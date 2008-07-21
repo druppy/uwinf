@@ -1,0 +1,82 @@
+[OPTIONS]
+compress=yes
+title= BIF help
+warning=3
+;contents=
+
+[CONFIG]
+BrowseButtons()
+
+[FILES]
+toc.rtf
+intro.rtf
+overview.rtf
+bifwnd.rtf
+winc.rtf
+wclasses.rtf
+wwnds.rtf
+control.rtf
+whndl.rtf
+comhndl.rtf
+csi.rtf
+wmouse.rtf
+wscroll.rtf
+wszrest.rtf
+wctlhndl.rtf
+wownerdr.rtf
+wclhndls.rtf
+wmisc.rtf
+wfuncs.rtf
+whello.rtf
+wcmplr.rtf
+bifthrea.rtf
+tbasis.rtf
+tinc.rtf
+tclasses.rtf
+thread.rtf
+thello.rtf
+tcmplr.rtf
+bifmix.rtf
+mmix.rtf
+minc.rtf
+mclasses.rtf
+mdbmm.rtf
+mcmplr.rtf
+howto.rtf
+thowto.rtf
+[bitmaps]
+#include <intro.bi>
+#include <overview.bi>
+#include <bifwnd.bi>
+#include <winc.bi>
+#include <wclasses.bi>
+#include <wwnds.bi>
+#include <control.bi>
+#include <whndl.bi>
+#include <comhndl.bi>
+#include <csi.bi>
+#include <wmouse.bi>
+#include <wscroll.bi>
+#include <wszrest.bi>
+#include <wctlhndl.bi>
+#include <wownerdr.bi>
+#include <wclhndls.bi>
+#include <wmisc.bi>
+#include <wfuncs.bi>
+#include <whello.bi>
+#include <wcmplr.bi>
+#include <bifthrea.bi>
+#include <tbasis.bi>
+#include <tinc.bi>
+#include <tclasses.bi>
+#include <thread.bi>
+#include <thello.bi>
+#include <tcmplr.bi>
+#include <bifmix.bi>
+#include <mmix.bi>
+#include <minc.bi>
+#include <mclasses.bi>
+#include <mdbmm.bi>
+#include <mcmplr.bi>
+#include <howto.bi>
+#include <thowto.bi>

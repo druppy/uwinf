@@ -1,0 +1,162 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote FCSIMoveHandler}
+${\footnote FCSIMoveHandler}
++{\footnote defbrowse}
+K{\footnote FCSIMoveHandler}
+{\fs26\cf1\b FCSIMoveHandler}\par
+The FCSIMoveHandler enables the program to move a window in Coordinate System  
+Independent manner.  If you use the handler you will not have 
+to worry about that Windows' (0,0) origin is at the top-left corner and OS/2 
+PM's (0,0) origin is at the bottom-left corner.\par
+
+This handler has the following public member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Movement relative to parent: 
+\line{\f1
+Bool AlignTTParent();\line
+Bool AlignBBParent();\line
+Bool AlignLLParent();\line
+Bool AlignRRParent();\line
+}
+\par
+\tab
+These functions move the window so that its top/bottom/left/right edge is  
+aligned with the top/bottom/left/right edge of the window's parent.\par
+\tab
+\par
+\tab
+Movement relative to siblings: 
+\line{\f1
+Bool AlignLLSibling(FWnd *pSibling);\line
+Bool AlignRRSibling(FWnd *pSibling);\line
+Bool AlignTTSibling(FWnd *pSibling);\line
+Bool AlignBBSibling(FWnd *pSibling);\line
+Bool AlignLRSibling(FWnd *pSibling);\line
+Bool AlignRLSibling(FWnd *pSibling);\line
+Bool AlignTBSibling(FWnd *pSibling);\line
+Bool AlignBTSibling(FWnd *pSibling);\line
+}
+\par
+\tab
+These functions moves the window so that its top/bottom/left/right edge is  
+aligned with the top/bottom/left/right edge of the sibling. 
+\par\pard\sb100
+\par
+
+See also: {\uldb FCSISizeHandler}{\v FCSISizeHandler}\par
+
+For an example see {\uldb FCSIMoveHandler/FCSISizeHandler example}{\v CSI_example} 
+\page
+
+#{\footnote FCSISizeHandler}
+${\footnote FCSISizeHandler}
++{\footnote defbrowse}
+K{\footnote FCSISizeHandler}
+{\fs26\cf1\b FCSISizeHandler}\par
+The FCSISizeHandler enables the program to size (or implicitly move) a  
+window in Coordinate System Independent manner.  If you use the handler you will 
+not have to worry about that Windows' Y-axis goes down while OS/2 PM's Y-axis  
+goes up.\par
+
+This handler has the following public member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Size relative to parent: 
+\line{\f1
+Bool SizeTTParent();\line
+Bool SizeBBParent();\line
+Bool SizeLLParent();\line
+Bool SizeRRParent();\line
+}
+\par
+\tab
+These functions changes the size of the window so that its top/bottom/left/right 
+edge is aligned with the top/bottom/left/right edge of the window's parent.\par
+\tab
+\par
+\tab
+Size relative to siblings: 
+\line{\f1
+Bool SizeLLSibling(FWnd *pSibling);\line
+Bool SizeRRSibling(FWnd *pSibling);\line
+Bool SizeTTSibling(FWnd *pSibling);\line
+Bool SizeBBSibling(FWnd *pSibling);\line
+Bool SizeLRSibling(FWnd *pSibling);\line
+Bool SizeRLSibling(FWnd *pSibling);\line
+Bool SizeTBSibling(FWnd *pSibling);\line
+Bool SizeBTSibling(FWnd *pSibling);\line
+}
+\par
+\tab
+These functions changes the size of the window so that its top/bottom/left/right 
+edge is aligned with the top/bottom/left/right edge of the sibling. 
+\par\pard\sb100
+\par
+
+See also: {\uldb FCSIMoveHandler}{\v FCSIMoveHandler}\par
+
+For an example see {\uldb FCSIMoveHandler/FCSISizeHandler example}{\v CSI_example} 
+\page
+
+#{\footnote CSI_example}
+${\footnote CSI handler example}
++{\footnote defbrowse}
+K{\footnote CSI example}
+K{\footnote CSI handler example}
+{\fs26\cf1\b CSI example}\par
+This example shows how to use the {\uldb FCSISizeHandler}{\v FCSISizeHandler} and 
+{\uldb FCSIMoveHandler}{\v FCSIMoveHandler}\par
+
+Assume that we have a client window that contains three windows, two listboxes  
+and a multiline edit control. We want the windows positioned and size so our  
+client window will look like this:\par
+
+\{bml csi.mrb\}\par
+
+Assume that 'lb1' is listbox #1, 'lb2' is listbox #2, 'mle' is the multiline  
+editfield and that the all have inherited FCSIMoveHandler, fCSISizeHandler and  
+that lb1 in addition has inherited FSizeHandler. 
+\line{\f1
+int clientWidth,clientHeight;\line
+GetSize(&clientWidth,&clientHeight);    //get size of client window\line
+\line
+//move and size first listbox\line
+lb1.AlignLLParent();\line
+lb1.AlignTTParent();\line
+lb1.SetSize(clientWidth/2,clientHeight*2/3);\line
+\line
+//move and align the second listbox\line
+lb2.AlignLRSibling(&lb1);\line
+lb2.AlignTTSibling(&lb1);\line
+lb2.SizeRRParent();\line
+lb2.SizeBBSibling(&lb1);\line
+\line
+//move and size the multiline editfield\line
+mle.AlignLLSibling(&lb1);\line
+mle.AlignTBSibling(&lb1);\line
+mle.SizeRRSibling(&lb2);\line
+mle.SizeBBParent();\line
+}
+\par
+
+This piece of code can seem a bit complicated, but it is extremly flexible.  
+Suppose that the first listbox' width should be only 1/4 of the client width.  
+The only line to change would be the SetSize()-line into: 
+\line{\f1
+lb1.SetSize(clientWidth/4,clientHeight*2/3);\line
+}
+\par
+
+and the two other windows would move/size accordingly. 
+\page
+
+}

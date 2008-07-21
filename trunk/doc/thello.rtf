@@ -1,0 +1,235 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote bifthread_helloworld}
+${\footnote BIF/Thread hello world example}
++{\footnote defbrowse}
+K{\footnote Thread Hello world example}
+K{\footnote BIF/Thread hello world example}
+{\fs26\cf1\b Thread Hello world example}\par
+This "hello world" program splits the task of writing the string 
+"Hello world!" to the screen. An indeed very silly thing to do but we 
+needed a simple example.\par
+
+{\b{Note:}} This example cannot be used under Windows 3.1 because printf() is used. 
+(And no, EasyWin or the like will not work) 
+\par
+
+The task is split into 3: 
+\par\pard\sb100\tx550\li550\fi-300
+1.\tab
+Writing the text "Hello " to the screen. This is done by the 
+"hello"-thread 
+\par
+2.\tab
+Writing the text "world" to the screen. This is done by the 
+"world"-thread 
+\par
+3.\tab
+Writing the final two characters "!\\n" to the screen. This is 
+done by the main thread 
+\par\pard\sb100
+\par
+
+This has to be synchronized. This program uses two different methods: 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+An event semaphore for synchronization between the "hello"-thread 
+and the "world"-thread 
+\par
+{\f2\'B7}\tab
+The wait-for-thread-to-terminate feature for synchronization 
+between the "world"-thread and the main thread. 
+\par\pard\sb100
+\par
+
+\line{\f1
+#define BIFINCL_THREAD                                (1)\line
+#define BIFINCL_MAINTHREAD\line
+#define BIFINCL_SEMAPHORES\line
+#include <bif.h>                                      (2)\line
+\line
+#include <stdio.h>\line
+\line
+FEventSemaphore helloWritten;                         (3)\line
+\line
+class HelloThread : public FThread \{                  (4)\line
+public:\line
+  void Go();                                          (5)\line
+\};\line
+\line
+class WorldThread : public FThread \{\line
+public:\line
+  void Go();\line
+\};\line
+\line
+class HelloWorldMainThread : public FMainThread \{     (6)\line
+public:\line
+  HelloWorldMainThread(int argc, char **argv)         (7)\line
+    : FMainThread(argc,argv)\line
+    \{\}\line
+\line
+  int Main(int,char**);                               (8)\line
+\};\line
+\line
+\line
+void HelloThread::Go() \{\line
+  printf("Hello ");                                   (9)\line
+  helloWriten.Post();                                 (10)\line
+\}\line
+\line
+void WorldThread::Go() \{\line
+  helloWritten.Wait();                                (11)\line
+  printf("world");                                    (12)\line
+\}\line
+\line
+int HelloWorldMainThread::Main(int,char**) \{          (13)\line
+  HelloThread hello;                                  (14)\line
+  WorldThread world;\line
+\line
+  hello.Start();                                      (15)\line
+  world.Start();\line
+\line
+  world.wait();                                       (16)\line
+  printf("!\\n");                                      (17)\line
+\line
+  hello.wait();                                       (18)\line
+\line
+  return 0;                                           (19)\line
+\}\line
+\line
+DEFBIFTHREADMAIN(HelloWorldMainThread);               (20)\line
+}
+\par
+
+\par\pard\sb100\tx601\li601\fi-600
+step\tab
+Description\par
+1 
+\tab
+Before we include bif.h we must tell bif.h what we would like to 
+include. In this case we need the BIF/Thread library, the main-thread 
+class and the event semaphore class. For information on what to define 
+to get access to classes select {\uldb include hierachy}{\v bifthread_include_hierachy} 
+\par
+2 
+\tab
+Include the bif.h headerfile. bif.h will include the necessary 
+files according to what we told it we needed in the above 3 lines. 
+\par
+3 
+\tab
+We need an {\uldb event semaphore}{\v FEventSemaphore} so the 
+"world"-thread can wait until the "hello"-thread has written its text. 
+\par
+4 
+\tab
+We now declare our "hello"-thread. Normal thread must be a 
+subclass of FThread. 
+\par
+5 
+\tab
+The HelloThread overrides the virtual {\uldb Go()}{\v FThread_Go} 
+function. The Go() function is the entry point for normal threads. 
+\par
+6 
+\tab
+Here we declare our main thread. Main threads (a program can only 
+have one) must be a subclass of {\uldb FMainThread}{\v FMainThread}. 
+\par
+7 
+\tab
+The FMainThread's constructor takes two arguments: argc and argv. 
+We must pass them on from HelloWorldMainThread to FMainThread. 
+\par
+8 
+\tab
+The HelloWorldMainThread overrides the virtual 
+{\uldb Main()}{\v FMainThread_Main} fnction. The Main() member function is 
+the entry point for main threads and therefore also the entry point 
+for the whole program 
+\par
+9 
+\tab
+The HelloThread prints the text "Hello " to the screen. 
+\par
+10 
+\tab
+The HelloThread signals that it has printed its text. 
+\par
+11 
+\tab
+The WorldThread waits until the HelloThread tells that it has 
+written "Hello ". If WorldThread didn't wait the output would be 
+unpredictable, it could be "worldHello ", "Helworldlo ", or by 
+pure luck "Hello world". If 
+\par
+12 
+\tab
+Now that the WorldThread {\b{knows}} that the text "Hello " 
+has been written (the HelloThread has told it so), it prints the text 
+"world". 
+\par
+13 
+\tab
+The program starts at HelloWorldMainThread::Main(). When a program 
+starts the main thread will be the only thread of control. Main() is not 
+interested in the rogram arguments, so it does not name the 
+parameters. 
+\par
+14 
+\tab
+The main thread creates instances of the two other threads. Note 
+that the thread instances are created, but they will not be running 
+(yet) 
+\par
+15 
+\tab
+The main thread starts the two threads. This is done by calling 
+the {\uldb Start()}{\v FThread_Start} member function of the threads. 
+\par
+16 
+\tab
+The main thread waits until the WorldThread has finished. When the 
+WorldThread thread has finished it must have written "world". The 
+program could also have used another event semaphore for 
+synchronization between the "world"-thread and the main thread like 
+the one used for synchronization between the "hello"-thread and the 
+"world"-thread. 
+\par
+17 
+\tab
+The main thread prints the final characters "!\\n". 
+\par
+18 
+\tab
+The main thread waits until the "hello"-thread has finished. It is 
+not very likely that it hasn't but in a multitasking environment you 
+never know... Main thread should always wait for all the threads to 
+finish otherwise the will get killed when the main thread terminates. 
+\par
+19 
+\tab
+The mai thread (and therefore the whole program) terminates. The 
+return value from Main() is passed back to the operating system as the 
+program exit code. If we were really pedantic we should have return 
+EXIT_SUCCESS as defined in <stdlib.h>, but we don't 
+\par
+20 
+\tab
+Well... the program does not automatically start executing at 
+FHelloWorldMainThread::Main(). The DEFBIFTHREADMAIN macro takes care 
+of the initialization and the creation of an instance of the main 
+thread. We don't like macros but this was the only way to shield the 
+programmer from the differences between the operating systems. 
+\par\pard\sb100
+ 
+\page
+
+}

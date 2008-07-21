@@ -1,0 +1,20 @@
+#include "defres.h"
+
+rcinclude "../../../sample/window/os2/defres/ukdlg.dlg"
+
+ICON ID_DEFRES "../../../sample/window/os2/defres/english.ico"
+
+STRINGTABLE 
+BEGIN
+  ID_DEFRES, "Resource module test program"
+END
+
+MENU ID_DEFRES
+BEGIN
+  SUBMENU "~File", -1
+  BEGIN
+    MENUITEM "E~xit", MID_EXIT
+  END
+  MENUITEM "Dialog ~test", MID_TESTDIALOG
+END
+

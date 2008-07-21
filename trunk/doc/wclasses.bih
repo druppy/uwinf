@@ -1,0 +1,19 @@
+[topic bifwindow_classes same "Classes" "BIF/Window classes"]
+[todo "<missing>"]
+[etopic]
+
+[topic bifwindow_class_hierachy down "Class hierachy" "BIF/Window class hierachy"]
+At the top level the class hierachy looks like this:
+[graphic hypergraphic "" "winbmp:wndclass.bmp" "os2bmp:wndclass.bmp"]
+
+
+FControl has several subclasses. The sub-hierachy of FControl looks like this:
+[graphic hypergraphic "" "winbmp:control.bmp" "os2bmp:control.bmp"]
+
+The FListBox sub-hierachy looks like this:
+[graphic hypergraphic "" "winbmp:listbox.bmp" "os2bmp:listbox.bmp"]
+
+The FComboBox sub-hierachy looks like this:
+[graphic hypergraphic "" "winbmp:combobox.bmp" "os2bmp:combobox.bmp"]
+[etopic]
+

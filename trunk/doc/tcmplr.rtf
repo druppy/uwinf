@@ -1,0 +1,221 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote bifthread_compiler_setup}
+${\footnote BIF/Thread compiler setup}
++{\footnote defbrowse}
+K{\footnote Compiler setup}
+K{\footnote BIF/Thread compiler setup}
+{\fs26\cf1\b Compiler setup}\par
+This section describes what compiler options must be 
+selected/deselected when you use BIF/Thread.\par
+
+If you are using the DLL version of BIF you must define 'BIF_IN_DLL' 
+otherwise you program will crash.\par
+
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Windows 3.1}{\v bt_compiler_setup_win31} 
+\par
+\tab
+{\uldb OS/2}{\v bt_compiler_setup_os2} 
+\par
+\tab
+{\uldb DOS}{\v bt_compiler_setup_dos} 
+\par
+\tab
+{\uldb win32 (win95/NT)}{\v bt_compiler_setup_win32} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote bt_compiler_setup_win31}
+${\footnote BIF/Thread Compiler setup for Windows 3.1}
++{\footnote defbrowse}
+K{\footnote Windows 3.1}
+K{\footnote BIF/Thread Compiler setup for Windows 3.1}
+{\fs26\cf1\b Windows 3.1}\par
+Compiler setup under Windows 3.1. This is necessary mainly because BIF/Thread 
+switches stack. 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+Borland C++ 3.1: 
+\par\pard\sb100\tx2550\li2550\fi-1999
+Defines\tab
+add DBG_LOG_ALL (only if debugging) 
+\par
+Test stack overflow\tab
+OFF 
+\par
+Assume DS==SS\tab
+Never 
+\par
+Entry/exit code\tab
+Never any of the "Windows smart callback..." 
+\par\pard\sb100\tx550\li550\fi-300
+ 
+\par
+{\f2\'B7}\tab
+Borland C++ 4.0 & 4.02 Windows: You most note that you cannot use 
+exception handling with BIF/Thread because Borland's exception 
+handling assumes that DS==SS and that the stack does not change 
+\par\pard\sb100\tx2550\li2550\fi-1999
+Defines\tab
+add DBG_LOG_ALL (only if debugging) 
+\par
+Test stack overflow\tab
+OFF 
+\par
+Assume DS==SS\tab
+Never 
+\par
+Entry/exit code\tab
+Never any of the "Windows smart callback..." 
+\par
+Exception handling\tab
+OFF 
+\par
+Exeption location information\tab
+OFF 
+\par
+Destructor cleanup\tab
+OFF 
+\par\pard\sb100\tx550\li550\fi-300
+ 
+\par
+{\f2\'B7}\tab
+Symantec C++ 6.1 
+\par\pard\sb100\tx2550\li2550\fi-1999
+Defines\tab
+add DBG_LOG_ALL (only if debugging) 
+\par
+Test stack overflow\tab
+OFF 
+\par
+Assume DS==SS\tab
+OFF 
+\par\pard\sb100\tx550\li550\fi-300
+ 
+\par
+{\f2\'B7}\tab
+Watcom C/C++ 10.0: 
+\par\pard\sb100\tx2550\li2550\fi-1999
+Source switches|Macro definitions\tab
+add DBG_LOG_ALL (only if debugging) 
+\par
+Diagnostic switches|Disable stack depth checking (-s)\tab
+ON 
+\par
+CodeGen option switches|SS not assumed equal to DS (-zu)\tab
+ON 
+\par
+C++ Compiler Switches|exceptions\tab
+OFF 
+\par\pard\sb100\tx550\li550\fi-300
+ 
+\par
+{\f2\'B7}\tab
+All: 
+Ensure that the local heap size is at least 8K, otherwise the stack of the main 
+thread cannot be allocated. This is very important for BC 4.0 since BC 
+4.0 by default does not create a local heap and Windows' LocalAlloc() 
+crashes when there are no local heap. 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote bt_compiler_setup_os2}
+${\footnote BIF/Thread Compiler setup for OS/2}
++{\footnote defbrowse}
+K{\footnote OS/2}
+K{\footnote BIF/Thread Compiler setup for OS/2}
+{\fs26\cf1\b OS/2}\par
+Just remember to tell your compiler that the application is multithreaded and 
+everything should work just fine. 
+\page
+
+#{\footnote bt_compiler_setup_dos}
+${\footnote BIF/Thread Compiler setup for DOS}
++{\footnote defbrowse}
+K{\footnote DOS}
+K{\footnote BIF/Thread Compiler setup for DOS}
+{\fs26\cf1\b DOS}\par
+Ensure that the compiler does not assume that DS==SS, that it does not insert 
+stack overflow checks, that exception handling is OFF, and that the compiler 
+either has DS pegged to DGROUP or reloads DS when needed.\par
+
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+Borland C++ 3.1: 
+\par\pard\sb100\tx2550\li2550\fi-1999
+Test stack overflow\tab
+OFF 
+\par
+Assume DS==SS\tab
+Never 
+\par\pard\sb100\tx550\li550\fi-300
+ 
+\par
+{\f2\'B7}\tab
+Borland C++ 4.0 & 4.02 Windows: {\b{Not tested}} 
+\par
+{\f2\'B7}\tab
+Symantec C++ 6.1 
+\par\pard\sb100\tx2550\li2550\fi-1999
+Defines\tab
+add DBG_LOG_ALL (only if debugging) 
+\par
+Test stack overflow\tab
+OFF 
+\par
+Assume DS==SS\tab
+OFF 
+\par\pard\sb100\tx550\li550\fi-300
+ 
+\par
+{\f2\'B7}\tab
+Watcom C/C++ 10.0: 
+\par\pard\sb100\tx2550\li2550\fi-1999
+Diagnostic switches|Disable stack depth checking (-s)\tab
+ON 
+\par
+CodeGen option switches|SS not assumed equal to DS (-zu)\tab
+ON 
+\par
+Register usage|DS register (-zdp)\tab
+DS pegged to DGROUP 
+\par
+C++ Compiler Switches|exceptions\tab
+OFF 
+\par\pard\sb100\tx550\li550\fi-300
+ 
+\par\pard\sb100
+\par
+
+You should also ensure that any runtime functions you use do not assume DS==SS.\par
+
+In general, runtime-libraries never has stack overflow checks in them. Some 
+library functions may assume SS==DS, in particular Watcom's graphics functions 
+including _setvideomoderows() etc. assumes SS==DS. If you have to use functions 
+that assumes SS==DS you may have to try to define STACK_IN_DS in 
+source/thread/win16/thread3.cpp or allocate your stack statically and override 
+the stack allocation in your main thread's constructor. 
+\page
+
+#{\footnote bt_compiler_setup_win32}
+${\footnote BIF/Thread Compiler setup for win32}
++{\footnote defbrowse}
+K{\footnote Win32}
+K{\footnote BIF/Thread Compiler setup for win32}
+{\fs26\cf1\b Win32}\par
+Just remember to tell your compiler that the application is multithreaded and 
+everything should work just fine. 
+\page
+
+}

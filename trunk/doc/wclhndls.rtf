@@ -1,0 +1,343 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote FPaintHandler}
+${\footnote FPaintHandler}
++{\footnote defbrowse}
+K{\footnote FPaintHandler}
+{\fs26\cf1\b FPaintHandler}\par
+Declaration: 
+\line{\f1
+class FPaintHandler : public {\uldb FHandler}{\v FHandler} \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_CLIENTHANDLERS\par
+
+The FPaintHandler is used for catching paint events.\par
+
+Notifications: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Paint()}{\v FPaintHandler_Paint} 
+\par\pard\sb100
+\par
+
+Operations: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Invalidate()}{\v FPaintHandler_Invalidate} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FPaintHandler_Paint}
+${\footnote FPaintHandler::Paint()}
++{\footnote defbrowse}
+K{\footnote Paint()}
+K{\footnote FPaintHandler::Paint()}
+{\fs26\cf1\b Paint()}\par
+Declaration: 
+\line{\f1
+virtual Bool Paint(FPaintEvent &ev);\line
+}
+\par
+
+Paint() is called whenver the native GUI system thinks it's time to repaint a  
+portion of the window.\par
+
+In response to this you should paint the window. 
+\page
+
+#{\footnote FPaintHandler_Invalidate}
+${\footnote FPaintHandler::Invalidate()}
++{\footnote defbrowse}
+K{\footnote Invalidate()}
+K{\footnote FPaintHandler::Invalidate()}
+{\fs26\cf1\b Invalidate()}\par
+Declaration: 
+\line{\f1
+Windows:\line
+  void Invalidate(FRect *pr=0, Bool eraseBackground=True);\line
+OS/2 PM and WMS:\line
+  void Invalidate(FRect *pr=0, Bool includeDescendands=True);\line
+}
+\par
+
+This function invalidates a rectangle of the window. If {\i{pr}} is NULL  
+the whole window is invalidated. 
+\page
+
+#{\footnote FCaretHandler}
+${\footnote FCaretHandler}
++{\footnote defbrowse}
+K{\footnote FCaretHandler}
+{\fs26\cf1\b FCaretHandler}\par
+Declaration: 
+\line{\f1
+class FCaretHandler : public {\uldb FHandler}{\v FHandler} \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_CLIENTHANDLERS\par
+
+The FCaretHandler is used for showing and controlling that blinking blob on the  
+screen known under many names "Cursor" and "Caret". This handler controls the  
+visibility, shape and position of the caret. The caret is initially hidden and  
+must be shown with {\uldb ShowCaret()}{\v FCaretHandler_ShowCaret} before the caret  
+is visible. The FCaretHandler maintains a hide/show count, so if 5 calls to  
+HideCaret() the caret does not become visible again before ShowCaret() is  
+called 5 times.\par
+
+Operations: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb SetCaretPos()}{\v FCaretHandler_SetCaretPos} 
+\par
+\tab
+{\uldb SetCaretShape(Shape)}{\v FCaretHandler_SetCaretShape1} - set caret shap only 
+\par
+\tab
+{\uldb SetCaretShape(Shape,int,int)}{\v FCaretHandler_SetCaretShape2} - set caret shape and size 
+\par
+\tab
+{\uldb ShowCaret()}{\v FCaretHandler_ShowCaret} 
+\par
+\tab
+{\uldb HideCaret()}{\v FCaretHandler_HideCaret} 
+\par\pard\sb100
+\par
+
+(Techinal note) 
+FCaretHandler automatically creates and destroys the native  
+caret/cursor/whatever when the associated window recieves or loses the focus. 
+\page
+
+#{\footnote FCaretHandler_SetCaretPos}
+${\footnote FCaretHandler::SetCaretPos()}
++{\footnote defbrowse}
+K{\footnote SetCaretPos()}
+K{\footnote FCaretHandler::SetCaretPos()}
+{\fs26\cf1\b SetCaretPos()}\par
+Declaration: 
+\line{\f1
+Bool SetCaretPos(int x, int y);\line
+}
+\par
+
+This function moves the caret to a new position in the window. 
+\page
+
+#{\footnote FCaretHandler_SetCaretShape1}
+${\footnote FCaretHandler::SetCaretShape(shape)}
++{\footnote defbrowse}
+K{\footnote SetCaretShape(shape)}
+K{\footnote FCaretHandler::SetCaretShape(shape)}
+{\fs26\cf1\b SetCaretShape(shape)}\par
+Declaration: 
+\line{\f1
+Bool SetCaretShape(Shape s);\line
+}
+\par
+
+This function simply calls {\uldb SetCaretShape(shape,w,h)}{\v FCaretHandler_SetCaretShape2}  
+with the current size of the caret. 
+\page
+
+#{\footnote FCaretHandler_SetCaretShape2}
+${\footnote FCaretHandler::SetCaretShape(shape,w,h)}
++{\footnote defbrowse}
+K{\footnote SetCaretShape(shape,w,h)}
+K{\footnote FCaretHandler::SetCaretShape(shape,w,h)}
+{\fs26\cf1\b SetCaretShape(shape,w,h)}\par
+Declaration 
+\line{\f1
+Bool SetCaretShape(Shape s, int w, int h);\line
+}
+\par
+
+This function sets the shape, width and height of the caret.\par
+
+The {\i{Shape}} enum is defined as: 
+\line{\f1
+enum Shape \{\line
+        InsertCaret,\line
+        OverwriteCaret,\line
+        <additional non-portable shapes>\line
+\};\line
+}
+\par
+
+Example: 
+\line{\f1
+if(insertMode)\line
+        SetCaretShape(InsertCaret, currentfont_width, currentfont_height);\line
+else\line
+        SetCaretShape(OverwritetCaret, currentfont_width, currentfont_height);\line
+}
+\par
+
+\page
+
+#{\footnote FCaretHandler_ShowCaret}
+${\footnote FCaretHandler::ShowCaret()}
++{\footnote defbrowse}
+K{\footnote ShowCaret()}
+K{\footnote FCaretHandler::ShowCaret()}
+{\fs26\cf1\b ShowCaret()}\par
+Declaration: 
+\line{\f1
+Bool ShowCaret();\line
+}
+\par
+
+This function increments the visibility counter. If the caret should be visible 
+it is shown. A call to ShowCaret() should always be paired with a call to HideCaret().\par
+
+See also: {\uldb HideCaret()}{\v FCaretHandler_HideCaret} 
+\page
+
+#{\footnote FCaretHandler_HideCaret}
+${\footnote FCaretHandler::HideCaret()}
++{\footnote defbrowse}
+K{\footnote HideCaret()}
+K{\footnote FCaretHandler::HideCaret()}
+{\fs26\cf1\b HideCaret()}\par
+Declaration: 
+\line{\f1
+Bool HideCaret();\line
+}
+\par
+
+This function decrements the visibility counter. If the caret should not be  
+visible it is hidden. A call to ShowCaret() should always be paired with a call 
+to HideCaret().\par
+
+See also: {\uldb HideCaret()}{\v FCaretHandler_HideCaret} 
+\page
+
+#{\footnote FTimerHandler}
+${\footnote FTimerHandler}
++{\footnote defbrowse}
+K{\footnote FTimerHandler}
+{\fs26\cf1\b FTimerHandler}\par
+Declaration: 
+\line{\f1
+class FTimerHandler : public {\uldb FHandler}{\v FHandler} \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_CLIENTHANDLERS\par
+
+This handler is an interface to the timer functionallity of the native GUI system. 
+Timers can be created, caught and destroyed.\par
+
+Operations: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb StartTimer()}{\v FTimerHandler_StartTimer} 
+\par
+\tab
+{\uldb StopTimer()}{\v FTimerHandler_StopTimer} 
+\par\pard\sb100
+\par
+
+Notification: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Timer()}{\v FTimerHandler_Timer} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FTimerHandler_StartTimer}
+${\footnote FTimerHandler::StartTimer()}
++{\footnote defbrowse}
+K{\footnote StartTimer()}
+K{\footnote FTimerHandler::StartTimer()}
+{\fs26\cf1\b StartTimer()}\par
+Declaration: 
+\line{\f1
+Bool StartTimer(int interval, int timerid);\line
+}
+\par
+
+This function creates a timer. If the function is successful timer events with 
+and ID of {\i{timerid}} will be occur in intervals of approximatly 
+{\i{interval}} milliseconds. A timer created with StartTimer() should 
+later be destroyed with {\uldb StopTimer()}{\v FTimerHandler_StopTimer}.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+interval 
+\tab
+The desired interval between the timer in milliseconds. This value is not 
+guaranteed since the system may be busy doing other things. In particular, 
+intervals below 100ms are very sensitive to the general load of the system. 
+\par
+timerid 
+\tab
+ID of the timer. The ID of the timer can be chosen freely by the 
+application, but it is recommended that ID above 0x7FFF are not used, since the 
+these IDs may be used by the native GUI system for scrolling, blinking etc. 
+\par\pard\sb100
+\par
+
+{\b{Caution: }}Timers are a limited resource. The native GUI system usually only 
+restricts the number of timers systemwide to 32. The program should be able to 
+function even if StartTimer() fails. 
+ 
+\page
+
+#{\footnote FTimerHandler_StopTimer}
+${\footnote FTimerHandler::StopTimer()}
++{\footnote defbrowse}
+K{\footnote StopTimer()}
+K{\footnote FTimerHandler::StopTimer()}
+{\fs26\cf1\b StopTimer()}\par
+Declaration: 
+\line{\f1
+Bool StopTimer(int timerid);\line
+}
+\par
+
+This function destroys a timer previously created with 
+{\uldb StartTimer()}{\v FTimerHandler_StartTimer}. 
+\page
+
+#{\footnote FTimerHandler_Timer}
+${\footnote FTimerHandler::Timer()}
++{\footnote defbrowse}
+K{\footnote Timer()}
+K{\footnote FTimerHandler::Timer()}
+{\fs26\cf1\b Timer()}\par
+Declaration: 
+\line{\f1
+virtual Bool Timer(FTimerEvent &ev);\line
+}
+\par
+
+This function is called when a timer event arrives to the handler. The subclass 
+should test for timers it has created with {\uldb StartTimer()}{\v FTimerHandler_StartTimer} only\par
+
+Example: 
+\line{\f1
+Bool MyWindow::Timer(FTimerEvent &ev) \{\line
+  if(ev.GetTimerID() == MYTIMERID) \{\line
+    <do something interesting>\line
+    return True; //handled\line
+  \} else\line
+    return False;\line
+\}\line
+}
+\par
+
+\page
+
+}

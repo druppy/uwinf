@@ -1,0 +1,22 @@
+#define IDM_ALE ID_ALE
+#define MID_FILE                100
+#define   MID_OPENFILE          111
+#define   MID_SAVEFILE          112
+#define MID_LINK                200
+#define   MID_NEXTLINK          211
+#define   MID_PREVLINK          212
+#define   MID_MOVELINK          220
+#define     MID_MOVELINKUP      221
+#define     MID_MOVELINKDOWN    222
+#define     MID_MOVELINKLEFT    223
+#define     MID_MOVELINKRIGHT   224
+#define   MID_SIZELINK          230
+#define     MID_BROADER         231
+#define     MID_NARROWER        232
+#define     MID_TALLER          233
+#define     MID_SHORTER         234
+#define   MID_EDITLINK          213
+#define   MID_DELETELINK        214
+#define   MID_DELETEALLLINKS    215
+
+

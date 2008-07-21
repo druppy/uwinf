@@ -1,0 +1,10 @@
+#include "menuedit.idh"
+ICON ICON_MENUEDIT "../../../sample/window/os2/menuedit/menuedit.ico"
+rcinclude "../../../sample/window/os2/menuedit/menuedit.dlg"
+rcinclude "../../../sample/window/os2/menuedit/testmenu.dlg"
+rcinclude "../../../sample/window/os2/menuedit/prodinfo.dlg"
+ICON ID_MOVEUP PRELOAD "../../../sample/window/os2/menuedit/moveup.ico"
+ICON ID_MOVEDOWN PRELOAD "../../../sample/window/os2/menuedit/movedown.ico"
+rcinclude "../../../sample/window/os2/menuedit/menuedit.mnu"
+BITMAP 999 "../../../sample/window/os2/menuedit/prodinfo.bmp"
+

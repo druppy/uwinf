@@ -1,0 +1,100 @@
+[topic bifwindow_buildingblocks same "The basis windows building blocks."]
+
+The basis BIF window building blocks, is split into following four parts:
+
+[dt][ref bifwindow_fwnd "FWnd"][dd]The main window class.
+[dt][ref bifwindow_fhandle "FHandler"][dd]The system event handler.
+
+[dt][ref bifwindow_fevent "FEvent"][dd]The event data encapsulation.
+[dt][ref bifwindow_faaplication "FApplication"][dd]The application main
+thread.
+
+These classes are all the the basis windows system need for the most
+simple needs, opon these the rest of the window system is build and all
+other visual elements are build upon this basis. So to gain understandig
+of the BIF window system this is the four importent parts. The other
+importend basis system if the [ref bifthread_buildingblocks
+"thread library"].
+
+[topic bifwindow_fwnd same "The FWnd class"]
+
+FWnd is the direct alias for a GUI window, and a window is a visual
+rectangle on the screen. With this the user have the posibility of writing
+to the window, resize and move the window and so on. So this is what GUI
+is all about, all you see on the desktop on the computer (you may already
+be looking at one) is simply a collection of well arranged windows.
+
+Now, beside beeing able to manipulate the content of this window, the user
+also have the posiblity to make them visible clip in relation to eatch
+other.  Hmm, you may think --- what does the man meen !!! Well, if one
+window need to contain another window inside it, but don't want this
+window to paint outside its own visible rectangle, it can make the child.
+Otherwise it will normaly clip in relation to the desktop.  There for its
+also posible setup the farmely relations (child, parrent, siblings), to
+control the clipping order, but that not the it --- yet.
+
+When the system sendes messages or events, there is an order in which
+this is done, and this is done by setting up the Window's ownership.
+
+Special : [ref FWnd_SetOwner "notes for Windows systems"]
+
+When the system need a window to do something, like painting itself, it
+generate an event (by sending a message), and send it to the application
+what own the window needed to be repainted. When the application recive
+this event it will route the event directly to the involved window. These
+events need to be handled, and therefor this class works together with the
+[ref bifwindow_fevent "FEvent"] class and the [ref bifwindow_fhandler
+"FHandler"].
+
+[etopic]
+
+[topic bifwindow_fhandler same "The FHandle class"]
+
+All Events send to a window need to be handled somehow, that is why BIF
+impliment a FHandler class, who is the one working on the events send
+to the differant windows. The id‚er is that for every group of events BIF
+have implimentet a handler, taking care of the events, but all these
+handles share this common FHandler base class.
+
+When it is nessesary to make a handler work, this need to know the owner
+window at construction time, and will automaticly attach itself to the
+[ref bifwindow_fwnd "FWnd"] class, and will then recive relevant events.
+
+If the Fhandler processes the event it will return a boolean true to tell
+the hiden backround event handler that no more processing is needed (like
+not calling the default windows procedure).
+
+The user window class may consist of one or several coexisting FHandler
+classes working togther, the only thing to be aware of is the order in
+which the handler's recive events. The last handler added to the window,
+that is the last created, is the first to recive the events send to the
+owner window, and if this handler process all events, the rest of the
+handlers (if any) will recive nothing.
+
+This base handler will always recive a raw [ref bifwindow_fevent "FEvent"]
+from the system, its then up to the hander to specialize this event class
+or maby just to call the propper virtual function, with the single data
+element needed.
+
+The Handler may be in the situation of just listening to events, and may
+alow other to work with the same events, but this is normaly not the case.
+
+[etopic]
+
+[topic bifwindow_fevent same "The FEvent class."]
+
+FEvent if the information part send from the system, it is directly
+related to the system message element, and therefor it contain OS related
+information, and its only the Handler programmer who need to vork directly
+on this class.
+
+[etopic]
+
+[topic bifwindow_fapplication same "The FApplication class."]
+
+To make all run, we don't use the nomal methode of starting from a main
+(or WinMain) function. The user need to inhered a class from our
+FApplication class, and as a minimum impliment the FApplication::Main, to
+make the single threded program run.
+
+[etopic]

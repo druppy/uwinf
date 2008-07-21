@@ -1,0 +1,18 @@
+#ifndef OS2_INCLUDED
+   #include <os2.h>
+#endif
+#include "..\..\..\SAMPLE\WINDOW\OS2\MENUEDIT\PRODINFO.H"
+
+DLGTEMPLATE DIALOG_PRODINFO LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Product Information", DIALOG_PRODINFO, -84, -13, 177, 63, 
+            FS_MOUSEALIGN | WS_VISIBLE, FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        DEFPUSHBUTTON   "O~k", DID_OK, 64, 4, 40, 14
+        CONTROL         999, -1, 1, 33, 21, 16, WC_STATIC, SS_BITMAP | 
+                        WS_GROUP | WS_VISIBLE
+        CTEXT           "BIF Menu Editor v1.0 BETA", -1, 42, 50, 129, 8
+        CTEXT           "This application is a part of the BIF library", -1, 
+                        42, 23, 129, 23, DT_WORDBREAK
+    END
+END

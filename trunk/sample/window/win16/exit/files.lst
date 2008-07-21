@@ -1,0 +1,5 @@
+This directory contains a small "Exit Windows" application.
+EXIT.ICO	Icon for the application
+EXIT.H		resource IDs
+EXIT.RC		resources
+EXIT.CPP	Source

@@ -1,0 +1,12 @@
+[topic bifmix_include_hierachy same "Include hierachy" "BIF/Mix Include hierachy" secondary]
+BIF/Mix is automaticaly included when you include both BIF/Window and BIF/Thread.
+
+
+[code]
+BIFINCL_THREAD and BIFINCL_WINDOW         FWWindowThread
+  BIFINCL_APPLICATION                     FMTApplication
+                                          FWMainWindowThread
+                                          DEFBIFMIXMAIN macro
+[ecode]
+[etopic]
+

@@ -1,0 +1,3 @@
+Contents: BIF/Thread support classes for OS/2 WMS
+mwthread.cpp
+wthread.cpp

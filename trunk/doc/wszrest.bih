@@ -1,0 +1,134 @@
+[topic FSizeRestrictionFrameHandler same "FSizeRestrictionFrameHandler"]
+Declaration:
+[code]
+class FSizeRestrictionFrameHandler : public [ref FHandler "FHandler"] {
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_ADVANCEDHANDLERS and BIFINCL_SIZERESTRICTIONHANDLERS.
+
+This handler is use by the [ref FSizeRestrictionClientHandler "FSizeRestrictionClientHandler"]
+These two handlers has to communicate in order to implement size restrictions.
+[etopic]
+
+[topic FSizeRestrictionClientHandler same "FSizeRestrictionClientHandler"]
+Declaration:
+[code]
+class FSizeRestrictionClientHandler : public [ref FHandler "FHandler"] {
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_ADVANCEDHANDLERS and BIFINCL_SIZERESTRICTIONHANDLERS.
+
+The FSizeRestrictionClientHandler is used to restrict the size of the
+client window's frame window. The size can be restricted in a number of ways:
+[ul]
+[li]Minimum width and height
+[li]Maximum width and height
+[li]Limiting width or height to be a multiplum of a certain value
+[eul]
+
+[note]Even if your window specify restrictions the GUI system may choose to override them.
+Your window should always be able to accept any size
+[enote]
+
+This handler can also be used when the frame does not have a thick border.
+See SAMPLE\\WINDOW\\OS2\\ALE or SAMPLE\\MIX\\SORT for an example of this.
+
+Member functions:
+[sl]
+[li][ref FSizeRestrictionClientHandler_ctor "FSizeRestrictionClientHandler()"]
+[li][ref FSizeRestrictionClientHandler_ApplySizeRestrictions "ApplySizeRestrictions()"]
+[li][ref FSizeRestrictionClientHandler_GetMinimumWidth "GetMinimumWidth()"]
+[li][ref FSizeRestrictionClientHandler_GetMinimumHeight "GetMinimumHeight()"]
+[li][ref FSizeRestrictionClientHandler_GetMaximumWidth "GetMaximumWidth()"]
+[li][ref FSizeRestrictionClientHandler_GetMaximumHeight "GetMaximumHeight()"]
+[li][ref FSizeRestrictionClientHandler_GetHorizontalGrid "GetHorizontalGrid()"]
+[li][ref FSizeRestrictionClientHandler_GetVerticalGrid "GetVerticalGrid()"]
+[esl]
+[etopic]
+
+[topic FSizeRestrictionClientHandler_ctor down "FSizeRestrictionClientHandler()" "FSizeRestrictionClientHandler::FSizeRestrictionClientHandler()"]
+Declaration:
+[code]
+FSizeRestrictionClientHandler([ref FWnd "FWnd"] *pwnd,
+                              [ref FSizeRestrictionFrameHandler "FSizeRestrictionFrameHandler"] *pframehandler
+                             )
+[ecode]
+[parml]
+[pt]pwnd[pd]client window to attach the handler to
+[pt]pframehandler[pd]The frame handler that the handler should communicate with. 
+This should be the handler attached to [hp 1]pwnd[ehp]'s frame window's handler.
+[eparml]
+[etopic]
+
+[topic FSizeRestrictionClientHandler_ApplySizeRestrictions same "ApplySizeRestrictions()" "FSizeRestrictionClientHandler::ApplySizeRestrictions()"]
+Declaration:
+[code]
+Bool ApplySizeRestrictions();
+[ecode]
+This function applies the restrictions immidiatly. This function is normally
+called just after the client window and the frame has been shown.
+
+[note]This function may not work when the frame window is hidden[enote]
+[etopic]
+
+[topic FSizeRestrictionClientHandler_GetMinimumWidth same "GetMinimumWidth()" "FSizeRestrictionClientHandler::GetMinimumWidth()"]
+Declaration:
+[code]
+virtual Bool GetMinimumWidth(int &);
+[ecode]
+This function is called when the handler wants to know the minimum width of
+the window. If GetMinimumWidth() returns False the handler decides 
+the minimum width (usually a GUI-dependent value)
+[etopic]
+
+[topic FSizeRestrictionClientHandler_GetMinimumHeight same "GetMinimumHeight()" "FSizeRestrictionClientHandler::GetMinimumHeight()"]
+Declaration:
+[code]
+virtual Bool GetMinimumHeight(int &);
+[ecode]
+This function is called when the handler wants to know the minimum height of
+the window. If GetMinimumHeight() returns False the handler decides
+the minimum width.
+[etopic]
+
+[topic FSizeRestrictionClientHandler_GetMaximumWidth same "GetMaximumWidth()" "FSizeRestrictionClientHandler::GetMaximumWidth()"]
+Declaration:
+[code]
+virtual Bool GetMaximumWidth(int &);
+[ecode]
+This function is called when the handler wants to know the maximum width of
+the window. If GetMaximumWidth() returns False the handler decides 
+the maximum width (usually a GUI-dependent value)
+[etopic]
+
+[topic FSizeRestrictionClientHandler_GetMaximumHeight same "GetMaximumHeight()" "FSizeRestrictionClientHandler::GetMaximumHeight()"]
+Declaration:
+[code]
+virtual Bool GetMaximumHeight(int &);
+[ecode]
+This function is called when the handler wants to know the maximum height of
+the window. If GetMaximumHeight() returns False the handler decides
+the maximum width.
+[etopic]
+
+[topic FSizeRestrictionClientHandler_GetHorizontalGrid same "GetHorizontalGrid()" "FSizeRestrictionClientHandler::GetHorizontalGrid()"]
+Declaration:
+[code]
+virtual Bool GetHorizontalGrid(int &gx);
+[ecode]
+This function is called when the handler wants to know if there are any
+restrictions on the width. If GetHorizontalGrid() returns True the handler
+tries to make the width of the window a multiplum of [hp 1]gx[ehp].
+[etopic]
+
+[topic FSizeRestrictionClientHandler_GetVerticalGrid upafter "GetVerticalGrid()" "FSizeRestrictionClientHandler::GetVerticalGrid()"]
+Declaration:
+[code]
+virtual Bool GetVerticalGrid(int &gy);
+[ecode]
+This function is called when the handler wants to know if there are any
+restrictions on the height. If GetVerticalGrid() returns True the handler
+tries to make the height of the window a multiplum of [hp 1]gy[ehp].
+[etopic]
+
+

@@ -1,0 +1,5 @@
+Contents: BIF/Thread common files for dos16 and dos32
+DOSYIELD.CPP Yield function for various operating systems
+DOSYIELD.H   Header for -"-
+THREAD3.CPP  DOS-specific implementation of FThread member functions
+WMS          Contains BIF/Thread support files for WMS

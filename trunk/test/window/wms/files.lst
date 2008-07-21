@@ -1,0 +1,3 @@
+Contents: Test stubs for WMS
+mtest.cpp Test of menus
+test.cpp  Test of dialogs, all controls, frames etc.

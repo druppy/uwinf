@@ -1,0 +1,5 @@
+Contents: BIF/Thread win16
+btmsgbox.cpp BIF/Thread-friendly messagebox functions
+dsstuff.h    DS/SS abstraction
+thread3.cpp  win16-specific implementation of FThread member functions
+win          Directory containing BIF/Thread support classes for win16 windows

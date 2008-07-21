@@ -1,0 +1,236 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote FSizeRestrictionFrameHandler}
+${\footnote FSizeRestrictionFrameHandler}
++{\footnote defbrowse}
+K{\footnote FSizeRestrictionFrameHandler}
+{\fs26\cf1\b FSizeRestrictionFrameHandler}\par
+Declaration: 
+\line{\f1
+class FSizeRestrictionFrameHandler : public {\uldb FHandler}{\v FHandler} \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_ADVANCEDHANDLERS and BIFINCL_SIZERESTRICTIONHANDLERS.\par
+
+This handler is use by the {\uldb FSizeRestrictionClientHandler}{\v FSizeRestrictionClientHandler} 
+These two handlers has to communicate in order to implement size restrictions. 
+\page
+
+#{\footnote FSizeRestrictionClientHandler}
+${\footnote FSizeRestrictionClientHandler}
++{\footnote defbrowse}
+K{\footnote FSizeRestrictionClientHandler}
+{\fs26\cf1\b FSizeRestrictionClientHandler}\par
+Declaration: 
+\line{\f1
+class FSizeRestrictionClientHandler : public {\uldb FHandler}{\v FHandler} \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_ADVANCEDHANDLERS and BIFINCL_SIZERESTRICTIONHANDLERS.\par
+
+The FSizeRestrictionClientHandler is used to restrict the size of the 
+client window's frame window. The size can be restricted in a number of ways: 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+Minimum width and height 
+\par
+{\f2\'B7}\tab
+Maximum width and height 
+\par
+{\f2\'B7}\tab
+Limiting width or height to be a multiplum of a certain value 
+\par\pard\sb100
+\par
+
+{\b{Note:}} Even if your window specify restrictions the GUI system may choose to override them. 
+Your window should always be able to accept any size 
+\par
+
+This handler can also be used when the frame does not have a thick border. 
+See SAMPLE\\WINDOW\\OS2\\ALE or SAMPLE\\MIX\\SORT for an example of this.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FSizeRestrictionClientHandler()}{\v FSizeRestrictionClientHandler_ctor} 
+\par
+\tab
+{\uldb ApplySizeRestrictions()}{\v FSizeRestrictionClientHandler_ApplySizeRestrictions} 
+\par
+\tab
+{\uldb GetMinimumWidth()}{\v FSizeRestrictionClientHandler_GetMinimumWidth} 
+\par
+\tab
+{\uldb GetMinimumHeight()}{\v FSizeRestrictionClientHandler_GetMinimumHeight} 
+\par
+\tab
+{\uldb GetMaximumWidth()}{\v FSizeRestrictionClientHandler_GetMaximumWidth} 
+\par
+\tab
+{\uldb GetMaximumHeight()}{\v FSizeRestrictionClientHandler_GetMaximumHeight} 
+\par
+\tab
+{\uldb GetHorizontalGrid()}{\v FSizeRestrictionClientHandler_GetHorizontalGrid} 
+\par
+\tab
+{\uldb GetVerticalGrid()}{\v FSizeRestrictionClientHandler_GetVerticalGrid} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FSizeRestrictionClientHandler_ctor}
+${\footnote FSizeRestrictionClientHandler::FSizeRestrictionClientHandler()}
++{\footnote defbrowse}
+K{\footnote FSizeRestrictionClientHandler()}
+K{\footnote FSizeRestrictionClientHandler::FSizeRestrictionClientHandler()}
+{\fs26\cf1\b FSizeRestrictionClientHandler()}\par
+Declaration: 
+\line{\f1
+FSizeRestrictionClientHandler({\uldb FWnd}{\v FWnd} *pwnd,\line
+                              {\uldb FSizeRestrictionFrameHandler}{\v FSizeRestrictionFrameHandler} *pframehandler\line
+                             )\line
+}
+\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pwnd\tab
+client window to attach the handler to 
+\par
+pframehandler\tab
+The frame handler that the handler should communicate with.  
+This should be the handler attached to {\i{pwnd}}'s frame window's handler. 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FSizeRestrictionClientHandler_ApplySizeRestrictions}
+${\footnote FSizeRestrictionClientHandler::ApplySizeRestrictions()}
++{\footnote defbrowse}
+K{\footnote ApplySizeRestrictions()}
+K{\footnote FSizeRestrictionClientHandler::ApplySizeRestrictions()}
+{\fs26\cf1\b ApplySizeRestrictions()}\par
+Declaration: 
+\line{\f1
+Bool ApplySizeRestrictions();\line
+}
+\par
+
+This function applies the restrictions immidiatly. This function is normally 
+called just after the client window and the frame has been shown.\par
+
+{\b{Note:}} This function may not work when the frame window is hidden 
+\page
+
+#{\footnote FSizeRestrictionClientHandler_GetMinimumWidth}
+${\footnote FSizeRestrictionClientHandler::GetMinimumWidth()}
++{\footnote defbrowse}
+K{\footnote GetMinimumWidth()}
+K{\footnote FSizeRestrictionClientHandler::GetMinimumWidth()}
+{\fs26\cf1\b GetMinimumWidth()}\par
+Declaration: 
+\line{\f1
+virtual Bool GetMinimumWidth(int &);\line
+}
+\par
+
+This function is called when the handler wants to know the minimum width of 
+the window. If GetMinimumWidth() returns False the handler decides  
+the minimum width (usually a GUI-dependent value) 
+\page
+
+#{\footnote FSizeRestrictionClientHandler_GetMinimumHeight}
+${\footnote FSizeRestrictionClientHandler::GetMinimumHeight()}
++{\footnote defbrowse}
+K{\footnote GetMinimumHeight()}
+K{\footnote FSizeRestrictionClientHandler::GetMinimumHeight()}
+{\fs26\cf1\b GetMinimumHeight()}\par
+Declaration: 
+\line{\f1
+virtual Bool GetMinimumHeight(int &);\line
+}
+\par
+
+This function is called when the handler wants to know the minimum height of 
+the window. If GetMinimumHeight() returns False the handler decides 
+the minimum width. 
+\page
+
+#{\footnote FSizeRestrictionClientHandler_GetMaximumWidth}
+${\footnote FSizeRestrictionClientHandler::GetMaximumWidth()}
++{\footnote defbrowse}
+K{\footnote GetMaximumWidth()}
+K{\footnote FSizeRestrictionClientHandler::GetMaximumWidth()}
+{\fs26\cf1\b GetMaximumWidth()}\par
+Declaration: 
+\line{\f1
+virtual Bool GetMaximumWidth(int &);\line
+}
+\par
+
+This function is called when the handler wants to know the maximum width of 
+the window. If GetMaximumWidth() returns False the handler decides  
+the maximum width (usually a GUI-dependent value) 
+\page
+
+#{\footnote FSizeRestrictionClientHandler_GetMaximumHeight}
+${\footnote FSizeRestrictionClientHandler::GetMaximumHeight()}
++{\footnote defbrowse}
+K{\footnote GetMaximumHeight()}
+K{\footnote FSizeRestrictionClientHandler::GetMaximumHeight()}
+{\fs26\cf1\b GetMaximumHeight()}\par
+Declaration: 
+\line{\f1
+virtual Bool GetMaximumHeight(int &);\line
+}
+\par
+
+This function is called when the handler wants to know the maximum height of 
+the window. If GetMaximumHeight() returns False the handler decides 
+the maximum width. 
+\page
+
+#{\footnote FSizeRestrictionClientHandler_GetHorizontalGrid}
+${\footnote FSizeRestrictionClientHandler::GetHorizontalGrid()}
++{\footnote defbrowse}
+K{\footnote GetHorizontalGrid()}
+K{\footnote FSizeRestrictionClientHandler::GetHorizontalGrid()}
+{\fs26\cf1\b GetHorizontalGrid()}\par
+Declaration: 
+\line{\f1
+virtual Bool GetHorizontalGrid(int &gx);\line
+}
+\par
+
+This function is called when the handler wants to know if there are any 
+restrictions on the width. If GetHorizontalGrid() returns True the handler 
+tries to make the width of the window a multiplum of {\i{gx}}. 
+\page
+
+#{\footnote FSizeRestrictionClientHandler_GetVerticalGrid}
+${\footnote FSizeRestrictionClientHandler::GetVerticalGrid()}
++{\footnote defbrowse}
+K{\footnote GetVerticalGrid()}
+K{\footnote FSizeRestrictionClientHandler::GetVerticalGrid()}
+{\fs26\cf1\b GetVerticalGrid()}\par
+Declaration: 
+\line{\f1
+virtual Bool GetVerticalGrid(int &gy);\line
+}
+\par
+
+This function is called when the handler wants to know if there are any 
+restrictions on the height. If GetVerticalGrid() returns True the handler 
+tries to make the height of the window a multiplum of {\i{gy}}. 
+\page
+
+}

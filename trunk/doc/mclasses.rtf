@@ -1,0 +1,84 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote bifmix_classes}
+${\footnote BIF/Mix classes}
++{\footnote defbrowse}
+K{\footnote Classes}
+K{\footnote BIF/Mix classes}
+{\fs26\cf1\b Classes}\par
+This section describes the classes in BIF/Mix. There is no class hierachy diagram. 
+\page
+
+#{\footnote FWWindowThread}
+${\footnote FWWindowThread}
++{\footnote defbrowse}
+K{\footnote FWWindowThread}
+{\fs26\cf1\b FWWindowThread}\par
+Declaration: 
+\line{\f1
+class FWWindowThread : public FWindowThread \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_THREAD\par
+
+The FWWindowThread is the base class of threads that need to use BIF/Window.\par
+
+{\b{Caution: }}Under Windows 3.x secondary threads are limited to using 
+PostMessage(). They cannot for instance create windows, use SendMessage() or 
+use any API that may yield to other applications. 
+\par
+
+\page
+
+#{\footnote FMTApplication}
+${\footnote FMTApplication}
++{\footnote defbrowse}
+K{\footnote FMTApplication}
+{\fs26\cf1\b FMTApplication}\par
+Declaration: 
+\line{\f1
+class FMTApplication : public FApplication \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_THREAD and BIFINCL_APPLICATION\par
+
+FMTApplication must be used instead of {\uldb FApplication}{\v FApplication} in 
+programs that use BIF/Thread.\par
+
+Under Windows 3.1 this class ensures that modal message loops (used in 
+{\uldb FModalDialog::DoModal()}{\v FModalDialog_DoModal} and 
+{\uldb MessageBox()}{\v MessageBox} does not block other threads.\par
+
+\page
+
+#{\footnote FWMainWindowThread}
+${\footnote FWMainWindowThread}
++{\footnote defbrowse}
+K{\footnote FWMainWindowThread}
+{\fs26\cf1\b FWMainWindowThread}\par
+Declaration: 
+\line{\f1
+class FWMainWindowThread : public FMainWindowThread \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_THREAD and BIFINCL_APPLICATION\par
+
+FWMainWindowThread is used as the main thread of a program that uses BIF/Window. 
+The class starts up BIF/Window in its implementation of FMainThread::Main, so 
+the program logically starts executing at {\uldb FApplication::Main()}{\v FApplication_Main}\par
+
+You will normally not need to create subclasses of FWMainWindowThread.\par
+
+\page
+
+}

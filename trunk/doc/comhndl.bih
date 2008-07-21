@@ -1,0 +1,534 @@
+[topic FCreateDestroyHandler same "FCreateDestroyHandler"]
+[key "WM_CREATE"][key "wm_created"][key "WM_DESTROY"]
+The FCreateDestroyHandler is used when you have to initialize or clean up when
+the native window is created or destroyed.
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMMONHANDLERS
+
+Notifications:
+[sl]
+[li][ref FCreateDestroyHandler_Created "Created()"]
+[li][ref FCreateDestroyHandler_Destroying "Destroying()"]
+[esl]
+[etopic]
+
+
+[topic FCreateDestroyHandler_Created down "Created()" "FCreateDestroyHandler::Created()"]
+Declaration:
+[code]
+virtual Bool Created(FCreatedEvent &);
+[ecode]
+
+This function is called when BIF associates the native window with the BIF
+window object. It is called very early, but BIF does not guarantee that it
+will be called before any events are handled by the native window.
+
+[note]
+The FCreatedEvent is NOT equal to Windows' or PMs' WM_CREATE message.
+
+In dialogs created from resources Created() may be called before Windows/PM
+has created the controls. For control creation use
+[ref FDialog_CreateControls "FDialog::CreateControls()"]
+[enote]
+
+See also: [ref FCreateDestroyHandler_Destroying "Destroying()"], [ref FCreateDestroyHandler "FCreateDestroyHandler"]
+[etopic]
+
+
+[topic FCreateDestroyHandler_Destroying upafter "Destroying()" "FCreateDestroyHandler::Destroying()"]
+Declaration:
+[code]
+Bool Destroying(FDestroyingEvent &);
+[ecode]
+
+This function is called before the native window is destroyed.
+
+[note]
+The FDestroyingEvent is NOT equal to Windows' or PMs WM_DESTROY message.
+[enote]
+
+See also: [ref FCreateDestroyHandler_Created "Created()"], [ref FCreateDestroyHandler "FCreateDestroyHandler"]
+[etopic]
+
+
+
+[topic FCommandHandler same "FCommandHandler"]
+[key "WM_COMMAND"][key "WM_SYSCOMMAND"]
+The FCommandhandler is used to react on commands and system commands from
+push buttons, accelerators, menus and other sources.
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMMONHANDLERS
+
+Notifications:
+[sl]
+[li][ref FCommandHandler_Command "Command()"]
+[li][ref FCommandHandler_SysCommand "SysCommand()"]
+[esl]
+[etopic]
+
+
+[topic FCommandHandler_Command down "FCommandHandler::Command"]
+Declaration:
+[code]
+Bool Command(FCommandEvent&);
+[ecode]
+
+This function is called when something (a push button, menu or other) wants
+the window to do something. Normally, the window decides what to do based on
+the return value from [ref FCommandEvent "FCommandEvent::GetItem()"].
+
+Example:
+[code]
+Bool MyWindow::Command(FCommandEvent &ev) {
+    switch(ev.GetItem()) {
+        case ID_SAVE:
+            <save file>
+        case ID_SAVEAS:
+            <save file with new name>
+        case ID_CUT:
+            <move selected text to clipboard>
+        ...
+        case ID_PRODUCTINFORMATION:
+            <show "about" box>
+        default:
+            //unrecognized command
+            return False;
+    }
+    return True;        //handled
+}
+[ecode]
+
+See also: [ref FCommandHandler "FCommandHandler"], [ref FCommandHandler_SysCommand "SysCommand()"]
+
+[note]
+(Windows) The FCommandHandler will only call Command() if the WM_COMMAND
+message really is a command and not a notification. The
+[ref FOwnerNotifyHandler "FOwnerNotifyHandler"] is used for reacting on
+notifications.
+[enote]
+[etopic]
+
+
+[topic FCommandHandler_SysCommand upafter "FCommandHandler::SysCommand()"]
+Declaration:
+[code]
+Bool SysCommand(FSysCommandEvent&);
+[ecode]
+
+This handler allows the window to react on system commands, usually sent from
+the system menu. In general, windows should let the default action take place.
+
+See also: [ref FCommandHandler "FCommandHandler"], [ref FCommandHandler_Command "Command()"]
+[etopic]
+
+[topic FCommandEvent same "FCommandEvent"]
+The FCommandEvent is used by [ref FCommandHandler_Command "Command()"] when a
+command arrives to the window.
+
+The only portable operation is:
+[code]
+int GetItem() const;
+[ecode]
+which returns the ID of the item which caused the event to occur.
+[etopic]
+
+
+[topic FEnableHandler same "FEnableHandler"]
+[key "WM_ENABLE"]
+The FEnableHandler notifices when the window is enabled or disabled.
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMMONHANDLERS
+
+Notifications:
+[sl]
+[li][ref FEnableHandler_Enabled "Enabled()"]
+[li][ref FEnableHandler_Disabled "Disabled()"]
+[esl]
+[etopic]
+
+[topic FEnableHandler_Enabled down "Enabled()" "FEnableHandler::Enabled()"]
+Declaration:
+[code]
+Bool Enabled(FEnableEvent&);
+[ecode]
+
+This function is called when the window is being enabled.
+
+See also: [ref FEnableHandler "FEnableHandler"]
+[etopic]
+
+[topic FEnableHandler_Disabled upafter "Disabled()" "FEnableHandler::Disabled()"]
+Declaration:
+[code]
+Bool Disabled(FEnableEvent&);
+[ecode]
+
+This function is called when the window is being disabled.
+
+See also: [ref FEnableHandler "FEnableHandler"]
+[etopic]
+
+
+[topic FFocusHandler same "FFocusHandler"]
+[key "WM_SETFOCUS"][key "WM_KILLFOCUS"]
+This handler is used for manipulating the focus. The focus window is the
+window which receives keyboard events.
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMMONHANDLERS
+
+Notifications:
+[sl]
+[li][ref FFocusHandler_LostFocus "LostFocus()"]
+[li][ref FFocusHandler_GotFocus "GotFocus()"]
+[esl]
+
+Operations:
+[sl]
+[li][ref FFocusHandler_SetFocus "SetFocus()"]
+[li][ref FFocusHandler_ForwardFocus "ForwardFocus()"]
+[li][ref FFocusHandler_HasFocus "HasFocus()"]
+[esl]
+[etopic]
+
+
+[topic FFocusHandler_LostFocus down "LostFocus()" "FFocusHandler::LostFocus()"]
+Declaration:
+[code]
+Bool LostFocus(FKillFocusEvent&);
+[ecode]
+
+This function is called when the window is losing the focus. Normally a
+window should destroy carets and remove focus emphasis.
+
+See also: [ref FFocusHandler "FFocusHandler"], [ref FFocusHandler_GotFocus "GotFocus"]
+[etopic]
+
+
+[topic FFocusHandler_GotFocus same "GotFocus()" "FFocusHandler::GotFocus()"]
+Declaration:
+[code]
+Bool GotFocus(FSetFocusEvent&);
+[ecode]
+
+This function is called when the window is gaining focus. The window should
+create carets and add focus emphasis.
+
+See also: [ref FFocusHandler "FFocusHandler"], [ref FFocusHandler_LostFocus "LostFocus"]
+[etopic]
+
+[topic FFocusHandler_SetFocus same "SetFocus()" "FFocusHandler::SetFocus()"]
+Declaration:
+[code]
+Bool SetFocus();
+[ecode]
+
+This function sets the focus to the window.
+
+Return: True if the function successfully changed the focus the the window,
+False otherwise.
+
+See also: [ref FFocusHandler "FFocusHandler"]
+[etopic]
+
+[topic FFocusHandler_ForwardFocus same "ForwardFocus()" "FFocusHandler::ForwardFocus()"]
+Declaration:
+[code]
+Bool ForwardFocus(FWnd *pwnd);
+[ecode]
+
+This function forwards the focus to the specified window. This is only
+possible if the window has the focus.
+
+This function is usually used in a overridden [ref FFocusHandler_GotFocus "GotFocus()"]
+function when the window wants to forward the focus to one of its child
+windows.
+
+Example:
+[code]
+Bool MyWindow::GotFocus(FSetFocusEvent &ev) {
+  //we dont want the focus - the command line entry field should have it
+  ForwardFocus(&cmdline_window)
+  return True;
+}
+[ecode]
+
+See also: [ref FFocusHandler "FFocusHandler"]
+[etopic]
+
+
+[topic FFocusHandler_HasFocus upafter "HasFocus()" "FFocusHandler::HasFocus()"]
+Declaration:
+[code]
+Bool HasFocus();
+[ecode]
+This function returns wether or not the associated window currently has the focus.
+[etopic]
+
+
+[topic FSizeHandler same "FSizeHandler"]
+[key "WM_SIZE"]
+This handler handles the sizing of a window.
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMMONHANDLERS
+
+Notifications:
+[sl]
+[li][ref FSizehandler_SizeChanged "SizeChanged()"]
+[esl]
+
+Operations:
+[sl]
+[li][ref FSizehandler_SetSize "SetSize()"]
+[li][ref FSizehandler_GetSize "GetSize()"]
+[esl]
+[etopic]
+
+
+[topic FSizehandler_SizeChanged down "SizeChanged()" "FSizehandler::SizeChanged()"]
+Declaration:
+[code]
+Bool SizeChanged([ref FSizeEvent "FSizeEvent"]&);
+[ecode]
+This function is called whenever the size of the window has changed.
+
+Example:
+[code]
+Bool MyClient::SizeChanged(FSizeEvent &ev) {
+    //adjust scrollbars
+    ...
+    <calculate amount of visible data>
+    ...
+    SetHScrollBar(currentHpos,0,Htotal-Hvisible);
+    SetHScrollThumbSize(Hvisible,Htotal);
+    SetVScrollBar(currentVpos,0,Vtotal-Vvisible);
+    SetVScrollThumbSize(Vvisible,Vtotal);
+    return False;        //we don't mind other handlers reacting on the event
+}
+[ecode]
+
+See also: [ref FSizeHandler "FSizeHandler"]
+[etopic]
+
+[topic FSizeHandler_SetSize same "SetSize()" "FSizeHandler::SetSize()"]
+Declaration:
+[code]
+Bool SetSize(int w, int h);
+[ecode]
+This function sets the size of the window.
+
+Return: True if the function was succesful, False otherwise
+
+See also: [ref FSizeHandler "FSizeHandler"], [ref FSizehandler_GetSize "GetSize()"]
+[etopic]
+
+[topic FSizeHandler_GetSize upafter "GetSize()" "FSizeHandler::GetSize()"]
+Declaration:
+[code]
+Bool GetSize(int *w, int *h);
+[ecode]
+This function retrieves the current size of the window. If the function is
+succesful [hp 1]w[ehp] and [hp 1]h[ehp] is set the the current width and height
+of the window.
+
+Return: True if the function was succesful, False otherwise
+
+See also: [ref FSizeHandler "FSizeHandler"], [ref FSizehandler_SetSize "SetSize()"]
+[etopic]
+
+[topic FSizeEvent same "FSizeEvent"]
+This event is handled by an [ref FSizeHandler "FSizeHandler"].
+
+This event has to member functions:
+[sl]
+[li]int GetWidth()
+[li]int GetHeight()
+[esl]
+[etopic]
+
+
+[topic FMoveHandler same "FMoveHandler"]
+[key "WM_MOVE"]
+This handler handles the position of the window.
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMMONHANDLERS
+
+Notifications:
+[sl]
+[li][ref FMoveHandler_Moved "Moved()"]
+[esl]
+
+Operations:
+[sl]
+[li][ref FMoveHandler_Move "Move()"]
+[li][ref FMoveHandler_GetPosition "GetPosition()"]
+[esl]
+[etopic]
+
+
+[topic FMoveHandler_Moved down "Moved()" "FMoveHandler::Moved()"]
+Declaration:
+[code]
+Bool Moved(FMoveEvent&);
+[ecode]
+This function is called when the position of the window has changed.
+
+See also: [ref FMoveHandler "FMoveHandler"]
+[etopic]
+
+
+[topic FMoveHandler_Move same "Move()" "FMoveHandler::Move()"]
+Declaration:
+[code]
+Bool Move(int x, int y);
+[ecode]
+This function moves the window so its origin will be (x,y).
+
+[note]The coordinates must be in the native coordinate system.
+[enote]
+
+See also: [ref FMoveHandler "FMoveHandler"]
+[etopic]
+
+[topic FMoveHandler_GetPosition upafter "GetPosition()" "FMoveHandler::GetPosition()"]
+Declaration:
+[code]
+Bool GetPosition(int *x, int *y);
+[ecode]
+This function retrieves the current origin of the window.
+
+[note]The coordinates are retrieved in the native coordinate system.
+[enote]
+
+See also: [ref FMoveHandler "FMoveHandler"]
+[etopic]
+
+
+
+[topic FCloseHandler same "FCloseHandler"]
+[key "WM_CLOSE"][key "WM_ENDSESSION"][key "WM_SAVEAPPLICATION"]
+The FCloseHandler handles close requests and other related events.
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMMONHANDLERS
+
+Notifications:
+[sl]
+[li][ref FCloseHandler_Close1 "Close()"]
+[li][ref FCloseHandler_CloseUnconditionally1 "CloseUnconditionally()"]
+[esl]
+
+Operations:
+[sl]
+[li][ref FCloseHandler_Close2 "Close()"]
+[li][ref FCloseHandler_CloseUnconditionally2 "CloseUnconditionally()"]
+[esl]
+[etopic]
+
+
+[topic FCloseHandler_Close1 down "Close()" "FCloseHandler::Close(FEvent&)" secondary]
+Declaration:
+[code]
+Bool Close(FEvent &);
+[ecode]
+
+This function is called when something (or someone) request the window to
+close. If the window lets the default action take place the application
+is terminated.
+
+The window can ask the user if he wants to save the changes (if any) or
+eventually not close the window.
+
+Compare this to [ref FCloseHandler_CloseUnconditionally1 "CloseUnconditionally()"]
+
+Example:
+[code]
+Bool MyWindow::Close(FEvent&) {
+  if(changed) {
+    switch(MessageBox(this, "Do you want to save the changes?", "foo-app", mb_yesnocancel))
+    {
+      case mbid_yes:
+        //user wants to save
+        <save>
+        if(<save succesful>) {
+          changed=False;
+          GetCurrentApp()->TerminateApp();
+          return False;        //let other handlers know about the close
+        } else {
+          //error ocurred while saving
+          return True;         //eat the event
+        }
+      case mbid_no:
+        //user do not want to save
+        changed=False;
+        GetCurrentApp()->TerminateApp();
+        return False;
+      case mbid_cancel:
+        //the user didn't want to close the window after all
+        return True;           //eat the event
+    }
+  } else {
+    return False;              //let the default processing take place
+  }
+}
+[ecode]
+
+See also:
+[ref FCloseHandler "FCloseHandler"],
+[ref FCloseHandler_CloseUnconditionally1 "CloseUnconditionally()"]
+[etopic]
+
+
+[topic FCloseHandler_CloseUnconditionally1 same "CloseUnconditionally()" "FCloseHandler::CloseUnconditionally(FEvent&)" secondary]
+Declaration:
+[code]
+Bool CloseUnconditionally(FEvent &);
+[ecode]
+This function is called when the window is being closed. The window cannot
+reject the close and it cannot ask the user any questions. The event may be
+the very last event sent to the window.
+
+This function may get called several times. This function may get called when
+the window is being destructed, when the system is shutting down or whenever
+the operation system wants to.
+
+The window should save changed data to a special file, which is automatically
+loaded the next time the application is started.
+
+Example:
+[code]
+Bool MyWindow::CloseUnconditionally(FEvent &) {
+  if(changed) {
+    <save>
+    if(<save succesful>)
+      changed=False;
+    //if an error ocurred there is nothing we can do about it
+    //we cannot even report it to the user
+  }
+  return False;        //let other handlers know about this
+}
+[ecode]
+
+See also: [ref FCloseHandler "FCloseHandler"], [ref FCloseHandler_Close1 "Close()"]
+[etopic]
+
+
+[topic FCloseHandler_Close2 same "Close()" "FCloseHandler::Close()"]
+Declaration:
+[code]
+void Close();
+[ecode]
+This function requests the window to close. The window may reject.
+
+See also: [ref FCloseHandler "FCloseHandler"]
+[etopic]
+
+[topic FCloseHandler_CloseUnconditionally2 upafter "CloseUnconditionally()" "FCloseHandler::CloseUnconditionally()"]
+Declaration:
+[code]
+void CloseUnconditionally();
+[ecode]
+This function forces the window to close. The window will be notified of
+this.
+
+See also: [ref FCloseHandler "FCloseHandler"]
+[etopic]
+

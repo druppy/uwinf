@@ -1,0 +1,41 @@
+This demonstration program features a multithreaded filefinder. The
+user can perform several searches simultaneously.
+
+The main thread creates a window (actually a dialog), that allows the
+user to type in wildcards and a drive letter. The user can then press
+the "start" button to start the search.
+
+When the start button is pressed the dialog will create a search
+window.
+
+The search window will create a thread to do the filefinding.
+
+The filefind thread will post a message to the search window when it
+thinks it is time to update the listbox.
+
+
++----------+    creates     +---------------+
+|MainThread|--------------->|filefind dialog|
++----------+                +---------------+
+                                  |
+                                  |
+                           creates|
+                                  |
+                                  V
+                            +-------------+
+                            |search window|
+                            +-------------+
+                                |     ^
+                                |     |
+                         creates|     |notifies
+                                |     |
+                                |     |
+                                V     |
+                            +---------------+
+                            |filefind thread|
+                            +---------------+
+
+BTW, try comparing the search time of this filefinder with the search
+time of your favorite filefinder. The multitasking overhead is
+actually quite low.
+

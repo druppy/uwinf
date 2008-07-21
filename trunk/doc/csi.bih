@@ -1,0 +1,123 @@
+[topic FCSIMoveHandler same "FCSIMoveHandler"]
+The FCSIMoveHandler enables the program to move a window in Coordinate System 
+Independent manner.  If you use the handler you will not have
+to worry about that Windows' (0,0) origin is at the top-left corner and OS/2
+PM's (0,0) origin is at the bottom-left corner.
+
+This handler has the following public member functions:
+[sl]
+[li]Movement relative to parent:
+[code]
+Bool AlignTTParent();
+Bool AlignBBParent();
+Bool AlignLLParent();
+Bool AlignRRParent();
+[ecode]
+These functions move the window so that its top/bottom/left/right edge is 
+aligned with the top/bottom/left/right edge of the window's parent.
+
+[li]Movement relative to siblings:
+[code]
+Bool AlignLLSibling(FWnd *pSibling);
+Bool AlignRRSibling(FWnd *pSibling);
+Bool AlignTTSibling(FWnd *pSibling);
+Bool AlignBBSibling(FWnd *pSibling);
+Bool AlignLRSibling(FWnd *pSibling);
+Bool AlignRLSibling(FWnd *pSibling);
+Bool AlignTBSibling(FWnd *pSibling);
+Bool AlignBTSibling(FWnd *pSibling);
+[ecode]
+These functions moves the window so that its top/bottom/left/right edge is 
+aligned with the top/bottom/left/right edge of the sibling.
+[esl]
+
+See also: [ref FCSISizeHandler "FCSISizeHandler"]
+
+For an example see [ref CSI_example "FCSIMoveHandler/FCSISizeHandler example"]
+[etopic]
+
+
+
+[topic FCSISizeHandler same "FCSISizeHandler"]
+The FCSISizeHandler enables the program to size (or implicitly move) a 
+window in Coordinate System Independent manner.  If you use the handler you will
+not have to worry about that Windows' Y-axis goes down while OS/2 PM's Y-axis 
+goes up.
+
+This handler has the following public member functions:
+[sl]
+[li]Size relative to parent:
+[code]
+Bool SizeTTParent();
+Bool SizeBBParent();
+Bool SizeLLParent();
+Bool SizeRRParent();
+[ecode]
+These functions changes the size of the window so that its top/bottom/left/right
+edge is aligned with the top/bottom/left/right edge of the window's parent.
+
+[li]Size relative to siblings:
+[code]
+Bool SizeLLSibling(FWnd *pSibling);
+Bool SizeRRSibling(FWnd *pSibling);
+Bool SizeTTSibling(FWnd *pSibling);
+Bool SizeBBSibling(FWnd *pSibling);
+Bool SizeLRSibling(FWnd *pSibling);
+Bool SizeRLSibling(FWnd *pSibling);
+Bool SizeTBSibling(FWnd *pSibling);
+Bool SizeBTSibling(FWnd *pSibling);
+[ecode]
+These functions changes the size of the window so that its top/bottom/left/right
+edge is aligned with the top/bottom/left/right edge of the sibling.
+[esl]
+
+See also: [ref FCSIMoveHandler "FCSIMoveHandler"]
+
+For an example see [ref CSI_example "FCSIMoveHandler/FCSISizeHandler example"]
+[etopic]
+
+
+
+[topic CSI_example downonce "CSI example" "CSI handler example"]
+This example shows how to use the [ref FCSISizeHandler "FCSISizeHandler"] and
+[ref FCSIMoveHandler "FCSIMoveHandler"]
+
+Assume that we have a client window that contains three windows, two listboxes 
+and a multiline edit control. We want the windows positioned and size so our 
+client window will look like this:
+
+[graphic multiresolutionbitmap "" "winbmp:csi.mrb" "os2bmp:csi.bmp" "ascii:csi.asc"]
+
+Assume that 'lb1' is listbox #1, 'lb2' is listbox #2, 'mle' is the multiline 
+editfield and that the all have inherited FCSIMoveHandler, fCSISizeHandler and 
+that lb1 in addition has inherited FSizeHandler.
+[code]
+int clientWidth,clientHeight;
+GetSize(&clientWidth,&clientHeight);    //get size of client window
+
+//move and size first listbox
+lb1.AlignLLParent();
+lb1.AlignTTParent();
+lb1.SetSize(clientWidth/2,clientHeight*2/3);
+
+//move and align the second listbox
+lb2.AlignLRSibling(&lb1);
+lb2.AlignTTSibling(&lb1);
+lb2.SizeRRParent();
+lb2.SizeBBSibling(&lb1);
+
+//move and size the multiline editfield
+mle.AlignLLSibling(&lb1);
+mle.AlignTBSibling(&lb1);
+mle.SizeRRSibling(&lb2);
+mle.SizeBBParent();
+[ecode]
+
+This piece of code can seem a bit complicated, but it is extremly flexible. 
+Suppose that the first listbox' width should be only 1/4 of the client width. 
+The only line to change would be the SetSize()-line into:
+[code]
+lb1.SetSize(clientWidth/4,clientHeight*2/3);
+[ecode]
+and the two other windows would move/size accordingly.
+[etopic]

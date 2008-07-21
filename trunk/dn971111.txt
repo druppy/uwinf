@@ -1,0 +1,15 @@
+source\window\win16\wndcore.cpp
+  R‘kkef›lgen af genneml›b af pumpwindows (IsDialog() Translateaccelerator...)
+  er vendt om, s† det sidst registrerede pumpwindow bliver spurgt f›rst.
+source\window\win32\wndcore.cpp
+  Samme som ovenst†ende
+source\window\pm\wndmisc.cpp
+  Lidt for meget cut&paste - der var referencer til windows' lstrcpy() og
+  lstrlen().
+source\thread\win32\win\wthread.cpp
+  Run() er blevet fjernet. Skulle v‘re blevet fjernet for lang tid siden, da
+  initialiseringen af tr†de blev lavet om til PreGo()/PostGo()
+sample\mix\sort\pmsort.cpp
+  2 cast fra int til LONG er blevet indsat for at f† WC11.0 til at tie stille.
+  Det er en b›f i compileren, men jeg kan alts† bedst lide n†r en compilering
+  sker uden warnings.

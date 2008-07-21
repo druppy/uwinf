@@ -1,0 +1,5 @@
+[topic bifmix_compiler_setup same "Compiler Setup" "BIF/Mix Compiler Setup" secondary]
+When you use BIF/Mix you have to set up the compiler for [hp 2]both[ehp]
+BIF/Thread and BIF/Window. See [ref bw_compiler_setup "BIF/Window compiler setup"]
+and [ref bifthread_compiler_setup "BIF/Thread compiler setup"].
+[etopic]

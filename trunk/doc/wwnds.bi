@@ -1,0 +1,2 @@
+wndclass.shg
+winframe.bmp

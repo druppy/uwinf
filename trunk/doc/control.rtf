@@ -1,0 +1,3847 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote FCheckBox}
+${\footnote FCheckBox}
++{\footnote defbrowse}
+K{\footnote FCheckBox}
+{\fs26\cf1\b FCheckBox}\par
+K{\footnote checkboxes}
+Declaration: 
+\line{\f1
+class FCheckBox : public {\uldb FControl}{\v FControl}, \line
+                  public {\uldb FControlTextHandler}{\v FControlTextHandler} \line
+\{ ...\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_CHECKBOX\par
+
+The FCheckBox class is the encapsulation of the native checkbox control. 
+A normal checkbox can be in two states: "checked" and "unchecked". A checkbox 
+is usually (but not always) a box (with a cross in it when the checkbox is 
+checked) with a text to the right of it. A checkbox can also be a 3-state 
+checkbox with three states: "checked", "unchecked" and "undetermined".\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Create(parent,ID)}{\v FCheckBox_Create1} 
+\par
+\tab
+{\uldb Create(parent,ID, ...)}{\v FCheckBox_Create2} 
+\par
+\tab
+{\uldb GetCheck()}{\v FCheckBox_GetCheck} 
+\par
+\tab
+{\uldb SetCheck()}{\v FCheckBox_SetCheck} 
+\par
+\tab
+{\uldb Check()}{\v FCheckBox_Check} 
+\par
+\tab
+{\uldb UnCheck()}{\v FCheckBox_UnCheck} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FCheckBox_Create1}
+${\footnote FCheckBox::Create(parent,ID)}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID)}
+K{\footnote FCheckBox::Create(parent,ID)}
+{\fs26\cf1\b Create(parent,ID)}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int ID);\line
+}
+\par
+
+This function associates the BIF-checkbox with the native checkbox. 
+\page
+
+#{\footnote FCheckBox_Create2}
+${\footnote FCheckBox::Create(parent,ID,...)}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID,...)}
+K{\footnote FCheckBox::Create(parent,ID,...)}
+{\fs26\cf1\b Create(parent,ID,...)}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int ID, FRect *rect, const char *pszText, int states=2);\line
+}
+\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pParent\tab
+Parent of the checkbox 
+\par
+ID\tab
+control-ID of the checkbox 
+\par
+rect\tab
+Position and size of the checkbox 
+\par
+pszText\tab
+Text on the checkbox. The text is usually placed on the right side of the checkbox. 
+\par
+states\tab
+If {\i{states}} is 2 the checkbox is a normal 2-state checkbox. If {\i{states}} is 3 the 
+checkbox will be a 3-state checkbox. 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FCheckBox_GetCheck}
+${\footnote FCheckBox::GetCheck()}
++{\footnote defbrowse}
+K{\footnote GetCheck()}
+K{\footnote FCheckBox::GetCheck()}
+{\fs26\cf1\b GetCheck()}\par
+Declaration: 
+\line{\f1
+int GetCheck();\line
+}
+\par
+
+This function retrieves the current checkstate of the checkbox.\par
+
+Return value: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+0: The checkbox is in the unchecked states 
+\par
+\tab
+1: The checkbox is in the checked state 
+\par
+\tab
+2: The checkbox is in the undetermined state (3-state checkboxes only) 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FCheckBox_SetCheck}
+${\footnote FCheckBox::SetCheck()}
++{\footnote defbrowse}
+K{\footnote SetCheck()}
+K{\footnote FCheckBox::SetCheck()}
+{\fs26\cf1\b SetCheck()}\par
+Declaration: 
+\line{\f1
+Bool SetCheck(int state);\line
+}
+\par
+
+{\i{state}} can have three different values: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+When {\i{state}} is 0 the checkbox will be unchecked. 
+\par
+\tab
+When {\i{state}} is 1 the checkbox will be checked. 
+\par
+\tab
+When {\i{state}} is 2 and the checkbox is a 3-state checkbox the checkbox will be undetermined. 
+\par\pard\sb100
+ 
+Any other value will causes SetCheck() to return False.\par
+
+Return value: True on success, False otherwise. 
+\page
+
+#{\footnote FCheckBox_Check}
+${\footnote FCheckBox::Check()}
++{\footnote defbrowse}
+K{\footnote Check()}
+K{\footnote FCheckBox::Check()}
+{\fs26\cf1\b Check()}\par
+Declaration: 
+\line{\f1
+Bool Check();\line
+}
+\par
+
+This function simply maps to {\uldb SetCheck}{\v FCheckBox_SetCheck}(1) 
+\page
+
+#{\footnote FCheckBox_UnCheck}
+${\footnote FCheckBox::UnCheck()}
++{\footnote defbrowse}
+K{\footnote UnCheck()}
+K{\footnote FCheckBox::UnCheck()}
+{\fs26\cf1\b UnCheck()}\par
+Declaration: 
+\line{\f1
+Bool UnCheck();\line
+}
+\par
+
+This function simply maps to {\uldb SetCheck}{\v FCheckBox_SetCheck}(0) 
+\page
+
+#{\footnote FControl}
+${\footnote FControl}
++{\footnote defbrowse}
+K{\footnote FControl}
+{\fs26\cf1\b FControl}\par
+K{\footnote controls}
+Declaration: 
+\line{\f1
+class FControl : public {\uldb FWnd}{\v FWnd} \{ ...\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW\par
+
+This class is the base class for all control classes. A control is usually a 
+thing the user easily can interact with. 
+Controls are normally used in dialogs for retrieving/modifying data. Controls 
+are normally not created directly by the program by rather created by the 
+native GUI system from a resource and then interfaced with BIF.\par
+
+All controls have control-ID which is normally only used for identifying the 
+controls during creation.\par
+
+You will usually not need to create instances of FControl but rather instances 
+of its subclasses.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Create(parent,ID)}{\v FControl_Create1} (interface creation) 
+\par
+\tab
+{\uldb Create(parent,ID,...}{\v FControl_Create2} (full-blown creation) 
+\par
+\tab
+{\uldb GetID()}{\v FControl_GetID} 
+\par\pard\sb100
+\par
+
+Subclasses: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FCheckBox}{\v FCheckBox} 
+\par
+\tab
+{\uldb FGroupBox}{\v FGroupBox} 
+\par
+\tab
+{\uldb FListBox}{\v FListBox} 
+\par
+\tab
+{\uldb FMLE}{\v FMLE} 
+\par
+\tab
+{\uldb FPushButton}{\v FPushButton} 
+\par
+\tab
+{\uldb FRadioButton}{\v FRadioButton} 
+\par
+\tab
+{\uldb FSLE}{\v FSLE} 
+\par
+\tab
+{\uldb FSlider}{\v FSlider} 
+\par
+\tab
+{\uldb FStaticText}{\v FStaticText} 
+\par\pard\sb100
+\par
+
+See also: {\uldb FControlTextHandler}{\v FControlTextHandler}\par
+
+The FControl sub-hierachy: 
+\{bml control.shg\}\par{\fs16{Control class sub-hierarchy}}\par
+ 
+\page
+
+#{\footnote FControl_Create1}
+${\footnote FControl::Create(parent,ID)}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID)}
+K{\footnote FControl::Create(parent,ID)}
+{\fs26\cf1\b Create(parent,ID)}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int ID);\line
+}
+\par
+
+This function associates the BIF-control with the native control. The native 
+control must have been previously created.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pParent\tab
+Parent window of the control. This is usually the {\uldb dialog}{\v FDialog} 
+previously create from a resource. 
+\par
+ID\tab
+control-ID. This ID must have been assigned to the control when you created 
+the resource. 
+\par\pard\sb100
+\par
+
+Return value: True on success, False otherwise (usually because the control was 
+not found)\par
+
+All subclasses of FControl provide their own Create(parent,ID) method because 
+otherwise C++ would require you to fully qualify the call. 
+\page
+
+#{\footnote FControl_Create2}
+${\footnote FControl::Create(parent,ID,...)}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID,...)}
+K{\footnote FControl::Create(parent,ID,...)}
+{\fs26\cf1\b Create(parent,ID,...)}\par
+Declaration: 
+\line{\f1
+Windows:\line
+Bool Create(FWnd *pParent, int ID,\line
+            const char *pszClassname, const char *pszControlText,\line
+            DWORD dwStyle, FRect *rect);\line
+OS/2 PM:\line
+Bool Create(FWnd *pParent, int ID,\line
+            const char *pszClassname, const char *pszControlText,\line
+            ULONG flStyle, FRect *rect,\line
+            PVOID pCtlData=0, PVOID pPresParam=0);\line
+WMS:\line
+Bool Create(FWnd *pParent, int ID,\line
+            const char *pszControlText,\line
+            uint32 flStyle, FRect *rect);\line
+}
+\par
+
+This function creates a control with the specified id, classname, text, dimension ...\par
+
+This function is {\b{very OS-dependent}} and should be avoided. It is used by the 
+subclasses of FControl in order to create the native control with the correct 
+classname, etc.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pParent\tab
+Parent window 
+\par
+ID\tab
+Control-ID 
+\par
+pszClassname\tab
+class name of the native window class 
+\par
+pszControlText\tab
+Initial text of the control. Some controls ignore this 
+\par
+dwStyle/flStyle\tab
+window style. BIF automatically includes WS_VISIBLE. Under 
+Windows WS_CHILD is also automatically included. 
+\par
+rect\tab
+Initial position and size of the control. This parameter can be NULL 
+in which case the control is created with zero width and height and positionen at (0,0) 
+\par
+pCtlData\tab
+(OS/2 only) control data 
+\par
+pPresParam\tab
+(OS/2 only) presentation parameters 
+\par\pard\sb100
+\par
+
+See also: {\uldb Create(parent,ID)}{\v FControl_Create1}, {\uldb FControl}{\v FControl} 
+\page
+
+#{\footnote FControl_GetID}
+${\footnote FControl::GetID()}
++{\footnote defbrowse}
+K{\footnote GetID()}
+K{\footnote FControl::GetID()}
+{\fs26\cf1\b GetID()}\par
+Declaration: 
+\line{\f1
+int GetID();\line
+}
+\par
+
+This function returns the control-ID of the control. A function to set the ID 
+does not exist. 
+\page
+
+#{\footnote FControlTextHandler}
+${\footnote FControlTextHandler}
++{\footnote defbrowse}
+K{\footnote FControlTextHandler}
+{\fs26\cf1\b FControlTextHandler}\par
+Declaration: 
+\line{\f1
+class FControlTextHandler : public {\uldb FHandler}{\v FHandler} \{ ...\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW\par
+
+This class is "mixed" into control classes that support text query/set. Eg: 
+the FPushButton has the class mixed in because it is possible to change the 
+text of a pushbutton. On the other hand FListBox does not have it mixed in 
+because you cannot meaningfully set the text of a listbox (listboxes have a 
+totally different concept of their contents.)\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb GetTextLen()}{\v FControlTextHandler_GetTextLen} 
+\par
+\tab
+{\uldb GetText()}{\v FControlTextHandler_GetText} 
+\par
+\tab
+{\uldb SetText()}{\v FControlTextHandler_SetText} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FControlTextHandler_GetTextLen}
+${\footnote FControlTextHandler::GetTextLen()}
++{\footnote defbrowse}
+K{\footnote GetTextLen()}
+K{\footnote FControlTextHandler::GetTextLen()}
+{\fs26\cf1\b GetTextLen()}\par
+Declaration: 
+\line{\f1
+int GetTextLen();\line
+}
+\par
+
+This function return the length of the text of the control including the 
+terminating '\\0'\par
+
+See also: {\uldb FControlTextHandler}{\v FControlTextHandler} 
+\page
+
+#{\footnote FControlTextHandler_GetText}
+${\footnote FControlTextHandler::GetText()}
++{\footnote defbrowse}
+K{\footnote GetText()}
+K{\footnote FControlTextHandler::GetText()}
+{\fs26\cf1\b GetText()}\par
+Declaration: 
+\line{\f1
+Bool GetText(char *buffer, int maxbuf);\line
+}
+\par
+
+This function retrieves the text of the control.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+buffer\tab
+The buffer in which the control text will be copied 
+\par
+maxbuf\tab
+Size of the buffer. 
+\par\pard\sb100
+\par
+
+GetText() will return True if the retrieval succeeded, False otherwise.\par
+
+See also: {\uldb FControlTextHandler}{\v FControlTextHandler} 
+\page
+
+#{\footnote FControlTextHandler_SetText}
+${\footnote FControlTextHandler::SetText()}
++{\footnote defbrowse}
+K{\footnote SetText()}
+K{\footnote FControlTextHandler::SetText()}
+{\fs26\cf1\b SetText()}\par
+Declaration: 
+\line{\f1
+Bool SetText(const char *pszText);\line
+}
+\par
+
+This function sets the text of the control to {\i{pszText}} and returns 
+True if it succeeded, False otherwise.\par
+
+See also: {\uldb FControlTextHandler}{\v FControlTextHandler} 
+\page
+
+#{\footnote FComboBox}
+${\footnote FComboBox}
++{\footnote defbrowse}
+K{\footnote FComboBox}
+{\fs26\cf1\b FComboBox}\par
+Declaration: 
+\line{\f1
+class FComboBox : public {\uldb FControl}{\v FControl} \{ ...\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMBOBOX\par
+
+The FComboBox class is the base class of all combox-like controls. A combobox 
+is a control which consists of a static text/editfield and a listbox. It is 
+intended to let the user choose an item in a list (and optional enter his own)\par
+
+The FComboBox sub-hierachy: 
+\{bml combobox.shg\}\par{\fs16{FCombobox class sub-hierarchy}}\par
+\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb GetCount()}{\v FComboBox_GetCount} 
+\par
+\tab
+{\uldb Clear()}{\v FComboBox_Clear} 
+\par
+\tab
+{\uldb RemoveItem()}{\v FComboBox_RemoveItem} 
+\par
+\tab
+{\uldb SetCurrentSelection()}{\v FComboBox_SetCurrentSelection} 
+\par\pard\sb100
+\par
+
+See also: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FEditComboBox}{\v FEditComboBox} - allows the user to enter his own text 
+\par\pard\sb100\tx1100\li1100\fi-549
+\tab
+{\uldb FSimpleCombox}{\v FSimpleComboBox} - the list is always visible 
+\par
+\tab
+{\uldb FDropDownComboBox}{\v FDropDownComboBox} - the list is only visible when the user has requested it 
+\par\pard\sb100\tx550\li550\fi-549
+ 
+\par
+\tab
+{\uldb FSelectionComboBox}{\v FSelectionComboBox} - the user cannot enter his own text 
+\par\pard\sb100\tx1100\li1100\fi-549
+\tab
+{\uldb FTextSelectionComboBox}{\v FTextSelectionComboBox} - the items are text strings 
+\par
+\tab
+{\uldb FODSelectionComboBox}{\v FODSelectionComboBox} - Owner-draw version of FSelectionComboBox 
+\par\pard\sb100\tx550\li550\fi-549
+ 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FComboBox_GetCount}
+${\footnote FComboBox::GetCount()}
++{\footnote defbrowse}
+K{\footnote GetCount()}
+K{\footnote FComboBox::GetCount()}
+{\fs26\cf1\b GetCount()}\par
+Declaration: 
+\line{\f1
+int GetCount();\line
+}
+\par
+
+GetCount() returns the number of items in the combobox. 
+\page
+
+#{\footnote FComboBox_Clear}
+${\footnote FComboBox::Clear()}
++{\footnote defbrowse}
+K{\footnote Clear()}
+K{\footnote FComboBox::Clear()}
+{\fs26\cf1\b Clear()}\par
+Declaration: 
+\line{\f1
+void Clear();\line
+}
+\par
+
+Clear() removes all items in the combobox. 
+\page
+
+#{\footnote FComboBox_RemoveItem}
+${\footnote FComboBox::RemoveItem()}
++{\footnote defbrowse}
+K{\footnote RemoveItem()}
+K{\footnote FComboBox::RemoveItem()}
+{\fs26\cf1\b RemoveItem()}\par
+Declaration: 
+\line{\f1
+Bool RemoveItem(int index);\line
+}
+\par
+
+RemoveItem() removes an item in the list. If that item is currently selected 
+there will be no "current item". 
+\page
+
+#{\footnote FComboBox_SetCurrentSelection}
+${\footnote FComboBox::SetCurrentSelection()}
++{\footnote defbrowse}
+K{\footnote SetCurrentSelection()}
+K{\footnote FComboBox::SetCurrentSelection()}
+{\fs26\cf1\b SetCurrentSelection()}\par
+Declaration: 
+\line{\f1
+Bool SetCurrentSelection(int index);\line
+}
+\par
+
+This function selects an item in the list. If {\i{index}} is -1 no item will 
+be selected.\par
+
+The return value is True on success, False otherwise (index out of range, etc.)\par
+
+Because some of FComboBox' subclasses let the user enter his own item FComboBox 
+does not provide a method to retrieve the index of the currently selected item 
+(But {\uldb FSelectionComboBox}{\v FSelectionComboBox_GetCurrentSelection} does) 
+\page
+
+#{\footnote FEditComboBox}
+${\footnote FEditComboBox}
++{\footnote defbrowse}
+K{\footnote FEditComboBox}
+{\fs26\cf1\b FEditComboBox}\par
+Declaration: 
+\line{\f1
+class FEditComboBox : public {\uldb FComboBox}{\v FComboBox}, ...\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMBOBOX\par
+
+An FEditComboBox is a combobox where the user is allowed to enter his own 
+item. The item-list of the combobox is used only to let the user quickly 
+select a predefined string if he wants to.\par
+
+This class is normally not used directly when it is created by the application. 
+Instead one of its two subclasses are used: {\uldb FSimpleComboBox}{\v FSimpleComboBox} 
+and {\uldb FDropDownComboBox}{\v FDropDownComboBox}\par
+
+When the combobox is created via the resources this class is preferred over 
+its two subclasses because it should not matter to the application wether the 
+item list is visible or not.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb SetText()}{\v FEditComboBox_SetText} 
+\par
+\tab
+{\uldb GetText()}{\v FEditComboBox_GetText} 
+\par
+\tab
+{\uldb GetTextLength()}{\v FEditComboBox_GetTextLength} 
+\par
+\tab
+{\uldb LimitText()}{\v FEditComboBox_LimitText} 
+\par
+\tab
+{\uldb InsertItem()}{\v FComboBoxTextItem_mixin_InsertItem} 
+\par
+\tab
+{\uldb AddItem()}{\v FComboBoxTextItem_mixin_AddItem} 
+\par
+\tab
+{\uldb GetItemText()}{\v FComboBoxTextItem_mixin_GetItemText} 
+\par
+\tab
+{\uldb GetItemTextLength()}{\v FComboBoxTextItem_mixin_GetItemTextLength} 
+\par
+\tab
+{\uldb LimitText()}{\v FEditComboBox_LimitText} 
+\par\pard\sb100
+\par
+
+See also: {\uldb FComboBox}{\v FComboBox}, {\uldb FSimpleComboBox}{\v FSimpleComboBox}, {\uldb FDropDownComboBox}{\v FDropDownComboBox} 
+\page
+
+#{\footnote FComboBoxTextItem_mixin_InsertItem}
+${\footnote FxxxxComboBox::InsertItem()}
++{\footnote defbrowse}
+K{\footnote InsertItem()}
+K{\footnote FxxxxComboBox::InsertItem()}
+{\fs26\cf1\b InsertItem()}\par
+Declaration: 
+\line{\f1
+Bool InsertItem(int index, const char *pszItem);\line
+}
+\par
+
+This function is used to insert an item into a combobox.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+index\tab
+The (0-based) position where the new item will be inserted. The item is 
+inserted before {\i{index}} so that items {\i{index}}..{\i{end}} is "pushed" down. 
+\par
+pszItem\tab
+The text of the new item. 
+\par\pard\sb100
+\par
+
+Return value: True on success, False otherwise. 
+\page
+
+#{\footnote FComboBoxTextItem_mixin_AddItem}
+${\footnote FxxxxComboBox::AddItem()}
++{\footnote defbrowse}
+K{\footnote AddItem()}
+K{\footnote FxxxxComboBox::AddItem()}
+{\fs26\cf1\b AddItem()}\par
+Declaration: 
+\line{\f1
+Bool AddItem(const char *pszItem);\line
+}
+\par
+
+This function appends an item to the list of items in the combobox.\par
+
+Return value: True on success, False otherwise. 
+\page
+
+#{\footnote FComboBoxTextItem_mixin_GetItemText}
+${\footnote FxxxxComboBox::GetItemText()}
++{\footnote defbrowse}
+K{\footnote GetItemText()}
+K{\footnote FxxxxComboBox::GetItemText()}
+{\fs26\cf1\b GetItemText()}\par
+Declaration: 
+\line{\f1
+Bool GetItemText(int index, char *buffer, int buflen);\line
+}
+\par
+
+This function retrieves the text of an item in the combobox.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+index\tab
+The 0-based index of the item 
+\par
+buffer\tab
+The buffer where the item text will be returned 
+\par
+buflen\tab
+Maximum number of characters to copy into the buffer 
+\par\pard\sb100
+\par
+
+Return value: True on success, False otherwise (index out of range etc.) 
+\page
+
+#{\footnote FComboBoxTextItem_mixin_GetItemTextLength}
+${\footnote FxxxxComboBox::GetItemTextLen()}
++{\footnote defbrowse}
+K{\footnote GetItemTextLen()}
+K{\footnote FxxxxComboBox::GetItemTextLen()}
+{\fs26\cf1\b GetItemTextLen()}\par
+Declaration: 
+\line{\f1
+int GetItemTextLen(int index);\line
+}
+\par
+
+This function retrieves the length (including '\\0') of an item.\par
+
+Return value: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+non-negative: The length of the item 
+\par
+\tab
+negative: An error occured. 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FEditComboBox_SetText}
+${\footnote FEditComboBox::SetText()}
++{\footnote defbrowse}
+K{\footnote SetText()}
+K{\footnote FEditComboBox::SetText()}
+{\fs26\cf1\b SetText()}\par
+Declaration: 
+\line{\f1
+Bool SetText(const char *pszText);\line
+}
+\par
+
+This function is used to set the text of the editfield in the combobox to {\i{pszText}}.\par
+
+Return value: True on success, False otherwise\par
+
+See also: {\uldb FEditComboBox}{\v FEditComboBox}, {\uldb GetText()}{\v FEditComboBox_GetText} 
+\page
+
+#{\footnote FEditComboBox_GetText}
+${\footnote FEditComboBox::GetText()}
++{\footnote defbrowse}
+K{\footnote GetText()}
+K{\footnote FEditComboBox::GetText()}
+{\fs26\cf1\b GetText()}\par
+Declaration: 
+\line{\f1
+Bool GetText(char *buffer, int buflen);\line
+}
+\par
+
+GetText() retrieves the text in the editfield-part of the combobox. This text 
+is not necessarily one of the items in the item list, as the user is allowed 
+to enter his own item.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+buffer\tab
+The buffer where the text will be copied 
+\par
+buflen\tab
+Maximum number of characters to copy to {\i{buffer}} 
+\par\pard\sb100
+\par
+
+See also: {\uldb FEditComboBox}{\v FEditComboBox}, {\uldb SetText()}{\v FEditComboBox_SetText} 
+\page
+
+#{\footnote FEditComboBox_GetTextLength}
+${\footnote FEditComboBox::GetTextLength()}
++{\footnote defbrowse}
+K{\footnote GetTextLength()}
+K{\footnote FEditComboBox::GetTextLength()}
+{\fs26\cf1\b GetTextLength()}\par
+Declaration: 
+\line{\f1
+int GetTextLength();\line
+}
+\par
+
+This function retrieves the length of the text in the editfield-part of the 
+combobox.\par
+
+Return value: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+non-negative: length of text 
+\par
+\tab
+negative: An error occurred. 
+\par\pard\sb100
+\par
+
+See also: {\uldb FEditComboBox}{\v FEditComboBox}, {\uldb GetText()}{\v FEditComboBox_GetText} 
+\page
+
+#{\footnote FEditComboBox_LimitText}
+${\footnote FEditComboBox::LimitText()}
++{\footnote defbrowse}
+K{\footnote LimitText()}
+K{\footnote FEditComboBox::LimitText()}
+{\fs26\cf1\b LimitText()}\par
+Declaration: 
+\line{\f1
+Bool LimitText(int limit);\line
+}
+\par
+
+This function is used to limit the number of characters allowed in the 
+editfield-part of the combobox. If the current text exceeds this limit it is 
+{\b{not}} truncated.\par
+
+Return value: True on success, False otherwise 
+\page
+
+#{\footnote FSimpleCombobox}
+${\footnote FSimpleCombobox}
++{\footnote defbrowse}
+K{\footnote FSimpleCombobox}
+{\fs26\cf1\b FSimpleCombobox}\par
+Declaration: 
+\line{\f1
+class FSimpleComboBox : public {\uldb FEditComboBox}{\v FEditComboBox}\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMBOBOX\par
+
+An FSimpleComboBox is an FComboBox where the list of items is always visible 
+(in contrast to {\uldb FDropDownComboBox}{\v FDropDownComboBox})\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Create(parent,ID) - standard control-create 
+\par
+\tab
+{\uldb Create(parent,ID,...)}{\v FSimpleComboBox_Create2} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FSimpleComboBox_Create2}
+${\footnote FSimpleCombobox::Create(parent,ID,...)"}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID,...)}
+K{\footnote FSimpleCombobox::Create(parent,ID,...)"}
+{\fs26\cf1\b Create(parent,ID,...)}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int ID, const char *initialtext, FRect *rect);\line
+}
+\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pParent\tab
+Parent window 
+\par
+ID\tab
+Control-ID of the combobox 
+\par
+initialtext\tab
+The text that are to be put into the editfield-part of the combobox 
+\par
+rect\tab
+Position and dimension of the combobox. If {\i{rect}} is NULL  
+the combobox will be placed at (0,0) with zero width and heigth 
+\par\pard\sb100
+\par
+
+Return value: True on success (combobox created), False otherwise.\par
+
+See also: {\uldb FSimpleComboBox}{\v FSimpleComboBox} 
+\page
+
+#{\footnote FDropDownCombobox}
+${\footnote FDropDownCombobox}
++{\footnote defbrowse}
+K{\footnote FDropDownCombobox}
+{\fs26\cf1\b FDropDownCombobox}\par
+Declaration: 
+\line{\f1
+class FDropDownComboBox : public {\uldb FEditComboBox}{\v FEditComboBox}\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMBOBOX\par
+
+An FDropDownComboBox is an FComboBox where the list of items is not always visible 
+(in contrast to {\uldb FSimpleComboBox}{\v FSimpleComboBox}). The visibility of 
+the list is controlled by the user.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Create(parent,ID) - standard control-create 
+\par
+\tab
+{\uldb Create(parent,ID,...)}{\v FDropDownComboBox_Create2} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FDropDownComboBox_Create2}
+${\footnote FDropDownComboBox::Create(parent,ID,...)"}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID,...) }
+K{\footnote FDropDownComboBox::Create(parent,ID,...)"}
+{\fs26\cf1\b Create(parent,ID,...) }\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int ID, const char *initialtext, FRect *rect);\line
+}
+\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pParent\tab
+Parent window 
+\par
+ID\tab
+Control-ID of the combobox 
+\par
+initialtext\tab
+The text that are to be put into the editfield-part of the combobox 
+\par
+rect\tab
+Position and dimension of the combobox. If {\i{rect}} is NULL 
+the combobox will be placed at (0,0) with zero width and heigth 
+\par\pard\sb100
+\par
+
+Return value: True on success (combobox created), False otherwise.\par
+
+See also: {\uldb FDropDownComboBox}{\v FDropDownComboBox} 
+\page
+
+#{\footnote FSelectionComboBox}
+${\footnote FSelectionComboBox}
++{\footnote defbrowse}
+K{\footnote FSelectionComboBox}
+{\fs26\cf1\b FSelectionComboBox}\par
+Declaration: 
+\line{\f1
+class FSelectionComboBox : public {\uldb FComboBox}{\v FComboBox}\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMBOBOX\par
+
+An FSelectionComboBox is a combobox where the user is not allowed to enter his 
+own item, but is restricted to selecting one of the items in the item list.\par
+
+Member functions: 
+{\uldb GetCurrentSelection()}{\v FSelectionComboBox_GetCurrentSelection}\par
+
+See also: {\uldb FComboBox}{\v FComboBox}, {\uldb FTextSelectionComboBox}{\v FTextSelectionComboBox}, {\uldb FODSelectionComboBox}{\v FODSelectionComboBox} 
+\page
+
+#{\footnote FSelectionComboBox_GetCurrentSelection}
+${\footnote FSelectionComboBox::GetCurrentSelection()}
++{\footnote defbrowse}
+K{\footnote GetCurrentSelection()}
+K{\footnote FSelectionComboBox::GetCurrentSelection()}
+{\fs26\cf1\b GetCurrentSelection()}\par
+Declaration: 
+\line{\f1
+int GetCurrentSelection();\line
+}
+\par
+
+This function retrieves the 0-base index of the currently selected item. The 
+return value negative if there are no currently selected item.\par
+
+See also: {\uldb FSelectionComboBox}{\v FSelectionComboBox} 
+\page
+
+#{\footnote FTextSelectionComboBox}
+${\footnote FTextSelectionComboBox}
++{\footnote defbrowse}
+K{\footnote FTextSelectionComboBox}
+{\fs26\cf1\b FTextSelectionComboBox}\par
+Declaration: 
+\line{\f1
+class FTextSelectionComboBox : public {\uldb FSelectionComboBox}{\v FSelectionComboBox}, ...\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMBOBOX\par
+
+A FTextSelectionComboBox is a combobox where the user can select one of the 
+items in the item list, and the items are text items.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb InsertItem()}{\v FComboBoxTextItem_mixin_InsertItem} 
+\par
+\tab
+{\uldb AddItem()}{\v FComboBoxTextItem_mixin_AddItem} 
+\par
+\tab
+{\uldb GetItemText()}{\v FComboBoxTextItem_mixin_GetItemText} 
+\par
+\tab
+{\uldb GetItemTextLength()}{\v FComboBoxTextItem_mixin_GetItemTextLength} 
+\par\pard\sb100
+\par
+
+See also: {\uldb FSelectionComboBox}{\v FSelectionComboBox} 
+\page
+
+#{\footnote FODSelectionComboBox}
+${\footnote FODSelectionComboBox}
++{\footnote defbrowse}
+K{\footnote FODSelectionComboBox}
+{\fs26\cf1\b FODSelectionComboBox}\par
+Declaration: 
+\line{\f1
+class FODSelectionComboBox : public {\uldb FSelectionComboBox}{\v FSelectionComboBox}, public {\uldb FOwnerDrawOwnee}{\v FOwnerDrawOwnee}, ...\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMBOBOX\par
+
+The FODSelectionComboBox class is the encapsulation of owner-draw comboboxes. 
+The items are drawn by the application and not automatically by the native control.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FODSelectionComboBox()}{\v FODSelectionComboBox_FODSelectionComboBox} 
+\par
+\tab
+{\uldb Create(parent,ID)}{\v FODSelectionComboBox_Create1} 
+\par
+\tab
+{\uldb Create(parent,ID,...)}{\v FODSelectionComboBox_Create2} 
+\par
+\tab
+{\uldb AddItem()}{\v FODSelectionComboBox_AddItem} 
+\par
+\tab
+{\uldb InsertItem()}{\v FODSelectionComboBox_InsertItem} 
+\par
+\tab
+{\uldb GetItemData()}{\v FODSelectionComboBox_GetItemData} 
+\par
+\tab
+{\uldb GetItemHeigth()}{\v FODSelectionComboBox_GetItemHeigth} (protected and pure virtual) 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FODSelectionComboBox_FODSelectionComboBox}
+${\footnote FODSelectionComboBox::FODSelectionComboBox()}
++{\footnote defbrowse}
+K{\footnote FODSelectionComboBox()}
+K{\footnote FODSelectionComboBox::FODSelectionComboBox()}
+{\fs26\cf1\b FODSelectionComboBox()}\par
+Declaration: 
+\line{\f1
+FODSelectionComboBox({\uldb FOwnerDrawOwner}{\v FOwnerDrawOwner} *powner);\line
+}
+\par
+
+The {\i{powner}} parameter is the pointer to the FOwnerDrawOwner handler in the controls owner. 
+\page
+
+#{\footnote FODSelectionComboBox_Create1}
+${\footnote FODSelectionComboBox::Create(parent,ID)}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID)}
+K{\footnote FODSelectionComboBox::Create(parent,ID)}
+{\fs26\cf1\b Create(parent,ID)}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int ID);\line
+}
+\par
+
+This Create() function associates the FODSelectionComboBox object with the native combobox. 
+\page
+
+#{\footnote FODSelectionComboBox_Create2}
+${\footnote FODSelectionComboBox::Create(parent,ID,..)}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID,...)}
+K{\footnote FODSelectionComboBox::Create(parent,ID,..)}
+{\fs26\cf1\b Create(parent,ID,...)}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int ID, FRect *rect);\line
+}
+\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pParent\tab
+Parent window 
+\par
+ID\tab
+control-ID of the combobox 
+\par
+rect\tab
+Initial size and position of the combobox. If {\i{rect}} is NULL 
+the combobox is placed at (0,0) and will have zero width and heigth 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FODSelectionComboBox_AddItem}
+${\footnote FODSelectionComboBox::AddItem()}
++{\footnote defbrowse}
+K{\footnote AddItem()}
+K{\footnote FODSelectionComboBox::AddItem()}
+{\fs26\cf1\b AddItem()}\par
+Declaration: 
+\line{\f1
+Bool AddItem(long itemData);\line
+}
+\par
+
+This function append an item to the combobox. {\i{itemData}} is a long-value 
+that is associated with the new item. This value is not used by the combobox 
+itself, but is usually some sort of identification used by the application, 
+eg. a pointer. The value can be retrieved with {\uldb GetItemData()}{\v FODSelectionComboBox_GetItemData}\par
+
+Return value: True on success, False otherwise\par
+
+See also: {\uldb FODSelectionComboBox}{\v FODSelectionComboBox}, {\uldb InsertItem()}{\v FODSelectionComboBox_InsertItem} 
+\page
+
+#{\footnote FODSelectionComboBox_InsertItem}
+${\footnote FODSelectionComboBox::InsertItem()}
++{\footnote defbrowse}
+K{\footnote InsertItem()}
+K{\footnote FODSelectionComboBox::InsertItem()}
+{\fs26\cf1\b InsertItem()}\par
+Declaration: 
+\line{\f1
+Bool InsertItem(int index, long itemData);\line
+}
+\par
+
+This function inserts an item into the item list of the combobox.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+index\tab
+The 0-based index in the item list where the item will be inserted. 
+\par
+itemData\tab
+Application-defined value associated with the item 
+\par\pard\sb100
+\par
+
+Return value: True on success, False otherwise\par
+
+See also: {\uldb AddItem()}{\v FODSelectionComboBox_AddItem}, {\uldb GetItemData()}{\v FODSelectionComboBox_GetItemData} 
+\page
+
+#{\footnote FODSelectionComboBox_GetItemData}
+${\footnote FODSelectionComboBox::GetItemData()}
++{\footnote defbrowse}
+K{\footnote GetItemData()}
+K{\footnote FODSelectionComboBox::GetItemData()}
+{\fs26\cf1\b GetItemData()}\par
+Declaration: 
+\line{\f1
+Bool GetItemData(int index, long *itemData);\line
+}
+\par
+
+This function retrieves the long-value associated with an item.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+index\tab
+0-based index of the item 
+\par
+itemData\tab
+The value associated with the item will be stored here if the function is succesful 
+\par\pard\sb100
+\par
+
+Return value: True on success, False otherwise\par
+
+See also: {\uldb AddItem()}{\v FODSelectionComboBox_AddItem}, {\uldb InsertItem()}{\v FODSelectionComboBox_InsertItem} 
+\page
+
+#{\footnote FODSelectionComboBox_GetItemHeigth}
+${\footnote FODSelectionComboBox::GetItemHeigth()}
++{\footnote defbrowse}
+K{\footnote GetItemHeight()}
+K{\footnote FODSelectionComboBox::GetItemHeigth()}
+{\fs26\cf1\b GetItemHeight()}\par
+Declaration: 
+\line{\f1
+virtual int GetItemHeight() =0;\line
+}
+\par
+
+This function is called whenever the native combobox wants to know the heigth 
+of the items in the combobox.\par
+
+{\b{Note:}} This function may be called very early in the creation-process 
+when the BIF-object may not have been initialized yet, so the function should 
+not perform any operations on the combobox. 
+\par
+
+See also: {\uldb FOwnerDrawOwnee}{\v FOwnerDrawOwnee} 
+\page
+
+#{\footnote FGroupBox}
+${\footnote FGroupBox}
++{\footnote defbrowse}
+K{\footnote FGroupBox}
+{\fs26\cf1\b FGroupBox}\par
+Declaration: 
+\line{\f1
+class FGroupBox : public {\uldb FControl}{\v FControl}, public {\uldb FControlTextHandler}{\v FControlTextHandler}\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_GROUPBOX\par
+
+A FGroupBox is a control which visually groups together other controls, such 
+as radiobuttons. A groupbox is usually a rectangle with a text at the top.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Create(parent,ID) 
+\par
+\tab
+{\uldb Create(parent,ID,...)}{\v FGroupBox_Create2} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FGroupBox_Create2}
+${\footnote FGroupBox::Create(parent,ID,...)}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID,...)}
+K{\footnote FGroupBox::Create(parent,ID,...)}
+{\fs26\cf1\b Create(parent,ID,...)}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int ID, FRect *rect, const char *pszText=0);\line
+}
+\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pParent\tab
+Parent window 
+\par
+ID\tab
+Control-ID of the groupbox 
+\par
+rect\tab
+Position and size of groupbox. If {\i{rect}} is NULL the groupbox 
+will be placed at (0,0) and have zero width and height] 
+\par
+pszText\tab
+Initial text, if any 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FListBox}
+${\footnote FListBox}
++{\footnote defbrowse}
+K{\footnote FListBox}
+{\fs26\cf1\b FListBox}\par
+Declaration: 
+\line{\f1
+class FListBox : public {\uldb FControl}{\v FControl} \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_LISTBOX\par
+
+A listbox is a control that contains several items (usually text) and allows the 
+user to scroll through them and optionally select one or more items.\par
+
+The listbox control is not intended to contain more than, say, 100 items, as 
+the listbox operations are quite slow because every operation redraw the 
+listbox immidiatly.\par
+
+The FListBox is the base class for its subclasses, which provides specific 
+behaviour concerning single/multiple selection and text/owner-draw items.\par
+
+The class sub-hierarchy of FListBox looks like this: 
+\{bml listbox.shg\}\par{\fs16{FListBox class sub-hierarchy}}\par
+\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb GetCount()}{\v FListBox_GetCount} 
+\par
+\tab
+{\uldb Clear()}{\v FListBox_Clear} 
+\par
+\tab
+{\uldb GetTopIndex()}{\v FListBox_GetTopIndex} 
+\par
+\tab
+{\uldb SetTopIndex()}{\v FListBox_SetTopIndex} 
+\par
+\tab
+{\uldb DisableRedraw()}{\v FListBox_DisableRedraw} 
+\par
+\tab
+{\uldb EnableRedraw()}{\v FListBox_EnableRedraw} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FListBox_GetCount}
+${\footnote FListBox::GetCount()}
++{\footnote defbrowse}
+K{\footnote GetCount()}
+K{\footnote FListBox::GetCount()}
+{\fs26\cf1\b GetCount()}\par
+Declaration: 
+\line{\f1
+int GetCount();\line
+}
+\par
+
+This function returns the number of items in the listbox.\par
+
+See also: {\uldb FListBox}{\v FListBox} 
+\page
+
+#{\footnote FListBox_Clear}
+${\footnote FListBox::Clear()}
++{\footnote defbrowse}
+K{\footnote Clear()}
+K{\footnote FListBox::Clear()}
+{\fs26\cf1\b Clear()}\par
+Declaration: 
+\line{\f1
+void Clear();\line
+}
+\par
+
+This function removes all items in the listbox.\par
+
+See also: {\uldb FListBox}{\v FListBox} 
+\page
+
+#{\footnote FListBox_GetTopIndex}
+${\footnote FListBox::GetTopIndex()}
++{\footnote defbrowse}
+K{\footnote GetTopIndex()}
+K{\footnote FListBox::GetTopIndex()}
+{\fs26\cf1\b GetTopIndex()}\par
+Declaration: 
+\line{\f1
+int GetTopIndex();\line
+}
+\par
+
+The function returns the 0-base index of the first visible item in the listbox. 
+As the user scrolls through the items this index changes.\par
+
+See also: {\uldb FListBox}{\v FListBox}, {\uldb SetTopIndex()}{\v FListBox_SetTopIndex} 
+\page
+
+#{\footnote FListBox_SetTopIndex}
+${\footnote FListBox::SetTopIndex()}
++{\footnote defbrowse}
+K{\footnote SetTopIndex()}
+K{\footnote FListBox::SetTopIndex()}
+{\fs26\cf1\b SetTopIndex()}\par
+Declaration: 
+\line{\f1
+Bool SetTopIndex(int index);\line
+}
+\par
+
+This function scrolls the listbox so that the {\i{index}}'th item will be the 
+first visible item in the listbox. It is in general impolite to call this 
+function at other times as during the creation of the listbox.\par
+
+See also: {\uldb FListBox}{\v FListBox}, {\uldb SetTopIndex()}{\v FListBox_SetTopIndex} 
+\page
+
+#{\footnote FListBox_DisableRedraw}
+${\footnote FListBox::DisableRedraw()}
++{\footnote defbrowse}
+K{\footnote DisableRedraw()}
+K{\footnote FListBox::DisableRedraw()}
+{\fs26\cf1\b DisableRedraw()}\par
+Declaration: 
+\line{\f1
+void DisableRedraw();\line
+}
+\par
+
+This function disables the instant redraw of the listbox until {\uldb EnableRedraw()}{\v FListBox_EnableRedraw} 
+is called. This is useful when adding several items to the listbox. As a rule 
+of thumb you should use DisableRedraw() when you are adding or modifying more 
+than 2 items in the listbox.\par
+
+Example: 
+\line{\f1
+FListBox list;\line
+...\line
+//disable redrawing\line
+list.DisableRedraw();\line
+//now add a lot of items to the listbox\line
+for(int i=0; i<20; i++)\line
+  list.AddItem(...);\line
+//enable redrawing again\line
+list.EnableRedraw();\line
+}
+\par
+
+See also: {\uldb FListBox}{\v FListBox}, {\uldb EnableRedraw()}{\v FListBox_EnableRedraw} 
+\page
+
+#{\footnote FListBox_EnableRedraw}
+${\footnote FListBox::EnableRedraw()}
++{\footnote defbrowse}
+K{\footnote EnableRedraw()}
+K{\footnote FListBox::EnableRedraw()}
+{\fs26\cf1\b EnableRedraw()}\par
+Declaration: 
+\line{\f1
+void EnableRedraw();\line
+}
+\par
+
+This function enables instant redraw previously disabled with {\uldb DisableRedraw()}{\v FListBox_DisableRedraw} 
+and ensures that the whole listbox is redrawn. See notes and example in {\uldb DisableRedraw()}{\v FListBox_DisableRedraw}. 
+\page
+
+#{\footnote FTextListBox}
+${\footnote FTextListBox}
++{\footnote defbrowse}
+K{\footnote FTextListBox}
+{\fs26\cf1\b FTextListBox}\par
+Declaration: 
+\line{\f1
+class FTextListBox : virtual public {\uldb FListBox}{\v FListBox} \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_LISTBOX\par
+
+A FTextListBox is a listbox that contains text items. The listbox will manage 
+the strings. This imposes a limit to the amount of text that the listbox can 
+contain under Windows 3.1 and OS/2 2.x PM (and maybe OS/2 Warp PM as well, we 
+don't know) to approximatly 64Kb. If you need more text, use 
+{\uldb FODListBox}{\v FODListBox}.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb AddItem()}{\v FTextListBox_AddItem} 
+\par
+\tab
+{\uldb InsertItem()}{\v FTextListBox_InsertItem} 
+\par
+\tab
+{\uldb GetItemText()}{\v FTextListBox_GetItemText} 
+\par
+\tab
+{\uldb GetItemTextLen()}{\v FTextListBox_GetItemTextLen} 
+\par
+\tab
+{\uldb RemoveItem()}{\v FTextListBox_RemoveItem} 
+\par
+\tab
+{\uldb ReplaceItem()}{\v FTextListBox_ReplaceItem} 
+\par
+\tab
+{\uldb FindItem()}{\v FTextListBox_FindItem} 
+\par\pard\sb100
+\par
+
+See also: {\uldb FListBox}{\v FListBox}, 
+{\uldb FSingleSelectionTextListBox}{\v FSingleSelectionTextListBox}, 
+{\uldb FMultipleSelectionTextListBox}{\v FMultipleSelectionTextListBox} 
+\page
+
+#{\footnote FTextListBox_AddItem}
+${\footnote FTextListBox::AddItem()}
++{\footnote defbrowse}
+K{\footnote AddItem()}
+K{\footnote FTextListBox::AddItem()}
+{\fs26\cf1\b AddItem()}\par
+Declaration: 
+\line{\f1
+Bool AddItem(const char *pszText);\line
+}
+\par
+
+This function is used for adding an item at the end of the list.\par
+
+Return value: True on succes, False otherwise (most likely: "out of memory")\par
+
+See also: {\uldb FTextListBox}{\v FTextListBox}, {\uldb InsertItem()}{\v FTextListBox_InsertItem} 
+\page
+
+#{\footnote FTextListBox_InsertItem}
+${\footnote FTextListBox::InsertItem()}
++{\footnote defbrowse}
+K{\footnote InsertItem()}
+K{\footnote FTextListBox::InsertItem()}
+{\fs26\cf1\b InsertItem()}\par
+Declaration: 
+\line{\f1
+Bool InsertItem(int index, const char *pszText);\line
+}
+\par
+
+This function is used for inserting an item at {\i{index}}.\par
+
+Return value: True on succes, False otherwise (most likely: "out of memory")\par
+
+See also: {\uldb FTextListBox}{\v FTextListBox}, {\uldb AddItem()}{\v FTextListBox_AddItem} 
+\page
+
+#{\footnote FTextListBox_GetItemText}
+${\footnote FTextListBox::GetItemText()}
++{\footnote defbrowse}
+K{\footnote GetItemText()}
+K{\footnote FTextListBox::GetItemText()}
+{\fs26\cf1\b GetItemText()}\par
+Declaration: 
+\line{\f1
+Bool GetItemText(int index, char *buffer, int maxbuf);\line
+}
+\par
+
+This function retrieves the text of an item.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+index\tab
+The 0-based item index 
+\par
+buffer\tab
+Where the retrived text will be stored 
+\par
+maxbuf\tab
+Maximum number of characters to copy. To find the length of an 
+item text use {\uldb GetItemTextLen()}{\v FTextListBox_GetItemTextLen} 
+\par\pard\sb100
+\par
+
+Return value: True on success, False otherwise (index out of range etc.)\par
+
+See also: {\uldb FTextListBox}{\v FTextListBox}, {\uldb GetItemTextLen()}{\v FTextListBox_GetItemTextLen} 
+\page
+
+#{\footnote FTextListBox_GetItemTextLen}
+${\footnote FTextListBox::GetItemTextLen()}
++{\footnote defbrowse}
+K{\footnote GetItemTextLen()}
+K{\footnote FTextListBox::GetItemTextLen()}
+{\fs26\cf1\b GetItemTextLen()}\par
+Declaration: 
+\line{\f1
+int GetItemTextLen(int index);\line
+}
+\par
+
+This function returns the length of the {\i{index}}'th item's text including '\\0'\par
+
+Return value: non-negative: text length, negative: error occurred\par
+
+See also: {\uldb FTextListBox}{\v FTextListBox}, {\uldb GetItemText()}{\v FTextListBox_GetItemText} 
+\page
+
+#{\footnote FTextListBox_RemoveItem}
+${\footnote FTextListBox::RemoveItem()}
++{\footnote defbrowse}
+K{\footnote RemoveItem()}
+K{\footnote FTextListBox::RemoveItem()}
+{\fs26\cf1\b RemoveItem()}\par
+Declaration: 
+\line{\f1
+Bool RemoveItem(int index);\line
+}
+\par
+
+This function removes the index at (0-based) position {\i{index}}\par
+
+Return value: True on success, False otherwise\par
+
+See also: {\uldb FTextListBox}{\v FTextListBox}, {\uldb Clear()}{\v FListBox_Clear} 
+\page
+
+#{\footnote FTextListBox_ReplaceItem}
+${\footnote FTextListBox::ReplaceItem()}
++{\footnote defbrowse}
+K{\footnote ReplaceItem()}
+K{\footnote FTextListBox::ReplaceItem()}
+{\fs26\cf1\b ReplaceItem()}\par
+Declaration: 
+\line{\f1
+Bool ReplaceItem(int index, const char *pszText);\line
+}
+\par
+
+This function replaces an item's text. This is {\b{not}} equivalent to 
+removing and then inserting because ReplaceItem() preserves the item select 
+state among others.\par
+
+See also: {\uldb FTextListBox}{\v FTextListBox}, {\uldb InsertItem()}{\v FTextListBox_InsertItem}, {\uldb RemoveItem()}{\v FTextListBox_RemoveItem} 
+\page
+
+#{\footnote FTextListBox_FindItem}
+${\footnote FTextListBox::FindItem()}
++{\footnote defbrowse}
+K{\footnote FindItem()}
+K{\footnote FTextListBox::FindItem()}
+{\fs26\cf1\b FindItem()}\par
+Declaration: 
+\line{\f1
+int FindItem(const char *pszText, int startIndex=-1);\line
+}
+\par
+
+This function locates an item that begins with {\i{pszText}}. The search may 
+or may not be case-sensitive depending on the native listbox control. If you 
+want to search for a whole string or need other behaviour you will need to 
+iterate over the items yourself.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pszText\tab
+Initial characters to search for 
+\par
+startIndex\tab
+The search will start {\i{after}} startIndex and will wrap around 
+when the bottom of the listbox is reached. 
+\par\pard\sb100
+\par
+
+Return value: non-negative: index of item, negative: not found or error occurred\par
+
+See also: {\uldb FTextListBox}{\v FTextListBox} 
+\page
+
+#{\footnote FSingleSelectionListBox}
+${\footnote FSingleSelectionListBox}
++{\footnote defbrowse}
+K{\footnote FSingleSelectionListBox}
+{\fs26\cf1\b FSingleSelectionListBox}\par
+Declaration: 
+\line{\f1
+class FSingleSelectionListBox : virtual public {\uldb FListBox}{\v FListBox} \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_LISTBOX\par
+
+A FSingleSelectionListBox is a listbox where the user is only allowed to select one item.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb GetCurrentSelection()}{\v FSingleSelectionListBox_GetCurrentSelection} 
+\par
+\tab
+{\uldb SetCurrentSelection()}{\v FSingleSelectionListBox_SetCurrentSelection} 
+\par\pard\sb100
+\par
+
+See also: {\uldb FListBox}{\v FListBox}, 
+{\uldb FMultipleSelectionListBox}{\v FMultipleSelectionListBox}, 
+{\uldb FSingleSelectionTextListBox}{\v FSingleSelectionTextListBox}, 
+{\uldb FSingleSelectionODListBox}{\v FSingleSelectionODListBox} 
+\page
+
+#{\footnote FSingleSelectionListBox_GetCurrentSelection}
+${\footnote FSingleSelectionListBox::GetCurrentSelection()}
++{\footnote defbrowse}
+K{\footnote GetCurrentSelection()}
+K{\footnote FSingleSelectionListBox::GetCurrentSelection()}
+{\fs26\cf1\b GetCurrentSelection()}\par
+Declaration: 
+\line{\f1
+int GetCurrentSelection();\line
+}
+\par
+
+This function returns the index of the currently selected item, if any.\par
+
+Return value: non-negative: item index, negative: no item is currently selected\par
+
+See also: {\uldb FSingleSelectionListBox}{\v FSingleSelectionListBox}, {\uldb SetCurrentSelection()}{\v FSingleSelectionListBox_SetCurrentSelection} 
+\page
+
+#{\footnote FSingleSelectionListBox_SetCurrentSelection}
+${\footnote FSingleSelectionListBox::SetCurrentSelection()}
++{\footnote defbrowse}
+K{\footnote SetCurrentSelection()}
+K{\footnote FSingleSelectionListBox::SetCurrentSelection()}
+{\fs26\cf1\b SetCurrentSelection()}\par
+Declaration: 
+\line{\f1
+Bool SetCurrentSelection(int index);\line
+}
+\par
+
+This function makes an item the selected item. If {\i{index}} is -1 there will be no currently selected item.\par
+
+See also: {\uldb FSingleSelectionListBox}{\v FSingleSelectionListBox}, {\uldb GetCurrentSelection()}{\v FSingleSelectionListBox_GetCurrentSelection} 
+\page
+
+#{\footnote FMultipleSelectionListBox}
+${\footnote FMultipleSelectionListBox}
++{\footnote defbrowse}
+K{\footnote FMultipleSelectionListBox}
+{\fs26\cf1\b FMultipleSelectionListBox}\par
+Declaration: 
+\line{\f1
+class FMultipleSelectionListBox : virtual public {\uldb FListBox}{\v FListBox} \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_LISTBOX\par
+
+A FMultipleSelectionListBox is a listbox where the user can select several items at a time.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb SetSelState()}{\v FMultipleSelectionListBox_SetSelState} 
+\par
+\tab
+{\uldb SetSelStateAll()}{\v FMultipleSelectionListBox_SetSelStateAll} 
+\par
+\tab
+SelectItem(index) - maps to SetSelState(index,True) 
+\par
+\tab
+UnSelectItem(index) - maps to SetSelState(index,False) 
+\par
+\tab
+{\uldb GetSelCount()}{\v FMultipleSelectionListBox_GetSelCount} 
+\par
+\tab
+{\uldb GetSelItems()}{\v FMultipleSelectionListBox_GetSelItems} 
+\par\pard\sb100
+\par
+
+See also: {\uldb FListBox}{\v FListBox}, 
+{\uldb FMultipleSelectionTextListBox}{\v FMultipleSelectionTextListBox}, 
+{\uldb FMultipleSelectionODListBox}{\v FMultipleSelectionODListBox} 
+\page
+
+#{\footnote FMultipleSelectionListBox_SetSelState}
+${\footnote FMultipleSelectionListBox::SetSelState()}
++{\footnote defbrowse}
+K{\footnote SetSelState()}
+K{\footnote FMultipleSelectionListBox::SetSelState()}
+{\fs26\cf1\b SetSelState()}\par
+Declaration: 
+\line{\f1
+Bool SetSelState(int index, Bool selected);\line
+}
+\par
+
+This function changes the selects or de-selects an item.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+index\tab
+0-based item index 
+\par
+selected\tab
+new selection state of the item 
+\par\pard\sb100
+\par
+
+Return value: True on success, False otherwise\par
+
+See also: {\uldb FMultipleSelectionListBox}{\v FMultipleSelectionListBox}, {\uldb SetSelStateAll()}{\v FMultipleSelectionListBox_SetSelStateAll} 
+\page
+
+#{\footnote FMultipleSelectionListBox_SetSelStateAll}
+${\footnote FMultipleSelectionListBox::SetSelStateAll()}
++{\footnote defbrowse}
+K{\footnote SetSelStateAll()}
+K{\footnote FMultipleSelectionListBox::SetSelStateAll()}
+{\fs26\cf1\b SetSelStateAll()}\par
+Declaration: 
+\line{\f1
+Bool SetSelStateAll(Bool selected);\line
+}
+\par
+
+This function changes the selects or de-selects all items in the listbox.\par
+
+Return value: True on success, False otherwise\par
+
+See also: {\uldb FMultipleSelectionListBox}{\v FMultipleSelectionListBox}, {\uldb SetSelState()}{\v FMultipleSelectionListBox_SetSelState} 
+\page
+
+#{\footnote FMultipleSelectionListBox_GetSelCount}
+${\footnote FMultipleSelectionListBox::GetSelCount()}
++{\footnote defbrowse}
+K{\footnote GetSelCount()}
+K{\footnote FMultipleSelectionListBox::GetSelCount()}
+{\fs26\cf1\b GetSelCount()}\par
+Declaration: 
+\line{\f1
+int GetSelCount();\line
+}
+\par
+
+This function returns the number currently selected items in the listbox.\par
+
+For example see {\uldb GetSelItems()}{\v FMultipleSelectionListBox_GetSelItems} 
+\page
+
+#{\footnote FMultipleSelectionListBox_GetSelItems}
+${\footnote FMultipleSelectionListBox::GetSelItems()}
++{\footnote defbrowse}
+K{\footnote GetSelItems()}
+K{\footnote FMultipleSelectionListBox::GetSelItems()}
+{\fs26\cf1\b GetSelItems()}\par
+Declaration: 
+\line{\f1
+Bool GetSelItems(int index[], int maxitem);\line
+}
+\par
+
+This function retrieves a list of indexes of the currently selected items.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+index\tab
+array or pointer where the indexes will be stored 
+\par
+maxitem\tab
+maximum number of items indexes to retrieve 
+\par\pard\sb100
+\par
+
+Example: 
+\line{\f1
+//listbox is a FMultipleSelectionListBox\line
+int count = listbox.GetSelCount();\line
+int *indexlist = new int[count];\line
+listbox.GetSelItems(indexlist,count);\line
+//Now use the item indexes for something\line
+}
+\par
+
+See also: {\uldb FMultipleSelectionListBox}{\v FMultipleSelectionListBox},  
+{\uldb GetSelCount()}{\v FMultipleSelectionListBox_GetSelCount} 
+\page
+
+#{\footnote FSingleSelectionTextListBox}
+${\footnote FSingleSelectionTextListBox}
++{\footnote defbrowse}
+K{\footnote FSingleSelectionTextListBox}
+{\fs26\cf1\b FSingleSelectionTextListBox}\par
+Declaration: 
+\line{\f1
+class FSingleSelectionTextListBox : virtual public {\uldb FListBox}{\v FListBox},\line
+                                    public {\uldb FTextListBox}{\v FTextListBox},\line
+                                    public {\uldb FSingleSelectionListBox}{\v FSingleSelectionListBox}\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_LISTBOX\par
+
+A FSingleSelectionTextListBox is a list where the items are text items and the 
+user is only allowed to select one item.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Create(parent,ID) - standard create 
+\par
+\tab
+{\uldb Create(parent,ID,...)}{\v FSingleSelectionTextListBox_Create2} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FSingleSelectionTextListBox_Create2}
+${\footnote FSingleSelectionTextListBox::Create(parent,ID,...)}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID,...)}
+K{\footnote FSingleSelectionTextListBox::Create(parent,ID,...)}
+{\fs26\cf1\b Create(parent,ID,...)}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int ID, FRect *rect, Bool sorted=False);\line
+}
+\par
+
+This Create() creates the native listbox.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pParent\tab
+Parent window 
+\par
+ID\tab
+Control-ID 
+\par
+rect\tab
+Position and dimension of the listbox. If {\i{rect}} is NULL 
+the listbox will be placed at (0,0)and have zero width and height 
+\par
+sorted\tab
+Wether the items should be sorted or not. 
+See {\ul listbox item sorting}{\v listbox_item_sorting}! 
+\par\pard\sb100
+\par
+
+Return value: True on success, False otherwise\par
+
+See also: {\uldb FSingleSelectionTextListBox}{\v FSingleSelectionTextListBox} 
+\page
+
+#{\footnote listbox_item_sorting}
+ 
+There are differences in how the sorting feature is specified in Windows and OS/2 PM. 
+Windows sorts the items if a style bit is set when the listbox is created. 
+OS/2 PM sorts the items according to a flag specified on each insert operation.\par
+
+This can introduce a portability problem when the listbox is created from the 
+resources. Under Windows: If the resources specifies sorting (LBS_SORT) the 
+items will be sorted no matter what the {\i{sorted}} parameter to the Create() 
+function is. If the style bit is not specified the items will not be sorted. 
+Under OS/2 PM: only a problem if the resources are converted to Windows-format.\par
+
+The {\i{sorted}} parameter must be consistent with the resources.\par
+
+In general if you want the items in a listbox to be sorted it is easier (and 
+faster) to sort them yourself and then insert the items into the listbox. 
+\page#{\footnote FMultipleSelectionTextListBox}
+${\footnote FMultipleSelectionTextListBox}
++{\footnote defbrowse}
+K{\footnote FMultipleSelectionTextListBox}
+{\fs26\cf1\b FMultipleSelectionTextListBox}\par
+Declaration: 
+\line{\f1
+class FMultipleSelectionTextListBox : virtual public {\uldb FListBox}{\v FListBox},\line
+                                      public {\uldb FTextListBox}{\v FTextListBox},\line
+                                      public {\uldb FMultipleSelectionListBox}{\v FMultipleSelectionListBox}\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_LISTBOX\par
+
+A FMultipleSelectionTextListBox is a listbox where the items are text items 
+and the user is allowed to select several items.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Create(parent,ID) - standard control create 
+\par
+\tab
+{\uldb Create(parent,ID,...)}{\v FMultipleSelectionTextListBox_Create2} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FMultipleSelectionTextListBox_Create2}
+${\footnote FMultipleSelectionTextListBox::Create(parent,ID,...)}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID,...)}
+K{\footnote FMultipleSelectionTextListBox::Create(parent,ID,...)}
+{\fs26\cf1\b Create(parent,ID,...)}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int ID, FRect *rect,\line
+           lbs_multiselectstyle msstyle=lbs_me_selection,\line
+           Bool sorted=False);\line
+}
+\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pParent\tab
+Parent window 
+\par
+ID\tab
+Control-ID 
+\par
+rect\tab
+Position and dimension of the listbox. If {\i{rect}} is 
+NULL the listbox will be placed at (0,0) with zero with and height 
+\par
+msstyle\tab
+Keyboard and mouse interface style. {\i{msstyle}} specified how  
+the user can select multiple items. msstyle can be: 
+\par\pard\sb100\tx4000\li4000\fi-1999
+lbs_multipleselection\tab
+"Multiple selection" 
+\par
+lbs_extendedselection\tab
+"Extended selection" 
+\par
+lbs_me_selection\tab
+BIF-default style. This will let BIF select one of the 
+above according to the normal behaviour of the native GUI system and your 
+shoe size. 
+\par\pard\sb100\tx2000\li2000\fi-1999
+ 
+\par
+sorted\tab
+Specifies wether the items should be sorted when inserted into 
+the listbox. See {\ul listbox item sorting}{\v listbox_item_sorting}! 
+\par\pard\sb100
+\par
+
+See also: {\uldb FMultipleSelectionTextListBox}{\v FMultipleSelectionTextListBox} 
+\page
+
+#{\footnote FODListBox}
+${\footnote FODListBox}
++{\footnote defbrowse}
+K{\footnote FODListBox}
+{\fs26\cf1\b FODListBox}\par
+Declaration: 
+\line{\f1
+class FODListBox : virtual public {\uldb FListBox}{\v FListBox},\line
+                   public {\uldb FOwnerDrawOwnee}{\v FOwnerDrawOwnee}\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_LISTBOX\par
+
+A FODListBox is a listbox where it is the responsibility of the application to 
+draw the items. Each item has an associated 32-bit value that the application 
+can use for pointers, indexes, etc.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb AddItem()}{\v FODListBox_AddItem} 
+\par
+\tab
+{\uldb InsertItem()}{\v FODListBox_InsertItem} 
+\par
+\tab
+{\uldb GetItemData()}{\v FODListBox_GetItemData} 
+\par
+\tab
+{\uldb RemoveItem()}{\v FODListBox_RemoveItem} 
+\par
+\tab
+{\uldb ReplaceItem()}{\v FODListBox_ReplaceItem} 
+\par
+\tab
+{\uldb GetItemHeight()}{\v FODListBox_GetItemHeight} (protected and pure virtual) 
+\par\pard\sb100
+\par
+
+See also: {\uldb FListBox}{\v FListBox}, {\uldb FOwnerDrawOwnee}{\v FOwnerDrawOwnee}, 
+{\uldb FSingleSelectionODListBox}{\v FSingleSelectionODListBox}, 
+{\uldb FMultipleSelectionODListBox}{\v FMultipleSelectionODListBox} 
+\page
+
+#{\footnote FODListBox_AddItem}
+${\footnote FODListBox::AddItem()}
++{\footnote defbrowse}
+K{\footnote AddItem()}
+K{\footnote FODListBox::AddItem()}
+{\fs26\cf1\b AddItem()}\par
+Declaration: 
+\line{\f1
+Bool AddItem(long itemData);\line
+}
+\par
+
+This function append an item to the items. {\i{itemData}} will be the value associated with the item.\par
+
+Return value: True on success, False otherwise (usually out of memory)\par
+
+See also: {\uldb FODListBox}{\v FODListBox}, {\uldb InsertItem()}{\v FODListBox_InsertItem} 
+\page
+
+#{\footnote FODListBox_InsertItem}
+${\footnote FODListBox::InsertItem()}
++{\footnote defbrowse}
+K{\footnote InsertItem()}
+K{\footnote FODListBox::InsertItem()}
+{\fs26\cf1\b InsertItem()}\par
+Declaration: 
+\line{\f1
+Bool InsertItem(int index, long itemData);\line
+}
+\par
+
+This function inserts an item at the {\i{index}}'th to the items. {\i{itemData}} will be the value associated with the item.\par
+
+Return value: True on success, False otherwise (usually out of memory)\par
+
+See also: {\uldb FODListBox}{\v FODListBox}, {\uldb AddItem()}{\v FODListBox_AddItem} 
+\page
+
+#{\footnote FODListBox_GetItemData}
+${\footnote FOD_ListBox::GetItemData()}
++{\footnote defbrowse}
+K{\footnote GetItemData()}
+K{\footnote FOD_ListBox::GetItemData()}
+{\fs26\cf1\b GetItemData()}\par
+Declaration: 
+\line{\f1
+Bool GetItemData(int index, long *itemData);\line
+}
+\par
+
+This function retrieves the 32-bit value associated with the item at {\i{index}}\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+index\tab
+Item index 
+\par
+itemData\tab
+The retrieved 32-bit value be will stored here. 
+\par\pard\sb100
+\par
+
+Return value: True on success, False otherwise (usually index out of range)\par
+
+See also: {\uldb FODListBox}{\v FODListBox}, {\uldb InsertItem()}{\v FODListBox_InsertItem} 
+\page
+
+#{\footnote FODListBox_RemoveItem}
+${\footnote FODListBox::RemoveItem()}
++{\footnote defbrowse}
+K{\footnote RemoveItem()}
+K{\footnote FODListBox::RemoveItem()}
+{\fs26\cf1\b RemoveItem()}\par
+Declaration: 
+\line{\f1
+Bool RemoveItem(int index);\line
+}
+\par
+
+This function removes the item at the {\i{index}}'th place.\par
+
+See also: {\uldb FODListBox}{\v FODListBox}, {\uldb InsertItem()}{\v FODListBox_InsertItem} 
+\page
+
+#{\footnote FODListBox_ReplaceItem}
+${\footnote FODListBox::ReplaceItem()}
++{\footnote defbrowse}
+K{\footnote ReplaceItem()}
+K{\footnote FODListBox::ReplaceItem()}
+{\fs26\cf1\b ReplaceItem()}\par
+Declaration: 
+\line{\f1
+Bool ReplaceItem(int index, long itemData);\line
+}
+\par
+
+This function replaces an item.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+index\tab
+Item index 
+\par
+itemData\tab
+New 32-bit value to be associated with the item 
+\par\pard\sb100
+\par
+
+See also: {\uldb FODListBox}{\v FODListBox}, {\uldb InsertItem()}{\v FODListBox_InsertItem}, {\uldb RemoveItem()}{\v FODListBox_RemoveItem} 
+\page
+
+#{\footnote FODListBox_GetItemHeight}
+${\footnote FODListBox::GetItemHeight()}
++{\footnote defbrowse}
+K{\footnote GetItemHeight()}
+K{\footnote FODListBox::GetItemHeight()}
+{\fs26\cf1\b GetItemHeight()}\par
+Declaration: 
+\line{\f1
+virtual int GetItemHeight() =0;\line
+}
+\par
+
+This function is called whenever the native listbox wants to know the height of 
+the items in the listbox.\par
+
+{\b{Note:}} This function may be called before the BIF-object has been associated with 
+the native window, so the function should not assume the BIF-object is valid. 
+\par
+
+See also: {\uldb FODListBox}{\v FODListBox}, {\uldb FOwnerDrawOwnee}{\v FOwnerDrawOwnee} 
+\page
+
+#{\footnote FSingleSelectionODListBox}
+${\footnote FSingleSelectionODListBox}
++{\footnote defbrowse}
+K{\footnote FSingleSelectionODListBox}
+{\fs26\cf1\b FSingleSelectionODListBox}\par
+Declaration: 
+\line{\f1
+class FSingleSelectionODListBox : virtual public {\uldb FListBox}{\v FListBox},\line
+                                  public {\uldb FODListBox}{\v FODListBox},\line
+                                  public {\uldb FSingleSelectionListBox}{\v FSingleSelectionListBox}\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_LISTBOX\par
+
+A FSingleSelectionODListBox is a listbox where the items drawn by the 
+application and the user is allowed only to select one item.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Create(parent,ID) - standard control create 
+\par
+\tab
+{\uldb Create(parent,ID,...)}{\v FSingleSelectionODListBox_Create2} 
+\par\pard\sb100
+\par
+
+See also: {\uldb FMultipleSelectionODListBox}{\v FMultipleSelectionODListBox} 
+\page
+
+#{\footnote FSingleSelectionODListBox_Create2}
+${\footnote FSingleSelectionODListBox::Create(parent,ID,...)}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID,...)}
+K{\footnote FSingleSelectionODListBox::Create(parent,ID,...)}
+{\fs26\cf1\b Create(parent,ID,...)}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int ID, FRect *rect);\line
+}
+\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+parent\tab
+Parent window 
+\par
+ID\tab
+Control-ID of the listbox 
+\par
+rect\tab
+Position and dimension of the listbox. If {\i{rect}} is 
+NULL the listbox will be placed at (0,0) with zero width and height 
+\par\pard\sb100
+\par
+
+See also: {\uldb FSingleSelectionODListBox}{\v FSingleSelectionODListBox} 
+\page
+
+#{\footnote FMultipleSelectionODListBox}
+${\footnote FMultipleSelectionODListBox}
++{\footnote defbrowse}
+K{\footnote FMultipleSelectionODListBox}
+{\fs26\cf1\b FMultipleSelectionODListBox}\par
+Declaration: 
+\line{\f1
+class FMultipleSelectionODListBox : virtual public {\uldb FListBox}{\v FListBox},\line
+                                    public {\uldb FODListBox}{\v FODListBox},\line
+                                    public {\uldb FMultipleSelectionListBox}{\v FMultipleSelectionListBox}\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_LISTBOX\par
+
+A FMultipleSelectionListBox is a listbox where the items are draw by the 
+application and the user is allowed to select more than one item at a time.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Create(parent,ID) - standard control create 
+\par
+\tab
+{\uldb Create(parent,ID,...)}{\v FMultipleSelectionODListBox_Create2} 
+\par\pard\sb100
+\par
+
+See also: {\uldb FSingleSelectionODListBox}{\v FSingleSelectionODListBox} 
+\page
+
+#{\footnote FMultipleSelectionODListBox_Create2}
+${\footnote FMultipleSelectionODListBox::Create(parent,ID,...)}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID,...)}
+K{\footnote FMultipleSelectionODListBox::Create(parent,ID,...)}
+{\fs26\cf1\b Create(parent,ID,...)}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int ID, FRect *rect,\line
+            lbs_multiselectstyle msstyle=lbs_me_selection);\line
+}
+\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pParent\tab
+Parent window 
+\par
+ID\tab
+Control-ID 
+\par
+rect\tab
+Position and dimension of the listbox. If {\i{rect}} is NULL 
+the listbox will be placed at (0,0) with zero with and height 
+\par
+msstyle\tab
+Keyboard and mouse interface style. {\i{msstyle}} 
+specifies how the user can select multiple items. msstyle can be: 
+\par\pard\sb100\tx4000\li4000\fi-1999
+lbs_multipleselection\tab
+"Multiple selection" 
+\par
+lbs_extendedselection\tab
+"Extended selection" 
+\par
+lbs_me_selection\tab
+BIF-default style. This will let BIF select one of the 
+above according to the normal behaviour of the native GUI system and your 
+shoe size. 
+\par\pard\sb100\tx2000\li2000\fi-1999
+ 
+\par
+sorted\tab
+Specified wether the items should be sorted when inserted into the 
+listbox. See {\ul listbox item sorting}{\v listbox_item_sorting}! 
+\par\pard\sb100
+\par
+
+See also: {\uldb FMultipleSelectionODListBox}{\v FMultipleSelectionODListBox} 
+\page
+
+#{\footnote FMLE}
+${\footnote FMLE}
++{\footnote defbrowse}
+K{\footnote FMLE}
+{\fs26\cf1\b FMLE}\par
+Declaration: 
+\line{\f1
+class FMLE : public {\uldb FControl}{\v FControl} \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_MLE\par
+
+'MLE' is an abbreversion of Multi-Line-Edit. A FMLE is an editfield that allows 
+the user to enter several lines.\par
+
+{\b{Note:}} The Windows 3.1 version of FMLE is based on the normal editcontrol, so 
+the FMLE can only hold 64KB text. The OS/2 PM version for FMLE can in theory hold 
+4GB text, but at most 64KB can be inserted at a time. 
+\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Create(parent,ID) - standard control create 
+\par
+\tab
+{\uldb Create(parent,ID,...)}{\v FMLE_Create2} 
+\par
+\tab
+{\uldb Cut()}{\v FMLE_Cut} 
+\par
+\tab
+{\uldb Copy()}{\v FMLE_Copy} 
+\par
+\tab
+{\uldb Paste()}{\v FMLE_Paste} 
+\par
+\tab
+{\uldb Clear()}{\v FMLE_Clear} 
+\par
+\tab
+{\uldb ReplaceSelection()}{\v FMLE_ReplaceSelection} 
+\par
+\tab
+{\uldb HasBeenModified()}{\v FMLE_HasBeenModified} 
+\par
+\tab
+{\uldb SetModify()}{\v FMLE_SetModify} 
+\par
+\tab
+{\uldb GetTextLen()}{\v FMLE_GetTextLen} 
+\par
+\tab
+{\uldb GetText()}{\v FMLE_GetText} 
+\par
+\tab
+{\uldb SetText()}{\v FMLE_SetText} 
+\par
+\tab
+{\uldb LimitText()}{\v FMLE_LimitText} 
+\par
+\tab
+{\uldb IsReadonly()}{\v FMLE_IsReadonly} 
+\par
+\tab
+{\uldb SetReadonly()}{\v FMLE_SetReadonly} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FMLE_Create2}
+${\footnote FMLE::Create(parent,ID,...)}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID,...)}
+K{\footnote FMLE::Create(parent,ID,...)}
+{\fs26\cf1\b Create(parent,ID,...)}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int ID, FRect *rect,\line
+            long style=mle_border, const char *pszText=0);\line
+}
+\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pParent\tab
+Parent window 
+\par
+ID\tab
+Control-ID 
+\par
+style\tab
+A combination of the following: 
+\par\pard\sb100\tx4000\li4000\fi-1999
+mle_hscroll\tab
+text can scroll horizontally 
+\par
+mle_vscroll\tab
+text can scroll vertically 
+\par
+mle_readonly\tab
+the FMLE is initially readonly (the user cannot modify the text) 
+\par
+mle_border\tab
+the FMLE will have a small border 
+\par\pard\sb100\tx2000\li2000\fi-1999
+ 
+\par
+pszText\tab
+Initial text in the FMLE 
+\par\pard\sb100
+\par
+
+Return value: True on succes, False otherwise\par
+
+See also: {\uldb FMLE}{\v FMLE}, {\uldb SetReadonly()}{\v FMLE_SetReadonly} 
+\page
+
+#{\footnote FMLE_Cut}
+${\footnote FMLE::Cut()}
++{\footnote defbrowse}
+K{\footnote Cut()}
+K{\footnote FMLE::Cut()}
+{\fs26\cf1\b Cut()}\par
+Declaration: 
+\line{\f1
+Bool Cut();\line
+}
+\par
+
+This function removes the currently selected text and places it in the 
+clipboard. This works like if the user had pressed Shift-Delete himself. 
+\page
+
+#{\footnote FMLE_Copy}
+${\footnote FMLE::Copy()}
++{\footnote defbrowse}
+K{\footnote Copy()}
+K{\footnote FMLE::Copy()}
+{\fs26\cf1\b Copy()}\par
+Declaration: 
+\line{\f1
+Bool Copy();\line
+}
+\par
+
+This function copies the currently selected text to the clipboard as if 
+the user had pressed Ctrl-Insert himself. 
+\page
+
+#{\footnote FMLE_Paste}
+${\footnote FMLE::Paste()}
++{\footnote defbrowse}
+K{\footnote Paste()}
+K{\footnote FMLE::Paste()}
+{\fs26\cf1\b Paste()}\par
+Declaration: 
+\line{\f1
+Bool Paste();\line
+}
+\par
+
+This copies the text in the clipboard to the FMLE where the current insertion point is. 
+This works like if the user had pressed Shift-Insert himself.\par
+
+{\b{Note:}} If any text is currently selected in the FMLE, it will be removed first 
+ 
+\page
+
+#{\footnote FMLE_Clear}
+${\footnote FMLE::Clear()}
++{\footnote defbrowse}
+K{\footnote Clear()}
+K{\footnote FMLE::Clear()}
+{\fs26\cf1\b Clear()}\par
+Declaration: 
+\line{\f1
+Bool Clear();\line
+}
+\par
+
+This function removes the currently selected text but does {\b{not}} place it in the 
+clipboard. This works like if the user had pressed Ctrl-Delete himself. 
+\page
+
+#{\footnote FMLE_ReplaceSelection}
+${\footnote FMLE::ReplaceSelection()}
++{\footnote defbrowse}
+K{\footnote ReplaceSelection()}
+K{\footnote FMLE::ReplaceSelection()}
+{\fs26\cf1\b ReplaceSelection()}\par
+Declaration: 
+\line{\f1
+Bool ReplaceSelection(const char *text);\line
+}
+\par
+
+This function replaces the currently selected text with the text at {\i{text}}. 
+\page
+
+#{\footnote FMLE_HasBeenModified}
+${\footnote FMLE::HasBeenModified()}
++{\footnote defbrowse}
+K{\footnote HasBeenModified()}
+K{\footnote FMLE::HasBeenModified()}
+{\fs26\cf1\b HasBeenModified()}\par
+Declaration: 
+\line{\f1
+Bool HasBeenModified();\line
+}
+\par
+
+This function returns wether or not the text as been changed by the user since 
+the "changed"-flag was last cleared.\par
+
+Example: (very primitive editor) 
+\line{\f1
+MyEditor::Close() \{\line
+  if(mle.HasBeenModified()) \{\line
+    //save text before closing\line
+    Save();\line
+  \}\line
+\}\line
+...\line
+MyEditor::Save() \{\line
+  <save text>\line
+  mle.SetModify(False);\line
+\}\line
+}
+\par
+
+\page
+
+#{\footnote FMLE_SetModify}
+${\footnote FMLE::SetModify()}
++{\footnote defbrowse}
+K{\footnote SetModify()}
+K{\footnote FMLE::SetModify()}
+{\fs26\cf1\b SetModify()}\par
+Declaration: 
+\line{\f1
+Bool SetModify(Bool modified);\line
+}
+\par
+
+This function sets or clears the "changed"-flad of the FMLE.\par
+
+See {\uldb HasBeenModfied()}{\v FMLE_HasBeenModified} for example. 
+\page
+
+#{\footnote FMLE_GetTextLen}
+${\footnote FMLE::GetTextLen()}
++{\footnote defbrowse}
+K{\footnote GetTextLen()}
+K{\footnote FMLE::GetTextLen()}
+{\fs26\cf1\b GetTextLen()}\par
+Declaration: 
+\line{\f1
+int GetTextLen();\line
+}
+\par
+
+This function returns the length of the text in the FMLE including linefeeds 
+and the terminating '\\0' 
+\page
+
+#{\footnote FMLE_GetText}
+${\footnote FMLE::GetText()}
++{\footnote defbrowse}
+K{\footnote GetText()}
+K{\footnote FMLE::GetText()}
+{\fs26\cf1\b GetText()}\par
+Declaration: 
+\line{\f1
+Bool GetText(char *buffer, int maxbuf);\line
+}
+\par
+
+This function retrieves the text in the FMLE. Lines are separated with '\\n' and 
+the text is terminated with '\\0'\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+buffer\tab
+The buffer where the retrieved text will be stored 
+\par
+maxbuf\tab
+Maximum number of bytes to copy into {\i{buffer}} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FMLE_SetText}
+${\footnote FMLE::SetText()}
++{\footnote defbrowse}
+K{\footnote SetText()}
+K{\footnote FMLE::SetText()}
+{\fs26\cf1\b SetText()}\par
+Declaration: 
+\line{\f1
+Bool SetText(const char *text);\line
+}
+\par
+
+This function sets the text of the FMLE to {\i{text}} 
+\page
+
+#{\footnote FMLE_LimitText}
+${\footnote FMLE::LimitText()}
++{\footnote defbrowse}
+K{\footnote LimitText()}
+K{\footnote FMLE::LimitText()}
+{\fs26\cf1\b LimitText()}\par
+Declaration: 
+\line{\f1
+Bool LimitText(int limit);\line
+}
+\par
+
+This function limits the number of characters the user is allowed to enter 
+into the FMLE. If the current text in the FMLE exceeds this limit it is 
+{\b{not}} truncated. 
+\page
+
+#{\footnote FMLE_IsReadonly}
+${\footnote FMLE::IsReadonly()}
++{\footnote defbrowse}
+K{\footnote IsReadonly()}
+K{\footnote FMLE::IsReadonly()}
+{\fs26\cf1\b IsReadonly()}\par
+Declaration: 
+\line{\f1
+Bool IsReadonly();\line
+}
+\par
+
+This function returns wether or not the FMLE is read-only, that is if the ser 
+is allowed to modify the contents of the FMLE. 
+\page
+
+#{\footnote FMLE_SetReadonly}
+${\footnote FMLE::SetReadonly()}
++{\footnote defbrowse}
+K{\footnote SetReadonly()}
+K{\footnote FMLE::SetReadonly()}
+{\fs26\cf1\b SetReadonly()}\par
+Declaration: 
+\line{\f1
+Bool SetReadonly(Bool f);\line
+}
+\par
+
+This function changes the read-only state of the FMLE. 
+\page
+
+#{\footnote FPushButton}
+${\footnote FPushButton}
++{\footnote defbrowse}
+K{\footnote FPushButton}
+{\fs26\cf1\b FPushButton}\par
+Declaration: 
+\line{\f1
+class FPushButton : public {\uldb FControl}{\v FControl},\line
+                    public {\uldb FControlTextHandler}{\v FControlTextHandler}\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_PUSHBUTTON\par
+
+A FPushPutton is the encapsulation of the normal push-buttons. When the 
+user "pushes" the button it will send a {\uldb FCommandEvent}{\v FCommandEvent} 
+its owner (catchable with an {\uldb FCommandHandler}{\v FCommandHandler}).\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Create(parent,ID) - standard control-create 
+\par
+\tab
+{\uldb Create(parent,ID,...)}{\v FPushButton_Create2} 
+\par
+\tab
+{\uldb Push()}{\v FPushButton_Push} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FPushButton_Create2}
+${\footnote FPushButton::Create(parent,ID,...)}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID,...)}
+K{\footnote FPushButton::Create(parent,ID,...)}
+{\fs26\cf1\b Create(parent,ID,...)}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int ID, FRect *rect, const char *pszText, Bool isDefault=False);\line
+}
+\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pParent\tab
+Parent window 
+\par
+ID\tab
+Control ID. This ID will be used when the button sends a {\uldb FCommandEvent}{\v FCommandEvent} 
+to its owner 
+\par
+pszText\tab
+Button text. If {\i{pszText}} is NULL the button will not have a text in it 
+\par
+isDefault\tab
+Default flag. If a pushbutton is the "default pushbutton" the user can 
+push it by just pressing Enter anywhere in the dialog. A dialog should only have  
+1 default pushbutton. 
+\par\pard\sb100
+\par
+
+See also: {\uldb FPushButton}{\v FPushButton} 
+\page
+
+#{\footnote FPushButton_Push}
+${\footnote FPushButton::Push()}
++{\footnote defbrowse}
+K{\footnote Push()}
+K{\footnote FPushButton::Push()}
+{\fs26\cf1\b Push()}\par
+Declaration: 
+\line{\f1
+void Push();\line
+}
+\par
+
+This function will make the pushbutton behave exactly as if the user had 
+pushed it, that is the pushbutton will send a {\uldb FCommandEvent}{\v FCommandEvent}  
+to its owner.\par
+
+See also: {\uldb FPushButton}{\v FPushButton} 
+\page
+
+#{\footnote FRadioButton}
+${\footnote FRadioButton}
++{\footnote defbrowse}
+K{\footnote FRadioButton}
+{\fs26\cf1\b FRadioButton}\par
+Declaration: 
+\line{\f1
+class FRadioButton : public {\uldb FControl}{\v FControl},\line
+                     public {\uldb FControlTextHandler}{\v FControlTextHandler}\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_RADIOBUTTON\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Create(parent,ID) - standard control-create 
+\par
+\tab
+{\uldb Create(parent,ID,...)}{\v FRadioButton_Create2} 
+\par
+\tab
+{\uldb IsChecked()}{\v FRadioButton_IsChecked} 
+\par
+\tab
+{\uldb Check()}{\v FRadioButton_Check} 
+\par
+\tab
+{\uldb UnCheck()}{\v FRadioButton_UnCheck} 
+\par
+\tab
+{\uldb GetCheckIndex()}{\v FRadioButton_GetCheckIndex} 
+\par
+\tab
+{\uldb CheckIndex()}{\v FRadioButton_CheckIndex} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FRadioButton_Create2}
+${\footnote FRadioButton::Create(parent,ID,...)}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID,...)}
+K{\footnote FRadioButton::Create(parent,ID,...)}
+{\fs26\cf1\b Create(parent,ID,...)}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int ID, FRect *rect, const char *pszText);\line
+}
+\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pParent\tab
+Parent window 
+\par
+ID\tab
+Control ID. 
+\par
+pszText\tab
+Button text. If {\i{pszText}} is NULL the button will not have a text in it 
+\par\pard\sb100
+\par
+
+See also: {\uldb FRadioButton}{\v FRadioButton} 
+\page
+
+#{\footnote FRadioButton_IsChecked}
+${\footnote FRadioButton::IsChecked()}
++{\footnote defbrowse}
+K{\footnote IsChecked()}
+K{\footnote FRadioButton::IsChecked()}
+{\fs26\cf1\b IsChecked()}\par
+Declaration: 
+\line{\f1
+Bool IsChecked();\line
+}
+\par
+
+This function returns wether or not the radiobutton is checked.\par
+
+See also: {\uldb FRadioButton}{\v FRadioButton} 
+\page
+
+#{\footnote FRadioButton_Check}
+${\footnote FRadioButton::Check()}
++{\footnote defbrowse}
+K{\footnote Check()}
+K{\footnote FRadioButton::Check()}
+{\fs26\cf1\b Check()}\par
+Declaration: 
+\line{\f1
+Bool Check();\line
+}
+\par
+
+This function checks the radiobutton. Any other checked radiobutton in the 
+group will be unchecked.\par
+
+See also: {\uldb FRadioButton}{\v FRadioButton}, {\uldb UnCheck()}{\v FRadioButton_UnCheck}, {\uldb GetCheckIndex()}{\v FRadioButton_GetCheckIndex} 
+\page
+
+#{\footnote FRadioButton_UnCheck}
+${\footnote FRadioButton::UnCheck()}
++{\footnote defbrowse}
+K{\footnote UnCheck()}
+K{\footnote FRadioButton::UnCheck()}
+{\fs26\cf1\b UnCheck()}\par
+Declaration: 
+\line{\f1
+Bool UnCheck();\line
+}
+\par
+
+This function unchecks the radiobutton.\par
+
+See also: {\uldb FRadioButton}{\v FRadioButton}, {\uldb Check()}{\v FRadioButton_Check}, {\uldb CheckIndex()}{\v FRadioButton_GetCheckIndex} 
+\page
+
+#{\footnote FRadioButton_GetCheckIndex}
+${\footnote FRadioButton::GetCheckIndex()}
++{\footnote defbrowse}
+K{\footnote GetCheckIndex()}
+K{\footnote FRadioButton::GetCheckIndex()}
+{\fs26\cf1\b GetCheckIndex()}\par
+Declaration: 
+\line{\f1
+int GetCheckIndex();\line
+}
+\par
+
+This function returns the 0-based index of the checked radiobutton in the 
+group to which the radiobutton belongs. This function is usually much easier 
+to use than testing each radiobutton in a group\par
+
+Return value: non-negative: 0-base check index, negative: no radiobutton in the group were checked\par
+
+Example: 
+\line{\f1
+enum choice_t \{choice_1 choice_2 choice_3\}\line
+choice_t c;\line
+FRadioButton radio_choice_1,\line
+             radio_choice_2,\line
+             radio_choice_3,\line
+}
+\par
+
+Instead of having to write this: 
+\line{\f1
+if(radio_choice_1.IsChecked())\line
+        c = choice_1;\line
+else if(radio_choice_2.IsChecked())\line
+        c = choice_2;\line
+else \line
+        c = choice_3;\line
+}
+\par
+
+you only need to write this: 
+\line{\f1
+c = choice_t( radio_choice_1.GetCheckIndex() );\line
+}
+\par
+
+{\b{Note:}} in the above example radio_choice_1 was asked, any of the other two 
+radiobuttons could have been used, the return value would be the same. If none  
+of the radiobuttons in the group is checked GetCheckIndex() would return -1.  
+You should test for this case too. 
+\par
+
+See also: {\uldb FRadioButton}{\v FRadioButton}, {\uldb UnCheck()}{\v FRadioButton_UnCheck}, {\uldb CheckIndex()}{\v FRadioButton_CheckIndex} 
+\page
+
+#{\footnote FRadioButton_CheckIndex}
+${\footnote FRadioButton::CheckIndex()}
++{\footnote defbrowse}
+K{\footnote CheckIndex()}
+K{\footnote FRadioButton::CheckIndex()}
+{\fs26\cf1\b CheckIndex()}\par
+Declaration: 
+\line{\f1
+Bool CheckIndex(int i);\line
+}
+\par
+
+This function checks an radiobutton within the group.\par
+
+Example: 
+\line{\f1
+enum choice_t \{choice_1 choice_2 choice_3\}\line
+choice_t c;\line
+FRadioButton radio_choice_1,\line
+             radio_choice_2,\line
+             radio_choice_3,\line
+\line
+radio_choice_1.CheckIndex(int(c));\line
+}
+\par
+
+See also: {\uldb FRadioButton}{\v FRadioButton}, {\uldb Check()}{\v FRadioButton_Check}, {\uldb GetCheckIndex()}{\v FRadioButton_GetCheckIndex} 
+\page
+
+#{\footnote FSLE}
+${\footnote FSLE}
++{\footnote defbrowse}
+K{\footnote FSLE}
+{\fs26\cf1\b FSLE}\par
+Declaration: 
+\line{\f1
+class FSLE : public {\uldb FControl}{\v FControl},\line
+             public {\uldb FControlTextHandler}{\v FControlTextHandler}\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_SLE\par
+
+'SLE' is an abbreversion of Single-Line-Edit. A FSLE allows the user to enter one line of text.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Create(parent,ID) - standard control-create 
+\par
+\tab
+{\uldb Create(parent,ID,...)}{\v FSLE_Create2} 
+\par
+\tab
+{\uldb Cut()}{\v FSLE_Cut} 
+\par
+\tab
+{\uldb Copy()}{\v FSLE_Copy} 
+\par
+\tab
+{\uldb Paste()}{\v FSLE_Paste} 
+\par
+\tab
+{\uldb Clear()}{\v FSLE_Clear} 
+\par
+\tab
+{\uldb LimitText()}{\v FSLE_LimitText} 
+\par
+\tab
+{\uldb IsReadonly()}{\v FSLE_IsReadonly} 
+\par
+\tab
+{\uldb SetReadonly()}{\v FSLE_SetReadonly} 
+\par
+\tab
+{\uldb GetSelection()}{\v FSLE_GetSelection} 
+\par
+\tab
+{\uldb SetSelection()}{\v FSLE_SetSelection} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FSLE_Create2}
+${\footnote FSLE::Create(parent,ID,...)}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID,...)}
+K{\footnote FSLE::Create(parent,ID,...)}
+{\fs26\cf1\b Create(parent,ID,...)}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int ID, FRect *rect, long style=sle_border, const char *pszText=0);\line
+}
+\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pParent\tab
+Parent window 
+\par
+ID\tab
+Control-ID 
+\par
+rect\tab
+Position and size 
+\par
+style\tab
+style bits. This can be a combination of the following: 
+\par\pard\sb100\tx4000\li4000\fi-1999
+sle_password\tab
+The user cannot see what he types 
+\par
+sle_autohscroll\tab
+The FSLE will scroll horizontally and allow the user to type more text that can be visible at one time in the FLSE 
+\par
+sle_readonly\tab
+The user cannot modify the contents of the FLSE 
+\par
+sle_border\tab
+the FLSE will be sorrounded with a small border (preferred) 
+\par\pard\sb100\tx2000\li2000\fi-1999
+ 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FSLE_Cut}
+${\footnote FSLE::Cut()}
++{\footnote defbrowse}
+K{\footnote Cut()}
+K{\footnote FSLE::Cut()}
+{\fs26\cf1\b Cut()}\par
+Declaration: 
+\line{\f1
+Bool Cut();\line
+}
+\par
+
+This function removes the currently selected text and places it in the 
+clipboard. This works like if the user had pressed Shift-Delete himself. 
+\page
+
+#{\footnote FSLE_Copy}
+${\footnote FSLE::Copy()}
++{\footnote defbrowse}
+K{\footnote Copy()}
+K{\footnote FSLE::Copy()}
+{\fs26\cf1\b Copy()}\par
+Declaration: 
+\line{\f1
+Bool Copy();\line
+}
+\par
+
+This function copiesthe currently selected text to the clipboard as if 
+the user had pressed Ctrl-Insert himself. 
+\page
+
+#{\footnote FSLE_Paste}
+${\footnote FSLE::Paste()}
++{\footnote defbrowse}
+K{\footnote Paste()}
+K{\footnote FSLE::Paste()}
+{\fs26\cf1\b Paste()}\par
+Declaration: 
+\line{\f1
+Bool Paste();\line
+}
+\par
+
+This copies the text in the clipboard to the FSLE where the current insertion point is. 
+This works like if the user had pressed Shift-Insert himself.\par
+
+{\b{Note:}} If any text is currently selected in the FSLE, it will be removed first\par
+
+\page
+
+#{\footnote FSLE_Clear}
+${\footnote FSLE::Clear()}
++{\footnote defbrowse}
+K{\footnote Clear()}
+K{\footnote FSLE::Clear()}
+{\fs26\cf1\b Clear()}\par
+Declaration: 
+\line{\f1
+Bool Clear();\line
+}
+\par
+
+This function removes the currently selected text but does {\b{not}} place it in the 
+clipboard. This works like if the user had pressed Ctrl-Delete himself. 
+\page
+
+#{\footnote FSLE_LimitText}
+${\footnote FSLE::LimitText()}
++{\footnote defbrowse}
+K{\footnote LimitText()}
+K{\footnote FSLE::LimitText()}
+{\fs26\cf1\b LimitText()}\par
+Declaration: 
+\line{\f1
+Bool LimitText(int limit);\line
+}
+\par
+
+This function limits the number of characters the user is allowed to enter 
+into the FSLE. If the current text in the FSLE exceeds this limit it is 
+{\b{not}} truncated. 
+\page
+
+#{\footnote FSLE_IsReadonly}
+${\footnote FSLE::IsReadonly()}
++{\footnote defbrowse}
+K{\footnote IsReadonly()}
+K{\footnote FSLE::IsReadonly()}
+{\fs26\cf1\b IsReadonly()}\par
+Declaration: 
+\line{\f1
+Bool IsReadonly();\line
+}
+\par
+
+This function returns wether or not the FSLE is read-only, that is if the ser 
+is allowed to modify the contents of the FSLE. 
+\page
+
+#{\footnote FSLE_SetReadonly}
+${\footnote FSLE::SetReadonly()}
++{\footnote defbrowse}
+K{\footnote SetReadOnly()}
+K{\footnote FSLE::SetReadonly()}
+{\fs26\cf1\b SetReadOnly()}\par
+Declaration: 
+\line{\f1
+Bool SetReadonly(Bool f);\line
+}
+\par
+
+This function changes the read-only state of the FSLE. 
+\page
+
+#{\footnote FSLE_GetSelection}
+${\footnote FSLE::GetSelection()}
++{\footnote defbrowse}
+K{\footnote GetSelection()}
+K{\footnote FSLE::GetSelection()}
+{\fs26\cf1\b GetSelection()}\par
+Declaration: 
+\line{\f1
+Bool GetSelection(int *start, int *end);\line
+}
+\par
+
+This function retrieves the current selection if any.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+start\tab
+0-based start index 
+\par
+end\tab
+0-base end index 
+\par\pard\sb100
+\par
+
+The characters selected is [start...end-1]\par
+
+Return value: True on success, False otherwise (eg. no selection)\par
+
+See also: {\uldb FSLE}{\v FSLE}, {\uldb SetSelection()}{\v FSLE_SetSelection} 
+\page
+
+#{\footnote FSLE_SetSelection}
+${\footnote FSLE::SetSelection()}
++{\footnote defbrowse}
+K{\footnote SetSelection()}
+K{\footnote FSLE::SetSelection()}
+{\fs26\cf1\b SetSelection()}\par
+Declaration: 
+\line{\f1
+Bool SetSelection(int start, int end);\line
+}
+\par
+
+This function sets selects characters in the FSLE.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+start\tab
+0-base character index of the first character in the selection 
+\par
+end\tab
+0-base character index of the first character after the selection 
+\par\pard\sb100
+\par
+
+The caret is moved to {\i{end}}\par
+
+If {\i{start}} is 0 and {\i{end}} is -1 the whole text is selected.\par
+
+See also: {\uldb FSLE}{\v FSLE}, {\uldb GetSelection()}{\v FSLE_GetSelection} 
+\page
+
+#{\footnote FSlider}
+${\footnote FSlider}
++{\footnote defbrowse}
+K{\footnote FSlider}
+{\fs26\cf1\b FSlider}\par
+Declaration: 
+\line{\f1
+class FSlider : public FControl \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_SLIDER\par
+
+A FSlider is a control that is used for letting the user pick a value withing  
+a range. The slider work almost like a scrollbar, but a slider is not intended to 
+"scroll something into view". The FSlider control is a bit "sloppy" but excellent  
+for selecting "sloppy" values such as the red component of a RGB color, the speed 
+of a game, mouse sensitivity, etc.\par
+
+\{bml winslide.bmp\}\par{\fs16{FSlider snapshot}}\par
+\par
+
+The slider consists of several items: 
+\par\pard\sb100\tx2000\li2000\fi-1999
+Shaft\tab
+The shaft in which the arm moves 
+\par
+Arm\tab
+The "arm" the user can grab with the mouse and move 
+\par
+Buttons\tab
+Buttons for moving the arm 
+\par
+Ticks\tab
+Small indication for the range of values 
+\par
+Tick texts\tab
+Text on each tick can be set 
+\par
+Detents\tab
+Quick selection of specific non-tick values 
+\par\pard\sb100
+\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Create(parent,ID,...)}{\v FSlider_Create1} standard control-create 
+\par
+\tab
+{\uldb Create(parent,ID,...)}{\v FSlider_Create2} 
+\par
+\tab
+{\uldb AddDetent()}{\v FSlider_AddDetent} 
+\par
+\tab
+{\uldb RemoveDetent()}{\v FSlider_RemoveDetent} 
+\par
+\tab
+{\uldb GetDetentPos()}{\v FSlider_GetDetentPos} 
+\par
+\tab
+{\uldb SetTickText()}{\v FSlider_SetTickText} 
+\par
+\tab
+{\uldb GetTickSize()}{\v FSlider_GetTickSize} 
+\par
+\tab
+{\uldb SetTickSize()}{\v FSlider_SetTickSize} 
+\par
+\tab
+{\uldb GetArmPosition()}{\v FSlider_GetArmPosition} 
+\par
+\tab
+{\uldb SetArmPosition()}{\v FSlider_SetArmPosition} 
+\par\pard\sb100
+\par
+
+{\b{Note:}} Note: Windows 3.1 does not provide a native slider control, so BIF has implemented one under Windows 3.1. 
+\page
+
+#{\footnote FSlider_Create1}
+${\footnote FSlider::Create(parent,ID, int rangeMin, int rangeMax, int tickIncrement)}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID,...)}
+K{\footnote FSlider::Create(parent,ID, int rangeMin, int rangeMax, int tickIncrement)}
+{\fs26\cf1\b Create(parent,ID,...)}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int ID, int rangeMin, int rangeMax, int tickIncrement);\line
+}
+\par
+
+This Create() associates the BIF-object with the native window created from the resources. 
+See {\uldb Create(parent,ID,...)}{\v FSlider_Create2} for description of rangeMin,rangeMax and tickIncrement.\par
+
+{\b{Note:}} Because Windows 3.1 does not provide a slider control, BIF 
+has implemented one under Windows 3.1. The native class name is "BIFSlider", The native style bits can be 
+found in source\\window\\win16\\slider31.h 
+ 
+\page
+
+#{\footnote FSlider_Create2}
+${\footnote FSlider::Create(parent,ID,...)}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID,...)}
+K{\footnote FSlider::Create(parent,ID,...)}
+{\fs26\cf1\b Create(parent,ID,...)}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int ID,\line
+            FRect *rect, ULONG style,\line
+            int rangeMin, int rangeMax, int tickIncrement);\line
+}
+\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pParent\tab
+Parent window 
+\par
+ID\tab
+Control_ID of the slider 
+\par
+rect\tab
+Position and dimension of the slider 
+\par
+style\tab
+Style specification. This can be a combination of the following: 
+\par\pard\sb100\tx2550\li2550\fi-300
+{\f2\'B7}\tab
+Orientation: 
+\par\pard\sb100\tx4550\li4550\fi-1999
+sls_horizontal\tab
+Horizontal slider 
+\par
+sls_vertical\tab
+Vertical slider 
+\par\pard\sb100\tx2550\li2550\fi-300
+ 
+\par
+{\f2\'B7}\tab
+Placement: 
+\par\pard\sb100\tx4550\li4550\fi-1999
+sls_center\tab
+Slider is centered 
+\par
+sls_left\tab
+Slider is left-aligned (vertical slider only) 
+\par
+sls_right\tab
+Slider is right-aligned (vertical slider only) 
+\par
+sls_top\tab
+Slider is top-aligned (horizontal slider only) 
+\par
+sls_bottom\tab
+Slider is bottom-aligned (horizontal slider only) 
+\par\pard\sb100\tx2550\li2550\fi-300
+ 
+\par
+{\f2\'B7}\tab
+Button placement: 
+\par\pard\sb100\tx4550\li4550\fi-1999
+sls_buttonsleft\tab
+Buttons in the left end of the shaft (horizontal sliders only) 
+\par
+sls_buttonsright\tab
+Buttons in the right end of the shaft (horizontal sliders only) 
+\par
+sls_buttonstop\tab
+Buttons at the top of the shaft (verticall sliders only) 
+\par
+sls_buttonsbottom\tab
+Buttons at the bottom of the shaft (vertical sliders only) 
+\par\pard\sb100\tx2550\li2550\fi-300
+ 
+\par
+{\f2\'B7}\tab
+sls_readonly - User cannot modify the slider 
+\par
+{\f2\'B7}\tab
+sls_ribbonstrip - The shaft is filled from start to arm position 
+\par
+{\f2\'B7}\tab
+Home: 
+\par\pard\sb100\tx4550\li4550\fi-1999
+sls_homeleft\tab
+The "home" position is at the left end of the shaft 
+\par
+sls_homeright\tab
+The "home" position is at the right end of the shaft 
+\par
+sls_hometop\tab
+The "home" position is at the top end of the shaft 
+\par
+sls_homebottom\tab
+The "home" position is at the bottom end of the shaft 
+\par\pard\sb100\tx2550\li2550\fi-300
+ 
+\par\pard\sb100\tx2000\li2000\fi-1999
+ 
+\par
+rangeMin\tab
+Lower end of the range (inclusive) 
+\par
+rangeMax\tab
+Upper end of the range (inclusive) 
+\par
+tickIncrement\tab
+Interval between ticks 
+\par\pard\sb100
+\par
+
+Hint: If you need a "progress indicator" you can use a slider with sls_readonly and sls_ribbonstrip.\par
+
+Example: This piece of code creates a horizontal slider, with the range going 
+from 0 to 100 with ticks at 0,10,20,...100 
+\line{\f1
+FSlider sl;\line
+sl.Create(pParent,\line
+          ID,\line
+          &rect,\line
+          FSlider::sls_horizontal|\line
+          FSlider::sls_center|\line
+          FSlider::sls_buttonsright|\line
+          FSlider::sls_homeleft,\line
+          0,100,10\line
+         );\line
+}
+\par
+
+\page
+
+#{\footnote FSlider_AddDetent}
+${\footnote FSlider::AddDetent()}
++{\footnote defbrowse}
+K{\footnote AddDetent()}
+K{\footnote FSlider::AddDetent()}
+{\fs26\cf1\b AddDetent()}\par
+Declaration: 
+\line{\f1
+DetentID AddDetent(int pos);\line
+}
+\par
+
+This function adds a detent to the slider at {\i{pos}} from the "home" end of the shaft.\par
+
+Return value: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+non-zero: detent ID 
+\par
+\tab
+zero: an error occurred 
+\par\pard\sb100
+\par
+
+See also {\uldb FSlider}{\v FSlider}, {\uldb RemoveDetent()}{\v FSlider_RemoveDetent} 
+\page
+
+#{\footnote FSlider_RemoveDetent}
+${\footnote FSlider::RemoveDetent()}
++{\footnote defbrowse}
+K{\footnote RemoveDetent()}
+K{\footnote FSlider::RemoveDetent()}
+{\fs26\cf1\b RemoveDetent()}\par
+Declaration: 
+\line{\f1
+Bool RemoveDetent(DetentID did);\line
+}
+\par
+
+This function removes a detent previously add with {\uldb AddDetent()}{\v FSlider_AddDetent}\par
+
+See also {\uldb FSlider}{\v FSlider}, {\uldb AddDetent()}{\v FSlider_AddDetent} 
+\page
+
+#{\footnote FSlider_GetDetentPos}
+${\footnote FSlider::GetDetentPos()}
++{\footnote defbrowse}
+K{\footnote GetDetentPos()}
+K{\footnote FSlider::GetDetentPos()}
+{\fs26\cf1\b GetDetentPos()}\par
+Declaration: 
+\line{\f1
+int GetDetentPos(DetentID did, ...);\line
+}
+\par
+
+This function returns the position of the detent.\par
+
+Return value: non-negative: detent position, negative: error occurred\par
+
+See also {\uldb FSlider}{\v FSlider}, {\uldb AddDetent()}{\v FSlider_AddDetent} 
+\page
+
+#{\footnote FSlider_SetTickText}
+${\footnote FSlider::SetTickText()}
++{\footnote defbrowse}
+K{\footnote SetTickText()}
+K{\footnote FSlider::SetTickText()}
+{\fs26\cf1\b SetTickText()}\par
+Declaration: 
+\line{\f1
+Bool SetTickText(int pos, const char *pszText);\line
+}
+\par
+
+This function sets the text associated with a tick. {\i{pos}} must be 
+a multiplum of tickIncrement specified in {\uldb Create()}{\v FSlider_Create2}. 
+Otherwise this function will fail.\par
+
+Example: 
+\line{\f1
+FSlider slider;\line
+//assume that the slider goes from 0 to 100 with ticks at 0,10,20,...100\line
+for(int t=0; t<=100; t+=10) \{\line
+  char ticktext[10];\line
+  sprintf(ticktext, "%d", t);\line
+  slider.SetTickText(i,ticktext);\line
+\}\line
+}
+\par
+
+See also: {\uldb FSlider}{\v FSlider}, {\uldb GetTickText()}{\v FSlider_GetTickText} 
+\page
+
+#{\footnote FSlider_GetTickText}
+${\footnote FSlider::GetTickText()}
++{\footnote defbrowse}
+K{\footnote GetTickText()}
+K{\footnote FSlider::GetTickText()}
+{\fs26\cf1\b GetTickText()}\par
+Declaration: 
+\line{\f1
+Bool GetTickText(int pos, char *buf, int buflen);\line
+}
+\par
+
+GetTickText() retrives the text associated with a tick.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pos\tab
+Tick position 
+\par
+buf\tab
+The tick text will be returned here 
+\par
+buflen\tab
+Maximum number of characters to copy into {\i{buf}} 
+\par\pard\sb100
+\par
+
+See also: {\uldb FSlider}{\v FSlider}, {\uldb SetTickText()}{\v FSlider_SetTickText} 
+\page
+
+#{\footnote FSlider_GetTickSize}
+${\footnote FSlider::GetTickSize()}
++{\footnote defbrowse}
+K{\footnote GetTickSize()}
+K{\footnote FSlider::GetTickSize()}
+{\fs26\cf1\b GetTickSize()}\par
+Declaration: 
+\line{\f1
+int GetTickSize(int pos);\line
+}
+\par
+
+This function retrieves the size of a tick. The ticks in a slider are initially 0 pixels.\par
+
+See also: {\uldb FSlider}{\v FSlider}, {\uldb SetTickSize()}{\v FSlider_SetTickSize} 
+\page
+
+#{\footnote FSlider_SetTickSize}
+${\footnote FSlider::SetTickSize()}
++{\footnote defbrowse}
+K{\footnote SetTickSize()}
+K{\footnote FSlider::SetTickSize()}
+{\fs26\cf1\b SetTickSize()}\par
+Declaration: 
+\line{\f1
+Bool SetTickSize(int pos, int pels);\line
+}
+\par
+
+This function sets the size of a tick. The ticks are initially 0 pixels wide/tall.\par
+
+Example: 
+\line{\f1
+FSlider slider;\line
+//Assume the slider has 16 ticks at 0,1,2,3,4,...15\line
+\line
+//Now set the tick sizes to they will be taller and taller\line
+for(int t=0; t<=15; t++)\line
+  slider.SetTickSize(t,t+1);\line
+}
+\par
+
+See also: {\uldb FSlider}{\v FSlider}, {\uldb GetTickSize()}{\v FSlider_GetTickSize}, {\uldb SetTickText()}{\v FSlider_SetTickText} 
+\page
+
+#{\footnote FSlider_GetArmPosition}
+${\footnote FSlider::GetArmPosition()}
++{\footnote defbrowse}
+K{\footnote GetArmPosition()}
+K{\footnote FSlider::GetArmPosition()}
+{\fs26\cf1\b GetArmPosition()}\par
+Declaration: 
+\line{\f1
+int GetArmPosition();\line
+}
+\par
+
+This function retrieves the current position of the slider arm from 
+the "home" position. 
+\page
+
+#{\footnote FSlider_SetArmPosition}
+${\footnote FSlider::SetArmPosition()}
++{\footnote defbrowse}
+K{\footnote SetArmPosition()}
+K{\footnote FSlider::SetArmPosition()}
+{\fs26\cf1\b SetArmPosition()}\par
+Declaration: 
+\line{\f1
+Bool SetArmPosition(int pos);\line
+}
+\par
+
+This function moves the slider arm to {\i{pos}} pixels from 
+the home position. 
+\page
+
+#{\footnote FStaticText}
+${\footnote FStaticText}
++{\footnote defbrowse}
+K{\footnote FStaticText}
+{\fs26\cf1\b FStaticText}\par
+Declaration: 
+\line{\f1
+class FStaticText : public {\uldb FControl}{\v FControl},\line
+                    public {\uldb FControlTextHandler}{\v FControlTextHandler} \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_STATICTEXT\par
+
+A FStaticText is a control that can display text. That's that!\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Create(parent,ID) - standard control-create 
+\par
+\tab
+{\uldb Create(parent,ID,...)}{\v FStaticText_Create2} 
+\par\pard\sb100
+\par
+
+The FStaticText also has these member functions to set the text with several data types: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+SetText(const char *pszText) 
+\par
+\tab
+SetText_ul(unsigned long ul) 
+\par
+\tab
+SetText_l(long l) 
+\par
+\tab
+SetText_u(unsigned u) 
+\par
+\tab
+SetText_i(int i) 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FStaticText_Create2}
+${\footnote FStaticText::Create(parent,ID,..)}
++{\footnote defbrowse}
+K{\footnote Create(parent,ID,...)}
+K{\footnote FStaticText::Create(parent,ID,..)}
+{\fs26\cf1\b Create(parent,ID,...)}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int ID, FRect *rect, long style=st_left, const char *pszText=0);\line
+}
+\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pParent\tab
+Parent window 
+\par
+ID\tab
+Control-ID 
+\par
+rect\tab
+Position and size. If {\i{rect}} is NULL the FStaticText will 
+be placed at (0,0) with zero width and height 
+\par
+style\tab
+style bits. This can be one of the following: 
+\par\pard\sb100\tx4000\li4000\fi-1999
+st_left\tab
+the text is left-aligned 
+\par
+st_center\tab
+the text is centered 
+\par
+st_right\tab
+the text is right-aligned 
+\par
+st_leftnowrap\tab
+the text is left-aligned and will not wrap down to the next line (if any) 
+\par\pard\sb100\tx2000\li2000\fi-1999
+\par
+\tab
+In addition this style can be OR'ed into {\i{style}}: 
+st_noprefix - The FStaticText will not interpret OS-specific underline 
+characters (Windows: &, OS/2 PM: ~, WMS: @). 
+\par
+pszText\tab
+Initial text. If NULL the FStaticText will be empty 
+\par\pard\sb100
+ 
+\page
+
+}

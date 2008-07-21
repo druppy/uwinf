@@ -1,0 +1,265 @@
+[topic handler_and_events same "Handlers and events"]
+This section contains descriptions of all handlers and their associated events. They are ordered in logical order not alphabetically.
+[etopic]
+
+[topic FEvent down "FEvent"]
+Declaration:
+[code]
+Windows:
+  class FEvent : public MSG {
+OS/2 PM:
+  class FEvent : public QMSG {
+WMS:
+  class FEvent : public WmsQMSG {
+[ecode]
+FEvent is the BIF wrapper class for the native event type. It add one
+member to the native event type: the event result. This member is the
+value that results from the event and in the native GUI system is the
+return value fro window procedures.
+
+The FEvent class is very system-dependent but unsurprising to people
+knowing the native GUI system. It has the following interface
+under Windows 3.1:
+[code]
+[sl]
+[li]FEvent() - sets event result to 0
+[li]FEvent(HWND,UINT,WPARAM,LPARAM) - sets the event member to the parameters and event result to 0
+[li]HWND GetHwnd()
+[li]void SetHwnd(HWND)
+[li]UINT GetID() returns the event ID/message ID/message
+[li]void SetID(UINT id)
+[li]WPARAM GetWParam()
+[li]void SetWParam(WPARAM)
+[li]LPARAM GetLParam()
+[li]void SetLParam(LPARAM)
+[li]void Set(HWND,UINT,WPARAM,LPARAM)
+[li]void SetResult(LRESULT)
+[li]LRESULT GetResult()
+[esl]
+[ecode]
+
+Under OS/2 PM FEvent has the following interface:
+[code]
+[sl]
+[li]FEvent()
+[li]FEvent( HWND hWnd, ULONG msg, MPARAM MP1, MPARAM MP2 )
+[li]HWND GetHwnd()
+[li]void SetHwnd(HWND hw)
+[li]unsigned GetID()
+[li]void SetID( ULONG nId )
+[li]MPARAM GetMP1()
+[li]void SetMP1(MPARAM param )
+[li]MPARAM GetMP2()
+[li]void SetMP2(MPARAM param )
+[li]void Set(HWND hWnd, ULONG nId, MPARAM MP1, MPARAM MP2)
+[li]void SetResult( MRESULT lRet )
+[li]MRESULT GetResult()
+[esl]
+[ecode]
+
+Under WMS FEvent has the following interface:
+[code]
+[sl]
+[li]FEvent()
+[li]FEvent( WmsHWND hWnd, WmsMSG msg, WmsMPARAM MP1, WmsMPARAM MP2 )
+[li]WmsHWND GetHwnd()
+[li]void SetHwnd(WmsHWND hw)
+[li]WmsMSG GetID()
+[li]void SetID( WmsMSG nId )
+[li]WmsMPARAM GetMP1()
+[li]void SetMP1(WmsMPARAM param )
+[li]WmsMPARAM GetMP2()
+[li]void SetMP2(WmsMPARAM param )
+[li]void Set(WmsHWND hWnd, WmsMSG nId, WmsMPARAM MP1, WmsMPARAM MP2)
+[li]void SetResult( WmsMRESULT lRet )
+[li]WmsMRESULT GetResult()
+[esl]
+[ecode]
+
+[etopic]
+
+
+
+[topic FHandler same "FHandler"]
+Declaration:
+[code]
+class FHandler ...
+[ecode]
+A FHandler handles a certain aspect of a window. A handler usually
+provides both access member functions and virtual reaction member
+functions. A FHandler is the shield between the native GUI system
+and the programmer. A FHandler translates native GUI events into BIF events
+and translates requests from the programmer to the native GUI system.
+
+See [ref bifwindow_overview "BIF/Window overview"]
+
+The FHandler class has this interface which the subclasses can use:
+[sl]
+[li][ref FHandler_ctor "FHandler()"]
+[li][ref FHandler_dtor "~FHandler()"]
+[li][ref FHandler_SetDispatch "SetDispatch()"]
+[li][ref FHandler_GetWnd "GetWnd()"]
+[esl]
+
+See also: [ref FEvent "FEvent"], [ref FWnd "FWnd"], [ref FHandler_example "FHandler example"]
+[etopic]
+
+
+[topic FHandler_ctor down "FHandler()" "FHandler::FHandler()"]
+Declaration:
+[code]
+FHandler( FWnd *pWnd );
+[ecode]
+The FHandler constructor links itself into [hp 1]pWnd[ehp]'s handler chain.
+Handler subclasses that provides virtual reaction member fucntion must also use
+[ref FHandler_SetDispatch "SetDispatch()"]
+
+See also: [ref FHandler_dtor "~FHandler()"], [ref FHandler_GetWnd "GetWnd()"],
+[ref FHandler_example "FHandler example"]
+[etopic]
+
+
+[topic FHandler_dtor same "~FHandler()" "FHandler::~FHandler()"]
+Declaration:
+[code]
+virtual ~FHandler();
+[ecode]
+The destructor unlinks the handler from the associated window's handler chain
+
+See also: [ref FHandler_ctor "FHandler()"]
+[etopic]
+
+
+[topic FHandler_SetDispatch same "SetDispatch()" "FHandler::SetDispatch()"]
+Declaration:
+[code]
+typedef Bool (FHandler::*dispatchFunc_t)(FEvent&);
+void SetDispatch(dispatchFunc_t func)
+[ecode]
+This function changes the handler's dispatch function to [hp 1]func[ehp]. You
+always need to cast your subclass' dispatch function to dispatchFunc_t. This
+is safe because the member function pointer is newer used together with other
+instances.
+
+This mechanism is needed because virtual dispatch functions together with
+multiple inheritance breaks the Microsoft C++ and Symantec C++ compilers.
+
+Example:
+[code]
+MyHandler::MyHandler(FWnd *pwnd)
+  : FHandler(pwnd)
+{
+  SetDispatch(dispatchFunc_t(&MyHandler::Dispatch));
+}
+[ecode]
+
+See also: [ref FHandler_ctor "FHandler()"], [ref FHandler_GetWnd "GetWnd()"],
+[etopic]
+
+[topic FHandler_GetWnd same "GetWnd()" "FHandler::GetWnd()"]
+Declaration:
+[code]
+FWnd *GetWnd();
+[ecode]
+This function returns a pointer to the handlers associated window.
+
+See also: [ref FHandler_ctor "FHandler()"], [ref FHandler_GetWnd "GetWnd()"],
+[etopic]
+
+
+[topic FHandler_example upafter "FHandler example"]
+This example demonstrates how to make a handler that takes care of timers
+under Windows. (OS/2 PM is basically the same). You may find it interesting
+to read the Windows SDK first (look under "SetTimer")
+
+First we declare a new event type - a timer event:
+[code]
+struct TimerEvent : FEvent {
+  int GetTimerID() const { return (int)wParam; }
+};
+[ecode]
+The TimerEvent provides acces to the timer ID included in the native event.
+
+Then we declare the handler class:
+[code]
+class TimerHandler : public FHandler {
+public:
+  TimerHandler(FWnd *pwnd);
+  Bool StartTimer(int interval, int timerID);
+  Bool StopTimer(int timerID);
+        
+protected:
+  Bool Dispatch(FEvent &ev);
+
+  virtual Bool Timer(TimerEvent &);
+};
+[ecode]
+StartTimer and StopTimer is public because anyone should be able to start a timer.
+
+Dispatch() is the event dispatch function and is protected because noone
+except the eventual subclasses of TimerHandler should need to call it.
+
+The virtual Timer() function is the reaction functions. When WM_TIMER messages arrive
+at the handler they will be converted to a TimerEvent and given to Timer(). Timer() is
+protected because it is intended to be overridden by subclasses.
+
+
+Now we define the member functions:
+[code]
+TimerHandler::TimerHandler(FWnd *pwnd)
+  : FHandler(pwnd)
+{ 
+  SetDispatch(dispatchFunc_t(&TimerHandler::Dispatch)); 
+}
+[ecode]
+The constructor passes the window poiner to FHandler's constructor which will
+link the handler into the window's handler chain. The constructor then
+changes the dispatch function to the dispatch function in the TimerHandler class.
+
+
+The we define StartTimer and StopTimer:
+[code]
+Bool TimerHandler::StartTimer(int interval, int timerID) {
+  if(SetTimer(GetWnd()->GetHwnd(), timerID, interval, NULL))
+    return True;
+  else
+    return False;
+}
+
+Bool TimerHandler::StopTimer(int timerID) {
+  return (Bool)KillTimer(GetWnd()->GetHwnd(),timerID);
+}
+[ecode]
+
+
+Now to the important part: the dispatch function:
+[code]
+Bool TimerHandler::Dispatch(FEvent &ev) {
+  if(ev.GetID()==WM_TIMER)
+    return Timer((TimerEvent&)ev);
+  else
+    return False;
+}
+[ecode]
+If the event ID is WM_TIMER we have a timer event. Since the TimerEvent class
+does not add data member we simply cast the FEvent into a TimerEvent. It is
+then given the virtual Timer() function. Wether or not the event is passed to
+the next handler/default action depends on the return value of Timer(). If the
+event is not a WM_TIMER False is returned causing the event to be passed on
+the the next handler
+
+Finally, the Timer() function:
+[code]
+Bool FHandler::Timer(TimerEvent&) {
+  return False;
+}
+[ecode]
+The generic timer handler is not interested in the timer events so False is returned.
+
+
+No big deal, right? For an example of how to use this handler see the sample
+program in sample\\window\\win16\\resmon
+[etopic]
+
+
+

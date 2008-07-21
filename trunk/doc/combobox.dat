@@ -1,0 +1,9 @@
+:artlink.
+:link reftype=hd refid=FComboBox x=196 y=213 cx=73 cy=16.
+:link reftype=hd refid=FEditComboBox x=81 y=140 cx=94 cy=16.
+:link reftype=hd refid=FSelectionComboBox x=346 y=122 cx=128 cy=18.
+:link reftype=hd refid=FSimpleComboBox x=3 y=90 cx=111 cy=16.
+:link reftype=hd refid=FDropDownComboBox x=130 y=89 cx=133 cy=19.
+:link reftype=hd refid=FTextSelectionComboBox x=250 y=41 cx=153 cy=18.
+:link reftype=hd refid=FODSelectionComboBox x=359 y=6 cx=146 cy=18.
+:eartlink.

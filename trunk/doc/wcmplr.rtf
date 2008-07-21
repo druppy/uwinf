@@ -1,0 +1,83 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote bw_compiler_setup}
+${\footnote BIF/Window compiler setup}
++{\footnote defbrowse}
+K{\footnote Compiler setup}
+K{\footnote BIF/Window compiler setup}
+{\fs26\cf1\b Compiler setup}\par
+In general you don't have to use special setup for BIF/Window.\par
+
+If you are using the DLL version of BIF you must define 'BIF_IN_DLL' 
+otherwise you program will crash.\par
+
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Windows 3.1}{\v bw_compiler_setup_win31} 
+\par
+\tab
+{\uldb OS/2 PM}{\v bw_compiler_setup_os2} 
+\par
+\tab
+{\uldb WMS}{\v bw_compiler_setup_wms} 
+\par
+\tab
+{\uldb win32 (win95/NT)}{\v bw_compiler_setup_win32} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote bw_compiler_setup_win31}
+${\footnote BIF/Window Compiler setup for Windows 3.1}
++{\footnote defbrowse}
+K{\footnote Windows 3.1}
+K{\footnote BIF/Window Compiler setup for Windows 3.1}
+{\fs26\cf1\b Windows 3.1}\par
+The only thing to setup when using BIF/Window is to ensure that your 
+application uses the same STRICTness as BIF/Window. BIF/Window can be 
+compiled with or without STRICT defined. We strongly recommend using STRICT. 
+\page
+
+#{\footnote bw_compiler_setup_os2}
+${\footnote BIF/Window Compiler setup for OS/2 PM}
++{\footnote defbrowse}
+K{\footnote OS/2 PM}
+K{\footnote BIF/Window Compiler setup for OS/2 PM}
+{\fs26\cf1\b OS/2 PM}\par
+No special setup should be necessary. 
+\page
+
+#{\footnote bw_compiler_setup_wms}
+${\footnote BIF/Window Compiler setup for WMS}
++{\footnote defbrowse}
+K{\footnote WMS}
+K{\footnote BIF/Window Compiler setup for WMS}
+{\fs26\cf1\b WMS}\par
+Since WMS uses BIF/Thread you must use the compiler setup recommended in 
+{\uldb BIF/Thread Compiler setup}{\v bifthread_compiler_setup} 
+\page
+
+#{\footnote bw_compiler_setup_win32}
+${\footnote BIF/Window Compiler setup for win32}
++{\footnote defbrowse}
+K{\footnote Win32}
+K{\footnote BIF/Window Compiler setup for win32}
+{\fs26\cf1\b Win32}\par
+No special setup should be necessary except to use the same STRICTness as the 
+BIF library. BIF can be compiled with or without STRICT defined. We strongly 
+recommend using STRICT.\par
+
+You may also want to define WIN32_LEAN_AND_MEAN to reduce compilation time. BIF 
+can also be compiled with or without WIN32_LEAN_AND_MEAN defined. You do not 
+have use WIN32_LEAN_AND_MEAN if BIF was compiled using WIN32_LEAN_AND_MEAN and 
+vice versa. 
+\page
+
+}

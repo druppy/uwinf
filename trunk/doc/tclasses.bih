@@ -1,0 +1,10 @@
+[topic bifthread_classes same "Classes" "BIF/Thread Classes" secondary]
+This section contains documentation of each of the classes in
+BIF/Thread and a picture of the class hierachy
+[etopic]
+
+[topic bifthread_class_hierachy down "Class Hierarchy" "BIF/Thread Class Hierarchy" secondary]
+The following picture shows the hierarchy of the BIF/Thread subsystem:
+[graphic hypergraphic "BIF/Thread class hierarchy" "winbmp:threadhi" "os2bmp:threadhi"]
+[etopic]
+

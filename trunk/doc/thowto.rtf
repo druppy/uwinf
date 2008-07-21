@@ -1,0 +1,824 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote thowto}
+${\footnote BIF/Thread - howto}
++{\footnote defbrowse}
+K{\footnote BIF/Thread}
+K{\footnote BIF/Thread - howto}
+{\fs26\cf1\b BIF/Thread}\par
+This section show solutions to problems you may encounter in 
+multithreaded programs. Most of the problems are how to communicate 
+between threads.\par
+
+Select a topic: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Protecting shared variables}{\v thowto_shared_variables} 
+\par
+\tab
+{\uldb An 'external-wait-thing' under Windows 3.1}{\v thowto_callback} 
+\par
+\tab
+{\uldb The 'bounded buffer' problem}{\v thowto_boundedbuffer} 
+\par
+\tab
+{\uldb The 'readers and writers' problem}{\v thowto_readersandwriters} 
+\par
+\tab
+{\uldb Painting a window in the background}{\v thowto_backgroundpainting} 
+\par
+\tab
+{\uldb Background job status feedback}{\v thowto_backgroundfeedback} 
+\par
+\tab
+{\uldb Spinning semaphore and when and how to use them}{\v thowto_spin} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote thowto_shared_variables}
+${\footnote Protecting shared variables}
++{\footnote defbrowse}
+K{\footnote Protecting shared variables}
+{\fs26\cf1\b Protecting shared variables}\par
+This topic shows how to ensure that only one thread at a time accesses 
+a structure shared between two or more threads.\par
+
+The following solution is utterly simple: use a mutex semaphore to ensure 
+exclusive access. 
+\line{\f1
+Stack mystack;\line
+{\uldb FMutexSemaphore}{\v FMutexSemaphore} mystack_lock;\line
+\line
+\line
+thread 1:\line
+  ...\line
+  protect_mystack.Request();\line
+  <access mystack>\line
+  protect_mystack.Release();\line
+\line
+thread 2:\line
+  protect_mystack.Request();\line
+  <access mystack>\line
+  protect_mystack.Release();\line
+}
+\par
+
+While the use a separate mutex is non-intrusive to the stack the 
+explicit use of the mutex is error-prone. A usually better 
+solution is to put the synchronization into the structure itself or 
+create a wrapper class that implements the synchronization. 
+\line{\f1
+class SynchronizedStack : public Stack \{\line
+  {\uldb FMutexSemaphore}{\v FMutexSemaphore} mutex;\line
+public:\line
+  void push(int e);\line
+  int pop();\line
+  int top();\line
+  int isEmpty();\line
+\}\line
+\line
+void SynchronizedStack::push(int e) \{\line
+  mutex.Request();\line
+  Stack::push(e);\line
+  mutex.Release();\line
+\}\line
+\line
+int SynchronizedStack::pop() \{\line
+  mutex.Request();\line
+  int e=Stack::pop(e);\line
+  mutex.Release();\line
+  return e;\line
+\}\line
+int SynchronizedStack::top() \{\line
+  mutex.Request();\line
+  int e=Stack::top(e);\line
+  mutex.Release();\line
+\}\line
+int SynchronizedStack::isEmpty() \{\line
+  mutex.Request();\line
+  int is=Stack::isEmpty(e);\line
+  mutex.Release();\line
+  return is;\line
+\}\line
+}
+\par
+
+The use of a FMutexSemaphore does not scale well. If several threads 
+accesses the shared structure and they spend most of the time waiting 
+for the mutex to be released an other approach is needed. The access 
+to the shared structure can be replaced by message-passing or the 
+structure can be synchornized like the 
+{\uldb 'bounded buffer problem'}{\v thowto_boundedbuffer} 
+\page
+
+#{\footnote thowto_callback}
+${\footnote An 'external-wait-thing' uner Windows 3.1}
++{\footnote defbrowse}
+K{\footnote An 'external-wait-thing' under Windows 3.1}
+K{\footnote An 'external-wait-thing' uner Windows 3.1}
+{\fs26\cf1\b An 'external-wait-thing' under Windows 3.1}\par
+This topic shows how make an interface to external sources with 
+BIF/Thread under Windows 3.1. The solution apply to most APIs where 
+callbacks or notifications can be used, eg, the communication interface  
+under Windows, the IPX interface and sockets.\par
+
+The problem is: to create a interface class to an external library, so the 
+class provide blocking operations while the application can remain 
+responsive to the user interface.\par
+
+The solution is to have a FEventSemaphore in the wrapper class. When the 
+event is detected (either in a callback function or through a notification 
+message) the event semaphore is posted.\par
+
+The following code fragment implements wrapper class for an unspecified API. 
+Read and write semantics are assumed. 
+\line{\f1
+class MyWaitThing \{\line
+  FEventSemaphore dataReady;\line
+  FEventSemaphore dataSent;\line
+  void *readDataBuffer;\line
+  void *writeDataBuffer;\line
+  void readReturnValue;\line
+  void writeReturnValue;\line
+  friend void callbackFunction(...);\line
+static MyWaitThing *theWaitThing;\line
+public:\line
+  int read(void *buf);\line
+  int write(void *buf);\line
+\};\line
+\line
+MyWaitThing  MyWaitThing::theWaitThing=0;\line
+\line
+int MyWaitThing::read(void *buf) \{\line
+  dataReady.Reset();\line
+  readDataBuffer=buf;\line
+  API::SetCallback(callbackFunction);\line
+  API::<start reading>\line
+  dataReady.Wait();\line
+  return readReturnValue;\line
+\}\line
+\line
+int MyWaitThing::write(void *buf) \{\line
+  dataSent.Reset();\line
+  writeDataBuffer=buf;\line
+  API::SetCallback(callbackFunction);\line
+  API::<start writing>\line
+  dataSent.Wait();\line
+  return writeReturnValue;\line
+\}\line
+\line
+\line
+void callbackFunction(...) \{\line
+  //determine what happened\line
+  theWaitThing->readReturnValue = ...;\line
+  theWaitThing->dataReady.Post();\line
+\}\line
+\line
+\line
+//Using the wrapper class\line
+MyWaitThing device;\line
+\line
+MyThread::Go() \{\line
+  //this thread reads from the device and puts it into a file\line
+  FILE *fp=fopen("data.in","wb");\line
+  while(<continue>) \{\line
+    char buffer[1024];\line
+    device.read(buffer);\line
+    fwrite(buffer,1024,1,fp);\line
+  \}\line
+\}\line
+}
+\par
+
+The above callback function is not necessarily a callback function. It could 
+have been the messageloop detecting a WM_COMMNOTIFY message. 
+\page
+
+#{\footnote thowto_boundedbuffer}
+${\footnote The 'bounded buffer' problem}
++{\footnote defbrowse}
+K{\footnote The 'bounded buffer' problem}
+{\fs26\cf1\b The 'bounded buffer' problem}\par
+This topic shows a solution to the "bounded buffer problem" using BIF/Thread. 
+Many solution exist - this is just one. The 'bounded buffer' problem is often 
+met in multithreaded programs. It is when two thread communicate with each 
+other through a buffer of limited size. One thread produces data (eg. reads from a disk) 
+while another thread processes it. To enhance performance a buffer is inserted 
+between the two threads so they do not have to run at the same speed. 
+\line{\f1
+producer -> [buffer] -> consumer\line
+}
+\par
+
+The solution is the normal solution when semaphores are available: 
+\line{\f1
+#define maxbuf 10\line
+struct Element \{\line
+  ...\line
+\};\line
+\line
+class Buffer \{\line
+  Element buffer[maxbuf];\line
+  int head,tail;\line
+  FSemaphore notfull,notempty;\line
+public:\line
+  Buffer();\line
+  void Get(Element &e);\line
+  void Put(const Element &e);\line
+\};\line
+\line
+Buffer::Buffer()\line
+  : head(0),tail(0),\line
+    notfull(maxbuf), notempty(0)\line
+\{ \}\line
+\line
+void Buffer::Get(Element &e) \{\line
+  //retrieve an element from the buffer\line
+  \line
+  //wait until there is an element\line
+  notempty.Wait();\line
+  //take it\line
+  e = buffer[head];\line
+  head = (head+1)%maxbuf;\line
+  //since we have taken an element there is room for one more.\line
+  notempty.Signal();\line
+\}\line
+\line
+void Buffer::Put(const Element &e) \{\line
+  //append an element to the buffer\line
+  \line
+  //wait until there is room for it\line
+  notfull.Wait();\line
+  //append the element\line
+  buffer[tail] = e;\line
+  tail = (tail+1)%maxbuf;\line
+  //tell that there is one more element\line
+  notempty.Signal();\line
+\}\line
+}
+\par
+
+The buffer is a circular buffer. When the producer thread inserts an item 
+it has to wait until there is room for it (the consumer may be slow), 
+insert it and then tell the consumer thread that there is one more element 
+in the buffer. When the consumer thread wants to take an element it must 
+wait until there is one (the producer may be slow), take it and then tell the 
+producer thread that there is room for one more element.\par
+
+This fragment shows how to use the buffer. The code fragment contains the 
+framework of a decompression program. The decompression program uses three threads: 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+A disk-read thread that reads blocks from a disk. 
+\par
+{\f2\'B7}\tab
+A decompression thread that decompresses the blocks that the disk-read thread has put into a buffer 
+\par
+{\f2\'B7}\tab
+A disk-write thread that writes the decompressed blocks to the disk. 
+\par\pard\sb100
+\par
+
+\line{\f1
+//blocks of 1024 byts are used\line
+struct Element \{\line
+  char b[1024];\line
+  int size;         //size of block. non-1024 only in last block\line
+\};\line
+\line
+Buffer compressedBlocks;   //buffer between reader and decompressor\line
+Buffer decompressedBlocks; //buffer between decompressor and writer\line
+FILE *fpInput,*fpOutput;   //input and output files\line
+\line
+class ReaderThread : public FThread \{\line
+public:\line
+  void Go();\line
+\};\line
+\line
+class DecompressorThread : public FThread \{\line
+public:\line
+  void Go();\line
+\};\line
+\line
+class WriteThread : public FThread \{\line
+public:\line
+  void Go();\line
+\};\line
+\line
+\line
+void ReaderThread::Go() \{\line
+  Element e;\line
+  int bytesRead;\line
+  \line
+  do \{\line
+    bytesRead = fread(e.b, 1, 1024, fpInput);\line
+    if(bytesRead>0) \{\line
+      e.size = bytesRead;\line
+      compressedBlocks.Put(e);\line
+    \}\line
+  \} while(bytesRead>0);\line
+\}\line
+\line
+void DecompressorThread::Go() \{\line
+  <various state variables for the decompression>\line
+  Element in;\line
+  Element out;\line
+  \line
+  do \{\line
+    decompressedBlocks.Get(e);\line
+    if(e.size!=0) \{\line
+      //decompress block\line
+      for (...)\line
+        ...\line
+        if(out.size==1024) \{\line
+          //output block is full\line
+          decompressedBlocks.Put(out);\line
+          out.size=0;\line
+        \}\line
+        ...\line
+    \}\line
+  \} while(in.size==1024);\line
+  //flush last block\line
+  if(out.size>0) \{\line
+    decompressedBlocks.Put(out);\line
+  \}\line
+\}\line
+\line
+\line
+void WriterThread::Go() \{\line
+  Element e;\line
+  do \{\line
+    decompressedBlocks.Get(e);\line
+    if(e.size>0)\line
+      fwrite(e.b, 1, e.size, fpOutput);\line
+  \} while(e.size==1024);\line
+\}\line
+}
+\par
+
+A nice sideeffect of the code fragment above is that it saves time (except 
+under Windows 3.1). Instead of the running time being read-time + 
+decompression-time + write-time it is max(read-time,decompression-time,write-time).  
+Assume the input file is on a diskette and the output file is on a harddisk.  
+Reading 1.44MB from a diskette takes 60 seconds minute, decrompressing 1 MB  
+takes 20 seconds and writing the decompressed file (approx 3MB) takes 5  
+seconds. The running time of a single-threaded decompressor would take: 
+\line{\f1
+60 + 20 + 5  = 85 seconds\line
+}
+\par
+
+However, the running time of the multi-threaded decompressor in the code 
+fragment above would take: 
+\line{\f1
+max(60,20,5) = 60 seconds\line
+}
+\par
+
+\page
+
+#{\footnote thowto_readersandwriters}
+${\footnote The 'readers and writers' problem}
++{\footnote defbrowse}
+K{\footnote The 'readers and writers' problem}
+{\fs26\cf1\b The 'readers and writers' problem}\par
+The 'readers and writers' problem is also often met in multithreaded programs. 
+It is when a shared structure is accesses by many threads. The structure can 
+handle that multiple threads read the structure but only one thread at a time 
+may modify it (and then there must be no readers).\par
+
+The problem can be solved with a single mutex but this is often not 
+satisfactory since is limits the number of threads simultaneously accessing 
+the structure to 1.\par
+
+The goal is to create a synchronization mechanism that: 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+Allows multple threads to read the structure 
+\par
+{\f2\'B7}\tab
+Allows one thread to modify the structure 
+\par
+{\f2\'B7}\tab
+Ensures that the structure is not modified when there are threads reading the structure 
+\par\pard\sb100
+\par
+
+In addition to this the structure must also be free of deadlocks and livelocks: 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+A writer must wait until there are no readers accessing the structure 
+\par
+{\f2\'B7}\tab
+When a writer is waiting no readers are allowed to begin reading the structure 
+\par
+{\f2\'B7}\tab
+A reader is always allowed to stop reading the structure 
+\par\pard\sb100
+\par
+
+And just because we are masochistic :-) we also want it to work in a SMP environment.\par
+
+The mechanism has four operations: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Start writing 
+\par
+\tab
+Finish writing 
+\par
+\tab
+Start reading 
+\par
+\tab
+Finish reading 
+\par\pard\sb100
+\par
+
+The following code fragment is a bit tricky. 
+\line{\f1
+class RW \{\line
+  FMutexSemaphore modify;               //mutex for writing (and blocking readers)\line
+  FEventSemaphore noReaders;            //posted when there are no readers\line
+  int readers;                          //#readers\line
+  FMutexSemaphore countModify;          //protects above member\line
+public:\line
+  RW();\line
+  \line
+  void WriteLock();\line
+  void WriteUnlock();\line
+  \line
+  void ReadLock();\line
+  void ReadUnlock();\line
+\};\line
+\line
+RW::RW()\line
+\{\line
+  noReaders.Post();\line
+  readers=0;\line
+\}\line
+\line
+void RW::WriteLock() \{\line
+  modify.Request();                     //ensure only one writer\line
+  noReaders.Wait();                     //wait until all readers have left\line
+\}\line
+\line
+void RW::WriteUnlock() \{\line
+  modify.Release();                     //not writing anymore\line
+\}\line
+\line
+void RW:ReadLock() \{\line
+  modify.Request();                     //wait until no writers\line
+    countModify.Request();              //only one reader at a time may modify the count\line
+      if(readers==0) \{\line
+        noReaders.Reset();              //going from 0 to 1 readers\line
+      readers++;\line
+    countModify.Release();\line
+  modify.Release();\line
+\}\line
+\line
+void RW::ReadUnlock() \{\line
+  countModify.Request();                //only one reader at a time may modify the count\line
+    readers--;\line
+    if(readers==0)                      //last reader leaving\line
+      noReaders.Post();\line
+  countModify.Release();\line
+\}\line
+}
+\par
+
+The above mechanism is SMP-safe, free of livelocks and reasonably free of 
+deadlocks. A writer will deadlock itself if it has called ReadLock() and 
+then tries to make a WriteLock(). A writer is, however, allowed to first 
+call WriteLock() and then ReadLock() without deadlocking itself.\par
+
+The following fragment show how to use it: 
+\line{\f1
+BinaryTree tree;\line
+RW tree_RW;\line
+\line
+void reader() \{\line
+  //traverse the tree\line
+  tree_RW.ReadLock();\line
+    traverse(tree.top());\line
+  tree_RW.ReadUnlock();\line
+\}\line
+\line
+void writer() \{\line
+  //insert an element in the tree\line
+  tree_RW.WriteLock();\line
+    tree.insert(...);\line
+  tree_RW.WriteUnlock();\line
+\}\line
+}
+\par
+
+\page
+
+#{\footnote thowto_backgroundpainting}
+${\footnote Painting a window in the background}
++{\footnote defbrowse}
+K{\footnote Painting a window in the background}
+{\fs26\cf1\b Painting a window in the background}\par
+This topic shows how you can paint a window in a background thread.\par
+
+The purpose of painting a window in a background thread is that some windows 
+have very complex contents that take long time to paint. For instance a 
+window could contain graphics that involved heavy calculations to paint, 
+Bezier-curves combined with stretching, rotating and mapping 16M colors to a 
+dynamic 256 color palette.\par
+
+If the calculation/retrieval of the data to present in the window takes long 
+time it is a completely other problem, more like 
+{\uldb 'Background job status feedback'}{\v thowto_backgroundfeedback}\par
+
+The general idea is to answer the WM_PAINT message immidiatly and letting 
+the background thread paint the window. The background painting thread is 
+keept around for several repaints.\par
+
+The following code uses the Windows API, but OS/2 PM is essentially the same. 
+The code assumes that the Queue class is thread-aware (this could be done 
+like the {\uldb 'bounded buffer' problem}{\v thowto_boundedbuffer}) 
+\line{\f1
+Queue<RECT> paintQueue;\line
+FEventSemaphore workToDo;\line
+int stop=0;\line
+HWND hwndPaint;\line
+\line
+class BPThread : public FWindowThread \{\line
+public:\line
+  void Go();\line
+\};\line
+\line
+void BPThread::Go() \{\line
+  while(!stop) \{\line
+    workToDo.Wait();    //Go to sleep until there is something to paint\line
+    workToDo.Reset();   //Ok, were are awake now.\line
+    while(!stop && !paintQueue.IsEmpty()) \{\line
+      RECT rectPaint=paintQueue.Get();\line
+      HDC hdcPaint = GetDC(hwndPaint);\line
+      \line
+      <paint the rectangle>\line
+      ReleaseDC(hwndPaint,hdcPaint);\line
+    \}\line
+  \}\line
+  PostMessage(hwndPaint, WM_PAINTHREAD_TERMINATED,0,0); //Ackowledge the termination request\line
+\}\line
+\line
+\line
+LRESULT MyWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) \{\line
+  switch(msg) \{\line
+    case WM_PAINT: \{\line
+      PAINTSTRUCT ps;\line
+      BeginPaint(hwnd,&ps);\line
+      paintQueue.Put(ps.rcPaint);       //put the rectangle into the paint queue\line
+      EndPaint(hwnd,&ps);\line
+      workToDo.Post();                  //wake the thread\line
+      return 0;\line
+    \}\line
+    case WM_CLOSE: \{\line
+      //We cannot just close the window. We must wait for the background\line
+      //painting thread to terminate first.\line
+      stop = 1;\line
+      workToDo.Post();                  //wake the thread\line
+      return 0;\line
+    \}\line
+    case WM_PAINTHREAD_TERMINATED: \{\line
+      //the background painting thread has terminated\line
+      DestroyWindow(hwnd);\line
+      PostQuitMessage(0);\line
+    \}\line
+    ...\line
+  \}\line
+\}\line
+}
+\par
+
+\page
+
+#{\footnote thowto_backgroundfeedback}
+${\footnote Background job status feedback}
++{\footnote defbrowse}
+K{\footnote Background job status feedback}
+K{\footnote Background job status feedback}
+{\fs26\cf1\b Background job status feedback}\par
+This topic discusses various methods of giving the user progress information 
+on a task executed by a background thread.\par
+
+Several subjects must be adressed: 
+\par\pard\sb100\tx2000\li2000\fi-1999
+Immidiate feedback 
+\tab
+The user should have immidiate feedback when he starts the task. If not, 
+he may not realize that the task is being carried out. The feedback can range 
+from a beep, changing the text in a status bar to displaying a window. 
+\par
+When to update progress information 
+\tab
+While the task is being carried out the user should be able to track the 
+progress of the task. Eg. the number of pages printed, the state of the task or 
+displaying the results as they are computed. 
+\par
+How to signal status change 
+\tab
+The method of communication from the background thread to the GUI thread. 
+\par
+Completion feedback 
+\tab
+What to do when the task has finished 
+\par
+How to stop the job 
+\tab
+Since we are building user-friendly programs :-), the user should be able 
+to stop the task. 
+\par\pard\sb100
+\par
+
+\{bml thowto_1.bmp\}\par{\fs16{Communication between the two threads}}\par
+\par
+
+The following code fragment shows how your can implement background printing. 
+\line{\f1
+class PrintThread : public FWindowThread \{\line
+  HWND hwndNotify;\line
+public:\line
+  PrintThread(HWND hwnd, ...);\line
+  void Go();\line
+\line
+  int noOfPages:\line
+  int currentPage;\line
+  int stop;\line
+\};\line
+\line
+void PrintThread::Go() \{\line
+  <prepare printing>\line
+  for(currentPage=0; currentPage<noOfPages; currentPage++) \{\line
+    //tell the progress window to update information\line
+    WinPostMsg(hwndNotify, WM_UPDATEPRINTPROGRESS, 0,0);\line
+    //Ensure that we don't eat all the time\line
+    Yield();\line
+\line
+    <print the page>\line
+    if(stop) break;\line
+\line
+  \}\line
+  <end printing>\line
+  WinPostMsg(hwndNotify, WM_PRINTFINISHED, 0,0);\line
+\}\line
+\line
+PrintThread *printThread;\line
+MRESULT PrintProgressWndProc(HWND hwmd, MSG msg, MPARAM mp1, MPARAM mp2) \{\line
+  //window procedure for the\line
+  switch(msg) \{\line
+    case WM_INITDLG:\line
+      printThread = new PrintThread(hwnd, ...);\line
+      return FALSE;\line
+\line
+    case WM_COMMAND:\line
+      if(SHORT1FROMMP(mp1)==DID_CANCEL) \{\line
+        //abort printing\line
+        printThread->stop = 1;\line
+      \}\line
+      return 0;\line
+\line
+    case WM_UPDATEPRINTPROGRESS:\line
+      //The thread thinks it a good time to update the progress information\line
+      //we just update the number of pages printed\line
+      WinSetDlgItemShort(hwnd, DID_PRINITINGPAGE, printThread->currentPage, FALSE);\line
+      return 0;\line
+\line
+    case WM_PRINTFINISHED:\line
+      //the thread has finished printing\line
+      printThread->Wait();  //wait for the thread to terminate (it probably already has)\line
+      delete printThread;\line
+      WinDismissDlg(hwnd,0);\line
+      return 0;\line
+  \}\line
+  return DefDlgProc(hwnd,msg,mp1,mp2);\line
+\}\line
+\line
+MRESULT MainWndProc(HWND hwnd, MSG msg, MPARAM mp1, MPARAM mp2) \{\line
+  //window procedure for the main window\line
+  switch(msg) \{\line
+    case WM_COMMAND:\line
+      switch(SHORT1FROMMP(mp1)) \{\line
+        case CID_PRINT:\line
+          WinDlgBox(HWND_DESKTOP,hwnd,PrintProgressWndProc,NULL,IDD_PRINTPROGRESS,NULL);\line
+        case ...\line
+      \}\line
+      return 0;\line
+    ...\line
+  \}\line
+  return WinDefWindowProc(hwnd,msg,mp1,mp2);\line
+\}\line
+\line
+}
+\par
+
+\page
+
+#{\footnote thowto_spin}
+${\footnote Spinning Semaphores}
++{\footnote defbrowse}
+K{\footnote Spinning Semaphores}
+{\fs26\cf1\b Spinning Semaphores}\par
+BIF/Thread offers three spinning semaphores: 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+{\uldb FSpinMutexSemaphore}{\v fspinmutexsemaphore} 
+\par
+{\f2\'B7}\tab
+{\uldb FSpinEventSemaphore}{\v fspineventsemaphore} 
+\par
+{\f2\'B7}\tab
+{\uldb FSpinSemaphore}{\v fspinsemaphore} 
+\par\pard\sb100
+ 
+These semaphore try to optimize out of expensive system call and thereby 
+reducing the overhead of the synchronization. In general they spin in a tight 
+loop waiting for the condition to occur (thus the name "spinning") and if that 
+doesn't work within a certain amount of time the revert to the operating 
+system's semaphores.\par
+
+They have the following advantage over the standard semaphores: 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+They are faster. 
+\par\pard\sb100
+\par
+
+They have the following disadvantages: 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+They are partly or fully program-managed (not system managed). Because they use data 
+accessable to the program memory overwrites can have terribly consequences. 
+\par
+{\f2\'B7}\tab
+When the condition they wait for is not true within a short period of time 
+and they revert to the standard semaphores they will have used more CPU 
+resources than the standard semaphores. 
+\par
+{\f2\'B7}\tab
+In general, they cannot detect error conditions, such as when the owner of a 
+FSpinMutexSemaphores dies without releasing it, or when a FEventSemaphore's 
+destructor is called while threads are waiting for it. This can lead to deadlocks. 
+\par
+{\f2\'B7}\tab
+They do not have timeouts. 
+\par
+{\f2\'B7}\tab
+They cannot be used with the operating system functions 
+\par\pard\sb100
+\par
+
+{\b{When to use spinning semaphores}}\par
+
+If you expect threads to block on the semaphores' wait function in less than 5% of 
+the calls, that is: 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+FSpinEventSemaphore is usually posted. 
+\par
+{\f2\'B7}\tab
+FSpinMutexSemaphore is requested for {\i{very}} short periods of time 
+\par
+{\f2\'B7}\tab
+Only 1-2 threads are using a FSpinMutexSemaphore object 
+\par
+{\f2\'B7}\tab
+FSemaphore's count is usually above 0 
+\par\pard\sb100
+ 
+You should not use spinning semaphores unless you have verified that the 
+standard semaphores are responsible for more than 20% of your program's 
+running time.\par
+
+{\b{When spinning semaphores should be avoided}} 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+When more than, say, 5 threads are requesting a FSpinMutexSemaphore 
+\par
+{\f2\'B7}\tab
+When FSpinEventSemaphore's count is around 0-1. 
+\par
+{\f2\'B7}\tab
+When your program is not fully debugged 
+\par
+{\f2\'B7}\tab
+When your have not tried something else, such as reducing the amount 
+of synchronization. For instance, instead of transferring small blocks of data 
+(eg. 1 byte) from one thread to another a a time, try transferring large chunks 
+of data (eg. 4K) instead. 
+\par\pard\sb100
+ 
+\page
+
+}

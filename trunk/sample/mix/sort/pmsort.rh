@@ -1,0 +1,26 @@
+#define IDM_QUICKSORT           101
+#define IDM_HEAPSORT            102
+#define IDM_SHELLSORT           103
+#define IDM_COMBSORT            104
+#define IDM_BATCHERSORT         105
+#define IDM_RADIXEXCHANGE       106
+
+#define IDM_RANDOM              111
+#define IDM_MOSTLYSORTED        112
+#define IDM_ALMOSTSORTED        113
+#define IDM_SORTED              114
+#define IDM_REVERSESORTED       115
+#define IDM_SMALLVALUERANGE     116
+
+#define IDM_NEXT        151
+#define IDM_SORT        152
+
+#define IDS_QUICKSORT           200
+#define IDS_HEAPSORT            201
+#define IDS_SHELLSORT           202
+#define IDS_COMBSORT            203
+#define IDS_BATCHERSORT         204
+#define IDS_RADIXEXCHANGE       205
+
+#define IDSORT  256
+

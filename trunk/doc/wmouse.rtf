@@ -1,0 +1,1271 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote FMouseHandler}
+${\footnote FMouseHandler}
++{\footnote defbrowse}
+K{\footnote FMouseHandler}
+{\fs26\cf1\b FMouseHandler}\par
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_MOUSEHANDLERS\par
+
+FMouseHandler handles the mouse, including movement, button clicks, mouse  
+capture and pointer shape. It also serves as the base class for the more  
+advanced mouse handler: {\uldb FExtendedMouseHandler}{\v FExtendedMouseHandler}. 
+Whenever you can you should use the most advanced mouse handler as it relieves you of many 
+boring details. When you use a more advanced mouse handler you will usually only 
+use the capture, movement and pointer control functions of FMouseHandler.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb SetCapture()}{\v FMouseHandler_SetCapture} 
+\par
+\tab
+{\uldb ReleaseCapture()}{\v FMouseHandler_ReleaseCapture} 
+\par
+\tab
+{\uldb HasCapture()}{\v FMouseHandler_HasCapture} 
+\par
+\tab
+{\uldb GetCurrentMousePosition()}{\v FMouseHandler_GetCurrentMousePosition} 
+\par
+\tab
+{\uldb ButtonDown()}{\v FMouseHandler_ButtonDown} 
+\par
+\tab
+{\uldb ButtonUp()}{\v FMouseHandler_ButtonUp} 
+\par
+\tab
+{\uldb ButtonDblClk()}{\v FMouseHandler_ButtonDblClk} 
+\par
+\tab
+{\uldb Button1Down()}{\v FMouseHandler_Button1Down} 
+\par
+\tab
+{\uldb Button1Up()}{\v FMouseHandler_Button1Up} 
+\par
+\tab
+{\uldb Button1DblClk()}{\v FMouseHandler_Button1DblClk} 
+\par
+\tab
+{\uldb Button2Down()}{\v FMouseHandler_Button2Down} 
+\par
+\tab
+{\uldb Button2Up()}{\v FMouseHandler_Button2Up} 
+\par
+\tab
+{\uldb Button2DblClk()}{\v FMouseHandler_Button2DblClk} 
+\par
+\tab
+{\uldb Button3Down()}{\v FMouseHandler_Button3Down} 
+\par
+\tab
+{\uldb Button3Up()}{\v FMouseHandler_Button3Up} 
+\par
+\tab
+{\uldb Button3DblClk()}{\v FMouseHandler_Button3DblClk} 
+\par
+\tab
+{\uldb MouseMove()}{\v FMouseHandler_MouseMove} 
+\par
+\tab
+{\uldb ControlPointer()}{\v FMouseHandler_ControlPointer} 
+\par
+\tab
+{\uldb ControlPointerNonWindow()}{\v FMouseHandler_ControlPointerNonWindow} 
+\par\pard\sb100
+\par
+
+The following event classes are use by the mouse handlers: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FMouseEvent}{\v FMouseEvent} 
+\par
+\tab
+{\uldb FButtonDownEvent}{\v FButtonDownEvent} 
+\par
+\tab
+{\uldb FButtonUpEvent}{\v FButtonUpEvent} 
+\par
+\tab
+{\uldb FButtonDblClkEvent}{\v FButtonDblClkEvent} 
+\par
+\tab
+{\uldb FMouseMoveEvent}{\v FMouseMoveEvent} 
+\par
+\tab
+{\uldb FControlPointerEvent}{\v FControlPointerEvent} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FMouseHandler_SetCapture}
+${\footnote FMouseHandler::SetCapture()}
++{\footnote defbrowse}
+K{\footnote SetCapture()}
+K{\footnote FMouseHandler::SetCapture()}
+{\fs26\cf1\b SetCapture()}\par
+Declaration: 
+\line{\f1
+Bool SetCapture();\line
+}
+\par
+
+This function directs all mouse events to the window so when the user moves  
+mouse outside the handler's window the mouse events are still sent to the  
+window. You should only call SetCapture() when the mouse is over your window and 
+at least one mouse button is pressed. You should call 
+{\uldb ReleaseCapture()}{\v FMouseHandler_ReleaseCapture} when the use releases the  
+button that cause you to capture the mouse.\par
+
+{\b{Note:}} (Windows) when a WM_CANCELMODE message is recieved the capture is  
+automatically released. 
+\par
+
+Example: This code fragment draws a line starting from the point where the user  
+pressed button 1 to the point where the user releases button 1. 
+\line{\f1
+Bool MyWindow::Button1Down(FButtonDownEvent &ev) \{\line
+  SetCapture();\line
+  startpoint = ev.GetPoint();\line
+  endpoint = startpoint;\line
+  DrawLine(startpoint,endpoint,XOR);\line
+  return False; //even though we have processed the event we don't mind other\line
+                //handlers knowing a button was pressed\line
+\}\line
+\line
+Bool MyWindow::Button1Up(FButtonUpEvent &ev) \{\line
+  if(HasCapture()) \{\line
+    ReleaseCapture();\line
+    DrawLine(startpoint,endpoint,XOR);\line
+    <add line startpoint-endpoint to internal data structure>\line
+  \}\line
+  return False;\line
+\}\line
+\line
+Bool MyWindow::MouseMove(MouseMoveEvent &ev) \{\line
+  if(HasCapture()) \{\line
+    DrawLine(startpoint,endpoint,XOR);\line
+    endpoint = ev.GetPoint();\line
+    DrawLine(startpoint,endpoint,XOR);\line
+  \}\line
+  return False;\line
+\}\line
+}
+\par
+
+{\b{Caution: }}Be sure that you release the mouse capture. Under Windows 3.x as  
+long as an application has captured the mouse Windows 3.x can't bring up the  
+task list leaving only Ctrl-Alt-Del as a solution to the user. 
+\par
+
+See also: {\uldb ReleaseCapture()}{\v FMouseHandler_ReleaseCapture}, 
+{\uldb HasCapture()}{\v FMouseHandler_HasCapture} 
+\page
+
+#{\footnote FMouseHandler_ReleaseCapture}
+${\footnote FMouseHandler::ReleaseCapture()}
++{\footnote defbrowse}
+K{\footnote ReleaseCapture()}
+K{\footnote FMouseHandler::ReleaseCapture()}
+{\fs26\cf1\b ReleaseCapture()}\par
+Declaration: 
+\line{\f1
+Bool ReleaseCapture();\line
+}
+\par
+
+This function releases the mouse previously captured with  
+{\uldb SetCapture()}{\v FMouseHandler_SetCapture} 
+\page
+
+#{\footnote FMouseHandler_HasCapture}
+${\footnote FMouseHandler::HasCapture()}
++{\footnote defbrowse}
+K{\footnote HasCapture()}
+K{\footnote FMouseHandler::HasCapture()}
+{\fs26\cf1\b HasCapture()}\par
+Declaration: 
+\line{\f1
+Bool HasCapture() const;\line
+}
+\par
+
+This function returns wether or not the window has captured the mouse. See 
+{\uldb SetCapture()}{\v FMouseHandler_SetCapture} for details and an example. 
+\page
+
+#{\footnote FMouseHandler_GetCurrentMousePosition}
+${\footnote FMouseHandler::GetCurrentMousePosition()}
++{\footnote defbrowse}
+K{\footnote GetCurrentMousePosition()}
+K{\footnote FMouseHandler::GetCurrentMousePosition()}
+{\fs26\cf1\b GetCurrentMousePosition()}\par
+Declaration: 
+\line{\f1
+Bool GetCurrentMousePosition(int *x, int *y);\line
+}
+\par
+
+This function retrieves the current mouse position. This function should only 
+be used when you do not have a {\uldb FMouseEvent}{\v FMouseEvent} to ask.\par
+
+{\b{Note:}} This function can fail. 
+\page
+
+#{\footnote FMouseHandler_ButtonDown}
+${\footnote FMouseHandler::ButtonDown()}
++{\footnote defbrowse}
+K{\footnote ButtonDown()}
+K{\footnote FMouseHandler::ButtonDown()}
+{\fs26\cf1\b ButtonDown()}\par
+Declaration: 
+\line{\f1
+virtual Bool ButtonDown({\uldb FButtonDownEvent}{\v FButtonDownEvent}&);\line
+}
+\par
+
+This function is called when a mouse button has been pressed. The default 
+implementation calls {\uldb Button1Down()}{\v FMouseHandler_Button1Down}, 
+{\uldb Button2Down()}{\v FMouseHandler_Button2Down} or 
+{\uldb Button3Down()}{\v FMouseHandler_Button3Down} depending on the button pressed. 
+\page
+
+#{\footnote FMouseHandler_ButtonUp}
+${\footnote FMouseHandler::ButtonUp()}
++{\footnote defbrowse}
+K{\footnote ButtonUp()}
+K{\footnote FMouseHandler::ButtonUp()}
+{\fs26\cf1\b ButtonUp()}\par
+Declaration: 
+\line{\f1
+virtual Bool ButtonUp({\uldb FButtonUpEvent}{\v FButtonUpEvent}&);\line
+}
+\par
+
+This function is called when a mouse button has been released. The  
+default implementation calls {\uldb Button1Up()}{\v FMouseHandler_Button1Up}, 
+{\uldb Button2Up()}{\v FMouseHandler_Button2Up} or 
+{\uldb Button3Up()}{\v FMouseHandler_Button3Up} depending on the button  
+released.  
+\page
+
+#{\footnote FMouseHandler_ButtonDblClk}
+${\footnote FMouseHandler::ButtonDblClk()}
++{\footnote defbrowse}
+K{\footnote ButtonDblClk()}
+K{\footnote FMouseHandler::ButtonDblClk()}
+{\fs26\cf1\b ButtonDblClk()}\par
+Declaration: 
+\line{\f1
+virtual Bool ButtonDblClk({\uldb FButtonDblClkEvent}{\v FButtonDblClkEvent}&);\line
+}
+\par
+
+This function is called when a mouse button has been clicked twice  
+within a user-defined time limit. The 
+default implementation calls {\uldb Button1DblClk()}{\v FMouseHandler_Button1DblClk}, 
+{\uldb Button2DblClk()}{\v FMouseHandler_Button2DblClk} or 
+{\uldb Button3DblClk()}{\v FMouseHandler_Button3DblClk} depending on the button pressed. 
+\page
+
+#{\footnote FMouseHandler_Button1Down}
+${\footnote FMouseHandler::Button1Down()}
++{\footnote defbrowse}
+K{\footnote Button1Down()}
+K{\footnote FMouseHandler::Button1Down()}
+{\fs26\cf1\b Button1Down()}\par
+Declaration: 
+\line{\f1
+virtual Bool Button1Down({\uldb FButtonDownEvent}{\v FButtonDownEvent}&);\line
+}
+\par
+
+This function is called when button 1 (the left-most) has been 
+pressed.  
+\page
+
+#{\footnote FMouseHandler_Button1Up}
+${\footnote FMouseHandler::Button1Up()}
++{\footnote defbrowse}
+K{\footnote Button1Up()}
+K{\footnote FMouseHandler::Button1Up()}
+{\fs26\cf1\b Button1Up()}\par
+Declaration: 
+\line{\f1
+virtual Bool Button1Up({\uldb FButtonUpEvent}{\v FButtonUpEvent}&);\line
+}
+\par
+
+This function is called when button 1 has been released 
+\page
+
+#{\footnote FMouseHandler_Button1DblClk}
+${\footnote FMouseHandler::Button1DblClk()}
++{\footnote defbrowse}
+K{\footnote Button1DblClk()}
+K{\footnote FMouseHandler::Button1DblClk()}
+{\fs26\cf1\b Button1DblClk()}\par
+Declaration: 
+\line{\f1
+virtual Bool Button1DblClk({\uldb FButtonDblClkEvent}{\v FButtonDblClkEvent}&);\line
+}
+\par
+
+This function is called when mouse button 1 has been clicked twice 
+within a user-defined time limit. 
+\page
+
+#{\footnote FMouseHandler_Button2Down}
+${\footnote FMouseHandler::Button2Down()}
++{\footnote defbrowse}
+K{\footnote Button2Down()}
+K{\footnote FMouseHandler::Button2Down()}
+{\fs26\cf1\b Button2Down()}\par
+Declaration: 
+\line{\f1
+virtual Bool Button2Down({\uldb FButtonDownEvent}{\v FButtonDownEvent}&);\line
+}
+\par
+
+This function is called when button 2 (the right-most) has been 
+pressed.  
+\page
+
+#{\footnote FMouseHandler_Button2Up}
+${\footnote FMouseHandler::Button2Up()}
++{\footnote defbrowse}
+K{\footnote Button2Up()}
+K{\footnote FMouseHandler::Button2Up()}
+{\fs26\cf1\b Button2Up()}\par
+Declaration: 
+\line{\f1
+virtual Bool Button2Up({\uldb FButtonUpEvent}{\v FButtonUpEvent}&);\line
+}
+\par
+
+This function is called when button 2 has been released 
+\page
+
+#{\footnote FMouseHandler_Button2DblClk}
+${\footnote FMouseHandler::Button2DblClk()}
++{\footnote defbrowse}
+K{\footnote Button2DblClk()}
+K{\footnote FMouseHandler::Button2DblClk()}
+{\fs26\cf1\b Button2DblClk()}\par
+Declaration: 
+\line{\f1
+virtual Bool Button2DblClk({\uldb FButtonDblClkEvent}{\v FButtonDblClkEvent}&);\line
+}
+\par
+
+This function is called when mouse button 2 has been clicked twice 
+within a user-defined time limit. 
+\page
+
+#{\footnote FMouseHandler_Button3Down}
+${\footnote FMouseHandler::Button3Down()}
++{\footnote defbrowse}
+K{\footnote Button3Down()}
+K{\footnote FMouseHandler::Button3Down()}
+{\fs26\cf1\b Button3Down()}\par
+Declaration: 
+\line{\f1
+virtual Bool Button3Down({\uldb FButtonDownEvent}{\v FButtonDownEvent}&);\line
+}
+\par
+
+This function is called when button 3 (the middle) has been 
+pressed.  
+\page
+
+#{\footnote FMouseHandler_Button3Up}
+${\footnote FMouseHandler::Button3Up()}
++{\footnote defbrowse}
+K{\footnote Button3Up()}
+K{\footnote FMouseHandler::Button3Up()}
+{\fs26\cf1\b Button3Up()}\par
+Declaration: 
+\line{\f1
+virtual Bool Button3Up({\uldb FButtonUpEvent}{\v FButtonUpEvent}&);\line
+}
+\par
+
+This function is called when button 3 has been released 
+\page
+
+#{\footnote FMouseHandler_Button3DblClk}
+${\footnote FMouseHandler::Button3DblClk()}
++{\footnote defbrowse}
+K{\footnote Button3DblClk()}
+K{\footnote FMouseHandler::Button3DblClk()}
+{\fs26\cf1\b Button3DblClk()}\par
+Declaration: 
+\line{\f1
+virtual Bool Button3DblClk({\uldb FButtonDblClkEvent}{\v FButtonDblClkEvent}&);\line
+}
+\par
+
+This function is called when mouse button 3 has been clicked twice 
+within a user-defined time limit. 
+\page
+
+#{\footnote FMouseHandler_MouseMove}
+${\footnote FMoseHandler::MouseMove()}
++{\footnote defbrowse}
+K{\footnote MouseMove()}
+K{\footnote FMoseHandler::MouseMove()}
+{\fs26\cf1\b MouseMove()}\par
+Declaration: 
+\line{\f1
+virtual Bool MouseMove({\uldb FMouseMoveEvent}{\v FMouseMoveEvent}&)\line
+}
+\par
+
+MouseMove() is called when the mouse is moved over the handler's window (or anywhere on  
+the screen if the window has capture the mouse). 
+\page
+
+#{\footnote FMouseHandler_ControlPointer}
+${\footnote FmouseHandler::ControlPointer()}
++{\footnote defbrowse}
+K{\footnote ControlPointer()}
+K{\footnote FmouseHandler::ControlPointer()}
+{\fs26\cf1\b ControlPointer()}\par
+Declaration: 
+\line{\f1
+virtual Bool ControlPointer({\uldb FControlPointerEvent}{\v FControlPointerEvent}&);\line
+}
+\par
+
+This function is called when the window has an oppurtunity to specify the pointer shape.\par
+
+Example: 
+\line{\f1
+Bool MyWindow::ControlPointer(FControlPointerEvent &ev) \{\line
+  if(<window is busy>)\line
+    ev.SetPointer(*GetSystemWaitPointer());\line
+  else\line
+    ev.SetPointer(*GetSystemArrowPointer());\line
+  return True;\line
+\}\line
+}
+\par
+
+See also: 
+{\uldb GetSystemArrowPointer()}{\v GetSystemArrowPointer}, 
+{\uldb GetSystemTextPointer()}{\v GetSystemTextPointer}, 
+{\uldb GetSystemNESWPointer()}{\v GetSystemNESWPointer}, 
+{\uldb GetSystemNSPointer()}{\v GetSystemNSPointer}, 
+{\uldb GetSystemNWSEPointer()}{\v GetSystemNWSEPointer}, 
+{\uldb GetSystemWEPointer()}{\v GetSystemWEPointer}, 
+{\uldb GetSystemWaitPointer()}{\v GetSystemWaitPointer} 
+\page
+
+#{\footnote FMouseHandler_ControlPointerNonWindow}
+${\footnote FmouseHandler::ControlPointerNonWindow()}
++{\footnote defbrowse}
+K{\footnote ControlPointerNonWindow()}
+K{\footnote FmouseHandler::ControlPointerNonWindow()}
+{\fs26\cf1\b ControlPointerNonWindow()}\par
+Declaration: 
+\line{\f1
+virtual Bool ControlPointerNonWindow(FControlPointerEvent&)\line
+}
+\par
+
+This function is called when the window has an oppurtunity to specify the pointer shape,  
+but the mouse is not directly over the window but rather over one of its subwindows. This  
+function is portable, but not recommended.\par
+
+See also: {\uldb ControlPointer()}{\v FMouseHandler_ControlPointer} 
+\page
+
+#{\footnote FExtendedMouseHandler}
+${\footnote FExtendedMouseHandler}
++{\footnote defbrowse}
+K{\footnote FExtendedMouseHandler}
+{\fs26\cf1\b FExtendedMouseHandler}\par
+Declaration: 
+\line{\f1
+class FExtendedMouseHandler : public {\uldb FMouseHandler}{\v FMouseHandler} \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_MOUSEHANDLERS\par
+
+This handler adds a few abstractions to the FMouseHandler. These are: 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+Detection of motion (movement with buttons pressed) 
+\par
+{\f2\'B7}\tab
+Detection of clicks (button press and release) 
+\par
+{\f2\'B7}\tab
+Detection of chords (left and right button pressed simultaneously) 
+\par\pard\sb100
+\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Button1MotionStart()}{\v FExtendedMouseHandler_Button1MotionStart} 
+\par
+\tab
+{\uldb Button1MotionEnd()}{\v FExtendedMouseHandler_Button1MotionEnd} 
+\par
+\tab
+{\uldb Button1Click()}{\v FExtendedMouseHandler_Button1Click} 
+\par
+\tab
+{\uldb Button2MotionStart()}{\v FExtendedMouseHandler_Button2MotionStart} 
+\par
+\tab
+{\uldb Button2MotionEnd()}{\v FExtendedMouseHandler_Button2MotionEnd} 
+\par
+\tab
+{\uldb Button2Click()}{\v FExtendedMouseHandler_Button2Click} 
+\par
+\tab
+{\uldb Button3MotionStart()}{\v FExtendedMouseHandler_Button3MotionStart} 
+\par
+\tab
+{\uldb Button3MotionEnd()}{\v FExtendedMouseHandler_Button3MotionEnd} 
+\par
+\tab
+{\uldb Button3Click()}{\v FExtendedMouseHandler_Button3Click} 
+\par
+\tab
+{\uldb ButtonChord()}{\v FExtendedMouseHandler_ButtonChord} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FExtendedMouseHandler_Button1MotionStart}
+${\footnote FExtendedMouseHandler::Button1MotionStart()}
++{\footnote defbrowse}
+K{\footnote Button1MotionStart()}
+K{\footnote FExtendedMouseHandler::Button1MotionStart()}
+{\fs26\cf1\b Button1MotionStart()}\par
+Declaration: 
+\line{\f1
+virtual Bool Button1MotionStart({\uldb FMouseEvent}{\v FMouseEvent}&);\line
+}
+\par
+
+This function is called when the user has pressed button 1 and has begun moving 
+the mouse. This function is not called immidiatly when the mouse moves but later 
+when the mouse has moved a minimum number of pixels configured by the user. 
+This elimiates a lot of "false" motions.\par
+
+See also: {\uldb Button1MotionEnd()}{\v FExtendedMouseHandler_Button1MotionEnd} 
+\page
+
+#{\footnote FExtendedMouseHandler_Button1MotionEnd}
+${\footnote FExtendedMouseHandler::Button1MotionEnd()}
++{\footnote defbrowse}
+K{\footnote Button1MotionEnd()}
+K{\footnote FExtendedMouseHandler::Button1MotionEnd()}
+{\fs26\cf1\b Button1MotionEnd()}\par
+Declaration: 
+\line{\f1
+virtual Bool Button1MotionEnd({\uldb FMouseEvent}{\v FMouseEvent}&);\line
+}
+\par
+
+This function is called when the user has released button 1 after pressing the button and moving the mouse\par
+
+See also: {\uldb Button1MotionStart()}{\v FExtendedMouseHandler_Button1MotionStart} 
+\page
+
+#{\footnote FExtendedMouseHandler_Button1Click}
+${\footnote FExtendedMouseHandler::Button1Click()}
++{\footnote defbrowse}
+K{\footnote Button1Click()}
+K{\footnote FExtendedMouseHandler::Button1Click()}
+{\fs26\cf1\b Button1Click()}\par
+Declaration: 
+\line{\f1
+virtual Bool Button1Click({\uldb FMouseEvent}{\v FMouseEvent}&);\line
+}
+\par
+
+Button1Click() is called when the user has pressed an released button 1 within  
+a certain time interval without moving the mouse too much. (If the mouse moves 
+too much it is a motion) 
+\page
+
+#{\footnote FExtendedMouseHandler_Button2MotionStart}
+${\footnote FExtendedMouseHandler::Button2MotionStart()}
++{\footnote defbrowse}
+K{\footnote Button2MotionStart()}
+K{\footnote FExtendedMouseHandler::Button2MotionStart()}
+{\fs26\cf1\b Button2MotionStart()}\par
+Declaration: 
+\line{\f1
+virtual Bool Button2MotionStart({\uldb FMouseEvent}{\v FMouseEvent}&);\line
+}
+\par
+
+This function is called when the user has pressed button 2 and has begun moving 
+the mouse. This function is not called immidiatly when the mouse moves but later 
+when the mouse has moved a minimum number of pixels configured by the user. 
+This elimiates a lot of "false" motions.\par
+
+See also: {\uldb Button2MotionEnd()}{\v FExtendedMouseHandler_Button2MotionEnd} 
+\page
+
+#{\footnote FExtendedMouseHandler_Button2MotionEnd}
+${\footnote FExtendedMouseHandler::Button2MotionEnd()}
++{\footnote defbrowse}
+K{\footnote Button2MotionEnd()}
+K{\footnote FExtendedMouseHandler::Button2MotionEnd()}
+{\fs26\cf1\b Button2MotionEnd()}\par
+Declaration: 
+\line{\f1
+virtual Bool Button2MotionEnd({\uldb FMouseEvent}{\v FMouseEvent}&);\line
+}
+\par
+
+This function is called when the user has released button 2 after pressing the button and moving the mouse\par
+
+See also: {\uldb Button2MotionStart()}{\v FExtendedMouseHandler_Button2MotionStart} 
+\page
+
+#{\footnote FExtendedMouseHandler_Button2Click}
+${\footnote FExtendedMouseHandler::Button2Click()}
++{\footnote defbrowse}
+K{\footnote Button2Click()}
+K{\footnote FExtendedMouseHandler::Button2Click()}
+{\fs26\cf1\b Button2Click()}\par
+Declaration: 
+\line{\f1
+virtual Bool Button2Click({\uldb FMouseEvent}{\v FMouseEvent}&);\line
+}
+\par
+
+Button2Click() is called when the user has pressed an released button 2 within  
+a certain time interval without moving the mouse too much. (If the mouse moves 
+too much it is a motion) 
+\page
+
+#{\footnote FExtendedMouseHandler_Button3MotionStart}
+${\footnote FExtendedMouseHandler::Button3MotionStart()}
++{\footnote defbrowse}
+K{\footnote Button3MotionStart()}
+K{\footnote FExtendedMouseHandler::Button3MotionStart()}
+{\fs26\cf1\b Button3MotionStart()}\par
+Declaration: 
+\line{\f1
+virtual Bool Button3MotionStart({\uldb FMouseEvent}{\v FMouseEvent}&);\line
+}
+\par
+
+This function is called when the user has pressed button 3 and has begun moving 
+the mouse. This function is not called immidiatly when the mouse moves but later 
+when the mouse has moved a minimum number of pixels configured by the user. 
+This elimiates a lot of "false" motions.\par
+
+See also: {\uldb Button3MotionEnd()}{\v FExtendedMouseHandler_Button3MotionEnd} 
+\page
+
+#{\footnote FExtendedMouseHandler_Button3MotionEnd}
+${\footnote FExtendedMouseHandler::Button3MotionEnd()}
++{\footnote defbrowse}
+K{\footnote Button3MotionEnd()}
+K{\footnote FExtendedMouseHandler::Button3MotionEnd()}
+{\fs26\cf1\b Button3MotionEnd()}\par
+Declaration: 
+\line{\f1
+virtual Bool Button3MotionEnd({\uldb FMouseEvent}{\v FMouseEvent}&);\line
+}
+\par
+
+This function is called when the user has released button 3 after pressing the  
+button and moving the mouse.\par
+
+See also: {\uldb Button3MotionStart()}{\v FExtendedMouseHandler_Button3MotionStart} 
+\page
+
+#{\footnote FExtendedMouseHandler_Button3Click}
+${\footnote FExtendedMouseHandler::Button3Click()}
++{\footnote defbrowse}
+K{\footnote Button3Click()}
+K{\footnote FExtendedMouseHandler::Button3Click()}
+{\fs26\cf1\b Button3Click()}\par
+Declaration: 
+\line{\f1
+virtual Bool Button3Click({\uldb FMouseEvent}{\v FMouseEvent}&);\line
+}
+\par
+
+Button3Click() is called when the user has pressed an released button 3 within  
+a certain time interval without moving the mouse too much. (If the mouse moves 
+too much it is a motion) 
+\page
+
+#{\footnote FExtendedMouseHandler_ButtonChord}
+${\footnote FExtendedMouseHandler::ButtonChord()}
++{\footnote defbrowse}
+K{\footnote ButtonChord()}
+K{\footnote FExtendedMouseHandler::ButtonChord()}
+{\fs26\cf1\b ButtonChord()}\par
+Declaration: 
+\line{\f1
+virtual Bool ButtonChord(FMouseEvent&);\line
+}
+\par
+
+This function is called when the user presses button 1 and 2 simultaneously (within a certain time interval) 
+\page
+
+#{\footnote FTranslatedMouseHandler}
+${\footnote FTranslatedMouseHandler}
++{\footnote defbrowse}
+K{\footnote FTranslatedMouseHandler}
+{\fs26\cf1\b FTranslatedMouseHandler}\par
+Declaration: 
+\line{\f1
+class FTranslatedMouseHandler : public {\uldb FExtendedMouseHandler}{\v FExtendedMouseHandler} \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_MOUSEHANDLERS\par
+
+FTranslatedMouseHandler adds more abstractions to the mouse interface. It is  
+intended for use in windows that contain objects. It defines which gestures the 
+user can use to: 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+Drag objects 
+\par
+{\f2\'B7}\tab
+Select objects 
+\par
+{\f2\'B7}\tab
+Open objects 
+\par
+{\f2\'B7}\tab
+Bring up a context-sensitive menu 
+\par
+{\f2\'B7}\tab
+Edit the name of an object 
+\par\pard\sb100
+\par
+
+The exact gestures are configurable under OS/2 PM and currently fixed under  
+Windows 3.x and WMS.\par
+
+{\b{Note:}} FTranslatedMouseHandler overrides most of the virtual functions efined in  
+{\uldb FMouseHandler}{\v FMouseHandler} and  
+{\uldb FExtendedMouseHandler}{\v FExtendedMouseHandler} so you should always call  
+the base class' implementation of a virtual function. 
+\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb MouseDragStart()}{\v FTranslatedMouseHandler_MouseDragStart} 
+\par
+\tab
+{\uldb MouseDragEnd()}{\v FTranslatedMouseHandler_MouseDragEnd} 
+\par
+\tab
+{\uldb MouseSingleSelect()}{\v FTranslatedMouseHandler_MouseSingleSelect} 
+\par
+\tab
+{\uldb MouseSelectStart()}{\v FTranslatedMouseHandler_MouseSelectStart} 
+\par
+\tab
+{\uldb MouseSelectEnd()}{\v FTranslatedMouseHandler_MouseSelectEnd} 
+\par
+\tab
+{\uldb MouseOpen()}{\v FTranslatedMouseHandler_MouseOpen} 
+\par
+\tab
+{\uldb MouseTextEdit()}{\v FTranslatedMouseHandler_MouseTextEdit} 
+\par
+\tab
+{\uldb MouseContextMenu()}{\v FTranslatedMouseHandler_MouseContextMenu} 
+\par\pard\sb100
+\par
+
+In addition you will usually use these functions in FTranslatedMouseHandler's  
+superclass: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FMouseHandler::SetCapture()}{\v FMouseHandler_SetCapture} 
+\par
+\tab
+{\uldb FMouseHandler::ReleaseCapture()}{\v FMouseHandler_ReleaseCapture} 
+\par
+\tab
+{\uldb FMouseHandler::HasCapture()}{\v FMouseHandler_HasCapture} 
+\par
+\tab
+{\uldb FMouseHandler::MouseMove()}{\v FMouseHandler_MouseMove} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FTranslatedMouseHandler_MouseDragStart}
+${\footnote FTranslatedMouseHandler_MouseDragStart()}
++{\footnote defbrowse}
+K{\footnote MouseDragStart()}
+K{\footnote FTranslatedMouseHandler_MouseDragStart()}
+{\fs26\cf1\b MouseDragStart()}\par
+Declaration: 
+\line{\f1
+virtual Bool MouseDragStart({\uldb FMouseEvent}{\v FMouseEvent}&);\line
+}
+\par
+
+This function is called when the user starts dragging objects. This is the  
+recommended reaction: 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+If the mouse is over a selected object the user wants to drag all  
+selected objects. 
+\par
+{\f2\'B7}\tab
+If the mouse is over a non-selected object the user just wants to drag that  
+object. 
+\par
+{\f2\'B7}\tab
+If the mouse is not over an object the gesture is ignored 
+\par\pard\sb100
+\par
+
+If your window supports dragging you should call  
+{\uldb SetCapture()}{\v FMouseHandler_SetCapture} to ackowledge the drag request and 
+change the pointer shape (with 
+{\uldb ControlPointer()}{\v FMouseHandler_ControlPointer}) so the user can se that  
+he is dragging something.\par
+
+Example: This code fragment should give you an idea of how to use the drag  
+functions: 
+\line{\f1
+Bool MyWindow::MouseDragStart(FMouseEvent &ev) \{\line
+  MyObject *pobject = objectFromPoint(ev.GetPoint());\line
+  if(pobject) \{\line
+    //ok we can start dragging\line
+    SetCapture();\line
+    draglist = new DragList;\line
+    if( pobject->isSelected() ) \{\line
+      //drag all selected objects\line
+      draglist->add(<all selected objects>);\line
+    \} else \{\line
+      //drag only that object\line
+      draglist->add(pobject);\line
+    \}\line
+  \} else\line
+    return False; //ignored\line
+\}\line
+\line
+Bool MyWindow::MouseDragEnd(FMouseEvent &ev) \{\line
+  if(draglist) \{\line
+    ReleaseCapture();\line
+    //drop objects at ev.GetPoint();\line
+    <drop>\line
+    delete draglist;\line
+    draglist=0;\line
+    return True;\line
+  \} else\line
+    return False;\line
+\}\line
+\line
+Bool MyWindow::ControlPointer(FControlPointerEvent &ev) \{\line
+  //provide visual feedback\line
+  if(draglist) \{\line
+    if(draglist->count() > 1)\line
+      ev.SetPointer(pointer_dragmultipleobjects);\line
+    else\line
+      ev.SetPointer(pointer_dragsingleleobject);\line
+  \} else\line
+    ev.SetPointer(*GetSystemArrowPointer());\line
+  return True;\line
+\}\line
+}
+\par
+
+See also: {\uldb MouseDragEnd()}{\v FTranslatedMouseHandler_MouseDragEnd} 
+\page
+
+#{\footnote FTranslatedMouseHandler_MouseDragEnd}
+${\footnote FTranslatedMouseHandler::MouseDragEnd()}
++{\footnote defbrowse}
+K{\footnote MouseDragEnd()}
+K{\footnote FTranslatedMouseHandler::MouseDragEnd()}
+{\fs26\cf1\b MouseDragEnd()}\par
+Declaration: 
+\line{\f1
+virtual Bool MouseDragEnd({\uldb FMouseEvent}{\v FMouseEvent}&);\line
+}
+\par
+
+This function is called when the user wants to drop object(s) previously picked 
+up with {\uldb MouseDragStart()}{\v FTranslatedMouseHandler_MouseDragStart} 
+\page
+
+#{\footnote FTranslatedMouseHandler_MouseSingleSelect}
+${\footnote FTranslatedMouseHandler::MouseSingleSelect()}
++{\footnote defbrowse}
+K{\footnote MouseSingleSelect()}
+K{\footnote FTranslatedMouseHandler::MouseSingleSelect()}
+{\fs26\cf1\b MouseSingleSelect()}\par
+Declaration: 
+\line{\f1
+virtual Bool MouseSingleSelect({\uldb FMouseEvent}{\v FMouseEvent}&);\line
+}
+\par
+
+This function is called when the user wants to select/deselect a single object.  
+You should test wether the user wants to deselect the other selected objects 
+first.\par
+
+Example: 
+\line{\f1
+Bool MyWindow::MouseSingleSelect(FMouseEvent &ev) \{\line
+  if(!ev.IsCtrlDown())\line
+    <deselect currently selected objects>\line
+\line
+  MyObject *pobject = objectFromPoint(ev.GetPoint());\line
+  if(pobject) \{\line
+    //toggle the object's selection state\line
+    if( pobject->isSelected())\line
+      pobject->deSelect();\line
+    else\line
+      pobject->select();\line
+    pobject->focus(); //make the object the "current" object\line
+  \} else \{\line
+    //that's ok\line
+  \}\line
+  return True;\line
+\}\line
+}
+\par
+
+See also: {\uldb SelectStart()}{\v FTranslatedMouseHandler_MouseSelectStart} 
+\page
+
+#{\footnote FTranslatedMouseHandler_MouseSelectStart}
+${\footnote FTranslatedMouseHandler::MouseSelectStart()}
++{\footnote defbrowse}
+K{\footnote MouseSelectStart()}
+K{\footnote FTranslatedMouseHandler::MouseSelectStart()}
+{\fs26\cf1\b MouseSelectStart()}\par
+Declaration: 
+\line{\f1
+virtual Bool MouseSelectStart({\uldb FMouseEvent}{\v FMouseEvent}&);\line
+}
+\par
+
+MouseSelectStart() is called when the user wants to select multiple objects  
+either though a "rubber band" or a "sweep": 
+\par\pard\sb100\tx2000\li2000\fi-1999
+Rubber band\tab
+A selection rectangle which start where the selection started 
+(ev.GetPoint()) and ends where the mouse currently is. 
+\par
+Sweep\tab
+The user can just "sweep" the mouse over the object he wants to  
+select. 
+\par\pard\sb100
+\par
+
+Example: 
+\line{\f1
+Bool MyWindow::MouseSelectStart(FMouseEvent &ev) \{\line
+  MyObject *pobject = objectFromPoint(ev.GetPoint());\line
+  if(pobject) \{\line
+    //start sweeping\line
+    sweeping = True;\line
+  \} else \{\line
+    //start rubber banding\line
+    rubberbanding = True;\line
+    rubberBandStart = ev.GetPoint();\line
+    rubberBandEnd = rubberBandStart;\line
+    drawRubberBand(rubberBandStart,rubberBandEnd,XORMODE);\line
+  \}\line
+  SetCapture();\line
+  return True;\line
+\}\line
+\line
+Bool MyWindow::MouseSelectEnd(FMouseEvent &ev) \{\line
+  if(rubberBanding) \{\line
+    //now select the objects within the rubber band\line
+    <select objects inside rubber band>\line
+  \}\line
+  rubberBanding = False;\line
+  sweeping = False;\line
+  ReleaseCapture();\line
+  return True;\line
+\}\line
+\line
+Bool MyWindow::MouseMove(FMouseMoveEvent &ev) \{\line
+  if(sweeping) \{\line
+    MyObject *pobject = objectFromPoint(ev.GetPoint());\line
+    if(pobject)\line
+      pobject->select();\line
+  \} else if(rubberBanding) \{\line
+    drawRubberBand(rubberBandStart,rubberBandEnd,XORMODE);\line
+    rubberBandEnd = ev.GetPoint();\line
+    drawRubberBand(rubberBandStart,rubberBandEnd,XORMODE);\line
+  \} else \{\line
+    //not selecting objects\line
+  \}\line
+  return True;\line
+\}\line
+}
+\par
+
+\page
+
+#{\footnote FTranslatedMouseHandler_MouseSelectEnd}
+${\footnote FTranslatedMouseHandler::MouseSelectEnd()}
++{\footnote defbrowse}
+K{\footnote MouseSelectEnd()}
+K{\footnote FTranslatedMouseHandler::MouseSelectEnd()}
+{\fs26\cf1\b MouseSelectEnd()}\par
+Declaration: 
+\line{\f1
+virtual Bool MouseSelectEnd({\uldb FMouseEvent}{\v FMouseEvent}&);\line
+}
+\par
+
+This function is called when the user wants the end selection. 
+\page
+
+#{\footnote FTranslatedMouseHandler_MouseOpen}
+${\footnote FTranslatedMouseHandler::MouseOpen()}
++{\footnote defbrowse}
+K{\footnote MouseOpen()}
+K{\footnote FTranslatedMouseHandler::MouseOpen()}
+{\fs26\cf1\b MouseOpen()}\par
+Declaration: 
+\line{\f1
+virtual Bool MouseOpen({\uldb FMouseEvent}{\v FMouseEvent}&);\line
+}
+\par
+
+This function is called when the user wants to open an object or "do the 
+default thing" with an object. In a file mamager this could be starting an  
+associated application, in a eg. drawing application this would be to open  
+a dialog allowing the user to set the properties of the object. 
+\page
+
+#{\footnote FTranslatedMouseHandler_MouseTextEdit}
+${\footnote FTranslatedMouseHandler::MouseTextEdit()}
++{\footnote defbrowse}
+K{\footnote MouseTextEdit()}
+K{\footnote FTranslatedMouseHandler::MouseTextEdit()}
+{\fs26\cf1\b MouseTextEdit()}\par
+Declaration: 
+\line{\f1
+virtual Bool MouseTextEdit({\uldb FMouseEvent}{\v FMouseEvent}&);\line
+}
+\par
+
+MouseTextEdit() is called when the user wants to quickly modify the name of 
+the object at the mouse. The application should not bring up the dialog used  
+when {\uldb MouseOpen()}{\v FTranslatedMouseHandler_MouseOpen} but instead either  
+a very small dialog with only a entry field in it or let the user modify the 
+name of the object directly in the window.\par
+
+Example: 
+\line{\f1
+Bool MyWindow::MouseTextEdit(FMouseEvent &ev) \{\line
+  MyObject *pobject = objectFromPoint(ev.GetPoint());\line
+  if(pobject) \{\line
+    MyTinyNameEditDialog dlg;\line
+    char name[128];\line
+    strcpy(name,pobject->queryName());\line
+    if(dlg.DoModal(this, ev.GetPoint(), name) == DID_OK)\line
+      pobject->setName(name);\line
+  \}\line
+  return True;\line
+\}\line
+}
+\par
+
+\page
+
+#{\footnote FTranslatedMouseHandler_MouseContextMenu}
+${\footnote FTranslatedMouseHandler::MouseContextMenu()}
++{\footnote defbrowse}
+K{\footnote MouseContextMenu()}
+K{\footnote FTranslatedMouseHandler::MouseContextMenu()}
+{\fs26\cf1\b MouseContextMenu()}\par
+Declaration: 
+\line{\f1
+virtual Bool MouseContextMenu({\uldb FMouseEvent}{\v FMouseEvent}&);\line
+}
+\par
+
+This function is called when the user wants to bring up the menu of the object.\par
+
+Example: 
+\line{\f1
+Bool MyWindow::MouseContextMenu(FMouseEvent &ev) \{\line
+  MyObject *pobject = objectFromPoint(ev.GetPoint());\line
+  if(pobject) \{\line
+    contextObject = pobject; //remember object so we know which object the \line
+                             //{\uldb FCommandEvents}{\v FCommandEvent} apply to\line
+    if(!popupmenu) //load the menu if not already loaded\line
+      popupmenu = new FMenu(this,this,IDM_MYCONTEXTMENU);\line
+    FPoint popuppoint = ev.GetPoint();\line
+    popupmenu->Popup(this,this,&popuppoint);\line
+  \}\line
+  return True;\line
+\}\line
+}
+\par
+
+\page
+
+#{\footnote FMouseEvent}
+${\footnote FMouseEvent}
++{\footnote defbrowse}
+K{\footnote FMouseEvent}
+{\fs26\cf1\b FMouseEvent}\par
+Declaration: 
+\line{\f1
+class FMouseEvent : public {\uldb FEvent}{\v FEvent} \{\line
+}
+\par
+
+The FMouseEvent is used in many of the mouse handlers.\par
+
+It has the following member function: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Bool IsButtonDown(int b) 
+\par
+\tab
+Bool IsButtonDown1() 
+\par
+\tab
+Bool IsButtonDown2() 
+\par
+\tab
+Bool IsButtonDown3() 
+\par
+\tab
+Bool IsCtrlDown() 
+\par
+\tab
+Bool IsShiftDown() 
+\par
+\tab
+Bool GetX() 
+\par
+\tab
+Bool GetY() 
+\par
+\tab
+FPoint GetPoint() 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FButtonDownEvent}
+${\footnote FButtonDownEvent}
++{\footnote defbrowse}
+K{\footnote FButtonDownEvent}
+{\fs26\cf1\b FButtonDownEvent}\par
+Declaration: 
+\line{\f1
+class FButtonDownEvent : public {\uldb FMouseEvent}{\v FMouseEvent} \{\line
+}
+\par
+
+This event has only one member function: GetButton() which returns which 
+button has been pressed. 
+\page
+
+#{\footnote FButtonUpEvent}
+${\footnote FButtonUpEvent}
++{\footnote defbrowse}
+K{\footnote FButtonUpEvent}
+{\fs26\cf1\b FButtonUpEvent}\par
+Declaration: 
+\line{\f1
+class FButtonUpEvent : public {\uldb FMouseEvent}{\v FMouseEvent} \{\line
+}
+\par
+
+This event has only one member function: GetButton() which returns which 
+button has been pressed. 
+\page
+
+#{\footnote FButtonDblClkEvent}
+${\footnote FButtonDblClkEvent}
++{\footnote defbrowse}
+K{\footnote FButtonDblClkEvent}
+{\fs26\cf1\b FButtonDblClkEvent}\par
+Declaration: 
+\line{\f1
+class FButtonDlbClkEvent : public {\uldb FMouseEvent}{\v FMouseEvent} \{\line
+}
+\par
+
+This event has only one member function: GetButton() which returns which 
+button has been pressed. 
+\page
+
+#{\footnote FMouseMoveEvent}
+${\footnote FMouseMoveEvent}
++{\footnote defbrowse}
+K{\footnote FMouseMoveEvent}
+{\fs26\cf1\b FMouseMoveEvent}\par
+Declaration: 
+\line{\f1
+class FMouseMoveEvent : public {\uldb FMouseEvent}{\v FMouseEvent} \{\line
+}
+\par
+
+This event does not have any member functions. 
+\page
+
+#{\footnote FControlPointerEvent}
+${\footnote FControlPointerEvent}
++{\footnote defbrowse}
+K{\footnote FControlPointerEvent}
+{\fs26\cf1\b FControlPointerEvent}\par
+Declaration: 
+\line{\f1
+class FControlPointerEvent : public {\uldb FEvent}{\v FEvent} \{\line
+}
+\par
+
+This event has one member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb SetPointer()}{\v FControlPointerEvent_SetPointer} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FControlPointerEvent_SetPointer}
+${\footnote FControlPointerEvent::SetPointer()}
++{\footnote defbrowse}
+K{\footnote SetPointer()}
+K{\footnote FControlPointerEvent::SetPointer()}
+{\fs26\cf1\b SetPointer()}\par
+Declaration: 
+\line{\f1
+void SetPointer({\uldb FPointer}{\v FPointer}& p);\line
+}
+\par
+
+This function changes the shape of the pointer. 
+\page
+
+}

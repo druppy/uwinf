@@ -1,0 +1,59 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote DEFBIFMIXMAIN}
+${\footnote DEFBIFMIXMAIN macro}
++{\footnote defbrowse}
+K{\footnote DEFBIFMIXMAIN macro}
+K{\footnote DEFBIFMIXMAIN macro}
+{\fs26\cf1\b DEFBIFMIXMAIN macro}\par
+Declaration: 
+\line{\f1
+#define DEFBIFMIXMAIN(appClass,mainThreadClass) <you really don't want to know!>\line
+}
+\par
+
+The DEFBIFMIXMAIN is used for starting up the application.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+appClass\tab
+Your subclass of {\uldb FMTApplication}{\v FMTApplication}. An 
+instance of this class will be the application object. 
+\par
+mainThreadClass\tab
+Main thread class. Normally {\uldb FMTApplication}{\v FMTApplication}. 
+\par\pard\sb100
+\par
+
+Example: 
+\line{\f1
+class MyApp : public FMTApplication \{\line
+public:\line
+  Bool StartUp(int,char**);\line
+  int ShutDown();\line
+\};\line
+\line
+\line
+Bool MyApp::StartUp(int , char **) \{\line
+  ...\line
+\}\line
+\line
+int MyApp::ShutDown() \{\line
+  ...\line
+\}\line
+\line
+\line
+DEFBIFMIXMAIN(MyApp,FWMainWindowThread);\line
+}
+\par
+
+\page
+
+}

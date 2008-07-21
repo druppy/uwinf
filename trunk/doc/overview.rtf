@@ -1,0 +1,183 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote subsystem_overview}
+${\footnote Subsystem overview}
++{\footnote defbrowse}
+K{\footnote Subsystem overview}
+{\fs26\cf1\b Subsystem overview}\par
+The BIF system consists of 3 subsystems: 
+\par\pard\sb100\tx1561\li1561\fi-1560
+Subsystem\tab
+Description\par
+{\uldb BIF/Thread}{\v bifthread_overview} 
+\tab
+This subsystem implements classes to support multitasking. It offers 
+threads and semaphores which encapsulates the native OS-specific multitasking 
+API (if any). 
+\par
+{\uldb BIF/Window}{\v bifwindow_overview} 
+\tab
+BIF/Window encapsulates the native GUI system. It takes care of all the 
+boring details of Windows and PM programming and at the same time offers a 
+portable model so most of the user interface related parts of your programs 
+don't have to be changed if you switch from Windows to PM (or reverse). 
+\par
+{\uldb BIF/Mix}{\v bifmix_overview} 
+\tab
+BIF/Mix is the "glue" between BIF/Thread and BIF/Window. It builds upon the 
+two previous subsystems. Note: there are some limitations when using it under 
+Windows 3.x 
+\par
+WMS 
+\tab
+WMS is an abbreversion of "Window Management System". It is the 
+"native" windowing system for textmode applictions. It is portable 
+between OS/2, DOS, DOS/4G and Windows NT. It uses BIF/Thread since it 
+uses multithreading. 
+\par\pard\sb100
+\par
+
+The overviews are not meant as an introduction and does not go into details of 
+how to use them.\par
+
+See also: {\uldb BIF/Thread overview}{\v bifthread_overview}, 
+{\uldb BIF/Window overview}{\v bifwindow_overview}, 
+{\uldb BIF/Mix overview}{\v bifmix_overview} 
+{\uldb WMS overview}{\v wms_overview} 
+\page
+
+#{\footnote bifthread_overview}
+${\footnote BIF/Thread overview}
++{\footnote defbrowse}
+K{\footnote BIF/Thread}
+K{\footnote BIF/Thread overview}
+{\fs26\cf1\b BIF/Thread}\par
+There exists several approaches to multitasking. BIF/Thread uses the thread and 
+semaphore concepts mainly because that is what the currently supported  
+platforms offers.\par
+
+\par\pard\sb100\tx2000\li2000\fi-1999
+{\b{Threads}} 
+\tab
+A thread is a thread of execution. It has its own stack, registers and 
+instruction pointer. Threads are sometimes called "lightweight processes". A  
+traditional program has only one thread. A program which uses multitasking  
+can contain several threads. 
+\{bml sm-proce.bmp\}\par{\fs16{single- vs. multithreaded programs}}\par
+ 
+BIF/Thread offers several thread classes depending on wether they will create 
+windows or not, and wether they are the main thread or not. 
+\par
+{\b{Semaphores}} 
+\tab
+A semaphore is an object threads can wait for. Semaphores manages the necessarry 
+synchronization between threads.\par
+\tab
+The semaphores offered by BIF/Thread comes in three flavours: 
+\par\pard\sb100\tx4000\li4000\fi-1999
+{\uldb General semaphore}{\v FSemaphore} 
+\tab
+This is the semaphore type originally proposed by E. W. Dijkstra. 
+\par
+{\uldb Mutex semaphore}{\v FMutexSemaphore} 
+\tab
+This is a binary version of the general semaphore but the type that is most often used. 
+\par
+{\uldb Event semaphore}{\v FEventSemaphore} 
+\tab
+This semaphore type is usually used for telling other threads that something 
+has happened. 
+\par\pard\sb100\tx2000\li2000\fi-1999
+ 
+\par\pard\sb100
+\par
+
+For a better explanations of threads and semaphores see: 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+"Priciples of Concurrent Programming" by M. Ben-Ari, 
+Prentice-Hall, ISBN 0-13-701078-8 
+(excellent book - Ivan) 
+\par
+{\f2\'B7}\tab
+"Modern Operating Systems" by Andrew S. Tanenbaum, 
+Prentice-Hall, ISBN 0-13-595752-4 
+\par
+{\f2\'B7}\tab
+"Control Program Guide and Reference" in the OS/2 toolkit 
+\par
+{\f2\'B7}\tab
+"Win32 API Programmer's Reference", topic "Functions and overviews" | 
+"Processes and threads", click on the "Overview" button 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote bifwindow_overview}
+${\footnote BIF/Window overview}
++{\footnote defbrowse}
+K{\footnote BIF/Window}
+K{\footnote BIF/Window overview}
+{\fs26\cf1\b BIF/Window}\par
+K{\footnote Overviews}
+BIF/Window implements four types of classes: 
+\par\pard\sb100\tx1801\li1801\fi-1800
+Windows 
+\tab
+BIF/Window encapsulates the GUI by means of windows. It implements classes 
+for most of 'native' window classes (buttons, static text, listboxes, frame 
+windows, ...). It allows windows to intercept messages though the handler 
+mechanism. 
+\par
+Resources 
+\tab
+BIF/Window also encapsulates the common resource types (icons, strings, 
+bitmaps, ...)  and offers almost-automatic loading of them. A module class is 
+also implemented from which the resources can be loaded. 
+\par
+Application 
+\tab
+BIF/Window takes care of the standard message-loop (Windows: including 
+accelerators keyboard support). 
+\par
+Handlers 
+\tab
+Tiny classes which translates portable requests and events to and from 
+the native GUI system. 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote bifmix_overview}
+${\footnote BIF/Mix overview}
++{\footnote defbrowse}
+K{\footnote BIF/Mix}
+K{\footnote BIF/Mix overview}
+{\fs26\cf1\b BIF/Mix}\par
+Some things has to be done a bit different when both windows and 
+multitasking are used. BIF/Mix implements three support classes: an application 
+type that allows multitasking with BIF/Thread, a thread class that allows use of 
+BIF/Window, and a main thread class that allows use of BIF/Window. 
+\page
+
+#{\footnote wms_overview}
+${\footnote WMS overview}
++{\footnote defbrowse}
+K{\footnote WMS}
+K{\footnote WMS overview}
+{\fs26\cf1\b WMS}\par
+WMS implement a full windowing system including message queues, 
+clipping regions, character mode output, mouse and keyboard interface. The model 
+and abstractions are based on the OS/2 PM API but it is not identical. The WMS 
+subsystem is not documented. If you need documentation for WMS you will have to 
+study the sources and the "OS/2 Presentation Manager Guide" 
+\page
+
+}

@@ -1,0 +1,58 @@
+[topic FPaintHandler same "FPaintHandler"]
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_CLIENTHANDLERS
+
+The FPaintHandler is use for catching the native WM_PAINT message.
+
+Notifications:
+[sl]
+[li][ref FPaintHandler_Paint "Paint()"]
+[esl]
+Operations:
+[sl]
+[li][ref FPaintHandler_Invalidate "Invalidate]
+[esl]
+
+[note]If you do not use a FPaintHandler in you client window and you
+do not have subwindows that cover the whole client window there will
+be visual holes in your window.
+[enote]
+[note](For Windows programmers) The background-erasing mechanism of
+Windows is not supported by BIF. The normal BIF windows are registered
+with a NULL_BRUSH and FPaintHandler does not have a erasebkgnd
+notification function.
+[enote]
+[etopic]
+
+[topic FPaintHandler_Paint same "Paint()" "FPaintHandler::Paint()"]
+Declaration:
+[code]
+virtual Bool Paint(FPaintEvent&);
+[ecode]
+Paint() is called when the antive GUI system thinks it is a good time
+to repaint portions of/the whole window. FPaintEvent does not have any
+interesting members.
+
+Example: (trivial)
+[code]
+Bool MyWindow::Paint(FPaintEvent&) {
+  PAINTSTRUCT ps;
+  BeginPaint(GetHwnd(),&ps);
+  ...
+  EndPaint(GetHwnd(),&ps);
+  return True;
+}
+[code]
+[etopic]
+
+[topic FPaintHandler_Invalidate same "Invalidate()" "FPaintHandler::Invalidate()"]
+Declaration:
+[code]
+Windows:
+  void Invalidate(FRect *pr=0, Bool eraseBackground=True);
+OS/2 PM:
+  void Invalidate(FRect *pr=0, Bool includeDescendants=True);
+[ecode]
+Invalidate() tells the GUI system that a portion of the window needs
+repainting. The GUI system decides when it is a good idea to repaint.
+[etopic]
+

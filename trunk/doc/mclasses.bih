@@ -1,0 +1,57 @@
+[topic bifmix_classes same "Classes" "BIF/Mix classes" secondary]
+This section describes the classes in BIF/Mix. There is no class hierachy diagram.
+[etopic]
+
+
+[topic FWWindowThread down "FWWindowThread"]
+Declaration:
+[code]
+class FWWindowThread : public FWindowThread {
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_THREAD
+
+The FWWindowThread is the base class of threads that need to use BIF/Window.
+
+[caution]Under Windows 3.x secondary threads are limited to using
+PostMessage(). They cannot for instance create windows, use SendMessage() or
+use any API that may yield to other applications.
+[ecaution]
+
+[etopic]
+
+
+[topic FMTApplication same "FMTApplication"]
+Declaration:
+[code]
+class FMTApplication : public FApplication {
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_THREAD and BIFINCL_APPLICATION
+
+FMTApplication must be used instead of [ref FApplication "FApplication"] in
+programs that use BIF/Thread.
+
+Under Windows 3.1 this class ensures that modal message loops (used in
+[ref FModalDialog_DoModal "FModalDialog::DoModal()"] and
+[ref MessageBox "MessageBox()"] does not block other threads.
+
+[etopic]
+
+
+[topic FWMainWindowThread upafter "FWMainWindowThread"]
+Declaration:
+[code]
+class FWMainWindowThread : public FMainWindowThread {
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_THREAD and BIFINCL_APPLICATION
+
+FWMainWindowThread is used as the main thread of a program that uses BIF/Window.
+The class starts up BIF/Window in its implementation of FMainThread::Main, so
+the program logically starts executing at [ref FApplication_Main "FApplication::Main()"]
+
+You will normally not need to create subclasses of FWMainWindowThread.
+
+[etopic]
+

@@ -1,0 +1,14 @@
+Contents: BIF/Thread common files for dos16, dos32 and win16
+biftmain.cpp 
+clktck.h
+event.cpp
+mthread.cpp
+mutex.cpp
+semaphor.cpp
+spinsem.cpp
+thread.cpp
+thread1.cpp
+thread2.cpp
+thread4.cpp
+threadma.cpp
+waitthin.cpp

@@ -1,0 +1,32 @@
+#include "menuedit.mid"
+
+MENU MENU_MENUEDIT PRELOAD
+BEGIN
+  SUBMENU "~File", ID_FILE
+  BEGIN
+    MENUITEM "~New", ID_NEWFILE
+    MENUITEM "~Open...", ID_OPENFILE
+    MENUITEM "~Save", ID_SAVEFILE
+    MENUITEM "Save ~as...", ID_SAVEFILEAS
+  END
+  SUBMENU "~Edit", ID_EDIT
+  BEGIN
+    MENUITEM "~Check duplicates", ID_CHECKDUPLICATES
+  END
+  SUBMENU "~Standard", ID_STANDARD
+  BEGIN
+    MENUITEM "~File submenu", ID_STANDARDFILE
+    MENUITEM "~Edit submenu", ID_STANDARDEDIT
+    MENUITEM "~Help submenu", ID_STANDARDHELP
+  END
+  SUBMENU "~Help", ID_HELPMENU
+  BEGIN
+    MENUITEM "Help ~index", ID_HELP_INDEX
+    MENUITEM "~General help", ID_GENERAL_HELP
+    MENUITEM "~Using help", ID_USING_HELP
+    MENUITEM "~Keys help", ID_HELP_KEYS
+    MENUITEM SEPARATOR
+    MENUITEM "~Product information", ID_HELPPRODINFO
+  END
+END
+

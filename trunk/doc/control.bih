@@ -1,0 +1,2364 @@
+[topic FCheckBox same "FCheckBox"]
+[key checkboxes]
+Declaration:
+[code]
+class FCheckBox : public [ref FControl "FControl"], 
+                  public [ref FControlTextHandler "FControlTextHandler"] 
+{ ...
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_CHECKBOX
+
+The FCheckBox class is the encapsulation of the native checkbox control.
+A normal checkbox can be in two states: "checked" and "unchecked". A checkbox
+is usually (but not always) a box (with a cross in it when the checkbox is
+checked) with a text to the right of it. A checkbox can also be a 3-state
+checkbox with three states: "checked", "unchecked" and "undetermined".
+
+Member functions:
+[sl]
+[li][ref FCheckBox_Create1 "Create(parent,ID)"]
+[li][ref FCheckBox_Create2 "Create(parent,ID, ...)"]
+[li][ref FCheckBox_GetCheck "GetCheck()"]
+[li][ref FCheckBox_SetCheck "SetCheck()"]
+[li][ref FCheckBox_Check "Check()"]
+[li][ref FCheckBox_UnCheck "UnCheck()"]
+[esl]
+[etopic]
+
+[topic FCheckBox_Create1 down "Create(parent,ID)" "FCheckBox::Create(parent,ID)" secondary]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int ID);
+[ecode]
+
+This function associates the BIF-checkbox with the native checkbox.
+[etopic]
+
+
+[topic FCheckBox_Create2 same "Create(parent,ID,...)" "FCheckBox::Create(parent,ID,...)" secondary]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int ID, FRect *rect, const char *pszText, int states=2);
+[ecode]
+
+[parml]
+[pt]pParent[pd]Parent of the checkbox
+[pt]ID[pd]control-ID of the checkbox
+[pt]rect[pd]Position and size of the checkbox
+[pt]pszText[pd]Text on the checkbox. The text is usually placed on the right side of the checkbox.
+[pt]states[pd]If [hp 1]states[ehp] is 2 the checkbox is a normal 2-state checkbox. If [hp 1]states[ehp] is 3 the
+checkbox will be a 3-state checkbox.
+[eparml]
+[etopic]
+
+
+[topic FCheckBox_GetCheck same "GetCheck()" "FCheckBox::GetCheck()"]
+Declaration:
+[code]
+int GetCheck();
+[ecode]
+This function retrieves the current checkstate of the checkbox.
+
+Return value:
+[sl]
+[li]0: The checkbox is in the unchecked states
+[li]1: The checkbox is in the checked state
+[li]2: The checkbox is in the undetermined state (3-state checkboxes only)
+[esl]
+[etopic]
+
+[topic FCheckBox_SetCheck same "SetCheck()" "FCheckBox::SetCheck()"]
+Declaration:
+[code]
+Bool SetCheck(int state);
+[ecode]
+[hp 1]state[ehp] can have three different values:
+[sl]
+[li]When [hp 1]state[ehp] is 0 the checkbox will be unchecked.
+[li]When [hp 1]state[ehp] is 1 the checkbox will be checked.
+[li]When [hp 1]state[ehp] is 2 and the checkbox is a 3-state checkbox the checkbox will be undetermined.
+[esl]
+Any other value will causes SetCheck() to return False.
+
+Return value: True on success, False otherwise.
+[etopic]
+
+[topic FCheckBox_Check same "Check()" "FCheckBox::Check()" primary]
+Declaration:
+[code]
+Bool Check();
+[ecode]
+This function simply maps to [ref FCheckBox_SetCheck "SetCheck"](1)
+[etopic]
+
+[topic FCheckBox_UnCheck upafter "UnCheck()" "FCheckBox::UnCheck()" primary]
+Declaration:
+[code]
+Bool UnCheck();
+[ecode]
+This function simply maps to [ref FCheckBox_SetCheck "SetCheck"](0)
+[etopic]
+
+
+
+
+[topic FControl same "FControl"]
+[key controls]
+Declaration:
+[code]
+class FControl : public [ref FWnd "FWnd"] { ...
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW
+
+This class is the base class for all control classes. A control is usually a
+thing the user easily can interact with.
+Controls are normally used in dialogs for retrieving/modifying data. Controls
+are normally not created directly by the program by rather created by the
+native GUI system from a resource and then interfaced with BIF.
+
+All controls have control-ID which is normally only used for identifying the
+controls during creation.
+
+You will usually not need to create instances of FControl but rather instances
+of its subclasses.
+
+Member functions:
+[sl]
+[li][ref FControl_Create1 "Create(parent,ID)"] (interface creation)
+[li][ref FControl_Create2 "Create(parent,ID,..."] (full-blown creation)
+[li][ref FControl_GetID "GetID()"]
+[esl]
+
+Subclasses:
+[sl]
+[li][ref FCheckBox "FCheckBox"]
+[li][ref FGroupBox "FGroupBox"]
+[li][ref FListBox "FListBox"]
+[li][ref FMLE "FMLE"]
+[li][ref FPushButton "FPushButton"]
+[li][ref FRadioButton "FRadioButton"]
+[li][ref FSLE "FSLE"]
+[li][ref FSlider "FSlider"]
+[li][ref FStaticText "FStaticText"]
+[esl]
+
+See also: [ref FControlTextHandler "FControlTextHandler"]
+
+The FControl sub-hierachy:
+[graphic hypergraphic "Control class sub-hierarchy" "winbmp:control.bmp" "os2bmp:control.bmp"]
+[etopic]
+
+
+[topic FControl_Create1 down "Create(parent,ID)" "FControl::Create(parent,ID)"]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int ID);
+[ecode]
+This function associates the BIF-control with the native control. The native
+control must have been previously created.
+
+[parml]
+[pt]pParent[pd]Parent window of the control. This is usually the [ref FDialog "dialog"]
+previously create from a resource.
+[pt]ID[pd]control-ID. This ID must have been assigned to the control when you created
+the resource.
+[eparml]
+
+Return value: True on success, False otherwise (usually because the control was
+not found)
+
+All subclasses of FControl provide their own Create(parent,ID) method because
+otherwise C++ would require you to fully qualify the call.
+[etopic]
+
+
+[topic FControl_Create2 same "Create(parent,ID,...)" "FControl::Create(parent,ID,...)" primary]
+Declaration:
+[code]
+Windows:
+Bool Create(FWnd *pParent, int ID,
+            const char *pszClassname, const char *pszControlText,
+            DWORD dwStyle, FRect *rect);
+OS/2 PM:
+Bool Create(FWnd *pParent, int ID,
+            const char *pszClassname, const char *pszControlText,
+            ULONG flStyle, FRect *rect,
+            PVOID pCtlData=0, PVOID pPresParam=0);
+WMS:
+Bool Create(FWnd *pParent, int ID,
+            const char *pszControlText,
+            uint32 flStyle, FRect *rect);
+[ecode]
+
+This function creates a control with the specified id, classname, text, dimension ...
+
+This function is [hp 2]very OS-dependent[ehp] and should be avoided. It is used by the
+subclasses of FControl in order to create the native control with the correct
+classname, etc.
+
+[parml]
+[pt]pParent[pd]Parent window
+[pt]ID[pd]Control-ID
+[pt]pszClassname[pd]class name of the native window class
+[pt]pszControlText[pd]Initial text of the control. Some controls ignore this
+[pt]dwStyle/flStyle[pd]window style. BIF automatically includes WS_VISIBLE. Under
+Windows WS_CHILD is also automatically included.
+[pt]rect[pd]Initial position and size of the control. This parameter can be NULL
+in which case the control is created with zero width and height and positionen at (0,0)
+[pt]pCtlData[pd](OS/2 only) control data
+[pt]pPresParam[pd](OS/2 only) presentation parameters
+[eparml]
+
+See also: [ref FControl_Create1 "Create(parent,ID)"], [ref FControl "FControl"]
+[etopic]
+
+
+[topic FControl_GetID upafter "GetID()" "FControl::GetID()"]
+Declaration:
+[code]
+int GetID();
+[ecode]
+This function returns the control-ID of the control. A function to set the ID
+does not exist.
+[etopic]
+
+
+[topic FControlTextHandler same "FControlTextHandler"]
+Declaration:
+[code]
+class FControlTextHandler : public [ref FHandler "FHandler"] { ...
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW
+
+This class is "mixed" into control classes that support text query/set. Eg:
+the FPushButton has the class mixed in because it is possible to change the
+text of a pushbutton. On the other hand FListBox does not have it mixed in
+because you cannot meaningfully set the text of a listbox (listboxes have a
+totally different concept of their contents.)
+
+Member functions:
+[sl]
+[li][ref FControlTextHandler_GetTextLen "GetTextLen()"]
+[li][ref FControlTextHandler_GetText "GetText()"]
+[li][ref FControlTextHandler_SetText "SetText()"]
+[esl]
+[etopic]
+
+
+[topic FControlTextHandler_GetTextLen down "GetTextLen()" "FControlTextHandler::GetTextLen()"]
+Declaration:
+[code]
+int GetTextLen();
+[ecode]
+This function return the length of the text of the control including the
+terminating '\\0'
+
+See also: [ref FControlTextHandler "FControlTextHandler"]
+[etopic]
+
+
+[topic FControlTextHandler_GetText same "GetText()" "FControlTextHandler::GetText()" primary]
+Declaration:
+[code]
+Bool GetText(char *buffer, int maxbuf);
+[ecode]
+This function retrieves the text of the control.
+
+[parml]
+[pt]buffer[pd]The buffer in which the control text will be copied
+[pt]maxbuf[pd]Size of the buffer.
+[eparml]
+
+GetText() will return True if the retrieval succeeded, False otherwise.
+
+See also: [ref FControlTextHandler "FControlTextHandler"]
+[etopic]
+
+[topic FControlTextHandler_SetText upafter "SetText()" "FControlTextHandler::SetText()" primary]
+Declaration:
+[code]
+Bool SetText(const char *pszText);
+[ecode]
+This function sets the text of the control to [hp 1]pszText[ehp] and returns
+True if it succeeded, False otherwise.
+
+See also: [ref FControlTextHandler "FControlTextHandler"]
+[etopic]
+
+
+
+
+[topic FComboBox same "FComboBox"]
+Declaration:
+[code]
+class FComboBox : public [ref FControl "FControl"] { ...
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMBOBOX
+
+The FComboBox class is the base class of all combox-like controls. A combobox
+is a control which consists of a static text/editfield and a listbox. It is
+intended to let the user choose an item in a list (and optional enter his own)
+
+The FComboBox sub-hierachy:
+[graphic hypergraphic "FCombobox class sub-hierarchy" "winbmp:combobox.bmp" "os2bmp:combobox.bmp"]
+
+Member functions:
+[sl]
+[li][ref FComboBox_GetCount "GetCount()"]
+[li][ref FComboBox_Clear "Clear()"]
+[li][ref FComboBox_RemoveItem "RemoveItem()"]
+[li][ref FComboBox_SetCurrentSelection "SetCurrentSelection()"]
+[esl]
+
+See also:
+[sl]
+[li][ref FEditComboBox "FEditComboBox"] - allows the user to enter his own text
+[sl]
+[li][ref FSimpleComboBox "FSimpleCombox"] - the list is always visible
+[li][ref FDropDownComboBox "FDropDownComboBox"] - the list is only visible when the user has requested it
+[esl]
+[li][ref FSelectionComboBox "FSelectionComboBox"] - the user cannot enter his own text
+[sl]
+[li][ref FTextSelectionComboBox "FTextSelectionComboBox"] - the items are text strings
+[li][ref FODSelectionComboBox "FODSelectionComboBox"] - Owner-draw version of FSelectionComboBox
+[esl]
+[esl]
+[etopic]
+
+
+[topic FComboBox_GetCount down "GetCount()" "FComboBox::GetCount()" secondary]
+Declaration:
+[code]
+int GetCount();
+[ecode]
+GetCount() returns the number of items in the combobox.
+[etopic]
+
+
+[topic FComboBox_Clear same "Clear()" "FComboBox::Clear()" secondary]
+Declaration:
+[code]
+void Clear();
+[ecode]
+Clear() removes all items in the combobox.
+[etopic]
+
+
+[topic FComboBox_RemoveItem same "RemoveItem()" "FComboBox::RemoveItem()" secondary]
+Declaration:
+[code]
+Bool RemoveItem(int index);
+[ecode]
+RemoveItem() removes an item in the list. If that item is currently selected
+there will be no "current item".
+[etopic]
+
+
+[topic FComboBox_SetCurrentSelection upafter "SetCurrentSelection()" "FComboBox::SetCurrentSelection()" secondary]
+Declaration:
+[code]
+Bool SetCurrentSelection(int index);
+[ecode]
+This function selects an item in the list. If [hp 1]index[ehp] is -1 no item will
+be selected.
+
+The return value is True on success, False otherwise (index out of range, etc.)
+
+Because some of FComboBox' subclasses let the user enter his own item FComboBox
+does not provide a method to retrieve the index of the currently selected item
+(But [ref FSelectionComboBox_GetCurrentSelection "FSelectionComboBox"] does)
+[etopic]
+
+
+
+[topic FEditComboBox same "FEditComboBox"]
+Declaration:
+[code]
+class FEditComboBox : public [ref FComboBox "FComboBox"], ...
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMBOBOX
+
+An FEditComboBox is a combobox where the user is allowed to enter his own
+item. The item-list of the combobox is used only to let the user quickly
+select a predefined string if he wants to.
+
+This class is normally not used directly when it is created by the application.
+Instead one of its two subclasses are used: [ref FSimpleComboBox "FSimpleComboBox"]
+and [ref FDropDownComboBox "FDropDownComboBox"]
+
+When the combobox is created via the resources this class is preferred over
+its two subclasses because it should not matter to the application wether the
+item list is visible or not.
+
+Member functions:
+[sl]
+[li][ref FEditComboBox_SetText "SetText()"]
+[li][ref FEditComboBox_GetText "GetText()"]
+[li][ref FEditComboBox_GetTextLength "GetTextLength()"]
+[li][ref FEditComboBox_LimitText "LimitText()"]
+[li][ref FComboBoxTextItem_mixin_InsertItem "InsertItem()"]
+[li][ref FComboBoxTextItem_mixin_AddItem "AddItem()"]
+[li][ref FComboBoxTextItem_mixin_GetItemText "GetItemText()"]
+[li][ref FComboBoxTextItem_mixin_GetItemTextLength "GetItemTextLength()"]
+[li][ref FEditComboBox_LimitText "LimitText()"]
+[esl]
+
+See also: [ref FComboBox "FComboBox"], [ref FSimpleComboBox "FSimpleComboBox"], [ref FDropDownComboBox "FDropDownComboBox"]
+[etopic]
+
+
+[topic FComboBoxTextItem_mixin_InsertItem down "InsertItem()" "FxxxxComboBox::InsertItem()" secondary]
+Declaration:
+[code]
+Bool InsertItem(int index, const char *pszItem);
+[ecode]
+This function is used to insert an item into a combobox.
+
+[parml]
+[pt]index[pd]The (0-based) position where the new item will be inserted. The item is
+inserted before [hp 1]index[ehp] so that items [hp 1]index[ehp]..[hp 1]end[ehp] is "pushed" down.
+[pt]pszItem[pd]The text of the new item.
+[eparml]
+
+Return value: True on success, False otherwise.
+[etopic]
+
+[topic FComboBoxTextItem_mixin_AddItem same "AddItem()" "FxxxxComboBox::AddItem()" secondary]
+Declaration:
+[code]
+Bool AddItem(const char *pszItem);
+[ecode]
+This function appends an item to the list of items in the combobox.
+
+Return value: True on success, False otherwise.
+[etopic]
+
+[topic FComboBoxTextItem_mixin_GetItemText same "GetItemText()" "FxxxxComboBox::GetItemText()" secondary]
+Declaration:
+[code]
+Bool GetItemText(int index, char *buffer, int buflen);
+[ecode]
+This function retrieves the text of an item in the combobox.
+
+[parml]
+[pt]index[pd]The 0-based index of the item
+[pt]buffer[pd]The buffer where the item text will be returned
+[pt]buflen[pd]Maximum number of characters to copy into the buffer
+[eparml]
+
+Return value: True on success, False otherwise (index out of range etc.)
+[etopic]
+
+[topic FComboBoxTextItem_mixin_GetItemTextLength same "GetItemTextLen()" "FxxxxComboBox::GetItemTextLen()" secondary]
+Declaration:
+[code]
+int GetItemTextLen(int index);
+[ecode]
+This function retrieves the length (including '\\0') of an item.
+
+Return value:
+[sl]
+[li]non-negative: The length of the item
+[li]negative: An error occured.
+[esl]
+[etopic]
+
+
+[topic FEditComboBox_SetText same "SetText()" "FEditComboBox::SetText()" secondary]
+Declaration:
+[code]
+Bool SetText(const char *pszText);
+[ecode]
+This function is used to set the text of the editfield in the combobox to [hp 1]pszText[ehp].
+
+Return value: True on success, False otherwise
+
+See also: [ref FEditComboBox "FEditComboBox"], [ref FEditComboBox_GetText "GetText()"]
+[etopic]
+
+[topic FEditComboBox_GetText same "GetText()" "FEditComboBox::GetText()" secondary]
+Declaration:
+[code]
+Bool GetText(char *buffer, int buflen);
+[ecode]
+GetText() retrieves the text in the editfield-part of the combobox. This text
+is not necessarily one of the items in the item list, as the user is allowed
+to enter his own item.
+
+[parml]
+[pt]buffer[pd]The buffer where the text will be copied
+[pt]buflen[pd]Maximum number of characters to copy to [hp 1]buffer[ehp]
+[eparml]
+
+See also: [ref FEditComboBox "FEditComboBox"], [ref FEditComboBox_SetText "SetText()"]
+[etopic]
+
+[topic FEditComboBox_GetTextLength same "GetTextLength()" "FEditComboBox::GetTextLength()"]
+Declaration:
+[code]
+int GetTextLength();
+[ecode]
+This function retrieves the length of the text in the editfield-part of the
+combobox.
+
+Return value:
+[sl]
+[li]non-negative: length of text
+[li]negative: An error occurred.
+[esl]
+
+See also: [ref FEditComboBox "FEditComboBox"], [ref FEditComboBox_GetText "GetText()"]
+[etopic]
+
+
+[topic FEditComboBox_LimitText upafter "LimitText()" "FEditComboBox::LimitText()" secondary]
+Declaration:
+[code]
+Bool LimitText(int limit);
+[ecode]
+This function is used to limit the number of characters allowed in the
+editfield-part of the combobox. If the current text exceeds this limit it is
+[hp 2]not[ehp] truncated.
+
+Return value: True on success, False otherwise
+[etopic]
+
+
+[topic FSimpleCombobox same "FSimpleCombobox"]
+Declaration:
+[code]
+class FSimpleComboBox : public [ref FEditComboBox "FEditComboBox"]
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMBOBOX
+
+An FSimpleComboBox is an FComboBox where the list of items is always visible
+(in contrast to [ref FDropDownComboBox "FDropDownComboBox"])
+
+Member functions:
+[sl]
+[li]Create(parent,ID) - standard control-create
+[li][ref FSimpleComboBox_Create2 "Create(parent,ID,...)"]
+[esl]
+[etopic]
+
+[topic FSimpleComboBox_Create2 downonce "Create(parent,ID,...)" FSimpleCombobox::Create(parent,ID,...)" secondary]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int ID, const char *initialtext, FRect *rect);
+[ecode]
+
+[parml]
+[pt]pParent[pd]Parent window
+[pt]ID[pd]Control-ID of the combobox
+[pt]initialtext[pd]The text that are to be put into the editfield-part of the combobox
+[pt]rect[pd]Position and dimension of the combobox. If [hp 1]rect[ehp] is NULL 
+the combobox will be placed at (0,0) with zero width and heigth
+[eparml]
+
+Return value: True on success (combobox created), False otherwise.
+
+See also: [ref FSimpleComboBox "FSimpleComboBox"]
+[etopic]
+
+
+[topic FDropDownCombobox same "FDropDownCombobox"]
+Declaration:
+[code]
+class FDropDownComboBox : public [ref FEditComboBox "FEditComboBox"]
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMBOBOX
+
+An FDropDownComboBox is an FComboBox where the list of items is not always visible
+(in contrast to [ref FSimpleComboBox "FSimpleComboBox"]). The visibility of
+the list is controlled by the user.
+
+Member functions:
+[sl]
+[li]Create(parent,ID) - standard control-create
+[li][ref FDropDownComboBox_Create2 "Create(parent,ID,...)"]
+[esl]
+[etopic]
+
+[topic FDropDownComboBox_Create2 downonce "Create(parent,ID,...) "FDropDownComboBox::Create(parent,ID,...)" secondary]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int ID, const char *initialtext, FRect *rect);
+[ecode]
+
+[parml]
+[pt]pParent[pd]Parent window
+[pt]ID[pd]Control-ID of the combobox
+[pt]initialtext[pd]The text that are to be put into the editfield-part of the combobox
+[pt]rect[pd]Position and dimension of the combobox. If [hp 1]rect[ehp] is NULL
+the combobox will be placed at (0,0) with zero width and heigth
+[eparml]
+
+Return value: True on success (combobox created), False otherwise.
+
+See also: [ref FDropDownComboBox "FDropDownComboBox"]
+[etopic]
+
+
+
+[topic FSelectionComboBox same "FSelectionComboBox"]
+Declaration:
+[code]
+class FSelectionComboBox : public [ref FComboBox "FComboBox"]
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMBOBOX
+
+An FSelectionComboBox is a combobox where the user is not allowed to enter his
+own item, but is restricted to selecting one of the items in the item list.
+
+Member functions:
+[ref FSelectionComboBox_GetCurrentSelection "GetCurrentSelection()"]
+
+See also: [ref FComboBox "FComboBox"], [ref FTextSelectionComboBox "FTextSelectionComboBox"], [ref FODSelectionComboBox "FODSelectionComboBox"]
+[etopic]
+
+
+[topic FSelectionComboBox_GetCurrentSelection downonce "GetCurrentSelection()" "FSelectionComboBox::GetCurrentSelection()" secondary]
+Declaration:
+[code]
+int GetCurrentSelection();
+[ecode]
+This function retrieves the 0-base index of the currently selected item. The
+return value negative if there are no currently selected item.
+
+See also: [ref FSelectionComboBox "FSelectionComboBox"]
+[etopic]
+
+
+[topic FTextSelectionComboBox same "FTextSelectionComboBox"]
+Declaration:
+[code]
+class FTextSelectionComboBox : public [ref FSelectionComboBox "FSelectionComboBox"], ...
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMBOBOX
+
+A FTextSelectionComboBox is a combobox where the user can select one of the
+items in the item list, and the items are text items.
+
+Member functions:
+[sl]
+[li][ref FComboBoxTextItem_mixin_InsertItem "InsertItem()"]
+[li][ref FComboBoxTextItem_mixin_AddItem "AddItem()"]
+[li][ref FComboBoxTextItem_mixin_GetItemText "GetItemText()"]
+[li][ref FComboBoxTextItem_mixin_GetItemTextLength "GetItemTextLength()"]
+[esl]
+
+See also: [ref FSelectionComboBox "FSelectionComboBox"]
+[etopic]
+
+
+[topic FODSelectionComboBox same "FODSelectionComboBox"]
+Declaration:
+[code]
+class FODSelectionComboBox : public [ref FSelectionComboBox "FSelectionComboBox"], public [ref FOwnerDrawOwnee "FOwnerDrawOwnee"], ...
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMBOBOX
+
+The FODSelectionComboBox class is the encapsulation of owner-draw comboboxes.
+The items are drawn by the application and not automatically by the native control.
+
+Member functions:
+[sl]
+[li][ref FODSelectionComboBox_FODSelectionComboBox "FODSelectionComboBox()"]
+[li][ref FODSelectionComboBox_Create1 "Create(parent,ID)"]
+[li][ref FODSelectionComboBox_Create2 "Create(parent,ID,...)"]
+[li][ref FODSelectionComboBox_AddItem "AddItem()"]
+[li][ref FODSelectionComboBox_InsertItem "InsertItem()"]
+[li][ref FODSelectionComboBox_GetItemData "GetItemData()"]
+[li][ref FODSelectionComboBox_GetItemHeigth "GetItemHeigth()"] (protected and pure virtual)
+[esl]
+[etopic]
+
+
+[topic FODSelectionComboBox_FODSelectionComboBox down "FODSelectionComboBox()" "FODSelectionComboBox::FODSelectionComboBox()"]
+Declaration:
+[code]
+FODSelectionComboBox([ref FOwnerDrawOwner "FOwnerDrawOwner"] *powner);
+[ecode]
+The [hp 1]powner[ehp] parameter is the pointer to the FOwnerDrawOwner handler in the controls owner.
+[etopic]
+
+[topic FODSelectionComboBox_Create1 same "Create(parent,ID)" "FODSelectionComboBox::Create(parent,ID)" secondary]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int ID);
+[ecode]
+This Create() function associates the FODSelectionComboBox object with the native combobox.
+[etopic]
+
+[topic FODSelectionComboBox_Create2 same "Create(parent,ID,...)" "FODSelectionComboBox::Create(parent,ID,..)" secondary]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int ID, FRect *rect);
+[ecode]
+
+[parml]
+[pt]pParent[pd]Parent window
+[pt]ID[pd]control-ID of the combobox
+[pt]rect[pd]Initial size and position of the combobox. If [hp 1]rect[ehp] is NULL
+the combobox is placed at (0,0) and will have zero width and heigth
+[eparml]
+[etopic]
+
+[topic FODSelectionComboBox_AddItem same "AddItem()" "FODSelectionComboBox::AddItem()" secondary]
+Declaration:
+[code]
+Bool AddItem(long itemData);
+[ecode]
+This function append an item to the combobox. [hp 1]itemData[ehp] is a long-value
+that is associated with the new item. This value is not used by the combobox
+itself, but is usually some sort of identification used by the application,
+eg. a pointer. The value can be retrieved with [ref FODSelectionComboBox_GetItemData "GetItemData()"]
+
+Return value: True on success, False otherwise
+
+See also: [ref FODSelectionComboBox "FODSelectionComboBox"], [ref FODSelectionComboBox_InsertItem "InsertItem()"]
+[etopic]
+
+[topic FODSelectionComboBox_InsertItem same "InsertItem()" "FODSelectionComboBox::InsertItem()" secondary]
+Declaration:
+[code]
+Bool InsertItem(int index, long itemData);
+[ecode]
+This function inserts an item into the item list of the combobox.
+
+[parml]
+[pt]index[pd]The 0-based index in the item list where the item will be inserted.
+[pt]itemData[pd]Application-defined value associated with the item
+[eparml]
+
+Return value: True on success, False otherwise
+
+See also: [ref FODSelectionComboBox_AddItem "AddItem()"], [ref FODSelectionComboBox_GetItemData "GetItemData()"]
+[etopic]
+
+
+[topic FODSelectionComboBox_GetItemData same "GetItemData()" "FODSelectionComboBox::GetItemData()" secondary]
+Declaration:
+[code]
+Bool GetItemData(int index, long *itemData);
+[ecode]
+This function retrieves the long-value associated with an item.
+
+[parml]
+[pt]index[pd]0-based index of the item
+[pt]itemData[pd]The value associated with the item will be stored here if the function is succesful
+[eparml]
+
+Return value: True on success, False otherwise
+
+See also: [ref FODSelectionComboBox_AddItem "AddItem()"], [ref FODSelectionComboBox_InsertItem "InsertItem()"]
+[etopic]
+
+[topic FODSelectionComboBox_GetItemHeigth upafter "GetItemHeight()" "FODSelectionComboBox::GetItemHeigth()" secondary]
+Declaration:
+[code]
+virtual int GetItemHeight() =0;
+[ecode]
+This function is called whenever the native combobox wants to know the heigth
+of the items in the combobox.
+
+[note]This function may be called very early in the creation-process
+when the BIF-object may not have been initialized yet, so the function should
+not perform any operations on the combobox.
+[enote]
+
+See also: [ref FOwnerDrawOwnee "FOwnerDrawOwnee"]
+[etopic]
+
+
+
+
+[topic FGroupBox same "FGroupBox"]
+Declaration:
+[code]
+class FGroupBox : public [ref FControl "FControl"], public [ref FControlTextHandler "FControlTextHandler"]
+[ecode]
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_GROUPBOX
+
+A FGroupBox is a control which visually groups together other controls, such
+as radiobuttons. A groupbox is usually a rectangle with a text at the top.
+
+Member functions:
+[sl]
+[li]Create(parent,ID)
+[li][ref FGroupBox_Create2 "Create(parent,ID,...)"]
+[esl]
+[etopic]
+
+[topic FGroupBox_Create2 downonce "Create(parent,ID,...)" "FGroupBox::Create(parent,ID,...)" secondary]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int ID, FRect *rect, const char *pszText=0);
+[ecode]
+
+[parml]
+[pt]pParent[pd]Parent window
+[pt]ID[pd]Control-ID of the groupbox
+[pt]rect[pd]Position and size of groupbox. If [hp 1]rect[ehp] is NULL the groupbox
+will be placed at (0,0) and have zero width and height]
+[pt]pszText[pd]Initial text, if any
+[eparml]
+[etopic]
+
+
+
+
+
+
+[topic FListBox same "FListBox"]
+Declaration:
+[code]
+class FListBox : public [ref FControl "FControl"] {
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_LISTBOX
+
+A listbox is a control that contains several items (usually text) and allows the
+user to scroll through them and optionally select one or more items.
+
+The listbox control is not intended to contain more than, say, 100 items, as
+the listbox operations are quite slow because every operation redraw the
+listbox immidiatly.
+
+The FListBox is the base class for its subclasses, which provides specific
+behaviour concerning single/multiple selection and text/owner-draw items.
+
+The class sub-hierarchy of FListBox looks like this:
+[graphic hypergraphic "FListBox class sub-hierarchy" "winbmp:listbox.bmp" "os2bmp:listbox.bmp"]
+
+Member functions:
+[sl]
+[li][ref FListBox_GetCount "GetCount()"]
+[li][ref FListBox_Clear "Clear()"]
+[li][ref FListBox_GetTopIndex "GetTopIndex()"]
+[li][ref FListBox_SetTopIndex "SetTopIndex()"]
+[li][ref FListBox_DisableRedraw "DisableRedraw()"]
+[li][ref FListBox_EnableRedraw "EnableRedraw()"]
+[esl]
+[etopic]
+
+[topic FListBox_GetCount down "GetCount()" "FListBox::GetCount()" primary]
+Declaration:
+[code]
+int GetCount();
+[ecode]
+This function returns the number of items in the listbox.
+
+See also: [ref FListBox "FListBox"]
+[etopic]
+
+[topic FListBox_Clear same "Clear()" "FListBox::Clear()" primary]
+Declaration:
+[code]
+void Clear();
+[ecode]
+This function removes all items in the listbox.
+
+See also: [ref FListBox "FListBox"]
+[etopic]
+
+[topic FListBox_GetTopIndex same "GetTopIndex()" "FListBox::GetTopIndex()"]
+Declaration:
+[code]
+int GetTopIndex();
+[ecode]
+The function returns the 0-base index of the first visible item in the listbox.
+As the user scrolls through the items this index changes.
+
+See also: [ref FListBox "FListBox"], [ref FListBox_SetTopIndex "SetTopIndex()"]
+[etopic]
+
+[topic FListBox_SetTopIndex same "SetTopIndex()" "FListBox::SetTopIndex()"]
+Declaration:
+[code]
+Bool SetTopIndex(int index);
+[ecode]
+This function scrolls the listbox so that the [hp 1]index[ehp]'th item will be the
+first visible item in the listbox. It is in general impolite to call this
+function at other times as during the creation of the listbox.
+
+See also: [ref FListBox "FListBox"], [ref FListBox_SetTopIndex "SetTopIndex()"]
+[etopic]
+
+[topic FListBox_DisableRedraw same "DisableRedraw()" "FListBox::DisableRedraw()"]
+Declaration:
+[code]
+void DisableRedraw();
+[ecode]
+This function disables the instant redraw of the listbox until [ref FListBox_EnableRedraw "EnableRedraw()"]
+is called. This is useful when adding several items to the listbox. As a rule
+of thumb you should use DisableRedraw() when you are adding or modifying more
+than 2 items in the listbox.
+
+Example:
+[code]
+FListBox list;
+...
+//disable redrawing
+list.DisableRedraw();
+//now add a lot of items to the listbox
+for(int i=0; i<20; i++)
+  list.AddItem(...);
+//enable redrawing again
+list.EnableRedraw();
+[ecode]
+
+See also: [ref FListBox "FListBox"], [ref FListBox_EnableRedraw "EnableRedraw()"]
+[etopic]
+
+[topic FListBox_EnableRedraw upafter "EnableRedraw()" "FListBox::EnableRedraw()"]
+Declaration:
+[code]
+void EnableRedraw();
+[ecode]
+This function enables instant redraw previously disabled with [ref FListBox_DisableRedraw "DisableRedraw()"]
+and ensures that the whole listbox is redrawn. See notes and example in [ref FListBox_DisableRedraw "DisableRedraw()"].
+[etopic]
+
+
+[topic FTextListBox same "FTextListBox"]
+Declaration:
+[code]
+class FTextListBox : virtual public [ref FListBox "FListBox"] {
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_LISTBOX
+
+A FTextListBox is a listbox that contains text items. The listbox will manage
+the strings. This imposes a limit to the amount of text that the listbox can
+contain under Windows 3.1 and OS/2 2.x PM (and maybe OS/2 Warp PM as well, we
+don't know) to approximatly 64Kb. If you need more text, use
+[ref FODListBox "FODListBox"].
+
+Member functions:
+[sl]
+[li][ref FTextListBox_AddItem "AddItem()"]
+[li][ref FTextListBox_InsertItem "InsertItem()"]
+[li][ref FTextListBox_GetItemText "GetItemText()"]
+[li][ref FTextListBox_GetItemTextLen "GetItemTextLen()"]
+[li][ref FTextListBox_RemoveItem "RemoveItem()"]
+[li][ref FTextListBox_ReplaceItem "ReplaceItem()"]
+[li][ref FTextListBox_FindItem "FindItem()"]
+[esl]
+
+See also: [ref FListBox "FListBox"],
+[ref FSingleSelectionTextListBox "FSingleSelectionTextListBox"],
+[ref FMultipleSelectionTextListBox "FMultipleSelectionTextListBox"]
+[etopic]
+
+[topic FTextListBox_AddItem down "AddItem()" "FTextListBox::AddItem()" primary]
+Declaration:
+[code]
+Bool AddItem(const char *pszText);
+[ecode]
+This function is used for adding an item at the end of the list.
+
+Return value: True on succes, False otherwise (most likely: "out of memory")
+
+See also: [ref FTextListBox "FTextListBox"], [ref FTextListBox_InsertItem "InsertItem()"]
+[etopic]
+
+[topic FTextListBox_InsertItem same "InsertItem()" "FTextListBox::InsertItem()" primary]
+Declaration:
+[code]
+Bool InsertItem(int index, const char *pszText);
+[ecode]
+This function is used for inserting an item at [hp 1]index[ehp].
+
+Return value: True on succes, False otherwise (most likely: "out of memory")
+
+See also: [ref FTextListBox "FTextListBox"], [ref FTextListBox_AddItem "AddItem()"]
+[etopic]
+
+[topic FTextListBox_GetItemText same "GetItemText()" "FTextListBox::GetItemText()" primary]
+Declaration:
+[code]
+Bool GetItemText(int index, char *buffer, int maxbuf);
+[ecode]
+This function retrieves the text of an item.
+
+[parml]
+[pt]index[pd]The 0-based item index
+[pt]buffer[pd]Where the retrived text will be stored
+[pt]maxbuf[pd]Maximum number of characters to copy. To find the length of an
+item text use [ref FTextListBox_GetItemTextLen "GetItemTextLen()"]
+[eparml]
+
+Return value: True on success, False otherwise (index out of range etc.)
+
+See also: [ref FTextListBox "FTextListBox"], [ref FTextListBox_GetItemTextLen "GetItemTextLen()"]
+[etopic]
+
+[topic FTextListBox_GetItemTextLen same "GetItemTextLen()" "FTextListBox::GetItemTextLen()" primary]
+Declaration:
+[code]
+int GetItemTextLen(int index);
+[ecode]
+This function returns the length of the [hp 1]index[ehp]'th item's text including '\\0'
+
+Return value: non-negative: text length, negative: error occurred
+
+See also: [ref FTextListBox "FTextListBox"], [ref FTextListBox_GetItemText "GetItemText()"]
+[etopic]
+
+[topic FTextListBox_RemoveItem same "RemoveItem()" "FTextListBox::RemoveItem()" primary]
+Declaration:
+[code]
+Bool RemoveItem(int index);
+[ecode]
+This function removes the index at (0-based) position [hp 1]index[ehp]
+
+Return value: True on success, False otherwise
+
+See also: [ref FTextListBox "FTextListBox"], [ref FListBox_Clear "Clear()"]
+[etopic]
+
+[topic FTextListBox_ReplaceItem same "ReplaceItem()" "FTextListBox::ReplaceItem()" primary]
+Declaration:
+[code]
+Bool ReplaceItem(int index, const char *pszText);
+[ecode]
+This function replaces an item's text. This is [hp 2]not[ehp] equivalent to
+removing and then inserting because ReplaceItem() preserves the item select
+state among others.
+
+See also: [ref FTextListBox "FTextListBox"], [ref FTextListBox_InsertItem "InsertItem()"], [ref FTextListBox_RemoveItem "RemoveItem()"]
+[etopic]
+
+[topic FTextListBox_FindItem upafter "FindItem()" "FTextListBox::FindItem()"]
+Declaration:
+[code]
+int FindItem(const char *pszText, int startIndex=-1);
+[ecode]
+This function locates an item that begins with [hp 1]pszText[ehp]. The search may
+or may not be case-sensitive depending on the native listbox control. If you
+want to search for a whole string or need other behaviour you will need to
+iterate over the items yourself.
+
+[parml]
+[pt]pszText[pd]Initial characters to search for
+[pt]startIndex[pd]The search will start [hp 1]after[ehp] startIndex and will wrap around
+when the bottom of the listbox is reached.
+[eparml]
+
+Return value: non-negative: index of item, negative: not found or error occurred
+
+See also: [ref FTextListBox "FTextListBox"]
+[etopic]
+
+
+[topic FSingleSelectionListBox same "FSingleSelectionListBox"]
+Declaration:
+[code]
+class FSingleSelectionListBox : virtual public [ref FListBox "FListBox"] {
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_LISTBOX
+
+A FSingleSelectionListBox is a listbox where the user is only allowed to select one item.
+
+Member functions:
+[sl]
+[li][ref FSingleSelectionListBox_GetCurrentSelection "GetCurrentSelection()"]
+[li][ref FSingleSelectionListBox_SetCurrentSelection "SetCurrentSelection()"]
+[esl]
+
+See also: [ref FListBox "FListBox"],
+[ref FMultipleSelectionListBox "FMultipleSelectionListBox"],
+[ref FSingleSelectionTextListBox "FSingleSelectionTextListBox"],
+[ref FSingleSelectionODListBox "FSingleSelectionODListBox"]
+[etopic]
+
+[topic FSingleSelectionListBox_GetCurrentSelection down "GetCurrentSelection()" "FSingleSelectionListBox::GetCurrentSelection()" primary]
+Declaration:
+[code]
+int GetCurrentSelection();
+[ecode]
+This function returns the index of the currently selected item, if any.
+
+Return value: non-negative: item index, negative: no item is currently selected
+
+See also: [ref FSingleSelectionListBox "FSingleSelectionListBox"], [ref FSingleSelectionListBox_SetCurrentSelection "SetCurrentSelection()"]
+[etopic]
+
+[topic FSingleSelectionListBox_SetCurrentSelection upafter "SetCurrentSelection()" "FSingleSelectionListBox::SetCurrentSelection()"]
+Declaration:
+[code]
+Bool SetCurrentSelection(int index);
+[ecode]
+This function makes an item the selected item. If [hp 1]index[ehp] is -1 there will be no currently selected item.
+
+See also: [ref FSingleSelectionListBox "FSingleSelectionListBox"], [ref FSingleSelectionListBox_GetCurrentSelection "GetCurrentSelection()"]
+[etopic]
+
+
+[topic FMultipleSelectionListBox same "FMultipleSelectionListBox"]
+Declaration:
+[code]
+class FMultipleSelectionListBox : virtual public [ref FListBox "FListBox"] {
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_LISTBOX
+
+A FMultipleSelectionListBox is a listbox where the user can select several items at a time.
+
+Member functions:
+[sl]
+[li][ref FMultipleSelectionListBox_SetSelState "SetSelState()"]
+[li][ref FMultipleSelectionListBox_SetSelStateAll "SetSelStateAll()"]
+[li]SelectItem(index) - maps to SetSelState(index,True)
+[li]UnSelectItem(index) - maps to SetSelState(index,False)
+[li][ref FMultipleSelectionListBox_GetSelCount "GetSelCount()"]
+[li][ref FMultipleSelectionListBox_GetSelItems "GetSelItems()"]
+[esl]
+
+See also: [ref FListBox "FListBox"],
+[ref FMultipleSelectionTextListBox "FMultipleSelectionTextListBox"],
+[ref FMultipleSelectionODListBox "FMultipleSelectionODListBox"]
+[etopic]
+
+[topic FMultipleSelectionListBox_SetSelState down "SetSelState()" "FMultipleSelectionListBox::SetSelState()"]
+Declaration:
+[code]
+Bool SetSelState(int index, Bool selected);
+[ecode]
+This function changes the selects or de-selects an item.
+
+[parml]
+[pt]index[pd]0-based item index
+[pt]selected[pd]new selection state of the item
+[eparml]
+
+Return value: True on success, False otherwise
+
+See also: [ref FMultipleSelectionListBox "FMultipleSelectionListBox"], [ref FMultipleSelectionListBox_SetSelStateAll "SetSelStateAll()"]
+[etopic]
+
+[topic FMultipleSelectionListBox_SetSelStateAll same "SetSelStateAll()" "FMultipleSelectionListBox::SetSelStateAll()"]
+Declaration:
+[code]
+Bool SetSelStateAll(Bool selected);
+[ecode]
+This function changes the selects or de-selects all items in the listbox.
+
+Return value: True on success, False otherwise
+
+See also: [ref FMultipleSelectionListBox "FMultipleSelectionListBox"], [ref FMultipleSelectionListBox_SetSelState "SetSelState()"]
+[etopic]
+
+[topic FMultipleSelectionListBox_GetSelCount same "GetSelCount()" "FMultipleSelectionListBox::GetSelCount()"]
+Declaration:
+[code]
+int GetSelCount();
+[ecode]
+This function returns the number currently selected items in the listbox.
+
+For example see [ref FMultipleSelectionListBox_GetSelItems "GetSelItems()"]
+[etopic]
+
+[topic FMultipleSelectionListBox_GetSelItems upafter "GetSelItems()" "FMultipleSelectionListBox::GetSelItems()"]
+Declaration:
+[code]
+Bool GetSelItems(int index\[\], int maxitem);
+[ecode]
+This function retrieves a list of indexes of the currently selected items.
+
+[parml]
+[pt]index[pd]array or pointer where the indexes will be stored
+[pt]maxitem[pd]maximum number of items indexes to retrieve
+[eparml]
+
+Example:
+[code]
+//listbox is a FMultipleSelectionListBox
+int count = listbox.GetSelCount();
+int *indexlist = new int\[count\];
+listbox.GetSelItems(indexlist,count);
+//Now use the item indexes for something
+[ecode]
+
+See also: [ref FMultipleSelectionListBox "FMultipleSelectionListBox"], 
+[ref FMultipleSelectionListBox_GetSelCount "GetSelCount()"]
+[etopic]
+
+
+[topic FSingleSelectionTextListBox same "FSingleSelectionTextListBox"]
+Declaration:
+[code]
+class FSingleSelectionTextListBox : virtual public [ref FListBox "FListBox"],
+                                    public [ref FTextListBox "FTextListBox"],
+                                    public [ref FSingleSelectionListBox "FSingleSelectionListBox"]
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_LISTBOX
+
+A FSingleSelectionTextListBox is a list where the items are text items and the
+user is only allowed to select one item.
+
+Member functions:
+[sl]
+[li]Create(parent,ID) - standard create
+[li][ref FSingleSelectionTextListBox_Create2 "Create(parent,ID,...)"]
+[esl]
+[etopic]
+
+[topic FSingleSelectionTextListBox_Create2 downonce "Create(parent,ID,...)" "FSingleSelectionTextListBox::Create(parent,ID,...)" secondary]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int ID, FRect *rect, Bool sorted=False);
+[ecode]
+This Create() creates the native listbox.
+
+[parml]
+[pt]pParent[pd]Parent window
+[pt]ID[pd]Control-ID
+[pt]rect[pd]Position and dimension of the listbox. If [hp 1]rect[ehp] is NULL
+the listbox will be placed at (0,0)and have zero width and height
+[pt]sorted[pd]Wether the items should be sorted or not.
+See [reffootnote listbox_item_sorting "listbox item sorting"]!
+[eparml]
+
+Return value: True on success, False otherwise
+
+See also: [ref FSingleSelectionTextListBox "FSingleSelectionTextListBox"]
+[etopic]
+
+[footnote listbox_item_sorting]
+There are differences in how the sorting feature is specified in Windows and OS/2 PM.
+Windows sorts the items if a style bit is set when the listbox is created.
+OS/2 PM sorts the items according to a flag specified on each insert operation.
+
+This can introduce a portability problem when the listbox is created from the
+resources. Under Windows: If the resources specifies sorting (LBS_SORT) the
+items will be sorted no matter what the [hp 1]sorted[ehp] parameter to the Create()
+function is. If the style bit is not specified the items will not be sorted.
+Under OS/2 PM: only a problem if the resources are converted to Windows-format.
+
+The [hp 1]sorted[ehp] parameter must be consistent with the resources.
+
+In general if you want the items in a listbox to be sorted it is easier (and
+faster) to sort them yourself and then insert the items into the listbox.
+[efootnote]
+
+
+[topic FMultipleSelectionTextListBox same "FMultipleSelectionTextListBox"]
+Declaration:
+[code]
+class FMultipleSelectionTextListBox : virtual public [ref FListBox "FListBox"],
+                                      public [ref FTextListBox "FTextListBox"],
+                                      public [ref FMultipleSelectionListBox "FMultipleSelectionListBox"]
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_LISTBOX
+
+A FMultipleSelectionTextListBox is a listbox where the items are text items
+and the user is allowed to select several items.
+
+Member functions:
+[sl]
+[li]Create(parent,ID) - standard control create
+[li][ref FMultipleSelectionTextListBox_Create2 "Create(parent,ID,...)"]
+[esl]
+[etopic]
+
+[topic FMultipleSelectionTextListBox_Create2 downonce "Create(parent,ID,...)" "FMultipleSelectionTextListBox::Create(parent,ID,...)" secondary]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int ID, FRect *rect,
+           lbs_multiselectstyle msstyle=lbs_me_selection,
+           Bool sorted=False);
+[ecode]
+
+[parml]
+[pt]pParent[pd]Parent window
+[pt]ID[pd]Control-ID
+[pt]rect[pd]Position and dimension of the listbox. If [hp 1]rect[ehp] is
+NULL the listbox will be placed at (0,0) with zero with and height
+[pt]msstyle[pd]Keyboard and mouse interface style. [hp 1]msstyle[ehp] specified how 
+the user can select multiple items. msstyle can be:
+[dl]
+[dt]lbs_multipleselection[dd]"Multiple selection"
+[dt]lbs_extendedselection[dd]"Extended selection"
+[dt]lbs_me_selection[dd]BIF-default style. This will let BIF select one of the
+above according to the normal behaviour of the native GUI system and your
+shoe size.
+[edl]
+[pt]sorted[pd]Specifies wether the items should be sorted when inserted into
+the listbox. See [reffootnote listbox_item_sorting "listbox item sorting"]!
+[eparml]
+
+See also: [ref FMultipleSelectionTextListBox "FMultipleSelectionTextListBox"]
+[etopic]
+
+
+
+[topic FODListBox same "FODListBox"]
+Declaration:
+[code]
+class FODListBox : virtual public [ref FListBox "FListBox"],
+                   public [ref FOwnerDrawOwnee "FOwnerDrawOwnee"]
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_LISTBOX
+
+A FODListBox is a listbox where it is the responsibility of the application to
+draw the items. Each item has an associated 32-bit value that the application
+can use for pointers, indexes, etc.
+
+Member functions:
+[sl]
+[li][ref FODListBox_AddItem "AddItem()"]
+[li][ref FODListBox_InsertItem "InsertItem()"]
+[li][ref FODListBox_GetItemData "GetItemData()"]
+[li][ref FODListBox_RemoveItem "RemoveItem()"]
+[li][ref FODListBox_ReplaceItem "ReplaceItem()"]
+[li][ref FODListBox_GetItemHeight "GetItemHeight()"] (protected and pure virtual)
+[esl]
+
+See also: [ref FListBox "FListBox"], [ref FOwnerDrawOwnee "FOwnerDrawOwnee"],
+[ref FSingleSelectionODListBox "FSingleSelectionODListBox"],
+[ref FMultipleSelectionODListBox "FMultipleSelectionODListBox"]
+[etopic]
+
+[topic FODListBox_AddItem down "AddItem()" "FODListBox::AddItem()" secondary]
+Declaration:
+[code]
+Bool AddItem(long itemData);
+[ecode]
+This function append an item to the items. [hp 1]itemData[ehp] will be the value associated with the item.
+
+Return value: True on success, False otherwise (usually out of memory)
+
+See also: [ref FODListBox "FODListBox"], [ref FODListBox_InsertItem "InsertItem()"]
+[etopic]
+
+[topic FODListBox_InsertItem same "InsertItem()" "FODListBox::InsertItem()" secondary]
+Declaration:
+[code]
+Bool InsertItem(int index, long itemData);
+[ecode]
+This function inserts an item at the [hp 1]index[ehp]'th to the items. [hp 1]itemData[ehp] will be the value associated with the item.
+
+Return value: True on success, False otherwise (usually out of memory)
+
+See also: [ref FODListBox "FODListBox"], [ref FODListBox_AddItem "AddItem()"]
+[etopic]
+
+[topic FODListBox_GetItemData same "GetItemData()" "FOD_ListBox::GetItemData()"]
+Declaration:
+[code]
+Bool GetItemData(int index, long *itemData);
+[ecode]
+This function retrieves the 32-bit value associated with the item at [hp 1]index[ehp]
+
+[parml]
+[pt]index[pd]Item index
+[pt]itemData[pd]The retrieved 32-bit value be will stored here.
+[eparml]
+
+Return value: True on success, False otherwise (usually index out of range)
+
+See also: [ref FODListBox "FODListBox"], [ref FODListBox_InsertItem "InsertItem()"]
+[etopic]
+
+[topic FODListBox_RemoveItem same "RemoveItem()" "FODListBox::RemoveItem()" secondary]
+Declaration:
+[code]
+Bool RemoveItem(int index);
+[ecode]
+This function removes the item at the [hp 1]index[ehp]'th place.
+
+See also: [ref FODListBox "FODListBox"], [ref FODListBox_InsertItem "InsertItem()"]
+[etopic]
+
+
+[topic FODListBox_ReplaceItem same "ReplaceItem()" "FODListBox::ReplaceItem()" secondary]
+Declaration:
+[code]
+Bool ReplaceItem(int index, long itemData);
+[ecode]
+This function replaces an item.
+
+[parml]
+[pt]index[pd]Item index
+[pt]itemData[pd]New 32-bit value to be associated with the item
+[eparml]
+
+See also: [ref FODListBox "FODListBox"], [ref FODListBox_InsertItem "InsertItem()"], [ref FODListBox_RemoveItem "RemoveItem()"]
+[etopic]
+
+[topic FODListBox_GetItemHeight upafter "GetItemHeight()" "FODListBox::GetItemHeight()" primary]
+Declaration:
+[code]
+virtual int GetItemHeight() =0;
+[ecode]
+This function is called whenever the native listbox wants to know the height of
+the items in the listbox.
+
+[note]This function may be called before the BIF-object has been associated with
+the native window, so the function should not assume the BIF-object is valid.
+[enote]
+
+See also: [ref FODListBox "FODListBox"], [ref FOwnerDrawOwnee "FOwnerDrawOwnee"]
+[etopic]
+
+
+
+[topic FSingleSelectionODListBox same "FSingleSelectionODListBox"]
+Declaration:
+[code]
+class FSingleSelectionODListBox : virtual public [ref FListBox "FListBox"],
+                                  public [ref FODListBox "FODListBox"],
+                                  public [ref FSingleSelectionListBox "FSingleSelectionListBox"]
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_LISTBOX
+
+A FSingleSelectionODListBox is a listbox where the items drawn by the
+application and the user is allowed only to select one item.
+
+Member functions:
+[sl]
+[li]Create(parent,ID) - standard control create
+[li][ref FSingleSelectionODListBox_Create2 "Create(parent,ID,...)"]
+[esl]
+
+See also: [ref FMultipleSelectionODListBox "FMultipleSelectionODListBox"]
+[etopic]
+
+[topic FSingleSelectionODListBox_Create2 downonce "Create(parent,ID,...)" "FSingleSelectionODListBox::Create(parent,ID,...)" secondary]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int ID, FRect *rect);
+[ecode]
+
+[parml]
+[pt]parent[pd]Parent window
+[pt]ID[pd]Control-ID of the listbox
+[pt]rect[pd]Position and dimension of the listbox. If [hp 1]rect[ehp] is
+NULL the listbox will be placed at (0,0) with zero width and height
+[eparml]
+
+See also: [ref FSingleSelectionODListBox "FSingleSelectionODListBox"]
+[etopic]
+
+
+[topic FMultipleSelectionODListBox same "FMultipleSelectionODListBox"]
+Declaration:
+[code]
+class FMultipleSelectionODListBox : virtual public [ref FListBox "FListBox"],
+                                    public [ref FODListBox "FODListBox"],
+                                    public [ref FMultipleSelectionListBox "FMultipleSelectionListBox"]
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_LISTBOX
+
+A FMultipleSelectionListBox is a listbox where the items are draw by the
+application and the user is allowed to select more than one item at a time.
+
+Member functions:
+[sl]
+[li]Create(parent,ID) - standard control create
+[li][ref FMultipleSelectionODListBox_Create2 "Create(parent,ID,...)"]
+[esl]
+
+See also: [ref FSingleSelectionODListBox "FSingleSelectionODListBox"]
+[etopic]
+
+[topic FMultipleSelectionODListBox_Create2 downonce "Create(parent,ID,...)" "FMultipleSelectionODListBox::Create(parent,ID,...)" secondary]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int ID, FRect *rect,
+            lbs_multiselectstyle msstyle=lbs_me_selection);
+[ecode]
+
+[parml]
+[pt]pParent[pd]Parent window
+[pt]ID[pd]Control-ID
+[pt]rect[pd]Position and dimension of the listbox. If [hp 1]rect[ehp] is NULL
+the listbox will be placed at (0,0) with zero with and height
+[pt]msstyle[pd]Keyboard and mouse interface style. [hp 1]msstyle[ehp]
+specifies how the user can select multiple items. msstyle can be:
+[dl]
+[dt]lbs_multipleselection[dd]"Multiple selection"
+[dt]lbs_extendedselection[dd]"Extended selection"
+[dt]lbs_me_selection[dd]BIF-default style. This will let BIF select one of the
+above according to the normal behaviour of the native GUI system and your
+shoe size.
+[edl]
+[pt]sorted[pd]Specified wether the items should be sorted when inserted into the
+listbox. See [reffootnote listbox_item_sorting "listbox item sorting"]!
+[eparml]
+
+See also: [ref FMultipleSelectionODListBox "FMultipleSelectionODListBox"]
+[etopic]
+
+
+
+
+
+[topic FMLE same "FMLE"]
+Declaration:
+[code]
+class FMLE : public [ref FControl "FControl"] {
+[ecode]
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_MLE
+
+'MLE' is an abbreversion of Multi-Line-Edit. A FMLE is an editfield that allows
+the user to enter several lines.
+
+[note]The Windows 3.1 version of FMLE is based on the normal editcontrol, so
+the FMLE can only hold 64KB text. The OS/2 PM version for FMLE can in theory hold
+4GB text, but at most 64KB can be inserted at a time.
+[enote]
+
+Member functions:
+[sl]
+[li]Create(parent,ID) - standard control create
+[li][ref FMLE_Create2 "Create(parent,ID,...)"]
+[li][ref FMLE_Cut "Cut()"]
+[li][ref FMLE_Copy "Copy()"]
+[li][ref FMLE_Paste "Paste()"]
+[li][ref FMLE_Clear "Clear()"]
+[li][ref FMLE_ReplaceSelection "ReplaceSelection()"]
+[li][ref FMLE_HasBeenModified "HasBeenModified()"]
+[li][ref FMLE_SetModify "SetModify()"]
+[li][ref FMLE_GetTextLen "GetTextLen()"]
+[li][ref FMLE_GetText "GetText()"]
+[li][ref FMLE_SetText "SetText()"]
+[li][ref FMLE_LimitText "LimitText()"]
+[li][ref FMLE_IsReadonly "IsReadonly()"]
+[li][ref FMLE_SetReadonly "SetReadonly()"]
+[esl]
+[etopic]
+
+
+[topic FMLE_Create2 down "Create(parent,ID,...)" "FMLE::Create(parent,ID,...)" secondary]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int ID, FRect *rect,
+            long style=mle_border, const char *pszText=0);
+[ecode]
+
+[parml]
+[pt]pParent[pd]Parent window
+[pt]ID[pd]Control-ID
+[pt]style[pd]A combination of the following:
+[dl]
+[dt]mle_hscroll[dd]text can scroll horizontally
+[dt]mle_vscroll[dd]text can scroll vertically
+[dt]mle_readonly[dd]the FMLE is initially readonly (the user cannot modify the text)
+[dt]mle_border[dd]the FMLE will have a small border
+[edl]
+[pt]pszText[pd]Initial text in the FMLE
+[eparml]
+
+Return value: True on succes, False otherwise
+
+See also: [ref FMLE "FMLE"], [ref FMLE_SetReadonly "SetReadonly()"]
+[etopic]
+
+[topic FMLE_Cut same "Cut()" "FMLE::Cut()" secondary]
+Declaration:
+[code]
+Bool Cut();
+[ecode]
+This function removes the currently selected text and places it in the
+clipboard. This works like if the user had pressed Shift-Delete himself.
+[etopic]
+
+[topic FMLE_Copy same "Copy()" "FMLE::Copy()" secondary]
+Declaration:
+[code]
+Bool Copy();
+[ecode]
+This function copies the currently selected text to the clipboard as if
+the user had pressed Ctrl-Insert himself.
+[etopic]
+
+[topic FMLE_Paste same "Paste()" "FMLE::Paste()" secondary]
+Declaration:
+[code]
+Bool Paste();
+[ecode]
+This copies the text in the clipboard to the FMLE where the current insertion point is.
+This works like if the user had pressed Shift-Insert himself.
+
+[note]If any text is currently selected in the FMLE, it will be removed first
+[enote]
+[etopic]
+
+[topic FMLE_Clear same "Clear()" "FMLE::Clear()" secondary]
+Declaration:
+[code]
+Bool Clear();
+[ecode]
+This function removes the currently selected text but does [hp 2]not[ehp] place it in the
+clipboard. This works like if the user had pressed Ctrl-Delete himself.
+[etopic]
+
+[topic FMLE_ReplaceSelection same "ReplaceSelection()" "FMLE::ReplaceSelection()"]
+Declaration:
+[code]
+Bool ReplaceSelection(const char *text);
+[ecode]
+This function replaces the currently selected text with the text at [hp 1]text[ehp].
+[etopic]
+
+[topic FMLE_HasBeenModified same "HasBeenModified()" "FMLE::HasBeenModified()"]
+Declaration:
+[code]
+Bool HasBeenModified();
+[ecode]
+This function returns wether or not the text as been changed by the user since
+the "changed"-flag was last cleared.
+
+Example: (very primitive editor)
+[code]
+MyEditor::Close() {
+  if(mle.HasBeenModified()) {
+    //save text before closing
+    Save();
+  }
+}
+...
+MyEditor::Save() {
+  <save text>
+  mle.SetModify(False);
+}
+[ecode]
+[etopic]
+
+[topic FMLE_SetModify same "SetModify()" "FMLE::SetModify()"]
+Declaration:
+[code]
+Bool SetModify(Bool modified);
+[ecode]
+This function sets or clears the "changed"-flad of the FMLE.
+
+See [ref FMLE_HasBeenModified "HasBeenModfied()"] for example.
+[etopic]
+
+[topic FMLE_GetTextLen same "GetTextLen()" "FMLE::GetTextLen()" secondary]
+Declaration:
+[code]
+int GetTextLen();
+[ecode]
+This function returns the length of the text in the FMLE including linefeeds
+and the terminating '\\0'
+[etopic]
+
+[topic FMLE_GetText same "GetText()" "FMLE::GetText()" secondary]
+Declaration:
+[code]
+Bool GetText(char *buffer, int maxbuf);
+[ecode]
+This function retrieves the text in the FMLE. Lines are separated with '\\n' and
+the text is terminated with '\\0'
+
+[parml]
+[pt]buffer[pd]The buffer where the retrieved text will be stored
+[pt]maxbuf[pd]Maximum number of bytes to copy into [hp 1]buffer[ehp]
+[eparml]
+[etopic]
+
+[topic FMLE_SetText same "SetText()" "FMLE::SetText()" secondary]
+Declaration:
+[code]
+Bool SetText(const char *text);
+[ecode]
+This function sets the text of the FMLE to [hp 1]text[ehp]
+[etopic]
+
+[topic FMLE_LimitText same "LimitText()" "FMLE::LimitText()" secondary]
+Declaration:
+[code]
+Bool LimitText(int limit);
+[ecode]
+This function limits the number of characters the user is allowed to enter
+into the FMLE. If the current text in the FMLE exceeds this limit it is
+[hp 2]not[ehp] truncated.
+[etopic]
+
+[topic FMLE_IsReadonly same "IsReadonly()""FMLE::IsReadonly()" secondary]
+Declaration:
+[code]
+Bool IsReadonly();
+[ecode]
+This function returns wether or not the FMLE is read-only, that is if the ser
+is allowed to modify the contents of the FMLE.
+[etopic]
+
+[topic FMLE_SetReadonly upafter "SetReadonly()" "FMLE::SetReadonly()" secondary]
+Declaration:
+[code]
+Bool SetReadonly(Bool f);
+[ecode]
+This function changes the read-only state of the FMLE.
+[etopic]
+
+
+
+[topic FPushButton same "FPushButton"]
+Declaration:
+[code]
+class FPushButton : public [ref FControl "FControl"],
+                    public [ref FControlTextHandler "FControlTextHandler"]
+[ecode]
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_PUSHBUTTON
+
+A FPushPutton is the encapsulation of the normal push-buttons. When the
+user "pushes" the button it will send a [ref FCommandEvent "FCommandEvent"]
+its owner (catchable with an [ref FCommandHandler "FCommandHandler"]).
+
+Member functions:
+[sl]
+[li]Create(parent,ID) - standard control-create
+[li][ref FPushButton_Create2 "Create(parent,ID,...)"]
+[li][ref FPushButton_Push "Push()"]
+[esl]
+[etopic]
+
+[topic FPushButton_Create2 down "Create(parent,ID,...)" "FPushButton::Create(parent,ID,...)" secondary]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int ID, FRect *rect, const char *pszText, Bool isDefault=False);
+[ecode]
+
+[parml]
+[pt]pParent[pd]Parent window
+[pt]ID[pd]Control ID. This ID will be used when the button sends a [ref FCommandEvent "FCommandEvent"]
+to its owner
+[pt]pszText[pd]Button text. If [hp 1]pszText[ehp] is NULL the button will not have a text in it
+[pt]isDefault[pd]Default flag. If a pushbutton is the "default pushbutton" the user can
+push it by just pressing Enter anywhere in the dialog. A dialog should only have 
+1 default pushbutton.
+[eparml]
+
+See also: [ref FPushButton "FPushButton"]
+[etopic]
+
+[topic FPushButton_Push upafter "Push()" "FPushButton::Push()"]
+Declaration:
+[code]
+void Push();
+[ecode]
+This function will make the pushbutton behave exactly as if the user had
+pushed it, that is the pushbutton will send a [ref FCommandEvent "FCommandEvent"] 
+to its owner.
+
+See also: [ref FPushButton "FPushButton"]
+[etopic]
+
+
+
+[topic FRadioButton same "FRadioButton"]
+Declaration:
+[code]
+class FRadioButton : public [ref FControl "FControl"],
+                     public [ref FControlTextHandler "FControlTextHandler"]
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_RADIOBUTTON
+
+Member functions:
+[sl]
+[li]Create(parent,ID) - standard control-create
+[li][ref FRadioButton_Create2 "Create(parent,ID,...)"]
+[li][ref FRadioButton_IsChecked "IsChecked()"]
+[li][ref FRadioButton_Check "Check()"]
+[li][ref FRadioButton_UnCheck "UnCheck()"]
+[li][ref FRadioButton_GetCheckIndex "GetCheckIndex()"]
+[li][ref FRadioButton_CheckIndex "CheckIndex()"]
+[esl]
+[etopic]
+
+[topic FRadioButton_Create2 down "Create(parent,ID,...)" "FRadioButton::Create(parent,ID,...)" secondary]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int ID, FRect *rect, const char *pszText);
+[ecode]
+
+[parml]
+[pt]pParent[pd]Parent window
+[pt]ID[pd]Control ID.
+[pt]pszText[pd]Button text. If [hp 1]pszText[ehp] is NULL the button will not have a text in it
+[eparml]
+
+See also: [ref FRadioButton "FRadioButton"]
+[etopic]
+
+[topic FRadioButton_IsChecked same "IsChecked()" "FRadioButton::IsChecked()"]
+Declaration:
+[code]
+Bool IsChecked();
+[ecode]
+This function returns wether or not the radiobutton is checked.
+
+See also: [ref FRadioButton "FRadioButton"]
+[etopic]
+
+[topic FRadioButton_Check same "Check()" "FRadioButton::Check()" secondary]
+Declaration:
+[code]
+Bool Check();
+[ecode]
+This function checks the radiobutton. Any other checked radiobutton in the
+group will be unchecked.
+
+See also: [ref FRadioButton "FRadioButton"], [ref FRadioButton_UnCheck "UnCheck()"], [ref FRadioButton_GetCheckIndex "GetCheckIndex()"]
+[etopic]
+
+[topic FRadioButton_UnCheck same "UnCheck()" "FRadioButton::UnCheck()" secondary]
+Declaration:
+[code]
+Bool UnCheck();
+[ecode]
+This function unchecks the radiobutton.
+
+See also: [ref FRadioButton "FRadioButton"], [ref FRadioButton_Check "Check()"], [ref FRadioButton_GetCheckIndex "CheckIndex()"]
+[etopic]
+
+[topic FRadioButton_GetCheckIndex same "GetCheckIndex()" "FRadioButton::GetCheckIndex()"]
+Declaration:
+[code]
+int GetCheckIndex();
+[ecode]
+This function returns the 0-based index of the checked radiobutton in the
+group to which the radiobutton belongs. This function is usually much easier
+to use than testing each radiobutton in a group
+
+Return value: non-negative: 0-base check index, negative: no radiobutton in the group were checked
+
+Example:
+[code]
+enum choice_t {choice_1 choice_2 choice_3}
+choice_t c;
+FRadioButton radio_choice_1,
+             radio_choice_2,
+             radio_choice_3,
+[ecode]
+Instead of having to write this:
+[code]
+if(radio_choice_1.IsChecked())
+        c = choice_1;
+else if(radio_choice_2.IsChecked())
+        c = choice_2;
+else 
+        c = choice_3;
+[ecode]
+you only need to write this:
+[code]
+c = choice_t( radio_choice_1.GetCheckIndex() );
+[ecode]
+
+[note]in the above example radio_choice_1 was asked, any of the other two
+radiobuttons could have been used, the return value would be the same. If none 
+of the radiobuttons in the group is checked GetCheckIndex() would return -1. 
+You should test for this case too.
+[enote]
+
+See also: [ref FRadioButton "FRadioButton"], [ref FRadioButton_UnCheck "UnCheck()"], [ref FRadioButton_CheckIndex "CheckIndex()"]
+[etopic]
+
+[topic FRadioButton_CheckIndex upafter "CheckIndex()" "FRadioButton::CheckIndex()"]
+Declaration:
+[code]
+Bool CheckIndex(int i);
+[ecode]
+This function checks an radiobutton within the group.
+
+Example:
+[code]
+enum choice_t {choice_1 choice_2 choice_3}
+choice_t c;
+FRadioButton radio_choice_1,
+             radio_choice_2,
+             radio_choice_3,
+
+radio_choice_1.CheckIndex(int(c));
+[ecode]
+
+See also: [ref FRadioButton "FRadioButton"], [ref FRadioButton_Check "Check()"], [ref FRadioButton_GetCheckIndex "GetCheckIndex()"]
+[etopic]
+
+
+
+
+[topic FSLE same "FSLE"]
+Declaration:
+[code]
+class FSLE : public [ref FControl "FControl"],
+             public [ref FControlTextHandler "FControlTextHandler"]
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_SLE
+
+'SLE' is an abbreversion of Single-Line-Edit. A FSLE allows the user to enter one line of text.
+
+Member functions:
+[sl]
+[li]Create(parent,ID) - standard control-create
+[li][ref FSLE_Create2 "Create(parent,ID,...)"]
+[li][ref FSLE_Cut "Cut()"]
+[li][ref FSLE_Copy "Copy()"]
+[li][ref FSLE_Paste "Paste()"]
+[li][ref FSLE_Clear "Clear()"]
+[li][ref FSLE_LimitText "LimitText()"]
+[li][ref FSLE_IsReadonly "IsReadonly()"]
+[li][ref FSLE_SetReadonly "SetReadonly()"]
+[li][ref FSLE_GetSelection "GetSelection()"]
+[li][ref FSLE_SetSelection "SetSelection()"]
+[esl]
+[etopic]
+
+
+[topic FSLE_Create2 down "Create(parent,ID,...)" "FSLE::Create(parent,ID,...)" secondary]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int ID, FRect *rect, long style=sle_border, const char *pszText=0);
+[ecode]
+
+[parml]
+[pt]pParent[pd]Parent window
+[pt]ID[pd]Control-ID
+[pt]rect[pd]Position and size
+[pt]style[pd]style bits. This can be a combination of the following:
+[dl]
+[dt]sle_password[dd]The user cannot see what he types
+[dt]sle_autohscroll[dd]The FSLE will scroll horizontally and allow the user to type more text that can be visible at one time in the FLSE
+[dt]sle_readonly[dd]The user cannot modify the contents of the FLSE
+[dt]sle_border[dd]the FLSE will be sorrounded with a small border (preferred)
+[edl]
+[eparml]
+[etopic]
+
+[topic FSLE_Cut same "Cut()" "FSLE::Cut()" primary]
+Declaration:
+[code]
+Bool Cut();
+[ecode]
+This function removes the currently selected text and places it in the
+clipboard. This works like if the user had pressed Shift-Delete himself.
+[etopic]
+
+[topic FSLE_Copy same "Copy()" "FSLE::Copy()" primary]
+Declaration:
+[code]
+Bool Copy();
+[ecode]
+This function copiesthe currently selected text to the clipboard as if
+the user had pressed Ctrl-Insert himself.
+[etopic]
+
+[topic FSLE_Paste same "Paste()" "FSLE::Paste()" primary]
+Declaration:
+[code]
+Bool Paste();
+[ecode]
+This copies the text in the clipboard to the FSLE where the current insertion point is.
+This works like if the user had pressed Shift-Insert himself.
+
+[note]If any text is currently selected in the FSLE, it will be removed first[enote]
+
+[etopic]
+
+[topic FSLE_Clear same "Clear()" "FSLE::Clear()" secondary]
+Declaration:
+[code]
+Bool Clear();
+[ecode]
+This function removes the currently selected text but does [hp 2]not[ehp] place it in the
+clipboard. This works like if the user had pressed Ctrl-Delete himself.
+[etopic]
+
+[topic FSLE_LimitText same "LimitText()" "FSLE::LimitText()" primary]
+Declaration:
+[code]
+Bool LimitText(int limit);
+[ecode]
+This function limits the number of characters the user is allowed to enter
+into the FSLE. If the current text in the FSLE exceeds this limit it is
+[hp 2]not[ehp] truncated.
+[etopic]
+
+[topic FSLE_IsReadonly same "IsReadonly()" "FSLE::IsReadonly()"]
+Declaration:
+[code]
+Bool IsReadonly();
+[ecode]
+This function returns wether or not the FSLE is read-only, that is if the ser
+is allowed to modify the contents of the FSLE.
+[etopic]
+
+[topic FSLE_SetReadonly same "SetReadOnly()" "FSLE::SetReadonly()"]
+Declaration:
+[code]
+Bool SetReadonly(Bool f);
+[ecode]
+This function changes the read-only state of the FSLE.
+[etopic]
+
+
+[topic FSLE_GetSelection same "GetSelection()" "FSLE::GetSelection()"]
+Declaration:
+[code]
+Bool GetSelection(int *start, int *end);
+[ecode]
+This function retrieves the current selection if any.
+
+[parml]
+[pt]start[pd]0-based start index
+[pt]end[pd]0-base end index
+[eparml]
+
+The characters selected is \[start...end-1\]
+
+Return value: True on success, False otherwise (eg. no selection)
+
+See also: [ref FSLE "FSLE"], [ref FSLE_SetSelection "SetSelection()"]
+[etopic]
+
+[topic FSLE_SetSelection upafter "SetSelection()" "FSLE::SetSelection()"]
+Declaration:
+[code]
+Bool SetSelection(int start, int end);
+[ecode]
+This function sets selects characters in the FSLE.
+
+[parml]
+[pt]start[pd]0-base character index of the first character in the selection
+[pt]end[pd]0-base character index of the first character after the selection
+[eparml]
+
+The caret is moved to [hp 1]end[ehp]
+
+If [hp 1]start[ehp] is 0 and [hp 1]end[ehp] is -1 the whole text is selected.
+
+See also: [ref FSLE "FSLE"], [ref FSLE_GetSelection "GetSelection()"]
+[etopic]
+
+
+
+[topic FSlider same "FSlider"]
+Declaration:
+[code]
+class FSlider : public FControl {
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_SLIDER
+
+A FSlider is a control that is used for letting the user pick a value withing 
+a range. The slider work almost like a scrollbar, but a slider is not intended to
+"scroll something into view". The FSlider control is a bit "sloppy" but excellent 
+for selecting "sloppy" values such as the red component of a RGB color, the speed
+of a game, mouse sensitivity, etc.
+
+[graphic bitmap "FSlider snapshot" "winbmp:winslide.bmp" "os2bmp:pmslide.bmp"]
+
+The slider consists of several items:
+[dl]
+[dt]Shaft[dd]The shaft in which the arm moves
+[dt]Arm[dd]The "arm" the user can grab with the mouse and move
+[dt]Buttons[dd]Buttons for moving the arm
+[dt]Ticks[dd]Small indication for the range of values
+[dt]Tick texts[dd]Text on each tick can be set
+[dt]Detents[dd]Quick selection of specific non-tick values
+[edl]
+
+Member functions:
+[sl]
+[li][ref FSlider_Create1 "Create(parent,ID,...)"] standard control-create
+[li][ref FSlider_Create2 "Create(parent,ID,...)"]
+[li][ref FSlider_AddDetent "AddDetent()"]
+[li][ref FSlider_RemoveDetent "RemoveDetent()"]
+[li][ref FSlider_GetDetentPos "GetDetentPos()"]
+[li][ref FSlider_SetTickText "SetTickText()"]
+[li][ref FSlider_GetTickSize "GetTickSize()"]
+[li][ref FSlider_SetTickSize "SetTickSize()"]
+[li][ref FSlider_GetArmPosition "GetArmPosition()"]
+[li][ref FSlider_SetArmPosition "SetArmPosition()"]
+[esl]
+
+[note]Note: Windows 3.1 does not provide a native slider control, so BIF has implemented one under Windows 3.1.[enote]
+[etopic]
+
+[topic FSlider_Create1 down "Create(parent,ID,...)" "FSlider::Create(parent,ID, int rangeMin, int rangeMax, int tickIncrement)" secondary]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int ID, int rangeMin, int rangeMax, int tickIncrement);
+[ecode]
+This Create() associates the BIF-object with the native window created from the resources.
+See [ref FSlider_Create2 "Create(parent,ID,...)"] for description of rangeMin,rangeMax and tickIncrement.
+
+[note]Because Windows 3.1 does not provide a slider control, BIF
+has implemented one under Windows 3.1. The native class name is "BIFSlider", The native style bits can be
+found in source\\window\\win16\\slider31.h
+[enote]
+[etopic]
+
+[topic FSlider_Create2 same "Create(parent,ID,...)" "FSlider::Create(parent,ID,...)" secondary]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int ID,
+            FRect *rect, ULONG style,
+            int rangeMin, int rangeMax, int tickIncrement);
+[ecode]
+
+[parml]
+[pt]pParent[pd]Parent window
+[pt]ID[pd]Control_ID of the slider
+[pt]rect[pd]Position and dimension of the slider
+[pt]style[pd]Style specification. This can be a combination of the following:
+[ul]
+[li]Orientation:
+[dl]
+[dt]sls_horizontal[dd]Horizontal slider
+[dt]sls_vertical[dd]Vertical slider
+[edl]
+[li]Placement:
+[dl]
+[dt]sls_center[dd]Slider is centered
+[dt]sls_left[dd]Slider is left-aligned (vertical slider only)
+[dt]sls_right[dd]Slider is right-aligned (vertical slider only)
+[dt]sls_top[dd]Slider is top-aligned (horizontal slider only)
+[dt]sls_bottom[dd]Slider is bottom-aligned (horizontal slider only)
+[edl]
+[li]Button placement:
+[dl]
+[dt]sls_buttonsleft[dd]Buttons in the left end of the shaft (horizontal sliders only)
+[dt]sls_buttonsright[dd]Buttons in the right end of the shaft (horizontal sliders only)
+[dt]sls_buttonstop[dd]Buttons at the top of the shaft (verticall sliders only)
+[dt]sls_buttonsbottom[dd]Buttons at the bottom of the shaft (vertical sliders only)
+[edl]
+[li]sls_readonly - User cannot modify the slider
+[li]sls_ribbonstrip - The shaft is filled from start to arm position
+[li]Home:
+[dl]
+[dt]sls_homeleft[dd]The "home" position is at the left end of the shaft
+[dt]sls_homeright[dd]The "home" position is at the right end of the shaft
+[dt]sls_hometop[dd]The "home" position is at the top end of the shaft
+[dt]sls_homebottom[dd]The "home" position is at the bottom end of the shaft
+[edl]
+[eul]
+[pt]rangeMin[pd]Lower end of the range (inclusive)
+[pt]rangeMax[pd]Upper end of the range (inclusive)
+[pt]tickIncrement[pd]Interval between ticks
+[eparml]
+
+Hint: If you need a "progress indicator" you can use a slider with sls_readonly and sls_ribbonstrip.
+
+Example: This piece of code creates a horizontal slider, with the range going
+from 0 to 100 with ticks at 0,10,20,...100
+[code]
+FSlider sl;
+sl.Create(pParent,
+          ID,
+          &rect,
+          FSlider::sls_horizontal|
+          FSlider::sls_center|
+          FSlider::sls_buttonsright|
+          FSlider::sls_homeleft,
+          0,100,10
+         );
+[ecode]
+[etopic]
+
+[topic FSlider_AddDetent same "AddDetent()" "FSlider::AddDetent()"]
+Declaration:
+[code]
+DetentID AddDetent(int pos);
+[ecode]
+This function adds a detent to the slider at [hp 1]pos[ehp] from the "home" end of the shaft.
+
+Return value:
+[sl]
+[li]non-zero: detent ID
+[li]zero: an error occurred
+[esl]
+
+See also [ref FSlider "FSlider"], [ref FSlider_RemoveDetent "RemoveDetent()"]
+[etopic]
+
+[topic FSlider_RemoveDetent same "RemoveDetent()" "FSlider::RemoveDetent()"]
+Declaration:
+[code]
+Bool RemoveDetent(DetentID did);
+[ecode]
+This function removes a detent previously add with [ref FSlider_AddDetent "AddDetent()"]
+
+See also [ref FSlider "FSlider"], [ref FSlider_AddDetent "AddDetent()"]
+[etopic]
+
+[topic FSlider_GetDetentPos same "GetDetentPos()" "FSlider::GetDetentPos()"]
+Declaration:
+[code]
+int GetDetentPos(DetentID did, ...);
+[ecode]
+This function returns the position of the detent.
+
+Return value: non-negative: detent position, negative: error occurred
+
+See also [ref FSlider "FSlider"], [ref FSlider_AddDetent "AddDetent()"]
+[etopic]
+
+[topic FSlider_SetTickText same "SetTickText()" "FSlider::SetTickText()"]
+Declaration:
+[code]
+Bool SetTickText(int pos, const char *pszText);
+[ecode]
+This function sets the text associated with a tick. [hp 1]pos[ehp] must be
+a multiplum of tickIncrement specified in [ref FSlider_Create2 "Create()"].
+Otherwise this function will fail.
+
+Example:
+[code]
+FSlider slider;
+//assume that the slider goes from 0 to 100 with ticks at 0,10,20,...100
+for(int t=0; t<=100; t+=10) {
+  char ticktext\[10\];
+  sprintf(ticktext, "%d", t);
+  slider.SetTickText(i,ticktext);
+}
+[ecode]
+
+See also: [ref FSlider "FSlider"], [ref FSlider_GetTickText "GetTickText()"]
+[etopic]
+
+[topic FSlider_GetTickText same "GetTickText()" "FSlider::GetTickText()"]
+Declaration:
+[code]
+Bool GetTickText(int pos, char *buf, int buflen);
+[ecode]
+GetTickText() retrives the text associated with a tick.
+
+[parml]
+[pt]pos[pd]Tick position
+[pt]buf[pd]The tick text will be returned here
+[pt]buflen[pd]Maximum number of characters to copy into [hp 1]buf[ehp]
+[eparml]
+
+See also: [ref FSlider "FSlider"], [ref FSlider_SetTickText "SetTickText()"]
+[etopic]
+
+[topic FSlider_GetTickSize same "GetTickSize()" "FSlider::GetTickSize()"]
+Declaration:
+[code]
+int GetTickSize(int pos);
+[ecode]
+This function retrieves the size of a tick. The ticks in a slider are initially 0 pixels.
+
+See also: [ref FSlider "FSlider"], [ref FSlider_SetTickSize "SetTickSize()"]
+[etopic]
+
+[topic FSlider_SetTickSize same "SetTickSize()" "FSlider::SetTickSize()"]
+Declaration:
+[code]
+Bool SetTickSize(int pos, int pels);
+[ecode]
+This function sets the size of a tick. The ticks are initially 0 pixels wide/tall.
+
+Example:
+[code]
+FSlider slider;
+//Assume the slider has 16 ticks at 0,1,2,3,4,...15
+
+//Now set the tick sizes to they will be taller and taller
+for(int t=0; t<=15; t++)
+  slider.SetTickSize(t,t+1);
+[ecode]
+
+See also: [ref FSlider "FSlider"], [ref FSlider_GetTickSize "GetTickSize()"], [ref FSlider_SetTickText "SetTickText()"]
+[etopic]
+
+[topic FSlider_GetArmPosition same "GetArmPosition()" "FSlider::GetArmPosition()"]
+Declaration:
+[code]
+int GetArmPosition();
+[ecode]
+This function retrieves the current position of the slider arm from
+the "home" position.
+[etopic]
+
+[topic FSlider_SetArmPosition upafter "SetArmPosition()" "FSlider::SetArmPosition()"]
+Declaration:
+[code]
+Bool SetArmPosition(int pos);
+[ecode]
+This function moves the slider arm to [hp 1]pos[ehp] pixels from
+the home position.
+[etopic]
+
+
+
+
+[topic FStaticText same "FStaticText"]
+Declaration:
+[code]
+class FStaticText : public [ref FControl "FControl"],
+                    public [ref FControlTextHandler "FControlTextHandler"] {
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_STATICTEXT
+
+A FStaticText is a control that can display text. That's that!
+
+Member functions:
+[sl]
+[li]Create(parent,ID) - standard control-create
+[li][ref FStaticText_Create2 "Create(parent,ID,...)"]
+[esl]
+
+The FStaticText also has these member functions to set the text with several data types:
+[sl]
+[li]SetText(const char *pszText)
+[li]SetText_ul(unsigned long ul)
+[li]SetText_l(long l)
+[li]SetText_u(unsigned u)
+[li]SetText_i(int i)
+[esl]
+[etopic]
+
+[topic FStaticText_Create2 downonce "Create(parent,ID,...)" "FStaticText::Create(parent,ID,..)" secondary]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int ID, FRect *rect, long style=st_left, const char *pszText=0);
+[ecode]
+
+[parml]
+[pt]pParent[pd]Parent window
+[pt]ID[pd]Control-ID
+[pt]rect[pd]Position and size. If [hp 1]rect[ehp] is NULL the FStaticText will
+be placed at (0,0) with zero width and height
+[pt]style[pd]style bits. This can be one of the following:
+[dl]
+[dt]st_left[dd]the text is left-aligned
+[dt]st_center[dd]the text is centered
+[dt]st_right[dd]the text is right-aligned
+[dt]st_leftnowrap[dd]the text is left-aligned and will not wrap down to the next line (if any)
+[edl]
+
+In addition this style can be OR'ed into [hp 1]style[ehp]:
+st_noprefix - The FStaticText will not interpret OS-specific underline
+characters (Windows: &, OS/2 PM: ~, WMS: @).
+[pt]pszText[pd]Initial text. If NULL the FStaticText will be empty
+[eparml]
+[etopic]
+
+
+

@@ -1,0 +1,148 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote FOwnerNotifyHandler}
+${\footnote FOwnerNotifyHandler}
++{\footnote defbrowse}
+K{\footnote FOwnerNotifyHandler}
+{\fs26\cf1\b FOwnerNotifyHandler}\par
+Declaration: 
+\line{\f1
+class FOwnerNotifyHandler : public FHandler \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW\par
+
+The FOwnerNotifyHandler is used for catching notification from owned windows.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Notify()}{\v FOwnerNotifyHandler_Notify} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FOwnerNotifyHandler_Notify}
+${\footnote FOwnerNotifyHandler::FOwnerNotifyHandler()}
++{\footnote defbrowse}
+K{\footnote Notify()}
+K{\footnote FOwnerNotifyHandler::FOwnerNotifyHandler()}
+{\fs26\cf1\b Notify()}\par
+Declaration: 
+\line{\f1
+virtual Bool Notify({\uldb FOwnerNotifyEvent}{\v FOwnerNotifyEvent}&);\line
+}
+\par
+
+This function is called when a owned window want to the its owner window  
+something. Exactly what it tries to tell its owner is very GUI system dependent.\par
+
+{\b{Note:}} (Windows) Notify is called when the handler detects a WM_COMMAND message  
+that is not a command but a notification. (Windows has really messed up its  
+notification/command concept) 
+ 
+\page
+
+#{\footnote FOwnerNotifyEvent}
+${\footnote FOwnerNotifyEvent}
++{\footnote defbrowse}
+K{\footnote FOwnerNotifyEvent}
+{\fs26\cf1\b FOwnerNotifyEvent}\par
+Declaration: 
+\line{\f1
+class FOwnerNotifyEvent : public FEvent \{\line
+}
+\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb GetItem()}{\v FOwnerNotifyEvent_GetItem} 
+\par
+\tab
+{\uldb GetNotifyCode()}{\v FOwnerNotifyEvent_GetNotifyCode} 
+\par\pard\sb100
+\par
+
+Non-portable member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb GetNotifySpec()}{\v FOwnerNotifyEvent_GetNotifySpec} - OS/2 PM and WMS 
+\par
+\tab
+{\uldb GetItemHwnd()}{\v FOwnerNotifyEvent_GetItemHwnd} - Windows 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FOwnerNotifyEvent_GetItem}
+${\footnote FOwnerNotifyEvent::GetItem()}
++{\footnote defbrowse}
+K{\footnote GetItem()}
+K{\footnote FOwnerNotifyEvent::GetItem()}
+{\fs26\cf1\b GetItem()}\par
+Declaration: 
+\line{\f1
+int GetItem() const;\line
+}
+\par
+
+GetItem() returns the ID of the control that sent this event. 
+\page
+
+#{\footnote FOwnerNotifyEvent_GetNotifyCode}
+${\footnote FOwnerNotifyEvent::GetNotifyCode()}
++{\footnote defbrowse}
+K{\footnote GetNotifyCode()}
+K{\footnote FOwnerNotifyEvent::GetNotifyCode()}
+{\fs26\cf1\b GetNotifyCode()}\par
+Declaration: 
+\line{\f1
+int GetNotifyCode() const;\line
+}
+\par
+
+This function returns the type of the notification. The notification types are  
+very dependent on the GUI system. There are similarities between 
+Windows, OS/2 PM and WMS but not enough to build a common interface. 
+\page
+
+#{\footnote FOwnerNotifyEvent_GetNotifySpec}
+${\footnote FOwnerNotifyEvent::GetNotifySpec()}
++{\footnote defbrowse}
+K{\footnote GetNotifySpec()}
+K{\footnote FOwnerNotifyEvent::GetNotifySpec()}
+{\fs26\cf1\b GetNotifySpec()}\par
+Declaration: {\b{(OS/2 PM and WMS only)}} 
+\line{\f1
+ULONG GetNotifySpec() const;\line
+}
+\par
+
+Returns MParam2. See "PM guide and reference", "WM_CONTROL" for details. 
+\page
+
+#{\footnote FOwnerNotifyEvent_GetItemHwnd}
+${\footnote FOwnerNotifyEvent::GetItemHwnd()}
++{\footnote defbrowse}
+K{\footnote GetItemHwnd()}
+K{\footnote FOwnerNotifyEvent::GetItemHwnd()}
+{\fs26\cf1\b GetItemHwnd()}\par
+Declaration: {\b{(Windows only)}} 
+\line{\f1
+HWND GetItemHwnd() const;\line
+}
+\par
+
+Returns the HWND of the control that sent the event. See "Windows API", "WM_COMMAND" for details. 
+\page
+
+}

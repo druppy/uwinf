@@ -1,0 +1,817 @@
+[topic FMouseHandler same "FMouseHandler"]
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_MOUSEHANDLERS
+
+FMouseHandler handles the mouse, including movement, button clicks, mouse 
+capture and pointer shape. It also serves as the base class for the more 
+advanced mouse handler: [ref FExtendedMouseHandler "FExtendedMouseHandler"].
+Whenever you can you should use the most advanced mouse handler as it relieves you of many
+boring details. When you use a more advanced mouse handler you will usually only
+use the capture, movement and pointer control functions of FMouseHandler.
+
+Member functions:
+[sl]
+[li][ref FMouseHandler_SetCapture "SetCapture()"]
+[li][ref FMouseHandler_ReleaseCapture "ReleaseCapture()"]
+[li][ref FMouseHandler_HasCapture "HasCapture()"]
+[li][ref FMouseHandler_GetCurrentMousePosition "GetCurrentMousePosition()"]
+[li][ref FMouseHandler_ButtonDown "ButtonDown()"]
+[li][ref FMouseHandler_ButtonUp "ButtonUp()"]
+[li][ref FMouseHandler_ButtonDblClk "ButtonDblClk()"]
+[li][ref FMouseHandler_Button1Down "Button1Down()"]
+[li][ref FMouseHandler_Button1Up "Button1Up()"]
+[li][ref FMouseHandler_Button1DblClk "Button1DblClk()"]
+[li][ref FMouseHandler_Button2Down "Button2Down()"]
+[li][ref FMouseHandler_Button2Up "Button2Up()"]
+[li][ref FMouseHandler_Button2DblClk "Button2DblClk()"]
+[li][ref FMouseHandler_Button3Down "Button3Down()"]
+[li][ref FMouseHandler_Button3Up "Button3Up()"]
+[li][ref FMouseHandler_Button3DblClk "Button3DblClk()"]
+[li][ref FMouseHandler_MouseMove "MouseMove()"]
+[li][ref FMouseHandler_ControlPointer "ControlPointer()"]
+[li][ref FMouseHandler_ControlPointerNonWindow "ControlPointerNonWindow()"]
+[esl]
+
+The following event classes are use by the mouse handlers:
+[sl]
+[li][ref FMouseEvent "FMouseEvent"]
+[li][ref FButtonDownEvent "FButtonDownEvent"]
+[li][ref FButtonUpEvent "FButtonUpEvent"]
+[li][ref FButtonDblClkEvent "FButtonDblClkEvent"]
+[li][ref FMouseMoveEvent "FMouseMoveEvent"]
+[li][ref FControlPointerEvent "FControlPointerEvent"]
+[esl]
+[etopic]
+
+[topic FMouseHandler_SetCapture down "SetCapture()" "FMouseHandler::SetCapture()"]
+Declaration:
+[code]
+Bool SetCapture();
+[ecode]
+This function directs all mouse events to the window so when the user moves 
+mouse outside the handler's window the mouse events are still sent to the 
+window. You should only call SetCapture() when the mouse is over your window and
+at least one mouse button is pressed. You should call
+[ref FMouseHandler_ReleaseCapture "ReleaseCapture()"] when the use releases the 
+button that cause you to capture the mouse.
+
+[note](Windows) when a WM_CANCELMODE message is recieved the capture is 
+automatically released.
+[enote]
+
+Example: This code fragment draws a line starting from the point where the user 
+pressed button 1 to the point where the user releases button 1.
+[code]
+Bool MyWindow::Button1Down(FButtonDownEvent &ev) {
+  SetCapture();
+  startpoint = ev.GetPoint();
+  endpoint = startpoint;
+  DrawLine(startpoint,endpoint,XOR);
+  return False; //even though we have processed the event we don't mind other
+                //handlers knowing a button was pressed
+}
+
+Bool MyWindow::Button1Up(FButtonUpEvent &ev) {
+  if(HasCapture()) {
+    ReleaseCapture();
+    DrawLine(startpoint,endpoint,XOR);
+    <add line startpoint-endpoint to internal data structure>
+  }
+  return False;
+}
+
+Bool MyWindow::MouseMove(MouseMoveEvent &ev) {
+  if(HasCapture()) {
+    DrawLine(startpoint,endpoint,XOR);
+    endpoint = ev.GetPoint();
+    DrawLine(startpoint,endpoint,XOR);
+  }
+  return False;
+}
+[ecode]
+
+[caution]Be sure that you release the mouse capture. Under Windows 3.x as 
+long as an application has captured the mouse Windows 3.x can't bring up the 
+task list leaving only Ctrl-Alt-Del as a solution to the user.
+[ecaution]
+
+See also: [ref FMouseHandler_ReleaseCapture "ReleaseCapture()"],
+[ref FMouseHandler_HasCapture "HasCapture()"]
+[etopic]
+
+
+[topic FMouseHandler_ReleaseCapture same "ReleaseCapture()" "FMouseHandler::ReleaseCapture()"]
+Declaration:
+[code]
+Bool ReleaseCapture();
+[ecode]
+This function releases the mouse previously captured with 
+[ref FMouseHandler_SetCapture "SetCapture()"]
+[etopic]
+
+[topic FMouseHandler_HasCapture same "HasCapture()" "FMouseHandler::HasCapture()"]
+Declaration:
+[code]
+Bool HasCapture() const;
+[ecode]
+This function returns wether or not the window has captured the mouse. See
+[ref FMouseHandler_SetCapture "SetCapture()"] for details and an example.
+[etopic]
+
+[topic FMouseHandler_GetCurrentMousePosition same "GetCurrentMousePosition()" "FMouseHandler::GetCurrentMousePosition()"]
+Declaration:
+[code]
+Bool GetCurrentMousePosition(int *x, int *y);
+[ecode]
+This function retrieves the current mouse position. This function should only
+be used when you do not have a [ref FMouseEvent "FMouseEvent"] to ask.
+
+[note]This function can fail.[enote]
+[etopic]
+
+[topic FMouseHandler_ButtonDown same "ButtonDown()" "FMouseHandler::ButtonDown()"]
+Declaration:
+[code]
+virtual Bool ButtonDown([ref FButtonDownEvent "FButtonDownEvent"]&);
+[ecode]
+This function is called when a mouse button has been pressed. The default
+implementation calls [ref FMouseHandler_Button1Down "Button1Down()"],
+[ref FMouseHandler_Button2Down "Button2Down()"] or
+[ref FMouseHandler_Button3Down "Button3Down()"] depending on the button pressed.
+[etopic]
+
+[topic FMouseHandler_ButtonUp same "ButtonUp()" "FMouseHandler::ButtonUp()"]
+Declaration:
+[code]
+virtual Bool ButtonUp([ref FButtonUpEvent "FButtonUpEvent"]&);
+[ecode]
+This function is called when a mouse button has been released. The 
+default implementation calls [ref FMouseHandler_Button1Up "Button1Up()"],
+[ref FMouseHandler_Button2Up "Button2Up()"] or
+[ref FMouseHandler_Button3Up "Button3Up()"] depending on the button 
+released. 
+[etopic]
+
+[topic FMouseHandler_ButtonDblClk same "ButtonDblClk()" "FMouseHandler::ButtonDblClk()"] 
+Declaration:
+[code]
+virtual Bool ButtonDblClk([ref FButtonDblClkEvent "FButtonDblClkEvent"]&);
+[ecode]
+This function is called when a mouse button has been clicked twice 
+within a user-defined time limit. The
+default implementation calls [ref FMouseHandler_Button1DblClk "Button1DblClk()"],
+[ref FMouseHandler_Button2DblClk "Button2DblClk()"] or
+[ref FMouseHandler_Button3DblClk "Button3DblClk()"] depending on the button pressed.
+[etopic]
+
+
+[topic FMouseHandler_Button1Down same "Button1Down()" "FMouseHandler::Button1Down()"] 
+Declaration:
+[code]
+virtual Bool Button1Down([ref FButtonDownEvent "FButtonDownEvent"]&);
+[ecode]
+This function is called when button 1 (the left-most) has been
+pressed. 
+[etopic]
+
+[topic FMouseHandler_Button1Up same "Button1Up()" "FMouseHandler::Button1Up()"]
+Declaration:
+[code]
+virtual Bool Button1Up([ref FButtonUpEvent "FButtonUpEvent"]&);
+[ecode]
+This function is called when button 1 has been released
+[etopic]
+
+[topic FMouseHandler_Button1DblClk same "Button1DblClk()" "FMouseHandler::Button1DblClk()"] 
+Declaration:
+[code]
+virtual Bool Button1DblClk([ref FButtonDblClkEvent "FButtonDblClkEvent"]&);
+[ecode]
+This function is called when mouse button 1 has been clicked twice
+within a user-defined time limit.
+[etopic]
+
+
+[topic FMouseHandler_Button2Down same "Button2Down()" "FMouseHandler::Button2Down()"] 
+Declaration:
+[code]
+virtual Bool Button2Down([ref FButtonDownEvent "FButtonDownEvent"]&);
+[ecode]
+This function is called when button 2 (the right-most) has been
+pressed. 
+[etopic]
+
+[topic FMouseHandler_Button2Up same "Button2Up()" "FMouseHandler::Button2Up()"]
+Declaration:
+[code]
+virtual Bool Button2Up([ref FButtonUpEvent "FButtonUpEvent"]&);
+[ecode]
+This function is called when button 2 has been released
+[etopic]
+
+[topic FMouseHandler_Button2DblClk same "Button2DblClk()" "FMouseHandler::Button2DblClk()"] 
+Declaration:
+[code]
+virtual Bool Button2DblClk([ref FButtonDblClkEvent "FButtonDblClkEvent"]&);
+[ecode]
+This function is called when mouse button 2 has been clicked twice
+within a user-defined time limit.
+[etopic]
+
+
+[topic FMouseHandler_Button3Down same "Button3Down()" "FMouseHandler::Button3Down()"] 
+Declaration:
+[code]
+virtual Bool Button3Down([ref FButtonDownEvent "FButtonDownEvent"]&);
+[ecode]
+This function is called when button 3 (the middle) has been
+pressed. 
+[etopic]
+
+[topic FMouseHandler_Button3Up same "Button3Up()" "FMouseHandler::Button3Up()"]
+Declaration:
+[code]
+virtual Bool Button3Up([ref FButtonUpEvent "FButtonUpEvent"]&);
+[ecode]
+This function is called when button 3 has been released
+[etopic]
+
+[topic FMouseHandler_Button3DblClk same "Button3DblClk()" "FMouseHandler::Button3DblClk()"] 
+Declaration:
+[code]
+virtual Bool Button3DblClk([ref FButtonDblClkEvent "FButtonDblClkEvent"]&);
+[ecode]
+This function is called when mouse button 3 has been clicked twice
+within a user-defined time limit.
+[etopic]
+
+[topic FMouseHandler_MouseMove same "MouseMove()" "FMoseHandler::MouseMove()"]
+Declaration:
+[code]
+virtual Bool MouseMove([ref FMouseMoveEvent "FMouseMoveEvent"]&)
+[ecode]
+MouseMove() is called when the mouse is moved over the handler's window (or anywhere on 
+the screen if the window has capture the mouse).
+[etopic]
+
+[topic FMouseHandler_ControlPointer same "ControlPointer()" "FmouseHandler::ControlPointer()"]
+Declaration:
+[code]
+virtual Bool ControlPointer([ref FControlPointerEvent "FControlPointerEvent"]&);
+[ecode]
+This function is called when the window has an oppurtunity to specify the pointer shape.
+
+Example:
+[code]
+Bool MyWindow::ControlPointer(FControlPointerEvent &ev) {
+  if(<window is busy>)
+    ev.SetPointer(*GetSystemWaitPointer());
+  else
+    ev.SetPointer(*GetSystemArrowPointer());
+  return True;
+}
+[ecode]
+
+See also:
+[ref GetSystemArrowPointer "GetSystemArrowPointer()"],
+[ref GetSystemTextPointer "GetSystemTextPointer()"],
+[ref GetSystemNESWPointer "GetSystemNESWPointer()"],
+[ref GetSystemNSPointer "GetSystemNSPointer()"],
+[ref GetSystemNWSEPointer "GetSystemNWSEPointer()"],
+[ref GetSystemWEPointer "GetSystemWEPointer()"],
+[ref GetSystemWaitPointer "GetSystemWaitPointer()"]
+[etopic]
+
+[topic FMouseHandler_ControlPointerNonWindow upafter "ControlPointerNonWindow()" "FmouseHandler::ControlPointerNonWindow()"]
+Declaration:
+[code]
+virtual Bool ControlPointerNonWindow(FControlPointerEvent&)
+[ecode]
+This function is called when the window has an oppurtunity to specify the pointer shape, 
+but the mouse is not directly over the window but rather over one of its subwindows. This 
+function is portable, but not recommended.
+
+See also: [ref FMouseHandler_ControlPointer "ControlPointer()"]
+[etopic]
+
+
+
+
+
+[topic FExtendedMouseHandler same "FExtendedMouseHandler"]
+Declaration:
+[code]
+class FExtendedMouseHandler : public [ref FMouseHandler "FMouseHandler"] {
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_MOUSEHANDLERS
+
+This handler adds a few abstractions to the FMouseHandler. These are:
+[ul]
+[li]Detection of motion (movement with buttons pressed)
+[li]Detection of clicks (button press and release)
+[li]Detection of chords (left and right button pressed simultaneously)
+[eul]
+
+Member functions:
+[sl]
+[li][ref FExtendedMouseHandler_Button1MotionStart "Button1MotionStart()"]
+[li][ref FExtendedMouseHandler_Button1MotionEnd "Button1MotionEnd()"]
+[li][ref FExtendedMouseHandler_Button1Click "Button1Click()"]
+[li][ref FExtendedMouseHandler_Button2MotionStart "Button2MotionStart()"]
+[li][ref FExtendedMouseHandler_Button2MotionEnd "Button2MotionEnd()"]
+[li][ref FExtendedMouseHandler_Button2Click "Button2Click()"]
+[li][ref FExtendedMouseHandler_Button3MotionStart "Button3MotionStart()"]
+[li][ref FExtendedMouseHandler_Button3MotionEnd "Button3MotionEnd()"]
+[li][ref FExtendedMouseHandler_Button3Click "Button3Click()"]
+[li][ref FExtendedMouseHandler_ButtonChord "ButtonChord()"]
+[esl]
+[etopic]
+
+[topic FExtendedMouseHandler_Button1MotionStart down "Button1MotionStart()" "FExtendedMouseHandler::Button1MotionStart()"]
+Declaration:
+[code]
+virtual Bool Button1MotionStart([ref FMouseEvent "FMouseEvent"]&);
+[ecode]
+This function is called when the user has pressed button 1 and has begun moving
+the mouse. This function is not called immidiatly when the mouse moves but later
+when the mouse has moved a minimum number of pixels configured by the user.
+This elimiates a lot of "false" motions.
+
+See also: [ref FExtendedMouseHandler_Button1MotionEnd "Button1MotionEnd()"]
+[etopic]
+
+[topic FExtendedMouseHandler_Button1MotionEnd same "Button1MotionEnd()" "FExtendedMouseHandler::Button1MotionEnd()"]
+Declaration:
+[code]
+virtual Bool Button1MotionEnd([ref FMouseEvent "FMouseEvent"]&);
+[ecode]
+This function is called when the user has released button 1 after pressing the button and moving the mouse
+
+See also: [ref FExtendedMouseHandler_Button1MotionStart "Button1MotionStart()"]
+[etopic]
+
+[topic FExtendedMouseHandler_Button1Click same "Button1Click()" "FExtendedMouseHandler::Button1Click()"]
+Declaration:
+[code]
+virtual Bool Button1Click([ref FMouseEvent "FMouseEvent"]&);
+[ecode]
+Button1Click() is called when the user has pressed an released button 1 within 
+a certain time interval without moving the mouse too much. (If the mouse moves
+too much it is a motion)
+[etopic]
+
+
+
+[topic FExtendedMouseHandler_Button2MotionStart same "Button2MotionStart()" "FExtendedMouseHandler::Button2MotionStart()"]
+Declaration:
+[code]
+virtual Bool Button2MotionStart([ref FMouseEvent "FMouseEvent"]&);
+[ecode]
+This function is called when the user has pressed button 2 and has begun moving
+the mouse. This function is not called immidiatly when the mouse moves but later
+when the mouse has moved a minimum number of pixels configured by the user.
+This elimiates a lot of "false" motions.
+
+See also: [ref FExtendedMouseHandler_Button2MotionEnd "Button2MotionEnd()"]
+[etopic]
+
+[topic FExtendedMouseHandler_Button2MotionEnd same "Button2MotionEnd()" "FExtendedMouseHandler::Button2MotionEnd()"]
+Declaration:
+[code]
+virtual Bool Button2MotionEnd([ref FMouseEvent "FMouseEvent"]&);
+[ecode]
+This function is called when the user has released button 2 after pressing the button and moving the mouse
+
+See also: [ref FExtendedMouseHandler_Button2MotionStart "Button2MotionStart()"]
+[etopic]
+
+[topic FExtendedMouseHandler_Button2Click same "Button2Click()" "FExtendedMouseHandler::Button2Click()"]
+Declaration:
+[code]
+virtual Bool Button2Click([ref FMouseEvent "FMouseEvent"]&);
+[ecode]
+Button2Click() is called when the user has pressed an released button 2 within 
+a certain time interval without moving the mouse too much. (If the mouse moves
+too much it is a motion)
+[etopic]
+
+
+[topic FExtendedMouseHandler_Button3MotionStart same "Button3MotionStart()" "FExtendedMouseHandler::Button3MotionStart()"]
+Declaration:
+[code]
+virtual Bool Button3MotionStart([ref FMouseEvent "FMouseEvent"]&);
+[ecode]
+This function is called when the user has pressed button 3 and has begun moving
+the mouse. This function is not called immidiatly when the mouse moves but later
+when the mouse has moved a minimum number of pixels configured by the user.
+This elimiates a lot of "false" motions.
+
+See also: [ref FExtendedMouseHandler_Button3MotionEnd "Button3MotionEnd()"]
+[etopic]
+
+[topic FExtendedMouseHandler_Button3MotionEnd same "Button3MotionEnd()" "FExtendedMouseHandler::Button3MotionEnd()"]
+Declaration:
+[code]
+virtual Bool Button3MotionEnd([ref FMouseEvent "FMouseEvent"]&);
+[ecode]
+This function is called when the user has released button 3 after pressing the 
+button and moving the mouse.
+
+See also: [ref FExtendedMouseHandler_Button3MotionStart "Button3MotionStart()"]
+[etopic]
+
+[topic FExtendedMouseHandler_Button3Click same "Button3Click()" "FExtendedMouseHandler::Button3Click()"]
+Declaration:
+[code]
+virtual Bool Button3Click([ref FMouseEvent "FMouseEvent"]&);
+[ecode]
+Button3Click() is called when the user has pressed an released button 3 within 
+a certain time interval without moving the mouse too much. (If the mouse moves
+too much it is a motion)
+[etopic]
+
+
+[topic FExtendedMouseHandler_ButtonChord upafter "ButtonChord()" "FExtendedMouseHandler::ButtonChord()"]
+Declaration:
+[code]
+virtual Bool ButtonChord(FMouseEvent&);
+[ecode]
+This function is called when the user presses button 1 and 2 simultaneously (within a certain time interval)
+[etopic]
+
+
+
+
+[topic FTranslatedMouseHandler same "FTranslatedMouseHandler"]
+Declaration:
+[code]
+class FTranslatedMouseHandler : public [ref FExtendedMouseHandler "FExtendedMouseHandler"] {
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_MOUSEHANDLERS
+
+FTranslatedMouseHandler adds more abstractions to the mouse interface. It is 
+intended for use in windows that contain objects. It defines which gestures the
+user can use to:
+[ul]
+[li]Drag objects
+[li]Select objects
+[li]Open objects
+[li]Bring up a context-sensitive menu
+[li]Edit the name of an object
+[eul]
+
+The exact gestures are configurable under OS/2 PM and currently fixed under 
+Windows 3.x and WMS.
+
+[note]FTranslatedMouseHandler overrides most of the virtual functions efined in 
+[ref FMouseHandler "FMouseHandler"] and 
+[ref FExtendedMouseHandler "FExtendedMouseHandler"] so you should always call 
+the base class' implementation of a virtual function.
+[enote]
+
+Member functions:
+[sl]
+[li][ref FTranslatedMouseHandler_MouseDragStart "MouseDragStart()"]
+[li][ref FTranslatedMouseHandler_MouseDragEnd "MouseDragEnd()"]
+[li][ref FTranslatedMouseHandler_MouseSingleSelect "MouseSingleSelect()"]
+[li][ref FTranslatedMouseHandler_MouseSelectStart "MouseSelectStart()"]
+[li][ref FTranslatedMouseHandler_MouseSelectEnd "MouseSelectEnd()"]
+[li][ref FTranslatedMouseHandler_MouseOpen "MouseOpen()"]
+[li][ref FTranslatedMouseHandler_MouseTextEdit "MouseTextEdit()"]
+[li][ref FTranslatedMouseHandler_MouseContextMenu "MouseContextMenu()"]
+[esl]
+
+In addition you will usually use these functions in FTranslatedMouseHandler's 
+superclass:
+[sl]
+[li][ref FMouseHandler_SetCapture "FMouseHandler::SetCapture()"]
+[li][ref FMouseHandler_ReleaseCapture "FMouseHandler::ReleaseCapture()"]
+[li][ref FMouseHandler_HasCapture "FMouseHandler::HasCapture()"]
+[li][ref FMouseHandler_MouseMove "FMouseHandler::MouseMove()"]
+[esl]
+[etopic]
+
+
+[topic FTranslatedMouseHandler_MouseDragStart down "MouseDragStart()" "FTranslatedMouseHandler_MouseDragStart()"]
+Declaration:
+[code]
+virtual Bool MouseDragStart([ref FMouseEvent "FMouseEvent"]&);
+[ecode]
+This function is called when the user starts dragging objects. This is the 
+recommended reaction:
+[ul]
+[li]If the mouse is over a selected object the user wants to drag all 
+selected objects.
+[li]If the mouse is over a non-selected object the user just wants to drag that 
+object.
+[li]If the mouse is not over an object the gesture is ignored
+[eul]
+
+If your window supports dragging you should call 
+[ref FMouseHandler_SetCapture "SetCapture()"] to ackowledge the drag request and
+change the pointer shape (with
+[ref FMouseHandler_ControlPointer "ControlPointer()"]) so the user can se that 
+he is dragging something.
+
+Example: This code fragment should give you an idea of how to use the drag 
+functions:
+[code]
+Bool MyWindow::MouseDragStart(FMouseEvent &ev) {
+  MyObject *pobject = objectFromPoint(ev.GetPoint());
+  if(pobject) {
+    //ok we can start dragging
+    SetCapture();
+    draglist = new DragList;
+    if( pobject->isSelected() ) {
+      //drag all selected objects
+      draglist->add(<all selected objects>);
+    } else {
+      //drag only that object
+      draglist->add(pobject);
+    }
+  } else
+    return False; //ignored
+}
+
+Bool MyWindow::MouseDragEnd(FMouseEvent &ev) {
+  if(draglist) {
+    ReleaseCapture();
+    //drop objects at ev.GetPoint();
+    <drop>
+    delete draglist;
+    draglist=0;
+    return True;
+  } else
+    return False;
+}
+
+Bool MyWindow::ControlPointer(FControlPointerEvent &ev) {
+  //provide visual feedback
+  if(draglist) {
+    if(draglist->count() > 1)
+      ev.SetPointer(pointer_dragmultipleobjects);
+    else
+      ev.SetPointer(pointer_dragsingleleobject);
+  } else
+    ev.SetPointer(*GetSystemArrowPointer());
+  return True;
+}
+[ecode]
+
+See also: [ref FTranslatedMouseHandler_MouseDragEnd "MouseDragEnd()"]
+[etopic]
+
+
+[topic FTranslatedMouseHandler_MouseDragEnd same "MouseDragEnd()" "FTranslatedMouseHandler::MouseDragEnd()"]
+Declaration:
+[code]
+virtual Bool MouseDragEnd([ref FMouseEvent "FMouseEvent"]&);
+[ecode]
+This function is called when the user wants to drop object(s) previously picked
+up with [ref FTranslatedMouseHandler_MouseDragStart "MouseDragStart()"]
+[etopic]
+
+
+[topic FTranslatedMouseHandler_MouseSingleSelect same "MouseSingleSelect()" "FTranslatedMouseHandler::MouseSingleSelect()"]
+Declaration:
+[code]
+virtual Bool MouseSingleSelect([ref FMouseEvent "FMouseEvent"]&);
+[ecode]
+This function is called when the user wants to select/deselect a single object. 
+You should test wether the user wants to deselect the other selected objects
+first.
+
+Example:
+[code]
+Bool MyWindow::MouseSingleSelect(FMouseEvent &ev) {
+  if(!ev.IsCtrlDown())
+    <deselect currently selected objects>
+
+  MyObject *pobject = objectFromPoint(ev.GetPoint());
+  if(pobject) {
+    //toggle the object's selection state
+    if( pobject->isSelected())
+      pobject->deSelect();
+    else
+      pobject->select();
+    pobject->focus(); //make the object the "current" object
+  } else {
+    //that's ok
+  }
+  return True;
+}
+[ecode]
+
+See also: [ref FTranslatedMouseHandler_MouseSelectStart "SelectStart()"]
+[etopic]
+
+
+[topic FTranslatedMouseHandler_MouseSelectStart same "MouseSelectStart()" "FTranslatedMouseHandler::MouseSelectStart()"]
+Declaration:
+[code]
+virtual Bool MouseSelectStart([ref FMouseEvent "FMouseEvent"]&);
+[ecode]
+MouseSelectStart() is called when the user wants to select multiple objects 
+either though a "rubber band" or a "sweep":
+[dl]
+[dt]Rubber band[dd]A selection rectangle which start where the selection started
+(ev.GetPoint()) and ends where the mouse currently is.
+[dt]Sweep[dd]The user can just "sweep" the mouse over the object he wants to 
+select.
+[edl]
+
+Example:
+[code]
+Bool MyWindow::MouseSelectStart(FMouseEvent &ev) {
+  MyObject *pobject = objectFromPoint(ev.GetPoint());
+  if(pobject) {
+    //start sweeping
+    sweeping = True;
+  } else {
+    //start rubber banding
+    rubberbanding = True;
+    rubberBandStart = ev.GetPoint();
+    rubberBandEnd = rubberBandStart;
+    drawRubberBand(rubberBandStart,rubberBandEnd,XORMODE);
+  }
+  SetCapture();
+  return True;
+}
+
+Bool MyWindow::MouseSelectEnd(FMouseEvent &ev) {
+  if(rubberBanding) {
+    //now select the objects within the rubber band
+    <select objects inside rubber band>
+  }
+  rubberBanding = False;
+  sweeping = False;
+  ReleaseCapture();
+  return True;
+}
+
+Bool MyWindow::MouseMove(FMouseMoveEvent &ev) {
+  if(sweeping) {
+    MyObject *pobject = objectFromPoint(ev.GetPoint());
+    if(pobject)
+      pobject->select();
+  } else if(rubberBanding) {
+    drawRubberBand(rubberBandStart,rubberBandEnd,XORMODE);
+    rubberBandEnd = ev.GetPoint();
+    drawRubberBand(rubberBandStart,rubberBandEnd,XORMODE);
+  } else {
+    //not selecting objects
+  }
+  return True;
+}
+[ecode]
+[etopic]
+
+
+[topic FTranslatedMouseHandler_MouseSelectEnd same "MouseSelectEnd()" "FTranslatedMouseHandler::MouseSelectEnd()"] Declaration:
+[code]
+virtual Bool MouseSelectEnd([ref FMouseEvent "FMouseEvent"]&);
+[ecode]
+This function is called when the user wants the end selection.
+[etopic]
+
+
+[topic FTranslatedMouseHandler_MouseOpen same "MouseOpen()" "FTranslatedMouseHandler::MouseOpen()"]
+Declaration:
+[code]
+virtual Bool MouseOpen([ref FMouseEvent "FMouseEvent"]&);
+[ecode]
+This function is called when the user wants to open an object or "do the
+default thing" with an object. In a file mamager this could be starting an 
+associated application, in a eg. drawing application this would be to open 
+a dialog allowing the user to set the properties of the object.
+[etopic]
+
+
+[topic FTranslatedMouseHandler_MouseTextEdit same "MouseTextEdit()" "FTranslatedMouseHandler::MouseTextEdit()"]
+Declaration:
+[code]
+virtual Bool MouseTextEdit([ref FMouseEvent "FMouseEvent"]&);
+[ecode]
+MouseTextEdit() is called when the user wants to quickly modify the name of
+the object at the mouse. The application should not bring up the dialog used 
+when [ref FTranslatedMouseHandler_MouseOpen "MouseOpen()"] but instead either 
+a very small dialog with only a entry field in it or let the user modify the
+name of the object directly in the window.
+
+Example:
+[code]
+Bool MyWindow::MouseTextEdit(FMouseEvent &ev) {
+  MyObject *pobject = objectFromPoint(ev.GetPoint());
+  if(pobject) {
+    MyTinyNameEditDialog dlg;
+    char name\[128\];
+    strcpy(name,pobject->queryName());
+    if(dlg.DoModal(this, ev.GetPoint(), name) == DID_OK)
+      pobject->setName(name);
+  }
+  return True;
+}
+[ecode]
+[etopic]
+
+
+[topic FTranslatedMouseHandler_MouseContextMenu upafter "MouseContextMenu()" "FTranslatedMouseHandler::MouseContextMenu()"]
+Declaration:
+[code]
+virtual Bool MouseContextMenu([ref FMouseEvent "FMouseEvent"]&);
+[ecode]
+This function is called when the user wants to bring up the menu of the object.
+
+Example:
+[code]
+Bool MyWindow::MouseContextMenu(FMouseEvent &ev) {
+  MyObject *pobject = objectFromPoint(ev.GetPoint());
+  if(pobject) {
+    contextObject = pobject; //remember object so we know which object the 
+                             //[ref FCommandEvent "FCommandEvents"] apply to
+    if(!popupmenu) //load the menu if not already loaded
+      popupmenu = new FMenu(this,this,IDM_MYCONTEXTMENU);
+    FPoint popuppoint = ev.GetPoint();
+    popupmenu->Popup(this,this,&popuppoint);
+  }
+  return True;
+}
+[ecode]
+[etopic]
+
+
+[topic FMouseEvent same "FMouseEvent"]
+Declaration:
+[code]
+class FMouseEvent : public [ref FEvent "FEvent"] {
+[ecode]
+The FMouseEvent is used in many of the mouse handlers.
+
+It has the following member function:
+[sl]
+[li]Bool IsButtonDown(int b)
+[li]Bool IsButtonDown1()
+[li]Bool IsButtonDown2()
+[li]Bool IsButtonDown3()
+[li]Bool IsCtrlDown()
+[li]Bool IsShiftDown()
+[li]Bool GetX()
+[li]Bool GetY()
+[li]FPoint GetPoint()
+[esl]
+[etopic]
+
+[topic FButtonDownEvent same "FButtonDownEvent"]
+Declaration:
+[code]
+class FButtonDownEvent : public [ref FMouseEvent "FMouseEvent"] {
+[ecode]
+This event has only one member function: GetButton() which returns which
+button has been pressed.
+[etopic]
+
+[topic FButtonUpEvent same "FButtonUpEvent"]
+Declaration:
+[code]
+class FButtonUpEvent : public [ref FMouseEvent "FMouseEvent"] {
+[ecode]
+This event has only one member function: GetButton() which returns which
+button has been pressed.
+[etopic]
+
+[topic FButtonDblClkEvent same "FButtonDblClkEvent"]
+Declaration:
+[code]
+class FButtonDlbClkEvent : public [ref FMouseEvent "FMouseEvent"] {
+[ecode]
+This event has only one member function: GetButton() which returns which
+button has been pressed.
+[etopic]
+
+[topic FMouseMoveEvent same "FMouseMoveEvent"]
+Declaration:
+[code]
+class FMouseMoveEvent : public [ref FMouseEvent "FMouseEvent"] {
+[ecode]
+This event does not have any member functions.
+[etopic]
+
+[topic FControlPointerEvent same "FControlPointerEvent"]
+Declaration:
+[code]
+class FControlPointerEvent : public [ref FEvent "FEvent"] {
+[ecode]
+This event has one member functions:
+[sl][li][ref FControlPointerEvent_SetPointer "SetPointer()"]
+[esl]
+[etopic]
+
+[topic FControlPointerEvent_SetPointer downonce "SetPointer()" "FControlPointerEvent::SetPointer()"]
+Declaration:
+[code]
+void SetPointer([ref FPointer "FPointer"]& p);
+[ecode]
+This function changes the shape of the pointer.
+[etopic]
+

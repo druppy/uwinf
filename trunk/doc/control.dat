@@ -1,0 +1,13 @@
+:artlink.
+:link reftype=hd refid=FControl x=212 y=233 cx=54 cy=15.
+:link reftype=hd refid=FGroupBox x=5 y=142 cx=68 cy=16.
+:link reftype=hd refid=FStaticText x=32 y=112 cx=74 cy=16.
+:link reftype=hd refid=FCheckBox x=75 y=61 cx=71 cy=16.
+:link reftype=hd refid=FPushButton x=110 y=40 cx=79 cy=15.
+:link reftype=hd refid=FRadioButton x=150 y=19 cx=86 cy=17.
+:link reftype=hd refid=FSlider x=236 y=68 cx=47 cy=18.
+:link reftype=hd refid=FSLE x=314 y=75 cx=39 cy=15.
+:link reftype=hd refid=FMLE x=333 y=97 cx=44 cy=15.
+:link reftype=hd refid=FListBox x=404 y=117 cx=61 cy=16.
+:link reftype=hd refid=FComboBox x=426 y=141 cx=76 cy=17.
+:eartlink.

@@ -1,0 +1,5 @@
+1 intro Introduction and background
+2 story Short story
+2 designgoals Design goals
+2 biffuture Future development of BIF
+2 bifauthors The authors (and other related stuff ...)

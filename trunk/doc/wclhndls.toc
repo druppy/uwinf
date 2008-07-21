@@ -1,0 +1,13 @@
+4 FPaintHandler FPaintHandler
+5 FPaintHandler_Paint Paint()
+5 FPaintHandler_Invalidate Invalidate()
+4 FCaretHandler FCaretHandler
+5 FCaretHandler_SetCaretPos SetCaretPos()
+5 FCaretHandler_SetCaretShape1 SetCaretShape(shape)
+5 FCaretHandler_SetCaretShape2 SetCaretShape(shape,w,h)
+5 FCaretHandler_ShowCaret ShowCaret()
+5 FCaretHandler_HideCaret HideCaret()
+4 FTimerHandler FTimerHandler
+5 FTimerHandler_StartTimer StartTimer()
+5 FTimerHandler_StopTimer StopTimer()
+5 FTimerHandler_Timer Timer()

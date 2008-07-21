@@ -1,0 +1,15 @@
+#define IDD_EDITLINK                100
+#define DID_REFTYPE_HD              101
+#define DID_REFTYPE_FN              102
+#define DID_REFTYPE_LAUNCH          103
+#define DID_REFTYPE_INFORM          104
+#define DID_X                       105
+#define DID_Y                       106
+#define DID_CX                      107
+#define DID_CY                      108
+#define DID_APPLY_COORDINATES       109
+#define DID_RES                     110
+#define DID_REFID                   111
+#define DID_DATABASE                112
+#define DID_OBJECT                  113
+#define DID_DATA                    114

@@ -1,0 +1,5 @@
+2 bw_compiler_setup Compiler setup
+3 bw_compiler_setup_win31 Windows 3.1
+3 bw_compiler_setup_os2 OS/2 PM
+3 bw_compiler_setup_wms WMS
+3 bw_compiler_setup_win32 Win32

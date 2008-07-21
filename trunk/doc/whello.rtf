@@ -1,0 +1,117 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote bifwindow_helloworld}
+${\footnote BIF window hello world example}
++{\footnote defbrowse}
+K{\footnote Window Hello world example}
+K{\footnote BIF window hello world example}
+{\fs26\cf1\b Window Hello world example}\par
+This example show how simple BIF is to make application in, at least as long as they are 
+as small as this one.\par
+
+The example makes an new window containing a FStaticText label displaying the text 
+"Hello World". The code can be compiled onto any platform supported by BIF.\par
+
+{\b{Note:}} This example are single threaded and if what you need is a multithreaded example 
+please look at the Multithreaded hello world {\uldb example}{\v bifthread_helloworld}. 
+\par
+
+\line{\f1
+#define BIFINCL_WINDOW                 \{1\}\line
+#define BIFINCL_APPWINDOW\line
+#define BIFINCL_STATICTEXT\line
+#define BIFINCL_APPLICATION\line
+#include <bif.h>                       \{2\}\line
+\line
+///////////////////////\line
+// The program window\line
+class MyWindow : public FAppWindow \{   \{3\}\line
+public:\line
+  Create( void )                       \{4\}\line
+  \{\line
+    FAppWindow::Create( NULL, 0, fcf_sysmenu|fcf_titlebar|fcf_sizeborder, 0 );\line
+    m_text.Create( this, -1, NULL, FStaticText::st_center, "Hello World" );\line
+    SetClient( &m_text );\line
+    Show();\line
+    BringToFront();\line
+  \}\line
+\line
+private:\line
+  FStaticText m_text;\line
+\};\line
+\line
+/////////////////////////////\line
+// The Application instance\line
+\line
+class MyApplication : public FApplication \{    \{5\}\line
+public:\line
+  Bool StartUp( int argc, char **argv )        \{6\}\line
+  \{\line
+    m_mainwnd.Create();                        \{7\}\line
+    return( True );\line
+  \}\line
+private:\line
+  MyWindow m_mainwnd;\line
+\};\line
+\line
+DEFBIFWINDOWMAIN( MyApplication );\line
+}
+\par
+
+\par\pard\sb100\tx601\li601\fi-600
+step\tab
+Description\par
+1 
+\tab
+Before we include bif.h we must tell bif.h what we would like to 
+include. In this case we need the BIF/Thread library, the main-thread 
+class and the event semaphore class. For information on what to define 
+to get access to classes select {\uldb include hierarchy}{\v bifthread_include_hierachy} 
+\par
+2 
+\tab
+Include the bif.h headerfile. bif.h will include the necessary 
+files according to what we told it we needed in the above 4 lines. 
+\par
+3 
+\tab
+Define the MyWindow class as a subclass of FAppWindow, as this is a kind 
+of a frame window this window will be visible including frames menues and a 
+icon. 
+\par
+4 
+\tab
+The class will first create a window when the Create function is called, as BIF 
+uses a double life circlus for the windows classes. We then overwrite the Create 
+function to make our own additions to the creation. In this example we Creates the 
+FStaticText class (a BIF class) and set it as the client area in MyWindow. We make 
+sure its visible and make it appear in front of anything else. 
+\par
+5 
+\tab
+MyApplication is the starting point of the application. I object orientated programming 
+we need to define a starting point, as the objects can't just instanciate themself as 
+they like, everything have a startingpoint ! The is the application statingpoint. 
+\par
+6 
+\tab
+StartUp is called when the application are brought to life, and it looks very much like 
+the main function known from C, to avoid confusing the two startup function types we have 
+given it another name ! The only thing the this startup do is to make sure the m_mainWnd is 
+created, and return True to tell the BIF system all is OK. 
+\par\pard\sb100
+\par
+
+That all there is to making a simple BIF window hello world application. Ofcause the real 
+application work is much more complex, but a simple start is a good start.\par
+
+\page
+
+}

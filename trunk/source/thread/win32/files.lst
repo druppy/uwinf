@@ -1,0 +1,15 @@
+Contents: BIF/Thread for win32
+bifmain.cpp  _BIFMain()
+eventsem.cpp FEventSemaphore
+mthread.cpp  FMainThread
+mutexsem.cpp FMutexSemaphore
+semaphor.cpp FSemaphore
+spinsem.cpp  FSpinXxxxx semaphores
+thread1.cpp
+thread2.cpp  FThread; priority part
+thread3.cpp  FThread; suspend/resume part
+thread4.cpp  FThread; start and run part
+thread5.cpp  FThread; Kill()
+threadma.cpp FThreadManager
+win          Support classes for win32 windows
+wms          -"-                       WMS

@@ -1,0 +1,167 @@
+[topic bifthread_helloworld same "Thread Hello world example" "BIF/Thread hello world example"]
+This "hello world" program splits the task of writing the string
+"Hello world!" to the screen. An indeed very silly thing to do but we
+needed a simple example.
+
+[note]This example cannot be used under Windows 3.1 because printf() is used.
+(And no, EasyWin or the like will not work)
+[enote]
+
+The task is split into 3:
+[ol]
+[li]Writing the text "Hello " to the screen. This is done by the
+"hello"-thread
+[li]Writing the text "world" to the screen. This is done by the
+"world"-thread
+[li]Writing the final two characters "!\\n" to the screen. This is
+done by the main thread
+[eol]
+
+This has to be synchronized. This program uses two different methods:
+[ul]
+[li]An event semaphore for synchronization between the "hello"-thread
+and the "world"-thread
+[li]The wait-for-thread-to-terminate feature for synchronization
+between the "world"-thread and the main thread.
+[eul]
+
+[code]
+#define BIFINCL_THREAD                                (1)
+#define BIFINCL_MAINTHREAD
+#define BIFINCL_SEMAPHORES
+#include <bif.h>                                      (2)
+
+#include <stdio.h>
+
+FEventSemaphore helloWritten;                         (3)
+
+class HelloThread : public FThread {                  (4)
+public:
+  void Go();                                          (5)
+};
+
+class WorldThread : public FThread {
+public:
+  void Go();
+};
+
+class HelloWorldMainThread : public FMainThread {     (6)
+public:
+  HelloWorldMainThread(int argc, char **argv)         (7)
+    : FMainThread(argc,argv)
+    {}
+
+  int Main(int,char**);                               (8)
+};
+
+
+void HelloThread::Go() {
+  printf("Hello ");                                   (9)
+  helloWriten.Post();                                 (10)
+}
+
+void WorldThread::Go() {
+  helloWritten.Wait();                                (11)
+  printf("world");                                    (12)
+}
+
+int HelloWorldMainThread::Main(int,char**) {          (13)
+  HelloThread hello;                                  (14)
+  WorldThread world;
+
+  hello.Start();                                      (15)
+  world.Start();
+
+  world.wait();                                       (16)
+  printf("!\\n");                                      (17)
+
+  hello.wait();                                       (18)
+
+  return 0;                                           (19)
+}
+
+DEFBIFTHREADMAIN(HelloWorldMainThread);               (20)
+[ecode]
+
+[dl "step" "Description" 5]
+[dt]1
+[dd]Before we include bif.h we must tell bif.h what we would like to
+include. In this case we need the BIF/Thread library, the main-thread
+class and the event semaphore class. For information on what to define
+to get access to classes select [ref bifthread_include_hierachy "include hierachy"]
+[dt]2
+[dd]Include the bif.h headerfile. bif.h will include the necessary
+files according to what we told it we needed in the above 3 lines.
+[dt]3
+[dd]We need an [ref FEventSemaphore "event semaphore"] so the
+"world"-thread can wait until the "hello"-thread has written its text.
+[dt]4
+[dd]We now declare our "hello"-thread. Normal thread must be a
+subclass of FThread.
+[dt]5
+[dd]The HelloThread overrides the virtual [ref FThread_Go "Go()"]
+function. The Go() function is the entry point for normal threads.
+[dt]6
+[dd]Here we declare our main thread. Main threads (a program can only
+have one) must be a subclass of [ref FMainThread "FMainThread"].
+[dt]7
+[dd]The FMainThread's constructor takes two arguments: argc and argv.
+We must pass them on from HelloWorldMainThread to FMainThread.
+[dt]8
+[dd]The HelloWorldMainThread overrides the virtual
+[ref FMainThread_Main "Main()"] fnction. The Main() member function is
+the entry point for main threads and therefore also the entry point
+for the whole program
+[dt]9
+[dd]The HelloThread prints the text "Hello " to the screen.
+[dt]10
+[dd]The HelloThread signals that it has printed its text.
+[dt]11
+[dd]The WorldThread waits until the HelloThread tells that it has
+written "Hello ". If WorldThread didn't wait the output would be
+unpredictable, it could be "worldHello ", "Helworldlo ", or by
+pure luck "Hello world". If
+[dt]12
+[dd]Now that the WorldThread [hp 2]knows[ehp] that the text "Hello "
+has been written (the HelloThread has told it so), it prints the text
+"world".
+[dt]13
+[dd]The program starts at HelloWorldMainThread::Main(). When a program
+starts the main thread will be the only thread of control. Main() is not
+interested in the rogram arguments, so it does not name the
+parameters.
+[dt]14
+[dd]The main thread creates instances of the two other threads. Note
+that the thread instances are created, but they will not be running
+(yet)
+[dt]15
+[dd]The main thread starts the two threads. This is done by calling
+the [ref FThread_Start "Start()"] member function of the threads.
+[dt]16
+[dd]The main thread waits until the WorldThread has finished. When the
+WorldThread thread has finished it must have written "world". The
+program could also have used another event semaphore for
+synchronization between the "world"-thread and the main thread like
+the one used for synchronization between the "hello"-thread and the
+"world"-thread.
+[dt]17
+[dd]The main thread prints the final characters "!\\n".
+[dt]18
+[dd]The main thread waits until the "hello"-thread has finished. It is
+not very likely that it hasn't but in a multitasking environment you
+never know... Main thread should always wait for all the threads to
+finish otherwise the will get killed when the main thread terminates.
+[dt]19
+[dd]The mai thread (and therefore the whole program) terminates. The
+return value from Main() is passed back to the operating system as the
+program exit code. If we were really pedantic we should have return
+EXIT_SUCCESS as defined in <stdlib.h>, but we don't
+[dt]20
+[dd]Well... the program does not automatically start executing at
+FHelloWorldMainThread::Main(). The DEFBIFTHREADMAIN macro takes care
+of the initialization and the creation of an instance of the main
+thread. We don't like macros but this was the only way to shield the
+programmer from the differences between the operating systems.
+[edl]
+[etopic]
+

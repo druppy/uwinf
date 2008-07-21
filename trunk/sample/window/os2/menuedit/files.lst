@@ -1,0 +1,44 @@
+This directory contains a sample program that will let you edit menu resources.
+
+The program cannot read resources, so it stores menus in .BME files, but it
+also writes the menu definition to a resource format file (.MNU)
+
+EDITDLG.CPP   Source for the menu edit dialog
+EDITDLG.HPP
+GENMENU.CPP   Source for generating the menu resource
+GENMENU.HPP
+LOADMENU.CPP  Source for reading a menu from a .BME file
+LOADMENU.HPP
+MENUEDIT.CPP  Main source file
+MENUEDIT.DLG  Menu edit dialog
+MENUEDIT.H    Menu edit dialog resource IDs
+MENUEDIT.ICO  Application icon
+MENUEDIT.IDH
+MENUEDIT.MID  Menu resource IDs
+MENUEDIT.MNU  Menu
+MENUEDIT.RC   Resources
+MENUITEM.CPP  Soure for MenuItem and MenuItemList
+MENUITEM.HPP
+MOVEDOWN.ICO  Icon used in pushbutton
+MOVEUP.ICO    -"-
+PRODINFO.BMP  Product information bitmap
+PRODINFO.DLG  Product information dialog
+PRODINFO.H    Resource IDs for product information dialog
+PRODINFO.HPP  Header file for product information dialog (note: there are
+              no source file)
+SAVEMENU.CPP  Source for writing a menu to a .BME file
+SAVEMENU.HPP
+TESTMENU.CPP  Source for the menu test dialog (both as normal menu and popup)
+TESTMENU.DLG
+TESTMENU.H    Resource IDs
+TESTMENU.HPP
+
+Targets:
+  menuedit.exe
+    editdlg.cpp
+    genmenu.cpp
+    loadmenu.cpp
+    menuedit.cpp
+    savemenu.cpp
+    testmenu.cpp
+    menuedit.rc

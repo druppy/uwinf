@@ -1,0 +1,235 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote intro}
+${\footnote Introduction and background}
++{\footnote defbrowse}
+K{\footnote Introduction and background}
+{\fs26\cf1\b Introduction and background}\par
+This section contains a small introduction to BIF. 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Short story}{\v story} 
+\par
+\tab
+{\uldb Design goals}{\v designgoals} 
+\par
+\tab
+{\uldb Future}{\v biffuture} 
+\par
+\tab
+{\uldb The authors}{\v bifauthors} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote story}
+${\footnote Short story}
++{\footnote defbrowse}
+K{\footnote Short story}
+{\fs26\cf1\b Short story}\par
+It all started in spring '94 when we decided to make a cross-platform GUI and 
+multitasking library.  We did not like the existing GUI libraries because they 
+were either inconsistent, not portable, compiler dependent or simply too big.\par
+
+The design of the BIF/Thread subsystem was finished late in spring '94 and the 
+OS/2 version of it were running soon after.  The DOS and Windows 3.x version 
+was a bit more complicated.  The design remained the same but the 
+implementation was changed a bit until this release due to some gotcha's.\par
+
+The design of the BIF/Window subsystem was started in summer '94.  We looked at 
+other GUI libraries for getting an idea how to avoid a fat interface in the 
+FWnd class.  We found the handler mechanism in UICL and loved it.  Most of 
+the subsystem was made in the autumn by Ivan because he needed it for his 5th 
+semester project in his education.\par
+
+In the spring '96 the WMS (sub-)system was developed because one of 
+the developers needed a text interface for programming gateways 
+and because some of the other developers thought it would be fun. 
+\page
+
+#{\footnote designgoals}
+${\footnote Design goals}
++{\footnote defbrowse}
+K{\footnote Design goals}
+{\fs26\cf1\b Design goals}\par
+When we started designing BIF we set a few design goals. They were made from 
+common sense and what we didn't like in other libraries.\par
+
+Goals: 
+\par\pard\sb100\tx2000\li2000\fi-1999
+Subsystems 
+\tab
+We didn't like libraries where everything is connected to and dependent on 
+all other parts of the library. One subsystem must be able to run without the 
+other subsystems. If the programmer needs more than one of the subsystems he 
+must be able to do that, eventually using some "glue." 
+\par
+"Correct" class hierachies 
+\tab
+The class hierachies should be correct not smart. We focused on 
+well-defined classes rather than reuse or how something else is made. As an  
+example radiobuttons, checkboxes and pushbuttons could have had a common 
+"button" class, but from our point of view it is not obvious that they have  
+common functionality, so they haven't got a common "button" super class. 
+\par
+No fat interfaces 
+\tab
+We don't like fat interfaces especially not in the base classes. We have 
+tried to keep the interface to a minimum. As a deterrent we can mention that 
+Borland's OWL2 "TWindow" class has 318 functions and that Microsoft's MFC 2.1 
+"CWnd" has 260 functions. 
+\par
+Small 
+\tab
+Each subsystem should be as small as possible but yet usable. 
+\par
+Maximum flexibility 
+\tab
+The library should be designed so it can be used in ways even we can't 
+think of (and we are quite creative) 
+\par
+Compiler independent 
+\tab
+We wanted to support as many compilers as possible, so people don't have to 
+do anything special when they switch compiler. 
+\par
+90% Portable 
+\tab
+The library should enable programmers to in theory write 100% portable 
+programs, and in real life write 90-99% portable programs. 
+\par
+Possible to make nonportable things 
+\tab
+The library should not be a straight jacket limiting the programmer, but 
+rather a toolbox offering him the possibility to make portable programs. 
+\par\pard\sb100
+\par
+
+With WMS we had to make an exception. The WMS subsystem uses 
+BIF/Thread because it has multithreading built in and it would be 
+silly to use the native threading API when BIF/Thread was available. 
+\page
+
+#{\footnote biffuture}
+${\footnote Future development of BIF}
++{\footnote defbrowse}
+K{\footnote Future development of BIF}
+{\fs26\cf1\b Future development of BIF}\par
+This is the planned development of BIF: 
+\par\pard\sb100\tx2000\li2000\fi-1999
+Thread selection optimization. 
+\tab
+The current algorithm in win16 for selecting the next thread to run is 
+not optimal. It can be optimized quite a lot. 
+\par
+OS-specific controls. 
+\tab
+Currently, only common controls are supported in BIF/Window. In the 
+future interfaces to OS-specific controls will be made. 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote bifauthors}
+${\footnote The authors (and other related stuff ...)}
++{\footnote defbrowse}
+K{\footnote The authors (and other related stuff ...)}
+{\fs26\cf1\b The authors (and other related stuff ...)}\par
+K{\footnote Contacting the authors}
+K{\footnote Bug reports}
+BIF is made by: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Ivan Skytte J\'F8rgensen 
+\par
+\tab
+Bo Lorentsen 
+\par\pard\sb100
+\par
+
+{\b{Author background}}\par
+
+Ivan has just finished his second IT education at \'C5rhus K\'F8bmandskole, Informatik 
+(AArhus Business College, IT), Denmark.  He writes in a compact and 
+incomprehensible style which makes him unique, so when you don't understand 
+some of the text you know who has written it :-) His interests are among others 
+cross-platform development.\par
+
+Bo ... doesn't have any education, but have studied and practiced C/C++ 
+programming for quite some time. He's the one trying to moderate Ivan  
+when he is making to much code. His main interest is the base system, 
+and the OO design rules. If the code is full of comments and uses a more 
+consistent structure then its Bo's code. There isn't much of this kind of code 
+because Ivan is the drudge in the project, and Bo is only conducting the 
+battle.\par
+
+{\b{Acknowledgments:}}\par
+
+The authors thank Carsten Mouritzen and Casper Pedersen for valuable 
+opinions during the design and implementation of BIF.  We also thank Morten 
+Baun, SysOp of 2:238/10, Peder Toftegaard Olsen, SysOp of 2:238/169, 
+Brian Vind, SysOp of 2:238/141 and Per Riber, SysOp of 2:238/59 who made a 
+whole conference just for BIF.\par
+
+{\b{Contacting the authors}}\par
+
+If you have any questions or suggestions or have found any bugs please contact 
+us. \par
+
+Ivan Skytte J\'F8rgensen can be reached at: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+FidoNet: 2:238/64.17 or 2:238/59.23 
+\par
+\tab
+SnailMail: 
+\par\pard\sb100\tx1100\li1100\fi-549
+\tab
+Ivan Skytte J\'F8rgensen 
+\par
+\tab
+Vestergade 9 
+\par
+\tab
+8732  Hovedg\'E5rd 
+\par
+\tab
+Denmark 
+\par\pard\sb100\tx550\li550\fi-549
+ 
+\par\pard\sb100
+\par
+
+Bo Lorentsen can be reached at: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+FidoNet: 2:238/59.22 
+\par
+\tab
+SnailMail: 
+\par\pard\sb100\tx1100\li1100\fi-549
+\tab
+Bo Lorentsen 
+\par
+\tab
+\'C6blehaven 3 
+\par
+\tab
+8543  Hornslet 
+\par
+\tab
+Denmark 
+\par\pard\sb100\tx550\li550\fi-549
+ 
+\par\pard\sb100
+ 
+\page
+
+}

@@ -1,0 +1,85 @@
+WR2OR - Windows .RC to OS/2 .RC converter
+
+This program converts Windows(tm) resource script files to OS/2(tm)
+resource script files. This program is Public Domain.
+
+
+USAGE
+wr2or <inputfile> <outputfile> [options]
+ <inputfile>      Windows RC type file
+ <outputfile>     OS/2 RC output file
+ -eo <errorfile>  Put errors/warnings/notes into <errorfile>. If this option is
+		  not present the errors/warnings/notes will be displayed on
+		  the screen only.
+ -q               Quiet mode
+ -v               Verbose mode (default)
+ -w0              Warning level 0. Only Errors
+ -w1              Warning level 1. errors+warnings
+ -w3              Warning level 3. errors+warnings+ignored
+ -w4              Warning level 4. errors+warnings+ignored+notes (default)
+ -usage           Display this text
+
+
+EXAMPLE
+wr2or win.rc os2.rc -eo os2.err -w4
+
+
+DEFAULT ARGUMENT FILE
+You can put default arguments into a file called 'wr2or.dfl'
+
+
+NOTES
+ - You still have to convert windows bitmaps/icons/cursors into OS/2 format.
+   - Mike Robert has made at utility to convert bitmaps. I found it under the
+     name 'cvbmp.arj'.
+   - Ron Hall has made a program that converts bitmaps, icons and cursor into
+     OS/2 format. I found it under the name 'winicon.zip'
+ - RCDATA is not supported yet.
+ - Inline bitmaps/icons/cursors created by Resource Workshop are supported.
+   Note that cursors are dumped to a .CUR file, but the resource script will
+   refer to a .PTR file.
+ - Concatenated strings are not supported
+ - Comments are not supported inside resource definitions
+ - Both BEGIN/END and brace blocks are supported.
+ - SUBMENU are required to have ids in OS/2 resource scripts. So submenu
+   ids are automatically generated starting from 9000
+ - Dialogs:
+   - Dialog menus are ignored.
+   - Dialog classes are ignored.
+   - The dialog style translation is not perfect. You have to load the dialogs
+     into the OS/2 dialog editor to ensure the translation worked.
+   - If the font has been changed you have to change the height of the
+     editfields. They seem to be too tall.
+   - IDOK and IDCANCEL are translated into DID_OK and DID_CANCEL. All other
+     IDxxxx's are not translated.
+   - Static rectangle/frame translation is not perfect...
+   - Scrollbars are translated into slider controls.
+   - CTLDATA statement is not supported yet.
+
+
+FILES:
+  wr2or.exe     The program.
+  wr2or.txt     This text.
+  source\*.*    Source for the program. It has been built with BC and Watcom
+		Note: default.*, error.* and moreargs.* are also Public Domain,
+		but part of another package.
+
+
+ABOUT THE SOURCE
+The program is built as a recursive-decent parser. The scanner is in
+scanner.cpp and the main parser is in parser.cpp. The parser uses alle the
+p*.cpp modules for resource translation.
+
+
+FAN LETTERS (and bug reports :-)
+If you find an error or if you have an idea for better conversion please send
+NetMail to:
+  Ivan Joergensen   2:238/64.17@fidonet
+
+
+HISTORY
+1.2 Fixed a few bugs concerning references to files and using load/memory
+    options at the same time.
+1.1 Fixed a few bugs. BITMAPS wasn't handled, LISTBOX did not translate, 
+    literal styles wasn't handled
+1.0 First release

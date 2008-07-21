@@ -1,0 +1,105 @@
+[topic bifthread_compiler_setup same "Compiler setup" "BIF/Thread compiler setup" primary]
+This section describes what compiler options must be
+selected/deselected when you use BIF/Thread.
+
+If you are using the DLL version of BIF you must define 'BIF_IN_DLL'
+otherwise you program will crash.
+
+[sl]
+[li][ref bt_compiler_setup_win31 "Windows 3.1"]
+[li][ref bt_compiler_setup_os2 "OS/2"]
+[li][ref bt_compiler_setup_dos "DOS"]
+[li][ref bt_compiler_setup_win32 "win32 (win95/NT)"]
+[esl]
+[etopic]
+
+[topic bt_compiler_setup_win31 down "Windows 3.1" "BIF/Thread Compiler setup for Windows 3.1" primary]
+Compiler setup under Windows 3.1. This is necessary mainly because BIF/Thread
+switches stack.
+[ul]
+[li]Borland C++ 3.1:
+[dl]
+[dt]Defines[dd]                 add DBG_LOG_ALL (only if debugging)
+[dt]Test stack overflow[dd]     OFF
+[dt]Assume DS==SS[dd]           Never
+[dt]Entry/exit code[dd]         Never any of the "Windows smart callback..."
+[edl]
+[li]Borland C++ 4.0 & 4.02 Windows: You most note that you cannot use
+exception handling with BIF/Thread because Borland's exception
+handling assumes that DS==SS and that the stack does not change
+[dl]
+[dt]Defines[dd]                       add DBG_LOG_ALL (only if debugging)
+[dt]Test stack overflow[dd]           OFF
+[dt]Assume DS==SS[dd]                 Never
+[dt]Entry/exit code[dd]               Never any of the "Windows smart callback..."
+[dt]Exception handling[dd]            OFF
+[dt]Exeption location information[dd] OFF
+[dt]Destructor cleanup[dd]            OFF
+[edl]
+[li]Symantec C++ 6.1
+[dl]
+[dt]Defines[dd]             add DBG_LOG_ALL (only if debugging)
+[dt]Test stack overflow[dd] OFF
+[dt]Assume DS==SS[dd]       OFF
+[edl]
+[li]Watcom C/C++ 10.0:
+[dl]
+[dt]Source switches|Macro definitions[dd]                        add DBG_LOG_ALL (only if debugging)
+[dt]Diagnostic switches|Disable stack depth checking (-s)[dd]    ON
+[dt]CodeGen option switches|SS not assumed equal to DS (-zu)[dd] ON
+[dt]C++ Compiler Switches|exceptions[dd]                         OFF
+[edl]
+[li]All:
+Ensure that the local heap size is at least 8K, otherwise the stack of the main
+thread cannot be allocated. This is very important for BC 4.0 since BC
+4.0 by default does not create a local heap and Windows' LocalAlloc()
+crashes when there are no local heap.
+[eul]
+[etopic]
+
+[topic bt_compiler_setup_os2 same "OS/2" "BIF/Thread Compiler setup for OS/2" secondary]
+Just remember to tell your compiler that the application is multithreaded and
+everything should work just fine.
+[etopic]
+
+[topic bt_compiler_setup_dos same "DOS" "BIF/Thread Compiler setup for DOS" secondary]
+Ensure that the compiler does not assume that DS==SS, that it does not insert
+stack overflow checks, that exception handling is OFF, and that the compiler
+either has DS pegged to DGROUP or reloads DS when needed.
+
+[ul]
+[li]Borland C++ 3.1:
+[dl]
+[dt]Test stack overflow[dd]     OFF
+[dt]Assume DS==SS[dd]           Never
+[edl]
+[li]Borland C++ 4.0 & 4.02 Windows: [hp 2]Not tested[ehp]
+[li]Symantec C++ 6.1
+[dl]
+[dt]Defines[dd]             add DBG_LOG_ALL (only if debugging)
+[dt]Test stack overflow[dd] OFF
+[dt]Assume DS==SS[dd]       OFF
+[edl]
+[li]Watcom C/C++ 10.0:
+[dl]
+[dt]Diagnostic switches|Disable stack depth checking (-s)[dd]    ON
+[dt]CodeGen option switches|SS not assumed equal to DS (-zu)[dd] ON
+[dt]Register usage|DS register (-zdp)[dd]                        DS pegged to DGROUP
+[dt]C++ Compiler Switches|exceptions[dd]                         OFF
+[edl]
+[eul]
+
+You should also ensure that any runtime functions you use do not assume DS==SS.
+
+In general, runtime-libraries never has stack overflow checks in them. Some
+library functions may assume SS==DS, in particular Watcom's graphics functions
+including _setvideomoderows() etc. assumes SS==DS. If you have to use functions
+that assumes SS==DS you may have to try to define STACK_IN_DS in
+source/thread/win16/thread3.cpp or allocate your stack statically and override
+the stack allocation in your main thread's constructor.
+[etopic]
+
+[topic bt_compiler_setup_win32 upafter "Win32" "BIF/Thread Compiler setup for win32"]
+Just remember to tell your compiler that the application is multithreaded and
+everything should work just fine.
+[etopic]

@@ -1,0 +1,410 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote bifwindow_functions}
+${\footnote BIF/Window functions}
++{\footnote defbrowse}
+K{\footnote Functions}
+K{\footnote BIF/Window functions}
+{\fs26\cf1\b Functions}\par
+BIF/Window has only a few global functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb GetCurrentApp()}{\v GetCurrentApp} 
+\par
+\tab
+{\uldb GetDesktop()}{\v GetDesktop} 
+\par
+\tab
+{\uldb GetSystemArrowPointer()}{\v GetSystemArrowPointer} 
+\par
+\tab
+{\uldb GetSystemTextPointer()}{\v GetSystemTextPointer} 
+\par
+\tab
+{\uldb GetSystemNESWPointer()}{\v GetSystemNESWPointer} 
+\par
+\tab
+{\uldb GetSystemNSPointer()}{\v GetSystemNSPointer} 
+\par
+\tab
+{\uldb GetSystemNWSEPointer()}{\v GetSystemNWSEPointer} 
+\par
+\tab
+{\uldb GetSystemWEPointer()}{\v GetSystemWEPointer} 
+\par
+\tab
+{\uldb GetSystemWaitPointer()}{\v GetSystemWaitPointer} 
+\par
+\tab
+{\uldb GetWndMan()}{\v GetWndMan} 
+\par
+\tab
+{\uldb MessageBox()}{\v MessageBox} 
+\par
+\tab
+{\uldb Intersection()}{\v Intersection} 
+\par
+\tab
+{\uldb Union()}{\v Union} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote getcurrentapp}
+${\footnote GetCurrentApp()}
++{\footnote defbrowse}
+K{\footnote GetCurrentApp()}
+{\fs26\cf1\b GetCurrentApp()}\par
+Declaration: 
+\line{\f1
+FApplication * GetCurrentApp();\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_APPLICATION\par
+
+GetCurrentApp() returns a pointer to the one and only FApplication instance. 
+This is quite useful when you for example need to terminate the application: 
+\line{\f1
+...\line
+if(ev.GetItem()==IDM_EXIT) \{\line
+  //terminate application\line
+  GetCurrentApp()->TerminateApp();\line
+\}\line
+}
+\par
+
+See also: {\uldb FApplication}{\v fapplication} 
+\page
+
+#{\footnote getdesktop}
+${\footnote GetDesktop()}
++{\footnote defbrowse}
+K{\footnote GetDesktop()}
+{\fs26\cf1\b GetDesktop()}\par
+Declaration: 
+\line{\f1
+{\uldb FDesktop}{\v FDesktop} * GetDesktop();\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW\par
+
+GetDesktop() returns a pointer to the desktop window. The pointer can then be  
+used for specifying the parent window of frame window, or querying the width or  
+height of the desktop.\par
+
+{\b{Caution: }} 
+It is {\b{not}} recommended to use any of the FWnd member functions on the 
+desktop. 
+ 
+\page
+
+#{\footnote GetSystemArrowPointer}
+${\footnote GetSystemArrowPointer()}
++{\footnote defbrowse}
+K{\footnote GetSystemArrowPointer()}
+{\fs26\cf1\b GetSystemArrowPointer()}\par
+Declaration: 
+\line{\f1
+FPointer * const GetSystemArrowPointer();\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW\par
+
+This function returns the system-defined "arrow" pointer.\par
+
+See {\uldb GetSystemWaitPointer}{\v GetSystemWaitPointer} for example. 
+\page
+
+#{\footnote GetSystemTextPointer}
+${\footnote GetSystemTextPointer()}
++{\footnote defbrowse}
+K{\footnote GetSystemTextPointer()}
+{\fs26\cf1\b GetSystemTextPointer()}\par
+Declaration: 
+\line{\f1
+FPointer * const GetSystemTextPointer();\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW\par
+
+This function returns the system-defined pointer for use when the mouse is over  
+a tekst area. This pointer is usually an "I-beam". 
+\page
+
+#{\footnote GetSystemNESWPointer}
+${\footnote GetSystemNESWPointer()}
++{\footnote defbrowse}
+K{\footnote GetSystemNESWPointer()}
+{\fs26\cf1\b GetSystemNESWPointer()}\par
+Declaration: 
+\line{\f1
+FPointer * const GetSystemNESWPointer();\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW\par
+
+This function returns the system-defined North-East<->South-West pointer. This  
+pointer is normally used when the mouse is over (or dragging) the top-right or  
+bottom-left corner of a sizeable frame window. 
+\page
+
+#{\footnote GetSystemNSPointer}
+${\footnote GetSystemNSPointer()}
++{\footnote defbrowse}
+K{\footnote GetSystemNSPointer()}
+{\fs26\cf1\b GetSystemNSPointer()}\par
+Declaration: 
+\line{\f1
+FPointer * const GetSystemNSPointer();\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW\par
+
+This function returns the system-defined North<->South pointer. This pointer is  
+used when the mouse is over (or dragging) the left or right border of a sizeable 
+frame window. The pointer is also used when dragging something which can only be 
+moved up or down.  
+\page
+
+#{\footnote GetSystemNWSEPointer}
+${\footnote GetSystemNWSEPointer()}
++{\footnote defbrowse}
+K{\footnote GetSystemNWSEPointer()}
+{\fs26\cf1\b GetSystemNWSEPointer()}\par
+Declaration: 
+\line{\f1
+FPointer * const GetNWSEArrowPointer();\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW\par
+
+This function returns the system-defined North-West<->South-East pointer. This 
+pointer is normally used when the mouse is over (or dragging) the top-left or  
+bottom-right corner of a sizeable frame window.  
+\page
+
+#{\footnote GetSystemWEPointer}
+${\footnote GetSystemWEPointer()}
++{\footnote defbrowse}
+K{\footnote GetSystemWEPointer()}
+{\fs26\cf1\b GetSystemWEPointer()}\par
+Declaration: 
+\line{\f1
+FPointer * const GetSystemWEPointer();\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW\par
+
+This function returns the system-defined West<->East pointer. This pointer is 
+used when the mouse is over (or dragging) the top or bottom border of a sizeable 
+frame window. The pointer is also used when dragging something which can only be 
+moved left or right. 
+\page
+
+#{\footnote GetSystemWaitPointer}
+${\footnote GetSystemWaitPointer()}
++{\footnote defbrowse}
+K{\footnote GetSystemWaitPointer()}
+{\fs26\cf1\b GetSystemWaitPointer()}\par
+Declaration: 
+\line{\f1
+FPointer * const GetSystemWaitPointer();\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW\par
+
+This function returns the system-defined "wait" pointer (usually an hourglass or 
+something equivalent.) This pointer can (and should) be used when the user is 
+moving the mouse over a window that cannot accept user interaction ("busy").\par
+
+Example: 
+\line{\f1
+Bool MyWindow::{\uldb ControlPointer}{\v FMouseHandler_ControlPointer}(FControlPointerEvent& ev) \{\line
+  if(<window is busy>)\line
+    ev.SetPointer(*GetSystemWaitPointer());\line
+  else\line
+    ev.SetPointer(*GetSystemArrowPointer());\line
+  return True;\line
+\}\line
+}
+\par
+
+\page
+
+#{\footnote GetWndMan}
+${\footnote GetWndMan()}
++{\footnote defbrowse}
+K{\footnote GetWndMan()}
+{\fs26\cf1\b GetWndMan()}\par
+Declaration: 
+\line{\f1
+FWndMan * GetWndMan();\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW\par
+
+GetWndMan() returns a pointer to the one and only {\uldb FWndMan}{\v FWndMan} 
+instance.\par
+
+Remember: FWndMan does not contain any portable memberfunctions. 
+\page
+
+#{\footnote MessageBox}
+${\footnote MessageBox() function}
++{\footnote defbrowse}
+K{\footnote MessageBox()}
+K{\footnote MessageBox() function}
+{\fs26\cf1\b MessageBox()}\par
+Declaration: 
+\line{\f1
+mbid BIFFUNCTION MessageBox(FWnd *pOwner, const char *pszText, const char *pszTitle, mb_buttons buttons, mb_icon icon=mb_noicon);\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_MESSAGEBOX\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pOwner 
+\tab
+Owner window. This window will be disabled while the message box is being 
+displayed. Can be NULL. 
+\par
+pszText 
+\tab
+Text to display. 
+\par
+pszTitle 
+\tab
+Title of the messagebox. 
+\par
+buttons 
+\tab
+Specifies which push buttons should be available: 
+\par\pard\sb100\tx4401\li4401\fi-2400
+constant\tab
+buttons\par
+mb_abortretyrignore\tab
+abort, retry, ignore 
+\par
+mb_ok\tab
+ok 
+\par
+mb_okcancel\tab
+ok, cancel 
+\par
+mb_yesno\tab
+yes, no 
+\par
+mb_yesnocancel\tab
+yes, no, cancel 
+\par\pard\sb100\tx2000\li2000\fi-1999
+ 
+\par
+icon 
+\tab
+Specifies what sort of messagebox it is and which icon is to be displayed 
+in the message box: 
+\par\pard\sb100\tx3801\li3801\fi-1800
+Value\tab
+Typical use\par
+mb_noicon\tab
+unspecified 
+\par
+mb_question\tab
+Wanna save? 
+\par
+mb_warning\tab
+Are you really sure you want to format the disk? 
+\par
+mb_information\tab
+File has been saved 
+\par
+mb_critical\tab
+The disk has bad sectors 
+\par
+mb_error\tab
+An internal error has ocurred. The program will now terminate 
+unconditionally 
+\par\pard\sb100\tx2000\li2000\fi-1999
+ 
+\par\pard\sb100
+\par
+
+Return value: 
+\par\pard\sb100\tx1801\li1801\fi-1800
+Value\tab
+Meaning\par
+mbid_ok\tab
+User pressed "Ok" button 
+\par
+mbid_cancel\tab
+User pressed "Cancel" button. 
+\par
+mbid_abort\tab
+... 
+\par
+mbid_retry\tab
+... 
+\par
+mbid_ignore\tab
+... 
+\par
+mbid_yes\tab
+... 
+\par
+mbid_no\tab
+... 
+\par
+mbid_error\tab
+Error ocurred while displaying the messagebox, for instance 
+specifying an invalid {\i{pOwner}} or when the GUI system has run out of 
+memory. 
+\par\pard\sb100
+\par
+
+MessageBox() shows a messagebox to the user and returns after the messagebox has 
+been dismissed.\par
+
+Example: 
+\line{\f1
+Bool MyWindow::Close(FCloseEvent&) \{\line
+  if(!fileModified) return False;\line
+  switch(MessageBox(this,"Wanna save?","Save",mb_yesnocancel,mb_question))\line
+  \{\line
+    case mbid_yes:\line
+      Save();\line
+      return False;\line
+    case mbid_no:\line
+      return False;\line
+    case mbid_cancel:\line
+      return True;\line
+    case mbid_error:\line
+      //oops! better save and exit...\line
+      Save();\line
+      return False;\line
+  \}\line
+\}\line
+}
+\par
+
+\page
+
+}

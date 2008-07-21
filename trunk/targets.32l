@@ -1,0 +1,145 @@
+Win32 LIB targets (and test and sample programs using these)
+Extra switches unless otherwise is specified:
+  Include directories: e:\source\bif\include
+  -zc Put constants in code segment (not needed but helps find errors and can improve swap performance)
+  -bm Multithreaded application
+define BIF_IN_SLL and BUILDING_BIF
+define STRICT if your want it (we recommend it)
+define WIN32_LEAN_AND_MEAN for (much) faster compilation
+------------------------------------------------------------------------------
+Target:
+  lib\win32\log.lib
+Sources:
+  ..\..\source\dbglog.cpp
+  ..\..\source\log.cpp
+Switches:
+Description:
+  Logging library
+------------------------------------------------------------------------------
+Target:
+  lib\win32\bift.lib
+Sources:
+  ..\..\source\thread\win32\*.cpp
+Switches:
+Description:
+  BIF/Thread library
+------------------------------------------------------------------------------
+Target:
+  lib\win32\win\bifwwin.lib
+Sources:
+  ..\..\..\source\window\win32\*.cpp
+  ..\..\..\source\window\winc\*.cpp
+Switches:
+Description:
+  BIF/Window for win32
+------------------------------------------------------------------------------
+Target:
+  lib\win32\win\frametst.exe
+Sources:
+  ..\..\..\test\window\winc\frametst.exe
+  ..\..\..\test\window\winc\framtst.rc
+  ..\log.lib
+  bifwwin.lib
+Switches:
+Description:
+  Test of FFrameWindow
+------------------------------------------------------------------------------
+Target:
+  lib\win32\win\dlgtest.exe
+Sources:
+  ..\..\..\test\window\winc\dlgtest.cpp
+  ..\..\..\test\window\winc\dlgtest.rc
+  ..\log.lib
+  bifwpm.lib
+Switches:
+Description:
+  Test of FDialog
+------------------------------------------------------------------------------
+Target:
+  lib\win32\win\mousetst.exe
+Sources:
+  ..\..\..\test\window\winc\mousetst.cpp
+  ..\log.lib
+  bifwwin.lib
+Switches:
+Description:
+  Test stub for FTranslatedMouseHandler
+------------------------------------------------------------------------------
+Target:
+  lib\win32\win\slidert.exe
+Sources:
+  ..\..\..\test\window\winc\slidert.cpp
+  ..\log.lib
+  bifwwin.lib
+Switches:
+Description:
+  Test stub for FSlider class
+------------------------------------------------------------------------------
+Target:
+  lib\win32\win\mfopen.exe
+Sources:
+  ..\..\..\test\window\winc\mfopen.cpp
+  ..\log.lib
+  ..\bifwpm.lib
+Switches:
+Description:
+  Test stub for multifile standard file dialog
+
+------------------------------------------------------------------------------
+Target:
+  lib\win32\win\biftwin.lib
+Sources:
+  ..\..\source\thread\win32\win\*.cpp
+Switches:
+Description:
+  BIF/Thread support classes for Windows GUI
+------------------------------------------------------------------------------
+Target:
+  lib\win32\win\bifm.lib
+Sources:
+  ..\..\..\source\mix\win32\win\*.cpp
+Switches:
+Description:
+  BIF/Mix support classes for Windows GUI
+------------------------------------------------------------------------------
+Target:
+  lib\win32\win\winsort.exe
+Sources:
+  ..\..\..\sample\mix\sort\*.cpp (-pmsort.cpp)
+  bifm.lib
+  ..\bift.lib
+  ..\log.lib
+  bifwwin.lib
+  biftwin.lib
+Switches:
+Description:
+  Sample BIF/Mix program: Sort demonstration
+------------------------------------------------------------------------------
+Target:
+  lib\win32\ipc\bifipc.lib
+Sources:
+  ..\..\..\source\ipc\os2\*.cpp
+Switches:
+Description:
+  BIF/IPC library for win32
+------------------------------------------------------------------------------
+Target:
+  lib\win32\ipc\testsrv.exe
+Sources:
+  ..\..\..\test\ipc\testsrv.cpp
+  bifipc.lib
+  ..\bift.lib
+Switches:
+Description:
+  Test server for BIF/IPC
+------------------------------------------------------------------------------
+Target:
+  lib\win32\ipc\testcln.exe
+Sources:
+  ..\..\..\test\ipc\testcln.cpp
+  bifipc.lib
+  ..\bift.lib
+Switches:
+Description:
+  Test client for BIF/IPC
+

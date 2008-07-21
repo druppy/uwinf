@@ -1,0 +1,87 @@
+DOS 16/32-bit targets (and test and sample programs using these)
+For 32-bit replace references to lib\dos16 to lib\dos32
+Extra switches unless otherwise is specified:
+  Include directories: e:\source\bif\include
+  -zc Put constants in code segment (keeps data segment small)
+  -s  Disable stack depth checking
+  -zu SS not assumed equal to DS (not needed for 32-bit)
+------------------------------------------------------------------------------
+Target:
+  lib\dos16\bift.lib
+Sources:
+  ..\..\source\thread\dos1632\*.cpp
+  ..\..\source\thread\dosc\*.cpp
+Switches:
+Description:
+  BIF/Thread library
+------------------------------------------------------------------------------
+Target:
+  lib\dos16\bifttest.exe
+Sources:
+  ..\..\test\thread\test.cpp
+  bift.lib
+  log.lib
+Switches:
+Description:
+  BIF/Thread test stub
+------------------------------------------------------------------------------
+Target:
+  lib\dos16\log.lib
+Sources:
+  ..\..\source\dbglog.cpp
+  ..\..\source\log.cpp
+Switches:
+Description:
+  Logging library
+------------------------------------------------------------------------------
+Target:
+  lib\dos16\wms\biftwms.lib
+Sources:
+  ..\..\..\source\thread\dos1632\wms\*.cpp
+Switches:
+Description:
+  BIF/Thread support classes for WMS
+------------------------------------------------------------------------------
+Target:
+  lib\dos16\wms\bifwwms.lib
+Sources:
+  ..\..\..\source\window\wms\*.cpp
+Switches:
+Description:
+  BIF/Window for WMS
+------------------------------------------------------------------------------
+Target:
+  lib\dos16\wms\bifm.lib
+Sources:
+  ..\..\..\source\mix\dos\wms\*.cpp
+Switches:
+Description:
+  BIF/Mix
+------------------------------------------------------------------------------
+Target:
+  lib\dos16\wms\test.lib
+Sources:
+  ..\..\..\test\window\wms\test.cpp
+  ..\bift.lib
+  ..\log.lib
+  biftwms.lib
+  bifwwms.lib
+  bifwwms.lib
+Switches:
+Description:
+  Test stub for BIF/Window
+------------------------------------------------------------------------------
+Target:
+  lib\dos16\wms\mtest.lib
+Sources:
+  ..\..\..\test\window\wms\mtest.cpp
+  ..\bift.lib
+  ..\log.lib
+  biftwms.lib
+  bifwwms.lib
+  bifwwms.lib
+Switches:
+Description:
+  Test stub for BIF/Window
+
+
