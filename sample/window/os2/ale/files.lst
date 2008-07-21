@@ -1,0 +1,48 @@
+ALE - ArtLink Editor
+
+The IPF compiler supports artlinks, that is bitmaps/metafiles with links in
+them. However, it can be a tedious job to put the links at the right
+positions because you have to specify the links in the text.
+
+The links are read and written from a .DAT file with the same base
+name as the .BMP file. Eg test.bmp and test.dat. This can be used when
+creating bitmaps with links in them for the IPF compiler
+
+ALE lets the user load a bitmap from a file and display it. The user can then
+create links using the mouse and/or the keyboard.
+
+
+The user interface is pretty intuitive so an explanation is not given here.
+
+ALE.BME       Menu file (used by Bif menu editor (..\menuedit))
+ALE.MNU       Resource for the menu
+ALE.ICO       Application icon
+ALE.MID       Menu IDs
+ALE.RC        Resources
+ALE.CPP       Main source file
+ALE.H         Resource IDs
+EDITLINK.HPP  Headerfile for the link edit dialog
+EDITLINK.CPP  Source for the link edit dialog
+EDITLINK.H    Resource IDs for the link edit dialog
+EDITLINK.DLG  Link edit dialog
+LINK.HPP      Misc headerfile
+LNOTE.HPP     -"-
+LINKA.HPP     Headerfile for LinkArray class
+LINKA.CPP     Source for LinkArray class
+LINKIO.HPP    Headerfile for link I/O
+LINKIO.CPP    Link I/O
+ALEWIN.HPP    Headerfile for ALEClientWindow
+ALEWIN.CPP    Source for ALEClientWindow
+READBMP.HPP   Headerfile for the file below
+READBMP.CPP   Source for reading OS/2 .BMP files (grabbed from somewhere
+              in the toolkit samples)
+
+Targets:
+  ale.exe
+    ale.cpp
+    editlink.cpp
+    linka.cpp
+    linkio.cpp
+    alewin.cpp
+    readbmp.cpp
+    ale.rc

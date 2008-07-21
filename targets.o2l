@@ -1,0 +1,260 @@
+OS/2 LIB targets (and test and sample programs using these)
+Extra switches unless otherwise is specified:
+  Include directories: e:\source\bif\include
+  -zc Put constants in code segment (not needed but helps find errors and can improve swap performance)
+  -bm Multithreaded application
+define BIF_IN_SLL and BUILDING_BIF
+------------------------------------------------------------------------------
+Target:
+  lib\os2\log.lib
+Sources:
+  ..\..\source\dbglog.cpp
+  ..\..\source\log.cpp
+Switches:
+Description:
+  Logging library
+------------------------------------------------------------------------------
+Target:
+  lib\os2\bift.lib
+Sources:
+  ..\..\source\thread\os2\*.cpp
+Switches:
+Description:
+  BIF/Thread library
+------------------------------------------------------------------------------
+Target:
+  lib\os2\pm\bifwpm.lib
+Sources:
+  ..\..\..\source\window\pm\*.cpp
+Switches:
+Description:
+  BIF/Window for Presentation Manager
+------------------------------------------------------------------------------
+Target:
+  lib\os2\pm\frametst.exe
+Sources:
+  ..\..\..\test\window\os2\frametst.exe
+  ..\..\..\test\window\os2\frametst.rc
+  ..\log.lib
+  bifwpm.lib
+Switches:
+Description:
+  Test of FFrameWindow
+------------------------------------------------------------------------------
+Target:
+  lib\os2\pm\dlgtest.exe
+Sources:
+  ..\..\..\test\window\os2\dlgtest.cpp
+  ..\..\..\test\window\os2\dlgtest.rc
+  ..\log.lib
+  bifwpm.lib
+Switches:
+Description:
+  Test of FDialog
+------------------------------------------------------------------------------
+Target:
+  lib\os2\pm\menuedit.exe
+Sources:
+  ..\..\..\sample\window\os2\*.cpp
+  ..\..\..\sample\window\os2\menuedit.rc
+  ..\log.lib
+  bifwpm.lib
+Switches:
+Description:
+  Sample proram: Menu editor for OS/2
+------------------------------------------------------------------------------
+Target:
+  lib\os2\pm\pmsort.exe
+Sources:
+  ..\..\..\sample\mix\sort\*.cpp (-winsort.cpp)
+  bifm.lib
+  ..\bift.lib
+  ..\log.lib
+  bifwpm.lib
+  biftpm.lib
+Switches:
+Description:
+  Sample BIF/Mix program: Sort demonstration
+------------------------------------------------------------------------------
+Target:
+  lib\os2\pm\odcbtest.exe
+Sources:
+  ..\..\..\test\window\os2\odcbtest.cpp
+  ..\log.lib
+  bifwpm.lib
+Switches:
+Description:
+  Test of ownerdraw comboboxes (not supported directly by PM)
+------------------------------------------------------------------------------
+Target:
+  lib\os2\pm\bifm.lib
+Sources:
+  ..\..\..\source\mix\os2\*.cpp
+Switches:
+Description:
+  BIF/Mix for PM
+------------------------------------------------------------------------------
+Target:
+  lib\os2\pm\ale.exe
+Sources:
+  ..\..\..\sample\window\os2\ale\*.cpp
+  ..\log.lib
+  bifwpm.lib
+Switches:
+Description:
+  Art Link Editor sample program
+------------------------------------------------------------------------------
+Target:
+  lib\os2\pm\mfopen.exe
+Sources:
+  ..\..\..\test\window\os2\mfopen.cpp
+  ..\log.lib
+  ..\bifwpm.lib
+Switches:
+Description:
+  Test stub for multifile standard file dialog
+------------------------------------------------------------------------------
+Target:
+  lib\os2\pm\slidert.exe
+Sources:
+  ..\..\..\test\window\os2\slidert.cpp
+  ..\log.lib
+  bifwpm.lib
+Switches:
+Description:
+  Test stub for FSlider class
+------------------------------------------------------------------------------
+Target:
+  lib\os2\brserver.exe
+Sources:
+  ..\..\sample\thread\os2\brstart\conlist.cpp constrt.cpp conthrd.cpp
+                                  dispjobs.cpp job.cpp joblist.cpp jobstart.cpp 
+                                  smthrd.cpp srcmain.cpp srcpipe.cpp
+                                  tdelthrd.cpp
+  log.lib
+  bift.lib
+Switches:
+Description:
+  BIF Remote Start sample program (server)
+------------------------------------------------------------------------------
+Target:
+  lib\os2\brstart.exe
+Sources:
+  ..\..\sample\thread\os2\brstart\bros2.cpp clnpipe.cpp
+  log.lib
+  bift.lib
+Switches:
+Description:
+  BIF Remote Start sample program (OS/2 client)
+------------------------------------------------------------------------------
+Target:
+  lib\dos\brsdos
+Sources:
+  ..\..\sample\thread\os2\brstart\brsdos.cpp clnpipe.cpp
+Switches:
+  DOS Executable!
+Description:
+  BIF Remote Start sample program (DOS client)
+------------------------------------------------------------------------------
+Target:
+  lib\os2\pm\biftpm.lib
+Sources:
+  ..\..\source\thread\os2\pm\*.cpp
+Switches:
+Description:
+  BIF/Thread support classes for Presentation Manager
+------------------------------------------------------------------------------
+Target:
+  lib\os2\wms\biftwms.lib
+Sources:
+  ..\..\..\source\thread\os2\wms\*.cpp
+Switches:
+  Add WMS include path and define BIFWINDOWSYSTEM_WMS
+Description:
+  BIF/Thread support classes for WMS
+------------------------------------------------------------------------------
+Target:
+  lib\os2\wms\bifm.lib
+Sources:
+  ..\..\..\source\mix\os2\wms\*.cpp
+Switches:
+  Add WMS include path and define BIFWINDOWSYSTEM_WMS
+Description:
+  BIF/Mix support classes for WMS
+------------------------------------------------------------------------------
+Target:
+  lib\os2\wms\bifwwms.lib
+Sources:
+  ..\..\..\source\window\wms\*.cpp
+Switches:
+  Add WMS include path and define BIFWINDOWSYSTEM_WMS
+Description:
+  BIF/Window for WMS (source is shared bewteen os/2 and dos)
+------------------------------------------------------------------------------
+Target:
+  lib\os2\wms\test.exe
+Sources:
+  ..\..\..\test\window\wms\test.cpp
+  ..\bift.lib
+  ..\lob.lib
+  bifm.lib
+  biftwms.lib
+  bifwwms.lib
+  <wms.lib>
+Switches:
+  Add WMS include path and define BIFWINDOWSYSTEM_WMS
+Description:
+  Test program for WMS
+------------------------------------------------------------------------------
+Target:
+  lib\os2\wms\mtest.exe
+Sources:
+  ..\..\..\tst\window\wms\test.cpp
+  ..\bift.lib
+  ..\lob.lib
+  bifm.lib
+  biftwms.lib
+  bifwwms.lib
+  <wms.lib>
+Switches:
+  Add WMS include path and define BIFWINDOWSYSTEM_WMS
+Description:
+  Test program for testing WMS menus
+------------------------------------------------------------------------------
+Target:
+  lib\os2\os2\mousetst.exe
+Sources:
+  ..\..\..\test\window\os2\mousetst.cpp
+  ..\log.lib
+  bifwpm.lib
+Switches:
+Description:
+  Test stub for FTranslatedMouseHandler
+------------------------------------------------------------------------------
+Target:
+  lib\os2\ipc\bifipc.lib
+Sources:
+  ..\..\..\source\ipc\os2\*.cpp
+Switches:
+Description:
+  BIF/IPC library for OS/2
+------------------------------------------------------------------------------
+Target:
+  lib\os2\ipc\testsrv.exe
+Sources:
+  ..\..\..\test\ipc\testsrv.cpp
+  bifipc.lib
+  ..\bift.lib
+Switches:
+Description:
+  Test server for BIF/IPC
+------------------------------------------------------------------------------
+Target:
+  lib\os2\ipc\testcln.exe
+Sources:
+  ..\..\..\test\ipc\testcln.cpp
+  bifipc.lib
+  ..\bift.lib
+Switches:
+Description:
+  Test client for BIF/IPC

@@ -1,0 +1,20 @@
+#define MENU_MENUEDIT           100
+#define ID_FILE                 100
+#define ID_NEWFILE              101
+#define ID_OPENFILE             102
+#define ID_SAVEFILE             103
+#define ID_SAVEFILEAS           104
+#define ID_EDIT                 200
+#define ID_CHECKDUPLICATES      201
+#define ID_STANDARD             300
+#define ID_STANDARDFILE         301
+#define ID_STANDARDEDIT         302
+#define ID_STANDARDHELP         303
+#define ID_HELPMENU             900
+#define ID_HELP_INDEX           901
+#define ID_GENERAL_HELP         902
+#define ID_USING_HELP           903
+#define ID_HELP_KEYS            904
+#define ID_HELPPRODINFO         905
+
+

@@ -1,0 +1,13 @@
+#define ICON_STARTSEARCH	1
+#define ID_STATUS	105
+#define DIALOG_STARTSEARCH	1
+#define ID_CLOSE	104
+#define ID_START	103
+#define ID_DRIVE	102
+#define ID_FILESPEC	101
+
+#define DIALOG_SEARCH	2
+#define ID_DIRS	102
+#define ID_FILES	101
+#define ID_FILELIST	103
+

@@ -1,0 +1,1404 @@
+[topic bw_window_classes same "Window classes" "BIF/Window window classes"]
+BIF has only a few window classes (not counting control classes)
+
+The following picture shows the overall class hierarchy:
+[graphic hypergraphic "" "winbmp:wndclass" "os2bmp:wndclass"]
+[etopic]
+
+[topic FWnd down "FWnd" "FWnd class"]
+Declaration:
+[code]
+class FWnd { ...
+[ecode]
+
+The FWnd class is the base class of all window classes. It implements support for [ref FHandler "FHandlers"]
+
+FWnd has very few portable operations. These are:
+[sl]
+[li][ref FWnd_ctor "FWnd()"]
+[li][ref FWnd_dtor "~FWnd()"]
+[li][ref FWnd_Destroy "Destroy()"]
+[li][ref FWnd_Show "Show()"]
+[li][ref FWnd_Hide "Hide()"]
+[li][ref FWnd_IsVisible "IsVisible()"]
+[li][ref FWnd_Enable "Enable()"]
+[li][ref FWnd_Disable "Disable()"]
+[li][ref FWnd_IsEnabled "IsEnabled()"]
+[li][ref FWnd_GetParent "GetParent()"]
+[li][ref FWnd_SetParent "SetParent()"]
+[li][ref FWnd_GetOwner "GetOwner()"]
+[li][ref FWnd_SetOwner "SetOwner()"]
+[li][ref FWnd_IsValid "IsValid()"]
+[li][ref FWnd_Zorder "Zorder()"]
+[li][ref FWnd_GetFirstSibling "GetFirstSibling()"]
+[li][ref FWnd_GetNextSibling "GetNextSibling()"]
+[esl]
+
+The following operations are common to both Windows 3.1, OS/2 PM and WMS but
+still not portable. Whenever you use these operations, you will have to
+review your source when you port your program.
+[sl]
+[li][ref FWnd_GetHwnd "GetHwnd()"]
+[li][ref FWnd_PostEvent "PostEvent()"]
+[li][ref FWnd_SendEvent "SendEvent()"]
+[li][ref FWnd_GetStyle "GetStyle()"]
+[li][ref FWnd_SetStyle1 "SetStyle(style)"]
+[li][ref FWnd_SetStyle2 "SetStyle(and_mask,or_mask)"]
+[esl]
+[etopic]
+
+[topic FWnd_ctor down "FWnd()" "FWnd::FWnd()"]
+Declaration:
+[code]
+FWnd( void );
+[ecode]
+
+FWnd's constructor just initializes various data members used by the FWnd class.
+
+[note]The "native" window is [hp 1]not[ehp] created. This is done later by the
+create mechanism in each subclasses.
+[enote]
+[etopic]
+
+
+[topic FWnd_dtor same "~FWnd()" "FWnd::~FWnd()"]
+Declaration:
+[code]
+virtual ~FWnd();
+[ecode]
+If the native window still exists the destructor will call [ref FWnd_Destroy "Destroy()"].
+
+[note]Due to the semantics of destructors this will always call FWnd::Destroy().
+[enote]
+[etopic]
+
+
+[topic FWnd_Destroy same "Destroy()" "FWnd::Destroy()"]
+Declaration:
+[code]
+virtual Bool Destroy( void );
+[ecode]
+Destroy() destroys the native window (if any). This function is called by [ref FWnd_dtor "~FWnd()"]
+
+If the window has not been created calling Destroy() is harmless.
+
+You should destroy your windows explicitly instead of letting the destructors
+do it. If you do not destroy the window yourself and the BIF-object goes out
+of scope the C++ destructor mechanism will first destruct the member window
+objects (which will destroy the native windows) then the window object itself.
+Depending on GUI system and version of the GUI system this may cause
+unnecessary repainting of windows that are going to be destroyed. Example:
+[code]
+class MyWindow : public ... {
+  SubWindow subwindow1;
+  SubWindow subwindow2;
+  ...
+};
+
+foo() {
+  MyWindow window;
+  window.Create(...
+  
+  //'window' goes out of scope  
+}
+[ecode]
+When window's destructor is called automatically when it goes out of scope, this may happen:
+[code]
+  subwindow1's destructor called, which calls:
+    subwindow1.Destroy() which
+      destroys the native window, which can cause:
+        unnecessary repainting of the area in window that subwindow1 covered
+  subwindow2's destructor called, which calls:
+    subwindow2.Destroy() which
+      destroys the native window, which can cause:
+        unnecessary repainting of the area in window that subwindow2 covered
+  ...
+  window's destructor is called, which calls:
+    window's.Destroy(), which:
+      destroys the native window
+[ecode]
+The unnecessary repainting of the areas covered by the window's subwindows slows down a lot!
+
+If the foo() function explicitly called window.Destroy() before window goes out of scope this happens:
+[code]
+  (window.Destroy() is called)
+    native window including its subwindows are destroyed
+  (window goes out of scope)
+  subwindow1's destrouctor is called
+  subwindow2's destrouctor is called
+  window's destrouctor is called
+[ecode]
+
+The rule is that you should always match a xxxx.Create(...) with a xxxx.Destroy().
+
+[note]Other rules apply to [ref FModalDialog "modal dialogs"]
+[enote]
+[etopic]
+
+
+
+[topic FWnd_Show same "Show()" "FWnd::Show()"]
+Declaration:
+[code]
+Bool Show();
+[ecode]
+This function sets a window's visibility to 'visible'. The window is repainted when appropriate.
+
+Example:
+[code]
+Bool MyApp::StartUp(int,char**) {
+  if(!MyWindow.Create())
+    return False;
+  MyWindow.Show();
+  MyWindow.BringToFront();
+}
+[ecode]
+
+See also: [ref FWnd_Hide "Hide()"], [ref FWnd_IsVisible "IsVisible()"]
+[etopic]
+
+
+[topic FWnd_Hide same "Hide()" "FWnd::Hide()"]
+Declaration:
+[code]
+Bool Hide();
+[ecode]
+This function sets a window's visibility to 'invisible'. Invisible windows will
+not receive mouse or keyboard event.
+
+See also: [ref FWnd_Show "Show()"], [ref FWnd_IsVisible "IsVisible()"]
+[etopic]
+
+
+[topic FWnd_IsVisible same "IsVisible()" "FWnd::IsVisible()"]
+Declaration:
+[code]
+Bool IsVisible();
+[ecode]
+IsVisible() returns wheter or not the window is logically visible. A window
+can be logically visible, but physically covered by other windows.
+
+See also: [ref FWnd_Show "Show()"], [ref FWnd_Hide "Hide()"]
+[etopic]
+
+
+[topic FWnd_Enable same "Enable()" "FWnd::Enable()"]
+Declaration:
+[code]
+Bool Enable();
+[ecode]
+This function enables the window.
+[etopic]
+
+[topic FWnd_Disable same "Disable()" "FWnd::Disable()"]
+Declaration:
+[code]
+Bool Disable();
+[ecode]
+This function disables the window. A disabled window cannot receive mouse or keyboard events.
+[etopic]
+
+[topic FWnd_IsEnabled same "IsEnabled()" "FWnd::IsEnabled()"]
+Declaration:
+[code]
+Bool IsEnabled();
+[ecode]
+This function returns True if the window is enabled.
+[etopic]
+
+
+[topic FWnd_GetParent same "GetParent()" "FWnd::GetParent()"]
+Declaration:
+[code]
+FWnd *GetParent();
+[ecode]
+This function returns the window's parent window provided that BIF knows about
+it. The parent window is the window that the window is visually subordinated.
+Eg. a top-level frame window's parent is the desktop. A control in a dialog
+has the dialog as parent.
+
+See also: [ref FWnd_SetParent "SetParent()"], [ref FWnd_GetOwner "GetOwner()"]
+[etopic]
+
+
+[topic FWnd_SetParent same "SetParent()" "FWnd::SetParent()"]
+Declaration:
+[code]
+FWnd *SetParent(FWnd *pWnd );
+[ecode]
+This function reparents the window. The return value is the window's previous
+parent window and NULL if the function fails.
+
+See [reffootnote windows_ownerparent_note "Windows 3.1 restrictions"]
+
+See also: [ref FWnd_GetParent "GetParent()"], [ref FWnd_SetOwner "SetOwner()"]
+[etopic]
+
+[footnote windows_ownerparent_note]
+Windows 3.1 does not maintain separate parent and owner information for all windows.
+[ul]
+[li]Overlapped windows (top-level frame windows) always have the desktop as parent and owner.
+[li]Popup windows (non-top-level frame windows) have the desktop as parent and another window as owner.
+[li]Child windows' (eg.: controls') parent is always their owner
+[eul]
+
+Changing the parent or owner of a window is not recommended under Windows.
+SetParent() always fails for frame windows and SetOwner() always fails for
+top-level frame windows and child windows.
+[efootnote]
+
+
+[topic FWnd_GetOwner same "GetOwner()" "FWnd::GetOwner()"]
+Declaration:
+[code]
+FWnd *GetOwner();
+[ecode]
+This function returns the window's owner window. The owner of a window is the
+window that the window is logically subordinated. When windows send notification,
+they send them to their owner.
+
+See also: [ref FWnd_GetParent "GetParent()"], [ref FWnd_SetOwner "SetOwner()"]
+[etopic]
+
+
+[topic FWnd_SetOwner same "SetOwner()" "FWnd::SetOwner()"]
+Declaration:
+[code]
+FWnd *SetOwner( FWnd *pWnd );
+[ecode]
+This function changes the window's owner.
+
+See [reffootnote windows_ownerparent_note "Windows 3.1 restrictions"]
+
+See also: [ref FWnd_SetParent "SetParent()"], [ref FWnd_GetOwner "GetOwner()"]
+[etopic]
+
+
+[topic FWnd_GetHwnd same "GetHwnd()" "FWnd::GetHwnd()"]
+Declaration:
+[code]
+HWND GetHwnd();
+[ecode]
+This function returns the handle to the native window under Windows, OS/2 PM
+and WMS. This function is not portable.
+[etopic]
+
+[topic FWnd_IsValid same "IsValid()" "FWnd::IsValid()"]
+Declaration:
+[code]
+Bool IsValid();
+[ecode]
+This function returns True if the window is associated with a native window. Until
+the window's Create() function has been called the return value is False. Then it
+is True until the windows' Destroy() is called.
+
+This function can be handy when testing the return value from the window's
+Create() is not suitable.
+[etopic]
+
+
+
+[topic FWnd_Zorder same "Zorder()" "FWnd::Zorder()"]
+Declaration:
+[code]
+enum zorder {
+  zorder_first,
+  zorder_last,
+  zorder_before,
+  zorder_after
+};
+
+Bool Zorder(zorder z, FWnd *pWnd = NULL );
+[ecode]
+This function changes the Z-order of the window.
+
+[parml]
+[pt]z[pd]How to change the Z-order.
+[dl "Value" "Action"]
+[dt]zorder_first[dd]The window is moved to the start of the Z-order.
+[dt]zorder_last[dd]The window is moved to the end of the Z-order.
+[dt]zorder_before[dd]The window is moved to the front of [hp 1]pWnd[ehp].
+[dt]zorder_after[dd]The window is moved to the back of [hp 1]pWnd[ehp].
+[edl]
+[pt]pWnd[pd]Pointer to sibling window. Must be NULL if [hp 1]z[ehp] is zorder_first or zorder_lst.
+[eparml]
+
+The return value is True on when the function is succesful.
+
+See also: [ref FWnd_GetFirstSibling "GetFirstSibling()"], [ref FWnd_GetNextSibling "GetNextSibling()"]
+[etopic]
+
+
+[topic FWnd_GetFirstSibling same "GetFirstSibling()" "FWnd::GetFirstSibling()"]
+Declaration:
+[code]
+FWnd *GetFirstSibling();
+[ecode]
+This function returns a pointer to the first sibling. If BIF/Window does not
+know the first sibling the return value is NULL.
+
+Example:
+[code]
+//how to enumerate a window's siblings
+FWnd *window= ...
+
+FWnd *pwnd = window->GetFirstSibling();
+while(pwnd) {
+  ...
+  pwnd = pwnd->GetNextSibling();
+}
+[ecode]
+
+See also: [ref FWnd_GetNextSibling "GetNextSibling()"]
+[etopic]
+
+
+[topic FWnd_GetNextSibling same "GetNextSibling()" "Fwnd::GetNextSibling()"]
+Declaration:
+[code]
+FWnd *GetNextSibling();
+[ecode]
+This function returns a pointer to the next sibling of the window. If BIF/Window
+does not know the next sibling or there are no siblings after the window the
+return value is NULL.
+
+See also: [ref FWnd_GetFirstSibling "GetFirstSibling()"]
+[etopic]
+
+
+
+[topic FWnd_PostEvent same "PostEvent()" "FWnd::PostEvent()"]
+Declaration:
+[code]
+Bool PostEvent(const [ref FEvent "FEvent"] &event);
+[ecode]
+This function posts an event to a window. This can fail if the message
+queue of the destination window is full.
+
+[note]The destination window is the window specified in [hp 1]event[ehp].
+[enote]
+[etopic]
+
+
+[topic FWnd_SendEvent same "SendEvent()" "FWnd::SendEvent()"]
+Declaration:
+[code]
+Bool SendEvent([ref FEvent "FEvent"] &event);
+[ecode]
+This function sends an event to a window. 
+
+[note]The destination window is the window specified in [hp 1]event[ehp].
+Under Windows 3.1 BIF/Window may bypass Windows' SendMessage() function and
+transfer the event directly to the window.
+[enote]
+[etopic]
+
+
+
+[topic FWnd_GetStyle same "GetStyle()" "FWnd::GetStyle()"]
+Declaration:
+[code]
+Windows:
+  LONG GetStyle();
+OS/2 PM:
+  ULONG GetStyle();
+WMS:
+  uint32 GetStyle();
+[ecode]
+This function returns the style bits of the native window.
+
+See also: [ref FWnd_SetStyle1 "SetStyle()"], [ref FWnd_SetStyle2 "SetStyle(and_mask,or_mask)"]
+[etopic]
+
+[topic FWnd_SetStyle1 same "SetStyle()" "FWnd::SetStyle()"]
+Declaration:
+[code]
+Windows:
+  void SetStyle(LONG style);
+OS/2 PM:
+  void SetStyle(ULONG style);
+WMS:
+  void SetStyle(uint32 style);
+[ecode]
+This function sets the style bits of the antive window.
+
+[caution]You should use [ref FWnd_SetStyle2 "SetStyle(and_mask,or_mask)"] instead of a GetStyle/SetStyle pair
+[ecaution]
+[etopic]
+
+[topic FWnd_SetStyle2 upafter "SetStyle(and_mask,or_mask)" "FWnd::SetStyle(and_mask,or_mask)"]
+Declaration:
+[code]
+Windows:
+  void SetStyle(LONG and_mask, LONG or_mask);
+OS/2 PM:
+  void SetStyle(ULONG and_mask, ULONG or_mask);
+WMS:
+  void SetStyle(uint32 and_mask, uint32 or_mask);
+[ecode]
+This function changes the style bits specified by 0s in [hp 1]and_mask[ehp] to
+[hp 1]or_mask[ehp]. This function is safe in multitasking GUIs which
+GetStyle/SetStyle pairs are not. The new style is computed as follows:
+[code]
+newstyle = (oldstyle & and_mask) | or_mask;
+[ecode]
+
+Example: This piece of code removes the "tabstop" style bit of a window
+[code]
+FWnd *pwnd = ...
+pwnd->SetStyle(~WS_TABSTOP,0);
+[ecode]
+This piece of code adds the "tabstop" style bit of a window
+[code]
+FWnd *pwnd = ...
+pwnd->SetStyle(~WS_TABSTOP,WS_TABSTOP);
+[ecode]
+
+See also: [ref FWnd_GetStyle "GetStyle()"]
+[etopic]
+
+
+
+
+
+[topic FDesktop same "FDesktop"]
+[key "desktop alias"]
+Declaration:
+[code]
+class FDesktop : public FWnd {
+[ecode]
+The FDesktop class is the interface to the desktop. There exists only one
+instance of this class (gettable with [ref GetDesktop "GetDesktop()"])
+
+FDesktop has two member functions:
+[sl]
+[li]int GetWidth();
+[li]int GetHeight();        
+[esl]
+
+See also: [ref GetDesktop "GetDesktop()"]
+[etopic]
+
+
+
+
+
+
+[topic FFrameWindow same "FFrameWindow"]
+[key "frame window"]
+Declaration:
+[code]
+class FFrameWindow : public FWnd, ...
+[ecode]
+A FFrameWindow encapsulates the "frame windows". Frame windows are the windows that have titlebar, menus, ...
+The FrameWindow class is the superclass of [ref FAppWindow "FAppWindow"] and [ref FDialog "FDialog"].
+An application will rarely instantiate a FFrameWindow but rather one of its two
+subclasses.
+
+A frame window consists of several items (not always present):
+[ul]
+[li]Border
+[li]System menu
+[li]Titlebar
+[li]Minimize button
+[li]Maximize/restore button
+[li]Menu
+[li]Scrollbars
+[eul]
+
+[graphic bitmap "FFrameWindow snapshot" "winbmp:winframe.bmp" "os2bmp:pmframe.bmp"]
+
+Member functions:
+[sl]
+[li][ref FFrameWindow_Create "Create()"]
+[li][ref FFrameWindow_BringToFront "BringToFront()"]
+[li][ref FFrameWindow_BringToBack "BringToBack()"]
+[li][ref FFrameWindow_Minimize "Minimize()"]
+[li][ref FFrameWindow_Maximize "Maximize()"]
+[li][ref FFrameWindow_Restore "Restore()"]
+[li][ref FFrameWindow_GetMenu "GetMenu()"]
+[li][ref FFrameWindow_SetMenu "SetMenu()"]
+[li][ref FFrameWindow_GetSystemMenu "GetSystemMenu()"]
+[li][ref FFrameWindow_RedrawMenu "RedrawMenu()"]
+[li][ref FFrameWindow_SetCaption "SetCaption()"]
+[li][ref FFrameWindow_GetCaption "GetCaption()"]
+[li][ref FFrameWindow_SetSubtitle "SetSubtitle()"]
+[li][ref FFrameWindow_GetSubtitle "GetSubtitle()"]
+[esl]
+[etopic]
+
+
+[topic FFrameWindow_Create down "Create()" "FFrameWindow::Create()" primary]
+Declaration:
+[code]
+Bool Create(FWnd *pParent, int Id, long fcf, long alf, FRect *pRect = NULL, FModule *module=0 );
+[ecode]
+Create() creates the frame window with the specified items and loads menu,
+icon, title etc. as specified.
+
+[parml]
+[pt]pParent[pd]Parent window. If [hp 1]pParent[ehp] is NULL the desktop will be the parent.
+[pt]Id[pd]Window ID of the frame window. The ID is used for loading title, icon, accelerator table and menu.
+[pt]fcf[pd]Frame creation flags specifying what items should be present in the
+frame window. This can be a combination of the following:
+[dl "" "" 15]
+[dt]fcf_sysmenu[dd]System menu contains standard menu items (restore/minimize/move...)
+[dt]fcf_titlebar[dd]Title bar/Caption
+[dt]fcf_minbutton[dd]Minimize button (and minimize item in the system menu)
+[dt]fcf_maxbutton[dd]Maximize button (and maximize item in the system menu)
+[dt]fcf_bothbuttons[dd]Both minimize and maximize button
+[dt]fcf_menu[dd]The frame window will have room for a menu
+[dt]fcf_horzscroll[dd]Horizontal scrollbar.
+[dt]fcf_vertscroll[dd]Vertical scrollbar.
+[edl]
+
+And one of these:
+[dl "" "" 15]
+[dt]fcf_border[dd]Tiny border
+[dt]fcf_sizeborder[dd]Thick border used for sizing the frame window.
+[dt]fcf_dialogborder[dd]Dialog border used for signalling to the user
+that he must dismiss the window before he can interact with the rest of
+the application
+[edl]
+
+Note that some combinations of fcf_ flags can leave visual holes in the
+frame window (such a fcf_sysmenu but no fcf_titlebar)
+[pt]alf[pd]Auto-load flags. Specifies which items should be automatically
+loaded from the resources. This can be a combination of:
+[dl "" "" 15]
+[dt]alf_icon[dd]Icon is automatically loaded from the resources. The icon ID is [hp 1]Id[ehp].
+[dt]alf_menu[dd]Menu is automatically loaded from the resources. The menu ID is [hp 1]Id[ehp].
+[dt]alf_accelerator[dd]Accelerator table is automatically loaded from the resources.
+[dt]alf_caption[dd]The caption is automatically loaded from the resources (string table)
+[edl]
+[pt]pRect[pd]Initial position of the frame window. If NULL BIF/Window will let the native GUI system decide where the window is put.
+[pt]module[pd]Module containing icon, menu, accelerator etc.
+[eparml]
+
+[note]Frame windows are initially invisible to improve performance. Use [ref FWnd_Show "Show()"] to make them visible.
+[enote]
+
+The following example creates a frame window with system menu, titlebar minimize button, and menu.
+[code]
+//resources (Windows format)
+ID_MYAPP ICON "myapp.ico"
+STRINGTABLE
+BEGIN
+  ID_MYAPP "My application"
+END
+ID_MYAPP MENU
+BEGIN
+  MENUITEM "Item 1", 100
+  MENUITEM "Item 2", 101
+END
+
+//source
+FFrameWindow frame;
+
+Frame.Create(GetDesktop(),
+             ID_MYAPP,
+             FFrameWindow::fcf_sysmenu|
+             FFrameWindow::fcf_titlebar|
+             FFrameWindow::fcf_minbutton|
+             FFrameWindow::fcf_menu,
+             FFrameWindow::alf_icon|
+             FFrameWindow::alf_caption|
+             FFrameWindow::alf_menu,
+             (FRect*)0
+            );
+[ecode]
+[etopic]
+
+
+[topic FFrameWindow_BringToFront same "BringToFront()" "FFrameWindow::BringToFront()"]
+Declaration:
+[code]
+Bool BringToFront();
+[ecode]
+This function brings the frame window to the front of the other frame
+windows. It depends on the native GUI wether a frame window initially
+is at the front or not. When you create a frame window is is recommended
+to call BringToFront()
+
+Example:
+[code]
+frame.Create(...
+frame.Show();         //show window
+frame.BringToFront();
+[ecode]
+
+See also: [ref FFrameWindow_BringToBack "BringToBack()"], [ref FWnd_Show "Show()"]
+[etopic]
+
+
+[topic FFrameWindow_BringToBack same "BringToBack()" "FFrameWindow::BringToBack()"]
+Declaration:
+[code]
+Bool BringToBack();
+[ecode]
+This function puts the frame window behind all the other frame windows.
+
+See also: [ref FFrameWindow_BringToFront "BringToFront()"], [ref FWnd_Hide "Hide()"]
+[etopic]
+
+
+[topic FFrameWindow_Minimize same "Minimize()" "FFrameWindow::Minimize()"]
+Declaration:
+[code]
+Bool Minimize();
+[ecode]
+This function minimizes the window (= turns it into an icon). This works even
+if the frame window does not have a minimize button
+
+See also: [ref FFrameWindow_Maximize "Maximize()"], [ref FFrameWindow_Restore "Restore()"]
+[etopic]
+
+
+[topic FFrameWindow_Maximize same "Maximize()" "FFrameWindow::Maximize()"]
+Declaration:
+[code]
+Bool Maximize();
+[ecode]
+This function maximizes the window (= turns it into a fullscreen window). This works even
+if the frame window does not have a maximize button
+
+See also: [ref FFrameWindow_Minimize "Minimize()"], [ref FFrameWindow_Restore "Restore()"]
+[etopic]
+
+
+[topic FFrameWindow_Restore same "Restore()" "FFrameWindow::Restore()"]
+Declaration:
+[code]
+Bool Restore();
+[ecode]
+This function restores the window from its minimized or maximized state.
+
+See also: [ref FFrameWindow_Minimize "Minimize()"], [ref FFrameWindow_Maximize "Maximize()"]
+[etopic]
+
+
+[topic FFrameWindow_GetMenu same "GetMenu()" "FFrameWindow::GetMenu()"]
+Declaration:
+[code]
+[ref FMenu "FMenu"] *GetMenu();
+[ecode]
+This function returns the current menu of the frame window. This is
+either the menu that was automatically loaded when the frame window
+was created or the menu specified in a [ref FFrameWindow_SetMenu "SetMenu()"]
+call. The return value is NULL if the frame window does not have a menu.
+
+Example:
+[code]
+FMenu *pmenu = frame.GetMenu();
+pmenu->EnableItem(IDM_SAVE, True);
+frame.RedrawMenu();
+[ecode]
+
+See also: [ref FFrameWindow_SetMenu "SetMenu()"], [ref FFrameWindow_GetSystemMenu "GetSystemMenu()"]
+[etopic]
+
+
+[topic FFrameWindow_SetMenu same "Setmenu()" "FFrameWindow::SetMenu()"]
+Declaration:
+[code]
+void SetMenu([ref FMenu "FMenu"] *m);
+[ecode]
+This function assign the menu [hp 1]m[ehp] to the frame window.
+
+See also: [ref FFrameWindow_GetMenu "GetMenu()"], [ref FFrameWindow_GetSystemMenu "GetSystemMenu()"]
+[etopic]
+
+
+[topic FFrameWindow_GetSystemMenu same "GetSystemMenu()" "FFrameWindow::GetSystemMenu()"]
+Declaration:
+[code]
+FMenu *GetSystemMenu();
+[ecode]
+This function returns the system menu of the frame window (if any). Modifying
+the system menu is never portable and there are differences between Windows,
+OS/2 PM and WMS. For instance, command events from the menu items in system
+menu is intercepted with [ref FCommandHandler_SysCommand "FCommandHandler::SysCommand()"]
+under Windows. But under OS/2 PM and WMS the events depends on the menu item's
+style and attribute.
+[etopic]
+
+[topic FFrameWindow_RedrawMenu same "RedrawMenu()" "FFrameWindow::RedrawMenu()"]
+Declaration:
+[code]
+void RedrawMenu();
+[ecode]
+This function redraws the menu in the frame window (if any). This function must
+be called after modifying a menu that is attached to a frame window.
+
+
+Example:
+[code]
+FMenu *pmenu = frame.GetMenu();
+pmenu->EnableItem(IDM_SAVE, True);
+frame.RedrawMenu();
+[ecode]
+[etopic]
+
+
+
+[topic FFrameWindow_SetCaption same "SetCaption()" "FFrameWindow::SetCaption()"]
+Declaration:
+[code]
+Bool SetCaption(const char *s);
+[ecode]
+SetCaption() changes the caption of the frame window. Under BIF/Window the full
+title of the frame window consists of two strings: the caption and the
+subtitle concatenated with a hyphen. If the subtitle is NULL the full title
+of the frame window consists of just the caption.
+
+Application-oriented frame windows should use the application name as the
+caption and the current file as the subtitle. Eg.: If the application name is
+"WizardWord" and the current file is "project.wzw" the full title of the frame
+window should be "WizardWord - project.wzw".
+
+Object-oriented frame windows should use the object name as the caption and the
+view/action as the subtitle. Eg.: If the current object/file is "project.wzw" and
+the frame window is a settings dialog the full title should be "project.wzw - Settings".
+
+If the caption is automatically loaded from the resources (see [ref FFrameWindow_Create "Create()"])
+and it starts with a hyphen it is treated as the subtitle.
+
+Example: (an object-oriented window)
+[code]
+//resources
+  STRINGTABLE
+  BEGIN
+    ID_DETAILSVIEW, "-Details view"
+  END
+//source
+  frame.Create(.... alf_caption ...
+  LoadFile(...
+  frame.SetCaption(filename);
+[ecode]
+
+See also: [ref FFrameWindow_Create "Create()"], [ref FFrameWindow_GetCaption "GetCaption()"], [ref FFrameWindow_SetSubtitle "SetSubtitle()"]
+[etopic]
+
+
+[topic FFrameWindow_GetCaption same "GetCaption()" "FFrameWindow::GetCaption()"]
+Declaration:
+[code]
+int GetCaption(char *buf, int buflen);
+[ecode]
+This function retrieves the caption previously set with [ref FFrameWindow_SetCaption "SetCaption()"] or automatically loaded during the
+window creation.
+
+[parml]
+[pt]buf[pd]Buffer for receiving the caption string
+[pt]buflen[pd]Length of [hp 1]buf[ehp]
+[eparml]
+
+The return value is the length of the caption or 0 if the buffer is too small.
+
+See also: [ref FFrameWindow_SetCaption "SetCaption()"], [ref FFrameWindow_GetSubtitle "GetSubtitle()"]
+[etopic]
+
+
+[topic FFrameWindow_SetSubtitle same "SetSubtitle()" "FFrameWindow::SetSubtitle("]
+Declaration:
+[code]
+Bool SetSubtitle(const char *s);
+[ecode]
+This function sets the subtitle of the window. See
+[ref FFrameWindow_SetCaption "SetCaption()"] for an explanation of the caption+subtitle concept.
+
+See also: [ref FFrameWindow_GetSubtitle "GetSubtitle()"]
+[etopic]
+
+
+[topic FFrameWindow_GetSubtitle upafter "GetSubtitle()" "FFrameWindow::GetSubtitle()"]
+Declaration:
+[code]
+int GetSubtitle(char *buf, int buflen);
+[ecode]
+This function retrieves the subtitle of the frame window previously set with
+[ref FFrameWindow_SetSubtitle "SetSubtitle()"] or autoamtically set during
+creation of the window.
+
+[parml]
+[pt]buf[pd]Buffer for receiving the subtitle string
+[pt]buflen[pd]Length of [hp 1]buf[ehp]
+[eparml]
+
+The return value is the length of the subtitle or 0 if the buffer is too small
+[etopic]
+
+[topic FAppWindow same "FAppWindow"]
+Declaration:
+[code]
+class FAppWindow : public [ref FFrameWindow "FFrameWindow"], ... {
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_APPWINDOW
+
+FAppWindow (silly name, but we could not come up with a better name) is a frame
+window which contains a client window. The client window is resized to fit
+when the FAppWindow is resized and the FAppWindow automatically forwards the
+focus to the client window. [ref FCommandHandler "Command events"] (among others)
+are forwarded to the client window.
+
+The FAppWindow is normally used for the main window of the application for
+displaying whatever the application is processing.
+
+Member functions:
+[sl]
+[li][ref FAppWindow_SetClient "SetClient()"]
+[li][ref FAppWindow_SetClient "GetClient()"]
+[li][ref FAppWindow_SavePosition "SavePosition()"]
+[li][ref FAppWindow_RestorePosition "RestorePosition()"]
+[esl]
+
+See also: [ref FClientWindow "FClientWindow"]
+[etopic]
+
+[topic FAppWindow_SetClient down "SetClient()" "FAppWindow::SetClient()"]
+Declaration:
+[code]
+FWnd *SetClient(FWnd *pNewClient);
+[ecode]
+This function tells the FAppWindow which window is the client window. The new
+client window [hp 1]pNewClient[ehp] is resized and positioned to fit the
+FAppWindow. The new client window must have been Create()'d before the call.
+
+Return value: The old client window, if any.
+
+[note][ref FClientWindow_Create "FClientWindow::Create()"] automatically calls
+this function.
+[enote]
+
+[note](OS/2 PM and WMS) The Window ID of the new client window is set to FID_CLIENT.
+[enote]
+
+Example: This example show a code fragment of a simple editor which uses a
+FMLE for the edit window.
+[code]
+FAppWindow fappwnd;
+
+FMLE client.
+
+fappwnd.Create(...);
+
+client.Create(...);
+fappwnd.SetClient(&client);
+[ecode]
+
+See also: [ref FAppWindow "FAppWindow"], [ref FAppWindow_GetClient "GetClient()"]
+[etopic]
+
+
+[topic FAppWindow_GetClient same "GetClient()" "FAppWindow::GetClient()"]
+Declaration:
+[code]
+FWnd *GetClient();
+[ecode]
+This function returns the current client window of the FAppWindow.
+
+The return value is NULL if there is no current client window.
+
+See also: [ref FAppWindow "FAppWindow"], [ref FAppWindow_SetClient "SetClient()"]
+[etopic]
+
+
+[topic FAppWindow_SavePosition same "SavePosition()" "FAppWindow::SavePosition()"]
+Decalration:
+[code]
+Bool SavePosition();
+[ecode]
+SavePosition() saves the position, size and state
+(minimized/maximized/normal/visible/hidden) of the FAppWindow to an .INI file.
+This is normally done just before the window is destroyed.
+
+The FAppWindow's position, size and state can later be restored with
+[ref FAppWindow_RestorePosition "RestorePosition()"].
+
+Return value: True on success.
+
+Example: This code fragment shows how you can use the save/restore feature of
+FAppWindow.
+[code]
+class MyApplication : public FApplication {
+  MyFrameWindow fw;
+public:
+  Bool StartUp(int argc, char **argv) {
+    if(!fw.Create(0))
+      return False;
+    if(!fw.RestorePosition()) {
+      fw.Show();
+      fw.BringToFront().
+    }
+    return True;
+  }
+  int ShutDown() {
+    fw.SavePosition();
+    fw.Destroy();
+    return 0;
+  }
+};
+[ecode]
+
+See also: [ref FAppWindow "FAppWindow"],
+[ref FAppWindow_RestorePosition "RestorePosition()"]
+[etopic]
+
+
+[topic FAppWindow_RestorePosition upafter "RestorePosition()" "FAppWindow::RestorePosition()"]
+Declaration:
+[code]
+Bool RestorePosition();
+[ecode]
+This function restores the position, size and state previously saved with
+[ref FAppWindow_SavePosition "SavePosition()"].
+
+Return value: True on success, False otherwise (usually because SavePosition()
+has not previously been called).
+
+[note]If RestorePosition() returns False you should call [ref FWnd_Show "Show()"]
+yourself.
+[enote]
+
+See also: [ref FAppWindow "FAppWindow"], [ref FAppWindow_SavePosition "SavePosition()"]
+[etopic]
+
+
+
+[topic FClientWindow same "FClientWindow"]
+Declaration:
+[code]
+class FClientWindow : public [ref FWnd "FWnd"],
+                      public [ref FSizeHandler "FSizeHandler"]
+                      ...
+[ecode]
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_APPWINDOW
+
+FClientWindow is the normal base class for client windows. The FSizeHandler is
+mixed in because it is very unusual to have a client window that doesn't care
+abouts its size.
+
+Member functions:
+[sl]
+[li][ref FClientWindow_Create "Create()"]
+[li][ref FClientWindow_GetAppWindow "GetAppWindow()"]
+[esl]
+
+See also: [ref FAppWindow "FAppWindow"]
+[etopic]
+
+[topic FClientWindow_Create down "Create()" "FClientWindow::Create()" secondary]
+Declaration:
+[code]
+Bool Create(FAppWindow *pParent);
+[ecode]
+This function creates the client window and automatically calls
+[ref FAppWindow_SetClient "FAppWindow::SetClient()"].
+
+Return value: True on success.
+[etopic]
+
+[topic FClientWindow_GetAppWindow upafter "GetAppWindow()" "FClientWindow::GetAppWndow()"]
+Declaration:
+[code]
+FAppWindow *GetAppWindow();
+[ecode]
+This function returns a pointer the FAppWindow in which the client window is. It
+is the [hp 1]pParent[ehp] pointer passed [ref FClientWindow_Create "Create()"].
+[etopic]
+
+
+
+[topic FDialog same "FDialog"]
+Declaration:
+[code]
+class FDialog : public [ref FFrameWindow "FFrameWindow"],
+                public [ref FCloseHandler "FCloseHandler"],
+                public [ref FCommandHandler "FCommandHandler"]
+                ...
+[ecode]
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_DIALOG
+
+The FDialog class is the base class of all dialog-style windows. The dialog can
+have several [ref FControl "control windows"] inside it (in contrast to
+[ref FAppWindow "FAppWindow"] which only have one window inside it - the client
+window). Dialog offers a keyboard interface to the user enabling him to jump
+between the controls with the tab and arrow keys. The controls in the dialog are
+specified in a dialog template in the resources.
+[reffootnote dialog_resource_note "(*)"].
+
+The default behaviour of the dialog when a FCloseEvent (see [ref FCloseHandler "FCloseHandler"]) is
+recieved is to translate it to a [ref FCommandEvent "FCommandEvent"] with
+IDCANCEL/DID_CANCEL as the item (even if the dialog does not have a cancel
+button.)
+
+The default behaviour of a dialog when it recieves a
+[ref FCommandEvent "FCommandEvent"] is to hide the dialog (in
+[ref FModalDialog "modal dialogs"] this also terminates
+[ref FModalDialog_DoModal "DoModal()"]).
+
+Member functions:
+[sl]
+[li][ref FDialog_Create "Create()"]
+[li][ref FDialog_CreateControls "CreateControls()"]
+[esl]
+
+See also: [ref FFrameWindow "FFrameWindow"], [ref FModalDialog "FModalDialog"]
+[etopic]
+
+[footnote dialog_resource_note]
+In this version of BIF/Window dialogs must be loaded from the resources. It is not
+possible to create dialogs at runtime. This will probably change in future
+versions of BIF/Window.
+[efootnote]
+
+
+[topic FDialog_Create down "Create()" "FDialog::Create()" secondary]
+Declaration:
+[code]
+Bool Create(FWnd *pOwner, int resID, FModule *module=0);
+[ecode]
+This function creates the dialog based on the dialog template with the ID
+[hp 1]resID[ehp] in the resources.
+
+[parml]
+[pt]pOwner[pd]Owner window of the dialog. The dialog will be kept in front of
+the owner window even if the owner window is the active window. The owner window
+specified with this parameter may not be the final owner of the dialog, because
+the final owner of the dialog is the first window frame window at or above
+pOwner in the owner hierachy. I.e., if you specify the client window in a
+FAppWindow the final owner of the dialog will be the FAppWindow.
+[pt]resID[pd]Resource ID of the dialog template.
+[pt]module[pd]Module containing dialog template, if 0 then the application is used.
+[eparml]
+
+[note]Before Create() returns it will call [ref FDialog_CreateControls "CreateControls()"]
+[enote]
+
+The return value is True on succes, False otherwise (usually because the
+dialog template could not be found in the resources)
+[etopic]
+
+[topic FDialog_CreateControls upafter "CreateControls" "FDialog::CreateControls()"]
+Declaration:
+[code]
+virtual Bool CreateControls() { return True; }
+[ecode]
+CreateControls() is called by [ref FDialog_Create "Create()"] when the native
+controls have been created but before Create() returns.
+
+This function is meant to be overridden and contain code that calls Create() for
+the BIF control objects and fills the controls with data.
+
+Example: This is a fragment of a simple dialog used for entering/editing a
+persons name and sex.
+[code]
+class MyDialog : public FDialog {
+  FSLE         c_Name;
+  FRadioButton c_Male;
+  FRadioButton c_Female;
+
+  char *name;
+  int  *sex;
+public:
+  MyDialog(char *n, int *s)
+    : name(n), sex(s)
+    {}
+
+  Bool CreateControls();
+
+  ...
+};
+
+Bool MyDialog::CreateControls() {
+  //associate the BIF-objects with the native controls
+  if(!c_Name.Create(this, DID_NAME))
+    return False;
+  if(!c_Male.Create(this, DID_MALE))
+    return False;
+  if(!c_Female.Create(this, DID_FEMALE))
+    return False;
+
+  //Now initialize the controls
+  c_Name.SetSext(name);
+  if(sex==0)
+    c_Male.Check();
+  else
+    c_Female.Check();
+
+  return True; //succesful initialization
+}
+[ecode]
+[etopic]
+
+
+[topic FModalDialog same "FModalDialog"]
+Declaration:
+[code]
+class FModalDialog : public [ref FDialog "FDialog"] {
+[ecode]
+A FModalDialog is a dialog that stops the user's interaction wiht the modal
+dialog's owner. The user must dismiss the dialog before he can continue
+interacting with the modal dialog's owner.
+
+Public member functions:
+[sl]
+[li][ref FModalDialog_DoModal "DoModal()"]
+[esl]
+
+Protected member functions:
+[sl]
+[li][ref FModalDialog_EndDialog "EndDialog()"]
+[esl]
+[etopic]
+
+[topic FModalDialog_DoModal down "DoModal()" "FModalDialog::DoModal()" primary]
+Declaration:
+[code]
+int DoModal(FWnd *pOwner, int resID, FModule *module=0);
+[ecode]
+This function is used for "prompting" the user with the dialog. It performs
+(among others) the following tasks:
+[ol]
+[li]Creates the dialog from the dialog template
+[li]Disables the owner window, if any
+[li]Shows the dialog
+[li]Waits for EndDialog() to be called
+[li]Destroys the dialog
+[li]Enables the owner window again, if any.
+[li]Returns the value passed to EndDialog()
+[eol]
+
+The return value is the value of the [hp 1]iReturn[ehp] parameter passed to
+EndDialog() or -1 if an error occurred.
+
+Example: (use of the dialog declared in the example under [ref FDialog_CreateControls "CreateControls()"]
+[code]
+MyDialog dlg.
+if(MyDialog.DoModal(this,IDD_NAMESEX) == DID_OK) {
+  //user dismissed the dialog with the OK button
+  ...
+}
+[ecode]
+[etopic]
+
+[topic FModalDialog_EndDialog upafter "EndDialog()" "FModalDialog::EndDialog()"]
+Declaration:
+[code]
+void EndDialog(int iReturn=0);
+[ecode]
+The EndDialog() member function dismisses the dialog. You will usually call it
+when your dialog recieves a [ref FCommandEvent "FCommandEvent"].
+
+Example:
+[code]
+Bool MyDialog::Command(FCommandEvent &ev) {
+  if(ev.GetItem()==DID_OK ||
+     ev.GetItem()==DID_CANCEL)
+  {
+    EndDialog(ev.GetItem());
+    return True;
+  } else if(ev.GetItem()==DID_LOOKUPNAME) {
+    ...
+    return True;
+  } else
+    return False;
+}
+[ecode]
+[etopic]
+
+
+[topic FStdFileDialog same "FStdFileDialog"]
+Declaration:
+[code]
+class FStdFileDialog : public [ref FModalDialog "FModalDialog"] ...
+[ecode]
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_DIALOG and BIFINCL_STDFILEDIALOG
+
+The FStdFileDialog class just serves as the base class for
+[ref FStdOpenFileDialog "FStdOpenFileDialog"] and
+[ref FStdSaveFileDialog "FStdSaveFileDialog"] classes. The standard file dialogs
+are dialogs that use an OS-specific dialog for filename querying.
+[etopic]
+
+
+[topic FStdOpenFileDialog same "FStdOpenFileDialog"]
+Declaration:
+[code]
+class FStdOpenFileDialog : public [ref FStdFileDialog "FStdFileDialog"] {
+[ecode]
+The FStdOpenFileDialog class is used for prompting the user for filename(s).
+
+Member functions:
+[sl]
+[li][ref FStdOpenFileDialog_DoModal1 "DoModal()"] - single file
+[li][ref FStdOpenFileDialog_DoModal2 "DoModal()"] - multiple files
+[esl]
+[etopic]
+
+[topic FStdOpenFileDialog_DoModal1 down "DoModal() - single file" "FStdOpenFileDialog::DoModal()"]
+Declaration:
+[code]
+Bool DoModal(FWnd *pOwner,
+             char *filename,
+             const char *filterMask=0,
+             const char *dlgTitle=0, const char *okButtonText=0
+            );
+[ecode]
+This function prompts the user for a single filename.
+
+[parml]
+[pt]pOwner[pd]Dialog owner. See [ref FDialog_Create "FDialog::Create()"] for
+details.
+[pt]filename[pd]Initial and final filename. On input [hp 1]filename[ehp] is the
+initial filename in the dialog (empty if none). On output it is the filename
+that the user has entered. The [hp 1]filename[ehp] must have enough room for the
+maximum filename length allowed by the OS. (Windows 3.1: approx. 140, OS/2: 256
+Windows NT: 256).
+[pt]filterMask[pd]Wildcard mask. eg. "*.cpp". If [hp 1]filterMask[ehp] is NULL
+the mask will be "*.*". Note: The user can enter filenames not matching the
+filter mask.
+[pt]dlgTitle[pd]Dialog title. If NULL it will be the default title such as
+"Open File" or whatever default the native GUI system sets.
+[pt]okButtonText[pd]Button text on the "OK" button. This can be used when the
+default text is inappropriate. The default buttons text is set by the GUI and is
+usually "Ok" or "Open".
+[eparml]
+
+The return value is True on success, False otherwise (error or user cancelled)
+
+Example:
+[code]
+Bool MyWindow::Command(FCommandEvent &ev) {
+  if(ev.GetItem()==ID_OPENFILE) {
+    char filename\[128\]="test.wiz";
+    FStdOpenFileDialog dlg.
+    if(dlg.DoModal(this,filename,"*.wiz")) {
+      ReadFile(filename);
+    }
+  } else
+    ...
+  return True.
+}
+[ecode]
+[etopic]
+
+[topic FStdOpenFileDialog_DoModal2 upafter "DoModal() - multiple files" "FStdOpenFileDialog::DoModal()"]
+Declaration:
+[code]
+Bool DoModal(FWnd *pOwner,
+             char *filenameBuffer, int maxFilenameBuffer,
+             char **filename, int maxFiles,
+             const char *filterMask=0,
+             const char *dlgTitle=0, const char *okButtonText=0
+            );
+[ecode]
+This function prompts the user for multiple filenames.
+
+[parml]
+[pt]pOwner[pd]Dialog owner. See [ref FDialog_Create "FDialog::Create()"] for
+details.
+[pt]filenameBuffer[pd]Buffer for filenames. The filenames are returned with '\\0'
+between them. The last filename will have two '\\0' after it.
+[pt]maxFilenameBuffer[pd]Size of [hp 1]filenameBuffer[ehp]
+[pt]filename[pd]Pointer to array for string pointers. This array will be filled
+on output. The elements will point into [hp 1]filenameBuffer[ehp]. The last pointer
+will be NULL.
+[pt]maxFiles[pd]Maximum number of elements in [hp 1]filename[ehp]
+[pt]filterMask[pd]Wildcard mask. eg. "*.cpp". If [hp 1]filterMask[ehp] is NULL
+the mask will be "*.*". Note: The user can enter filenames not matching the
+filter mask.
+[pt]dlgTitle[pd]Dialog title. If NULL it will be the default title such as
+"Open File" or whatever default the native GUI system sets.
+[pt]okButtonText[pd]Button text on the "OK" button. This can be used when the
+default text is inappropriate. The default buttons text is set by the GUI and is
+usually "Ok" or "Open".
+[eparml]
+
+The return value is True on success and False if the user cancelled the dialog
+or an error occurred.
+
+Example:
+[code]
+Bool MyWindow::Command(FCommandEvent &ev) {
+  if(ev.GetItem()==ID_OPENFILE) {
+    char filenameBuffer\[1024\];
+    char *filename\[20\];
+    FStdOpenFileDialog dlg.
+    if(dlg.DoModal(this,filename,1024,filename,20,"*.wiz")) {
+      for(int f=0; filename\[f\]; f++)
+        ReadFile(filename\[f\]);
+    }
+  } else
+    ...
+  return True.
+}
+[ecode]
+[etopic]
+
+[topic FStdSaveFileDialog same "FStdSaveFileDialog"]
+Declaration:
+[code]
+class FStdSaveFileDialog : public FStdFileDialog {
+[ecode]
+A FStdSaveFileDialog is used for prompting the user for filename for saving a
+file.
+
+Member functions:
+[sl]
+[li][ref FStdSaveFileDialog_DoModal "DoModal()"]
+[esl]
+[etopic]
+
+[topic FStdSaveFileDialog_DoModal downonce "DoModal()" "FStdSaveFileDialog::DoModal()" secondary]
+Declaration:
+[code]
+Bool DoModal(FWnd *pOwner,
+             char *filename,
+             const char *filterMask=0,
+             const char *dlgTitle=0, const char *okButtonText=0
+            )
+[ecode]
+This function prompts the user for a "save"-filename.
+
+[parml]
+[pt]pOwner[pd]Dialog owner. See [ref FDialog_Create "FDialog::Create()"] for
+details.
+[pt]filename[pd]Initial and final filename. On input [hp 1]filename[ehp] is the
+initial filename in the dialog (empty if none). On output it is the filename
+that the user has entered. The [hp 1]filename[ehp] must have enough room for the
+maximum filename length allowed by the OS. (Windows 3.1: approx. 140, OS/2: 256
+Windows NT: 256).
+[pt]filterMask[pd]Wildcard mask. eg. "*.cpp". If [hp 1]filterMask[ehp] is NULL
+the mask will be "*.*". Note: The user can enter filenames not matching the
+filter mask.
+[pt]dlgTitle[pd]Dialog title. If NULL it will be the default title such as
+"Save File" or whatever default the native GUI system sets.
+[pt]okButtonText[pd]Button text on the "OK" button. This can be used when the
+default text is inappropriate. The default buttons text is set by the GUI and is
+usually "Ok" or "Save".
+[eparml]
+
+The return value is True on success, False otherwise (error or user cancelled)
+
+Example:
+[code]
+Bool MyWindow::Command(FCommandEvent &ev) {
+  if(ev.GetItem()==ID_SAVEAS) {
+    char savefilename\[128\];
+    strcpy(savefilename,currentFilename);
+    FStdSaveFileDialog dlg.
+    if(dlg.DoModal(this,savefilename,"*.wiz")) {
+      SaveFile(filename);
+      strcpy(currentFilename,savefilename);
+      GetAppWindow()->SetSubtitle(currentFilename);
+    }
+  } else
+    ...
+  return True.
+}
+[ecode]
+[etopic]
+
+

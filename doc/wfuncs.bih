@@ -1,0 +1,264 @@
+[topic bifwindow_functions same "Functions" "BIF/Window functions"]
+BIF/Window has only a few global functions:
+[sl]
+[li][ref GetCurrentApp "GetCurrentApp()"]
+[li][ref GetDesktop "GetDesktop()"]
+[li][ref GetSystemArrowPointer "GetSystemArrowPointer()"]
+[li][ref GetSystemTextPointer "GetSystemTextPointer()"]
+[li][ref GetSystemNESWPointer "GetSystemNESWPointer()"]
+[li][ref GetSystemNSPointer "GetSystemNSPointer()"]
+[li][ref GetSystemNWSEPointer "GetSystemNWSEPointer()"]
+[li][ref GetSystemWEPointer "GetSystemWEPointer()"]
+[li][ref GetSystemWaitPointer "GetSystemWaitPointer()"]
+[li][ref GetWndMan "GetWndMan()"]
+[li][ref MessageBox "MessageBox()"]
+[li][ref Intersection "Intersection()"]
+[li][ref Union "Union()"]
+[esl]
+[etopic]
+
+
+[topic getcurrentapp down "GetCurrentApp()"]
+Declaration:
+[code]
+FApplication * GetCurrentApp();
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_APPLICATION
+
+GetCurrentApp() returns a pointer to the one and only FApplication instance.
+This is quite useful when you for example need to terminate the application:
+[code]
+...
+if(ev.GetItem()==IDM_EXIT) {
+  //terminate application
+  GetCurrentApp()->TerminateApp();
+}
+[ecode]
+
+See also: [ref fapplication "FApplication"]
+[etopic]
+
+
+[topic getdesktop same "GetDesktop()"]
+Declaration:
+[code]
+[ref FDesktop "FDesktop"] * GetDesktop();
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW
+
+GetDesktop() returns a pointer to the desktop window. The pointer can then be 
+used for specifying the parent window of frame window, or querying the width or 
+height of the desktop.
+
+[caution]
+It is [hp 2]not[ehp] recommended to use any of the FWnd member functions on the
+desktop.
+[ecaution]
+[etopic]
+
+
+[topic GetSystemArrowPointer same "GetSystemArrowPointer()"]
+Declaration:
+[code]
+FPointer * const GetSystemArrowPointer();
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW
+
+This function returns the system-defined "arrow" pointer.
+
+See [ref GetSystemWaitPointer "GetSystemWaitPointer"] for example.
+[etopic]
+
+
+[topic GetSystemTextPointer same "GetSystemTextPointer()"]
+Declaration:
+[code]
+FPointer * const GetSystemTextPointer();
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW
+
+This function returns the system-defined pointer for use when the mouse is over 
+a tekst area. This pointer is usually an "I-beam".
+[etopic]
+
+
+[topic GetSystemNESWPointer same "GetSystemNESWPointer()"]
+Declaration:
+[code]
+FPointer * const GetSystemNESWPointer();
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW
+
+This function returns the system-defined North-East<->South-West pointer. This 
+pointer is normally used when the mouse is over (or dragging) the top-right or 
+bottom-left corner of a sizeable frame window.
+[etopic]
+
+
+[topic GetSystemNSPointer same "GetSystemNSPointer()"]
+Declaration:
+[code]
+FPointer * const GetSystemNSPointer();
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW
+
+This function returns the system-defined North<->South pointer. This pointer is 
+used when the mouse is over (or dragging) the left or right border of a sizeable
+frame window. The pointer is also used when dragging something which can only be
+moved up or down. 
+[etopic]
+
+
+[topic GetSystemNWSEPointer same "GetSystemNWSEPointer()"]
+Declaration:
+[code]
+FPointer * const GetNWSEArrowPointer();
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW
+
+This function returns the system-defined North-West<->South-East pointer. This
+pointer is normally used when the mouse is over (or dragging) the top-left or 
+bottom-right corner of a sizeable frame window. 
+[etopic]
+
+
+[topic GetSystemWEPointer same "GetSystemWEPointer()"]
+Declaration:
+[code]
+FPointer * const GetSystemWEPointer();
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW
+
+This function returns the system-defined West<->East pointer. This pointer is
+used when the mouse is over (or dragging) the top or bottom border of a sizeable
+frame window. The pointer is also used when dragging something which can only be
+moved left or right.
+[etopic]
+
+
+[topic GetSystemWaitPointer same "GetSystemWaitPointer()"]
+Declaration:
+[code]
+FPointer * const GetSystemWaitPointer();
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW
+
+This function returns the system-defined "wait" pointer (usually an hourglass or
+something equivalent.) This pointer can (and should) be used when the user is
+moving the mouse over a window that cannot accept user interaction ("busy").
+
+Example:
+[code]
+Bool MyWindow::[ref FMouseHandler_ControlPointer "ControlPointer"](FControlPointerEvent& ev) {
+  if(<window is busy>)
+    ev.SetPointer(*GetSystemWaitPointer());
+  else
+    ev.SetPointer(*GetSystemArrowPointer());
+  return True;
+}
+[ecode]
+[etopic]
+
+
+[topic GetWndMan same "GetWndMan()"]
+Declaration:
+[code]
+FWndMan * GetWndMan();
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW
+
+GetWndMan() returns a pointer to the one and only [ref FWndMan "FWndMan"]
+instance.
+
+Remember: FWndMan does not contain any portable memberfunctions.
+[etopic]
+
+
+[topic MessageBox same "MessageBox()" "MessageBox() function" only]
+Declaration:
+[code]
+mbid BIFFUNCTION MessageBox(FWnd *pOwner, const char *pszText, const char *pszTitle, mb_buttons buttons, mb_icon icon=mb_noicon);
+[ecode]
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_MESSAGEBOX
+
+[parml]
+[pt]pOwner
+[pd]Owner window. This window will be disabled while the message box is being
+displayed. Can be NULL.
+[pt]pszText
+[pd]Text to display.
+[pt]pszTitle
+[pd]Title of the messagebox.
+[pt]buttons
+[pd]Specifies which push buttons should be available:
+[dl "constant" "buttons" 20]
+[dt]mb_abortretyrignore[dd]abort, retry, ignore
+[dt]mb_ok[dd]ok
+[dt]mb_okcancel[dd]ok, cancel
+[dt]mb_yesno[dd]yes, no
+[dt]mb_yesnocancel[dd]yes, no, cancel
+[edl]
+[pt]icon
+[pd]Specifies what sort of messagebox it is and which icon is to be displayed
+in the message box:
+[dl "Value" "Typical use" 15]
+[dt]mb_noicon[dd]unspecified
+[dt]mb_question[dd]Wanna save?
+[dt]mb_warning[dd]Are you really sure you want to format the disk?
+[dt]mb_information[dd]File has been saved
+[dt]mb_critical[dd]The disk has bad sectors
+[dt]mb_error[dd]An internal error has ocurred. The program will now terminate
+unconditionally
+[edl]
+[eparml]
+
+Return value:
+[dl "Value" "Meaning" 15]
+[dt]mbid_ok[dd]User pressed "Ok" button
+[dt]mbid_cancel[dd]User pressed "Cancel" button.
+[dt]mbid_abort[dd]...
+[dt]mbid_retry[dd]...
+[dt]mbid_ignore[dd]...
+[dt]mbid_yes[dd]...
+[dt]mbid_no[dd]...
+[dt]mbid_error[dd]Error ocurred while displaying the messagebox, for instance
+specifying an invalid [hp 1]pOwner[ehp] or when the GUI system has run out of
+memory.
+[edl]
+
+MessageBox() shows a messagebox to the user and returns after the messagebox has
+been dismissed.
+
+Example:
+[code]
+Bool MyWindow::Close(FCloseEvent&) {
+  if(!fileModified) return False;
+  switch(MessageBox(this,"Wanna save?","Save",mb_yesnocancel,mb_question))
+  {
+    case mbid_yes:
+      Save();
+      return False;
+    case mbid_no:
+      return False;
+    case mbid_cancel:
+      return True;
+    case mbid_error:
+      //oops! better save and exit...
+      Save();
+      return False;
+  }
+}
+[ecode]
+[etopic]
+
+

@@ -1,0 +1,8 @@
+3 handler_and_events Handlers and events
+4 FEvent FEvent
+4 FHandler FHandler
+5 FHandler_ctor FHandler()
+5 FHandler_dtor ~FHandler()
+5 FHandler_SetDispatch SetDispatch()
+5 FHandler_GetWnd GetWnd()
+5 FHandler_example FHandler example

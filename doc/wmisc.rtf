@@ -1,0 +1,1315 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote bifwindow_miscellaneous}
+${\footnote Miscellaneous classes}
++{\footnote defbrowse}
+K{\footnote Miscellaneous classes}
+{\fs26\cf1\b Miscellaneous classes}\par
+BIF/Window defines a few "wrapper"-classes that encapsulates some of the 
+GUIs native classes/structures/resources. These classes are always 
+defined when you use BIF/Window.\par
+
+The following classes are provided: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FPoint}{\v FPoint} 
+\par
+\tab
+{\uldb FRect}{\v FRect} 
+\par
+\tab
+{\uldb FIcon}{\v FIcon} 
+\par
+\tab
+{\uldb FPointer}{\v FPointer} 
+\par
+\tab
+{\uldb FMenu}{\v FMenu} 
+\par
+\tab
+{\uldb FResourceString}{\v FResourceString} 
+\par\pard\sb100
+\par
+
+In addition these classes exist to wrap the DLLs and the application: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FApplication}{\v FApplication} 
+\par
+\tab
+{\uldb FModule}{\v FModule} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FPoint}
+${\footnote FPoint}
++{\footnote defbrowse}
+K{\footnote FPoint}
+{\fs26\cf1\b FPoint}\par
+Declaration: 
+\line{\f1
+Windows:\line
+  class FPoint : public POINT \{\line
+OS/2 PM:\line
+  class FPoint : public POINTL \{\line
+WMS:\line
+  class FPoint \{\line
+}
+\par
+
+The FPoint class is reasonable straight-forward. The FPoint class does 
+not add data members and does not contain virtual functions so you can 
+use the FPoint class when you call functions in the native GUI system.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+FPoint() 
+\par
+\tab
+FPoint(int x, int y) 
+\par
+\tab
+FPoint(POINTL/POINT p) 
+\par
+\tab
+void Set(int x, int y) 
+\par
+\tab
+void Set(POINTL/POINT p) 
+\par
+\tab
+int GetX() 
+\par
+\tab
+int GetY() 
+\par
+\tab
+operator == 
+\par
+\tab
+operator != 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FRect}
+${\footnote FRect}
++{\footnote defbrowse}
+K{\footnote FRect}
+{\fs26\cf1\b FRect}\par
+Declaration: 
+\line{\f1
+Windows:\line
+  class FRect : public RECT \{\line
+OS/2 PM:\line
+  class FRect : public RECTL \{\line
+WMS:\line
+  class FRect \{\line
+}
+\par
+
+The FRect class is a wrapper-class over the native rectangle class. It 
+tries to protect you from the native coordinate system by providing 
+coordinate-system independent functions (GetTop/GetBottom etc.). The class does  
+not add data members or virtual functions so it is compatible with the native  
+rectangle type.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+FRect() 
+\par
+\tab
+FRect( ... ) 
+\par
+\tab
+{\uldb FRect(RECT/RECTL)}{\v FRect_ctor3} 
+\par
+\tab
+int GetTop() 
+\par
+\tab
+int SetTop() 
+\par
+\tab
+int GetLeft() 
+\par
+\tab
+int SetLeft() 
+\par
+\tab
+int GetRight() 
+\par
+\tab
+int SetRight() 
+\par
+\tab
+int GetBottom() 
+\par
+\tab
+int SetBottom() 
+\par
+\tab
+int GetWidth() 
+\par
+\tab
+int GetHeight() 
+\par
+\tab
+{\uldb Shrink()}{\v FRect_Shrink} 
+\par
+\tab
+{\uldb Expand()}{\v FRect_Expand} 
+\par
+\tab
+{\uldb Contains(FPoint)}{\v FRect_Contains1} 
+\par
+\tab
+{\uldb Contains(FRect)}{\v FRect_Contains2} 
+\par
+\tab
+{\uldb Intersects()}{\v FRect_Intersects} 
+\par
+\tab
+{\uldb IsEmpty()}{\v FRect_IsEmpty} 
+\par\pard\sb100
+\par
+
+Related global functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Intersection()}{\v Intersection} 
+\par
+\tab
+{\uldb Union()}{\v Union} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FRect_ctor3}
+${\footnote FRect::FRect()}
++{\footnote defbrowse}
+K{\footnote FRect()}
+K{\footnote FRect::FRect()}
+{\fs26\cf1\b FRect()}\par
+Declaration: 
+\line{\f1
+Windows:\line
+  FRect( int l, int t, int r, int b )\line
+OS/2 PM:\line
+  FRect( int l, int b, int r, int t )\line
+WMS:\line
+  FRect( int l, int t, int r, int b )\line
+}
+\par
+
+\page
+
+#{\footnote FRect_Shrink}
+${\footnote Frect::Shrink()}
++{\footnote defbrowse}
+K{\footnote Shrink()}
+K{\footnote Frect::Shrink()}
+{\fs26\cf1\b Shrink()}\par
+Declaration: 
+\line{\f1
+void Shrink(int dx, int dy);\line
+}
+\par
+
+Shrink() shrinks the rectangle by moving 
+the left edge {\i{dx}} units to the right, 
+the right edge {\i{dx}} units to the left, 
+the top edge {\i{dy}} units down and 
+the bottom edge {\i{dy}} units up.\par
+
+{\b{Note:}} Shrink() does not check if the width or height becomes negative 
+\par
+
+See also: {\uldb Expand()}{\v FRect_Expand} 
+\page
+
+#{\footnote FRect_Expand}
+${\footnote Frect::Expand()}
++{\footnote defbrowse}
+K{\footnote Expand()}
+K{\footnote Frect::Expand()}
+{\fs26\cf1\b Expand()}\par
+Declaration: 
+\line{\f1
+void Expand(int dx, int dy);\line
+}
+\par
+
+Expand() expands the rectangle by moving 
+the left edge {\i{dx}} units to the left, 
+the right edge {\i{dx}} units to the right, 
+the top edge {\i{dy}} units up and 
+the bottom edge {\i{dy}} units down.\par
+
+See also: {\uldb Shrink()}{\v FRect_Shrink} 
+\page
+
+#{\footnote FRect_Contains1}
+${\footnote FRect::Contains(FPoint)}
++{\footnote defbrowse}
+K{\footnote Contains(FPoint)}
+K{\footnote FRect::Contains(FPoint)}
+{\fs26\cf1\b Contains(FPoint)}\par
+Declaration: 
+\line{\f1
+Bool Contains(const FPoint &p) const;\line
+}
+\par
+
+This function returns wether the point is inside the rectangle or not. 
+\page
+
+#{\footnote FRect_Contains2}
+${\footnote FRect::Contains(FRect)}
++{\footnote defbrowse}
+K{\footnote Contains(FRect)}
+K{\footnote FRect::Contains(FRect)}
+{\fs26\cf1\b Contains(FRect)}\par
+Declaration: 
+\line{\f1
+Bool Contains(const FRect &r) const;\line
+}
+\par
+
+This function returns wether the rectangle {\i{r}} is inside the 
+rectangle or not.\par
+
+{\b{Note:}} The return value is undefined when the rectangle {\i{r}} is 
+empty (zero width and height) 
+ 
+\page
+
+#{\footnote FRect_Intersects}
+${\footnote FRect::Intersects()}
++{\footnote defbrowse}
+K{\footnote Intersects()}
+K{\footnote FRect::Intersects()}
+{\fs26\cf1\b Intersects()}\par
+Declaration: 
+\line{\f1
+Bool Intersects(const FRect &r) const;\line
+}
+\par
+
+This function returns wether the rectangle {\i{r}} intersects the 
+rectangle or not.\par
+
+{\b{Note:}} The return value is undefined when the rectangle {\i{r}} is 
+empty (zero width and height) 
+\par
+
+See also: {\uldb Intersection()}{\v Intersection} 
+\page
+
+#{\footnote FRect_IsEmpty}
+${\footnote FRect::IsEmpty()}
++{\footnote defbrowse}
+K{\footnote IsEmpty()}
+K{\footnote FRect::IsEmpty()}
+{\fs26\cf1\b IsEmpty()}\par
+Declaration: 
+\line{\f1
+Bool IsEmpty() const;\line
+}
+\par
+
+This function returns wether the rectangle is empty or not. When an 
+rectangle is empty (=has zero width or height) the behavior of some 
+functions are undefined. 
+\page
+
+#{\footnote Intersection}
+${\footnote Intersection()}
++{\footnote defbrowse}
+K{\footnote Intersection()}
+{\fs26\cf1\b Intersection()}\par
+Declaration: 
+\line{\f1
+FRect Intersection(const FRect &r1, const FRect &r2);\line
+}
+\par
+
+This function returns the intersection (the area covered by both 
+rectangles). If the rectangles does not intersect the return value is 
+an empty rectangle.\par
+
+\{bml intersec.bmp\}\par
+
+{\b{Note:}} This function is global and not a member function.\par
+
+See also: {\uldb FRect::Intersects()}{\v FRect_Intersects} 
+\page
+
+#{\footnote Union}
+${\footnote FRect::Union()}
++{\footnote defbrowse}
+K{\footnote Union()}
+K{\footnote FRect::Union()}
+{\fs26\cf1\b Union()}\par
+Declaration: 
+\line{\f1
+FRect Union(const FRect &r1, const FRect &r2);\line
+}
+\par
+
+This function returns the union of the rectangles.\par
+
+\{bml union.bmp\}\par
+
+{\b{Note:}} This function is global and not a member function.\par
+
+See also: {\uldb Intersection()}{\v Intersection} 
+\page
+
+#{\footnote FIcon}
+${\footnote FIcon}
++{\footnote defbrowse}
+K{\footnote FIcon}
+{\fs26\cf1\b FIcon}\par
+The FIcon class encapsulates the native icons. Icons are normally 
+loaded from the resources. The FIcon class uses reference counting to 
+eliminate duplication of the native icon and to track when to delete 
+the native icon resource.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FIcon(HPOINTER/HICON)}{\v FIcon_ctor1} 
+\par
+\tab
+FIcon(FIcon) 
+\par
+\tab
+{\uldb FIcon(resID)}{\v FIcon_ctor3} 
+\par
+\tab
+{\uldb GetHandle()}{\v FIcon_GetHandle} 
+\par
+\tab
+operator = 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FIcon_ctor1}
+${\footnote FIcon::FIcon(HPOINTER/HICON)}
++{\footnote defbrowse}
+K{\footnote FIcon(HPOINTER/HICON)}
+K{\footnote FIcon::FIcon(HPOINTER/HICON)}
+{\fs26\cf1\b FIcon(HPOINTER/HICON)}\par
+Declaration: 
+\line{\f1
+Windows:\line
+  FIcon(HICON hicon, Bool d=False);\line
+OS/2 PM:\line
+  FIcon(HPOINTER hicon, Bool d=False);\line
+WMS:\line
+  non-existing\line
+}
+\par
+
+This constructor constructs a FIcon from a handle to a native icon. 
+the {\i{d}} specifies wether the native icon should be deleted 
+when the FIcon reference count decrements to zero. If the icon is 
+used by non-BIF functions throughout the lifetime of the FIcon 
+instance you should specify False (default). 
+\page
+
+#{\footnote FIcon_ctor3}
+${\footnote FIcon::FIcon(resId)}
++{\footnote defbrowse}
+K{\footnote FIcon(resId)}
+K{\footnote FIcon::FIcon(resId)}
+{\fs26\cf1\b FIcon(resId)}\par
+Declaration: 
+\line{\f1
+FIcon(int resId, {\uldb FModule}{\v FModule} *module=0);\line
+}
+\par
+
+This constructor automatically loads the icon with the id  
+{\i{resId}} from the module {\i{module}}. 
+\page
+
+#{\footnote FIcon_GetHandle}
+${\footnote FIcon::GetHandle()}
++{\footnote defbrowse}
+K{\footnote GetHandle()}
+K{\footnote FIcon::GetHandle()}
+{\fs26\cf1\b GetHandle()}\par
+Declaration: 
+\line{\f1
+Windows:\line
+  HICON GetHandle();\line
+OS/2 PM:\line
+  HPOINTER GetHandle();\line
+WMS:\line
+  non-existing\line
+}
+\par
+
+This function returns the handle to the native icon. 
+\page
+
+#{\footnote FPointer}
+${\footnote FPointer}
++{\footnote defbrowse}
+K{\footnote FPointer}
+{\fs26\cf1\b FPointer}\par
+The FPointer class encapsulates the native pointers. A pointer is the 
+shape of the thingy that moves on the screen when you move the mouse. 
+Pointers are normally loaded from the resources or retrieved by the 
+GetSystemXxxxPointer() functions. The FPointer class uses reference 
+counting to eliminate duplication of the native pointer and to track 
+when to delete the native pointer resource.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FPointer(HPOINTER/HICON)}{\v FPointer_ctor1} 
+\par
+\tab
+FPointer(FPointer) 
+\par
+\tab
+{\uldb FPointer(resID)}{\v FPointer_ctor3} 
+\par
+\tab
+{\uldb GetHandle()}{\v FPointer_GetHandle} 
+\par
+\tab
+operator = 
+\par\pard\sb100
+\par
+
+See also: 
+{\uldb GetSystemArrowPointer()}{\v GetSystemArrowPointer}, 
+{\uldb GetSystemTextPointer()}{\v GetSystemTextPointer}, 
+{\uldb GetSystemNESWPointer()}{\v GetSystemNESWPointer}, 
+{\uldb GetSystemNSPointer()}{\v GetSystemNSPointer}, 
+{\uldb GetSystemNWSEPointer()}{\v GetSystemNWSEPointer}, 
+{\uldb GetSystemWEPointer()}{\v GetSystemWEPointer}, 
+{\uldb GetSystemWaitPointer()}{\v GetSystemWaitPointer} 
+{\uldb FMouseHandler::ControlPointer()}{\v FMouseHandler_ControlPointer} 
+\page
+
+#{\footnote FPointer_ctor1}
+${\footnote FPointer::FPointer(HPOINTER/HICON)}
++{\footnote defbrowse}
+K{\footnote FPointer(HPOINTER/HICON)}
+K{\footnote FPointer::FPointer(HPOINTER/HICON)}
+{\fs26\cf1\b FPointer(HPOINTER/HICON)}\par
+Declaration: 
+\line{\f1
+Windows:\line
+  FPointer(HCURSOR hicon, Bool d=False);\line
+OS/2 PM:\line
+  FPointer(HPOINTER hicon, Bool d=False);\line
+WMS:\line
+  non-existing\line
+}
+\par
+
+This constructor constructs a FPointer from a handle to a native 
+pointer. 
+the {\i{d}} specifies wether the native pointer should be deleted 
+when the FPointer reference count decrements to zero. If the pointer is 
+used by non-BIF functions throughout the lifetime of the FPointer 
+instance you should specify False (default). 
+\page
+
+#{\footnote FPointer_ctor3}
+${\footnote FPointer::FPointer(resId)}
++{\footnote defbrowse}
+K{\footnote FPointer(resId)}
+K{\footnote FPointer::FPointer(resId)}
+{\fs26\cf1\b FPointer(resId)}\par
+Declaration: 
+\line{\f1
+FPointer(int resId, {\uldb FModule}{\v FModule} *module=0);\line
+}
+\par
+
+This constructor automatically loads the pointer with the id 
+{\i{resId}} from the module {\i{module}}. 
+\page
+
+#{\footnote FPointer_GetHandle}
+${\footnote FPointer::GetHandle()}
++{\footnote defbrowse}
+K{\footnote GetHandle()}
+K{\footnote FPointer::GetHandle()}
+{\fs26\cf1\b GetHandle()}\par
+Declaration: 
+\line{\f1
+Windows:\line
+  HICON GetHandle();\line
+OS/2 PM:\line
+  HPOINTER GetHandle();\line
+WMS:\line
+  non-existing\line
+}
+\par
+
+This function returns the handle to the native pointer. 
+\page
+
+#{\footnote FMenu}
+${\footnote FMenu}
++{\footnote defbrowse}
+K{\footnote FMenu}
+{\fs26\cf1\b FMenu}\par
+The FMenu class encapsulates the native menus. The FMenu uses 
+reference counting to track the use of the menu.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FMenu()}{\v FMenu_ctor1} 
+\par
+\tab
+FMenu(FMenu) 
+\par
+\tab
+{\uldb Popup()}{\v FMenu_Popup} 
+\par
+\tab
+{\uldb AppendItem(item)}{\v FMenu_AppendItem1} 
+\par
+\tab
+{\uldb AppendItem(submenu)}{\v FMenu_AppendItem2} 
+\par
+\tab
+{\uldb AppendSeparator()}{\v FMenu_AppendSeparator} 
+\par
+\tab
+{\uldb DeleteItem()}{\v FMenu_DeleteItem} 
+\par
+\tab
+{\uldb GetItem()}{\v FMenu_GetItem} 
+\par
+\tab
+{\uldb GetSubMenuFromPos()}{\v FMenu_GetSubmenuFromPos} 
+\par
+\tab
+{\uldb CheckItem()}{\v FMenu_CheckItem} 
+\par
+\tab
+{\uldb EnableItem()}{\v FMenu_EnableItem} 
+\par
+\tab
+{\uldb IsItemEnabled()}{\v FMenu_IsItemEnabled} 
+\par
+\tab
+{\uldb IsItemChecked()}{\v FMenu_IsItemChecked} 
+\par
+\tab
+operator = 
+\par\pard\sb100
+\par
+
+See also: {\uldb FFrameWindow::RedrawMenu()}{\v FFrameWindow_RedrawMenu}, 
+\page
+
+#{\footnote FMenu_ctor1}
+${\footnote FMenu::FMenu()}
++{\footnote defbrowse}
+K{\footnote FMenu()}
+K{\footnote FMenu::FMenu()}
+{\fs26\cf1\b FMenu()}\par
+Declaration: 
+\line{\f1
+FMenu(FWnd *pwndOwner, int resId, FModule *module=0);\line
+}
+\par
+
+This constructor loads the menu from the resources.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pwndOwner\tab
+The window that is to recieve menu events from the 
+menu. This is normally the frame window that the menu is going to be 
+attached or the powner parameter to {\uldb Popup()}{\v FMenu_Popup} 
+\par
+resId\tab
+Resource ID of the menu 
+\par
+module\tab
+Module where the menu is loaded from. If NULL the menu 
+is loaded from the application 
+\par\pard\sb100
+\par
+
+\page
+
+#{\footnote FMenu_Popup}
+${\footnote FMenu::Popup()}
++{\footnote defbrowse}
+K{\footnote Popup()}
+K{\footnote FMenu::Popup()}
+{\fs26\cf1\b Popup()}\par
+Declaration: 
+\line{\f1
+Bool Popup(FWnd *parent, FWnd *owner, const FPoint *position=0);\line
+}
+\par
+
+Popup() is used for displaying a submenu and letting the user select 
+an item from it. This can be used for context-sensitive menus.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+parent\tab
+parent window. This specifies which window the 
+{\i{position}} is relative to. Even if {\i{position}} is null, 
+parent is required. 
+\par
+owner\tab
+owner window. This is the window that will recieve menu 
+events. This should be the same as the pwndOwner parameter specified 
+in {\uldb Fmenu()}{\v FMenu_ctor1} 
+\par
+position\tab
+origin of the menu. If {\i{position}} is NULL the menu 
+will pop up a suitable place, eg. where the mouse currently is. 
+\par\pard\sb100
+\par
+
+{\b{Note:}} Popup() may return before the user has selected an item from the 
+menu, so you cannot let the FMenu instance go out of scope after the 
+the call to Popup(). 
+\par
+
+Example: 
+\line{\f1
+class MyWindow : public ..., public FTranslatedMouseHandler\line
+  FMenu *popupmenu;\line
+  MyWindow()\line
+    : FTranslatedMouseHandler(this)\line
+    \{ popupmenu=0; \}\line
+  ~MyWindow() \{ delete popupmenu; \}\line
+  MouseContextMenu(FMouseEvent &);\line
+  ...\line
+\};\line
+\line
+Bool MyWindow::MouseContextMenu(FMouseEvent &) \{\line
+  if(!popupmenu)\line
+    popupmenu = new FMenu(this,this,IDM_MYCONTEXTMENU);\line
+  popupmenu->Popup(this,this,0);\line
+  return True;\line
+\}\line
+}
+\par
+
+See also: {\uldb FCommandHandler}{\v FCommandHandler}, 
+{\uldb FTranslatedMouseHandler}{\v FTranslatedMouseHandler} 
+\page
+
+#{\footnote FMenu_AppendItem1}
+${\footnote FMenu::AppendItem()}
++{\footnote defbrowse}
+K{\footnote AppendItem(item)}
+K{\footnote FMenu::AppendItem()}
+{\fs26\cf1\b AppendItem(item)}\par
+Declaration: 
+\line{\f1
+Bool AppendItem(const char *string, int nId,\line
+                Bool enabled = True, Bool checked = False);\line
+}
+\par
+
+This function appends a normal menu item to the menu.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+string\tab
+Menu string. Under OS/2 PM shortcuts is specified with 
+an tilde (~), under Windows with an ampersand (&) and under WMS with 
+an at-sign (@) 
+\par
+nId\tab
+Menu item id. This is the id that will be returned in the 
+{\uldb FCommandEvent}{\v FCommandHandler_Command} 
+\par
+enabled\tab
+Specifies wether the item should initially be enabled. 
+\par
+checked\tab
+Specifies wether the item should initially have a check 
+mark 
+\par\pard\sb100
+\par
+
+Example: This code fragment show how to have the "File" submenu 
+contain the names of the past 4 files the user has had opened: 
+\line{\f1
+void SetOldFilename(const char *fn) \{\line
+  strcpy(oldfilename[3],oldfilename[2]);\line
+  strcpy(oldfilename[2],oldfilename[1]);\line
+  strcpy(oldfilename[1],oldfilename[0]);\line
+  strcpy(oldfilename[0],fn);\line
+\line
+  FMenu *pmenu = GetAppWindow()->GetMenu();\line
+  FMenu *pmenuFile = pmenu->GetSubMenuFromPos(0);\line
+\line
+  pmenuFile->DeleteItem(MID_FILE0);\line
+  pmenuFile->DeleteItem(MID_FILE1);\line
+  pmenuFile->DeleteItem(MID_FILE2);\line
+  pmenuFile->DeleteItem(MID_FILE3);\line
+\line
+  pmenuFile->AppendItem(oldfilename[0],MID_FILE0);\line
+  pmenuFile->AppendItem(oldfilename[1],MID_FILE1);\line
+  pmenuFile->AppendItem(oldfilename[2],MID_FILE2);\line
+  pmenuFile->AppendItem(oldfilename[3],MID_FILE3);\line
+\line
+  GetAppWindow()->RedrawMenu();\line
+\}\line
+}
+\par
+
+\page
+
+#{\footnote FMenu_AppendItem2}
+${\footnote FMenu::AppendMenu()}
++{\footnote defbrowse}
+K{\footnote AppendItem(submenu)}
+K{\footnote FMenu::AppendMenu()}
+{\fs26\cf1\b AppendItem(submenu)}\par
+Declaration: 
+\line{\f1
+Bool AppendItem(const char *pszItem, FMenu *submenu, Bool enabled);\line
+}
+\par
+
+This function appends a submenu to the menu.\par
+
+{\b{Note:}} When the menu is destroyed the native menu used by 
+{\i{submenu}} is destroyed too and BIF has no way of detecting this. 
+\par
+
+{\b{Note:}} Under OS/2 PM the submenu is given a serial ID 
+\page
+
+#{\footnote FMenu_AppendSeparator}
+${\footnote FMenu::AppendSeparator()}
++{\footnote defbrowse}
+K{\footnote AppendSeparator()}
+K{\footnote FMenu::AppendSeparator()}
+{\fs26\cf1\b AppendSeparator()}\par
+Declaration: 
+\line{\f1
+void AppendSeparator();\line
+}
+\par
+
+This function appends a separator to a menu.\par
+
+{\b{Note:}} There is no portable way to remove the separator again 
+ 
+\page
+
+#{\footnote FMenu_DeleteItem}
+${\footnote FMenu::DeleteItem()}
++{\footnote defbrowse}
+K{\footnote DeleteItem()}
+K{\footnote FMenu::DeleteItem()}
+{\fs26\cf1\b DeleteItem()}\par
+Declaration: 
+\line{\f1
+Bool DeleteItem(int Id);\line
+}
+\par
+
+DeleteItem() deletes the item in the menu with the id {\i{Id}}. 
+\page
+
+#{\footnote FMenu_GetItem}
+${\footnote FMenu::GetItem()}
++{\footnote defbrowse}
+K{\footnote GetItem()}
+K{\footnote FMenu::GetItem()}
+{\fs26\cf1\b GetItem()}\par
+Declaration: 
+\line{\f1
+Bool GetItem(int Id, char *buf, int buflen);\line
+}
+\par
+
+This function retrieves the text of an item. 
+\page
+
+#{\footnote FMenu_GetSubMenuFromPos}
+${\footnote Fmenu::GetSubmenuFromPos()}
++{\footnote defbrowse}
+K{\footnote GetSubmenuFromPos()}
+K{\footnote Fmenu::GetSubmenuFromPos()}
+{\fs26\cf1\b GetSubmenuFromPos()}\par
+Declaration: 
+\line{\f1
+FMenu GetSubmenuFromPos(int nPos);\line
+}
+\par
+
+GetSubmenuFromPos() retrieves the submenu at {\i{nPos}} (0-based). 
+\page
+
+#{\footnote FMenu_CheckItem}
+${\footnote FMenu::CheckItem()}
++{\footnote defbrowse}
+K{\footnote CheckItem()}
+K{\footnote FMenu::CheckItem()}
+{\fs26\cf1\b CheckItem()}\par
+Declaration: 
+\line{\f1
+void CheckItem(int Id, Bool check);\line
+}
+\par
+
+CheckItem() places or removes a checkmark at an item.\par
+
+Example: This code fragment toggles a "status bar" on and off. 
+\line{\f1
+Bool MyWindow::Command(FCommandEvent &ev) \{\line
+  if(ev.GetItem()==MID_STATUSBAR) \{\line
+    if(statuswindow->IsVisible()) \{\line
+      //turn off the status bar\line
+      GetAppWindow()->GetMenu()->CheckItem(MID_STATUSBAR,False);\line
+      statuswindow->Hide();\line
+    \} else \{\line
+      //turn the status bar on\line
+      GetAppWindow()->GetMenu()->CheckItem(MID_STATUSBAR,True);\line
+      statuswindow->Show();\line
+    \}\line
+    FormatSubWindows();\line
+  \} else\line
+    ...\line
+\}\line
+}
+\par
+
+See also: {\uldb IsItemChecked()}{\v FMenu_IsItemEnabled} 
+\page
+
+#{\footnote FMenu_EnableItem}
+${\footnote FMenu::EnableItem()}
++{\footnote defbrowse}
+K{\footnote EnableItem()}
+K{\footnote FMenu::EnableItem()}
+{\fs26\cf1\b EnableItem()}\par
+Declaration: 
+\line{\f1
+void EnableItem(int Id, Bool enable);\line
+}
+\par
+
+EnableItem() enables or disables an item. When an item is disabled it is 
+displayed as grayed text and the GUI ignores selections of the item.\par
+
+{\b{Note:}} It is possible to disable all items in a submenu by disabling the 
+submenu itself, but there is no portable way to do this. Windows requires 
+the 0-based position and OS/2 PM requires the submenu ID. 
+ 
+\page
+
+#{\footnote FMenu_IsItemChecked}
+${\footnote FMenu::IsItemChecked()}
++{\footnote defbrowse}
+K{\footnote IsItemChecked()}
+K{\footnote FMenu::IsItemChecked()}
+{\fs26\cf1\b IsItemChecked()}\par
+Declaration: 
+\line{\f1
+Bool IsItemChecked(int Id);\line
+}
+\par
+
+Returns true if the item with the id {\i{Id}} is checked. 
+\page
+
+#{\footnote FMenu_IsItemEnabled}
+${\footnote FMenu::IsItemEnabled()}
++{\footnote defbrowse}
+K{\footnote IsItemEnabled()}
+K{\footnote FMenu::IsItemEnabled()}
+{\fs26\cf1\b IsItemEnabled()}\par
+Declaration: 
+\line{\f1
+Bool IsItemEnabled(int Id);\line
+}
+\par
+
+Returns true if the item with the id {\i{Id}} is enabled. 
+\page
+
+#{\footnote FResourceString}
+${\footnote FResourceString}
++{\footnote defbrowse}
+K{\footnote FResourceString}
+{\fs26\cf1\b FResourceString}\par
+This humble class is very useful. It is the most convienient ways of loading 
+strings from the stringtable in the resources.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+FResourceString(int resId, FModule *module=0); 
+\par
+\tab
+operator const char *() const; 
+\par\pard\sb100
+\par
+
+Example: 
+\line{\f1
+MessageBox(this, FResourceString(IDS_COULDNOTSAVE), 0, mb_ok);\line
+}
+\par
+
+The above line displays a message to the user. The "FResourceString(IDS_COULDNOTSAVE)" 
+part will do several tasks for your: load the string, perform error checking and pass 
+the MessageBox() function a pointer to the string.\par
+
+If the string cannot be located in the resources the char* operator will return NULL.\par
+
+{\b{Note:}} The FResourceString has an iternal limit of 256 characters for the 
+string. This limit may be lifted or completly removed in future versions of BIF. 
+ 
+\page
+
+#{\footnote FModule}
+${\footnote FModule}
++{\footnote defbrowse}
+K{\footnote FModule}
+{\fs26\cf1\b FModule}\par
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_MODULE (or BIFINCL_APPLICATION)\par
+
+This classes the the interface to executables and DLLs. It is usually 
+only interesting when you want to load resources from another module 
+than your application.\par
+
+It has only two portable member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FModule()}{\v FModule_ctor} 
+\par
+\tab
+{\uldb Fail()}{\v FModule_Fail} 
+\par\pard\sb100
+\par
+
+In addition is has two static functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb GetDefaultResourceModule}{\v FModule_GetDefaultResourceModule} 
+\par
+\tab
+{\uldb SetDefaultResourceModule}{\v FModule_SetDefaultResourceModule} 
+\par\pard\sb100
+\par
+
+In addition it has a lot of non-portable member functions that you may be  
+interested in if portability is not an issue to your application. 
+\page
+
+#{\footnote FModule_ctor}
+${\footnote Fmodule::Fmodule()}
++{\footnote defbrowse}
+K{\footnote Fmodule()}
+K{\footnote Fmodule::Fmodule()}
+{\fs26\cf1\b Fmodule()}\par
+Declaration: 
+\line{\f1
+FModule(const char *name);\line
+}
+\par
+
+This constructor loads the DLL specified by {\i{name}}. If the DLL could 
+not be found (or an other error occurred) {\uldb Fail()}{\v FModule_Fail} will return true. 
+\page
+
+#{\footnote FModule_Fail}
+${\footnote FModule::Fail()}
++{\footnote defbrowse}
+K{\footnote Fail()}
+K{\footnote FModule::Fail()}
+{\fs26\cf1\b Fail()}\par
+Declaration: 
+\line{\f1
+Bool Fail() const;\line
+}
+\par
+
+This function return True if the constructor could not load the DLL. 
+\page
+
+#{\footnote FModule_GetDefaultResourceModule}
+${\footnote FModule::GetDefaultResourceModule()}
++{\footnote defbrowse}
+K{\footnote GetDefaultResourceModule()}
+K{\footnote FModule::GetDefaultResourceModule()}
+{\fs26\cf1\b GetDefaultResourceModule()}\par
+Declaration: 
+\line{\f1
+static FModule *GetDefaultResourceModule();\line
+}
+\par
+
+This function returns the default module for loading resources. This can be the 
+application or the module previously set with {\uldb SetDefaultResourceModule}{\v FModule_SetDefaultResourceModule} 
+\page
+
+#{\footnote FModule_SetDefaultResourceModule}
+${\footnote FModule::SetDefaultResourceModule()}
++{\footnote defbrowse}
+K{\footnote SetDefaultResourceModule()}
+K{\footnote FModule::SetDefaultResourceModule()}
+{\fs26\cf1\b SetDefaultResourceModule()}\par
+Declaration: 
+\line{\f1
+static void SetDefaultResourceModule(FModule *mod);\line
+}
+\par
+
+This function sets the default module for loading resources. If not set 
+{\uldb GetDefaultResourceModule}{\v FModule_GetDefaultResourceModule} will return 
+a point the the application ({\uldb FApplication}{\v FApplication}). 
+It can be very useful to change the default resource module. For instance if 
+your application is multi-lingual the applicaiton could at startup determine 
+the language and load the module containing the language-dependent resources.\par
+
+Example: 
+\line{\f1
+FModule *languageModule;\line
+MyApplication::StartUp(...) \{\line
+  //detect language\line
+  ...\line
+  <determine which .DLL contains that language>\line
+  char *modulename;\line
+  switch(language) \{\line
+    case LANG_UKEN: //UK english\line
+    case LANG_USEN: //US english\line
+      modulename = "l_en.dll";\line
+      break;\line
+    case LANG_DADK: //danish\line
+      modulename = "l_dadk.dll";\line
+      break;\line
+    case LANG_FRBE: //belgian french\line
+    case LANG_FRFR: //french\line
+      modulename = "l_fr.dll";\line
+      break;\line
+    default:\line
+      modulename = "l_en.dll"\line
+  \}\line
+  languageModule = new FModule(modulename);\line
+  FModule::SetDefaultResourceModule(languageModule);\line
+\}\line
+}
+\par
+
+\page
+
+#{\footnote FApplication}
+${\footnote FApplication}
++{\footnote defbrowse}
+K{\footnote FApplication}
+{\fs26\cf1\b FApplication}\par
+Declaration: 
+\line{\f1
+class FApplication : public FModule \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_APPLICATION\par
+
+The FApplication class is the basis for your application. Windows do not just 
+come to life automatically, something has to create them.\par
+
+FApplication takes care of a few things: 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+Initialization and termination of the program 
+\par
+{\f2\'B7}\tab
+Startup and shutdown of the windows 
+\par
+{\f2\'B7}\tab
+Message loop 
+\par
+{\f2\'B7}\tab
+and a few other things you don't want to know about 
+\par\pard\sb100
+\par
+
+There exists only one instance of FApplication. That instance is created for 
+you in the DEFBIFWINDOWMAIN macro.\par
+
+FApplication has the following portable member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb MessageLoop()}{\v FApplication_MessageLoop} 
+\par
+\tab
+{\uldb TerminateApp()}{\v FApplication_TerminateApp} 
+\par
+\tab
+{\uldb StartUp()}{\v FApplication_StartUp} 
+\par
+\tab
+{\uldb ShutDown()}{\v FApplication_ShutDown} 
+\par
+\tab
+{\uldb Main()}{\v FApplication_Main} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FApplication_MessageLoop}
+${\footnote FApplication::MessageLoop()}
++{\footnote defbrowse}
+K{\footnote MessageLoop()}
+K{\footnote FApplication::MessageLoop()}
+{\fs26\cf1\b MessageLoop()}\par
+Declaration: 
+\line{\f1
+virtual void MessageLoop();\line
+}
+\par
+
+MessageLoop() performs the main message-loop of the application. You will 
+normally only have to call it when you override {\uldb Main()}{\v FApplication_Main}\par
+
+MessageLoop() returns when {\uldb TerminateApp()}{\v FApplication_TerminateApp} has 
+been called or when there are no windows known to BIF/Window.\par
+
+{\b{Note:}} (For Windows programmers) You don't have to worry about modeless dialogs 
+and accelarator tables, BIF/Window takes care of that. 
+ 
+\page
+
+#{\footnote FApplication_TerminateApp}
+${\footnote FApplication::TerminateApp()}
++{\footnote defbrowse}
+K{\footnote TerminateApp()}
+K{\footnote FApplication::TerminateApp()}
+{\fs26\cf1\b TerminateApp()}\par
+Declaration: 
+\line{\f1
+void TerminateApp( void );\line
+}
+\par
+
+This function tells {\uldb MessageLoop()}{\v FApplication_MessageLoop} to terminate. 
+You should call this function when you main window is being closed. 
+\page
+
+#{\footnote FApplication_StartUp}
+${\footnote FApplication::StartUp()}
++{\footnote defbrowse}
+K{\footnote StartUp()}
+K{\footnote FApplication::StartUp()}
+{\fs26\cf1\b StartUp()}\par
+Declaration: 
+\line{\f1
+virtual Bool StartUp(int argc, char **argv);\line
+}
+\par
+
+This function is called by the default implementation of {\uldb Main()}{\v FApplication_Main}. 
+In you derived class you should create the main window(s) and show them.\par
+
+{\i{argc}} and {\i{argv}} contains the argument count and arguments 
+(including the program name) as you know them from DOS/OS/2/Unix/...\par
+
+If StartUp() returns False the application is aborted immidiatly. This is useful if 
+StartUp() was unable to create the main window.\par
+
+See also: {\uldb ShutDown()}{\v FApplication_ShutDown} 
+\page
+
+#{\footnote FApplication_ShutDown}
+${\footnote FApplication::ShutDown()}
++{\footnote defbrowse}
+K{\footnote ShutDown()}
+K{\footnote FApplication::ShutDown()}
+{\fs26\cf1\b ShutDown()}\par
+Declaration: 
+\line{\f1
+virtual int ShutDown();\line
+}
+\par
+
+This function is called by default implementation of {\uldb Main()}{\v FApplication_Main} just 
+before it returns. In your derived class you should destroy the main window(s) 
+of your application.\par
+
+The return value from ShutDown() is passed back to the operating system as the 
+program exit code.\par
+
+See also: {\uldb StartUp()}{\v FApplication_StartUp} 
+\page
+
+#{\footnote FApplication_Main}
+${\footnote FApplication::Main()}
++{\footnote defbrowse}
+K{\footnote Main()}
+K{\footnote FApplication::Main()}
+{\fs26\cf1\b Main()}\par
+Declaration: 
+\line{\f1
+virtual int Main( int argc, char **argv );\line
+}
+\par
+
+Main is the main entry point of a BIF/Window application. {\i{argc}} and 
+{\i{argv}} contains the argument count and arguments.\par
+
+The default implementation of Main is: 
+\line{\f1
+if(StartUp(argc,argv)) \{\line
+  MessageLoop();\line
+  return ShutDown();\line
+\} else\line
+  return -1;      //could not initialize\line
+}
+\par
+
+\page
+
+#{\footnote FWndMan}
+${\footnote FWndMan}
++{\footnote defbrowse}
+K{\footnote FWndMan}
+{\fs26\cf1\b FWndMan}\par
+FWndMan implements several GUI system dependent things: 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+Native window <-> BIF window mapping 
+\par
+{\f2\'B7}\tab
+Event dispatching 
+\par
+{\f2\'B7}\tab
+Special message handling 
+\par\pard\sb100
+\par
+
+FWndMan does not have any portable operations so it is not documented any further. 
+\page
+
+}

@@ -1,0 +1,462 @@
+[topic FClientScrollHandler same "FClientScrollHandler"]
+Declaration:
+[code]
+class FClientScrollHandler : public [ref FHandler "FHandler"] {
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_ADVANCEDHANDLERS and BIFINCL_SCROLLHANDLER
+
+The FClientScrollHandler is used to detect that the user wants to scroll the 
+view in the client window and to manage the scrollbars
+
+The FClientScrollHandler itself does not add scrollbars to the frame window, 
+you will have to specify it in [ref FFrameWindow_Create "FFrameWindow::Create()"]
+
+Member functions:
+[sl]
+[li][ref FClientScrollHandler_ctor "FClientScrollHandler()"]
+[esl]
+
+[note]The handler contains both vertical and horizontal but only the member functions
+concerning vertical scrolling is documented here. The difference between them is that
+the 'V' is an 'H' and up/down is left/right. Just tell you WetWare computer inside
+your head to do a search&replace :-)
+[enote]
+
+Notifications:
+[sl]
+[li][ref FClientScrollHandler_VScroll "VScroll()"]
+[li][ref FClientScrollHandler_VScrollLineUp "VScrollLineUp()"]
+[li][ref FClientScrollHandler_VScrollLineDown "VScrollLineDown()"]
+[li][ref FClientScrollHandler_VScrollPageUp "VScrollPageUp()"]
+[li][ref FClientScrollHandler_VScrollPageDown "VScrollPageDown()"]
+[li][ref FClientScrollHandler_VScrollTop "VScrollTop()"]
+[li][ref FClientScrollHandler_VScrollBottom "VScrollBottom()"]
+[li][ref FClientScrollHandler_VScrollTo "VScrollTo()"]
+[li][ref FClientScrollHandler_VScrollTrack "VScrollTrack()"]
+[esl]
+
+Operations:
+[sl]
+[li][ref FClientScrollHandler_GetVScrollPos "GetVScrollPos()"]
+[li][ref FClientScrollHandler_SetVScrollPos "SetVScrollPos()"]
+[li][ref FClientScrollHandler_GetVScrollRange "GetVScrollRange()"]
+[li][ref FClientScrollHandler_SetVScrollThumbSize "SetVScrollThumbSize()"]
+[li][ref FClientScrollHandler_SetVScrollBar "SetVScrollBar()"]
+[esl]
+
+See also: [ref scrollhandler_example "scrolling example"]
+[etopic]
+
+
+[topic FClientScrollHandler_ctor down "FClientScrollHandler()" "FClientScrollHandler::FClientScrollHandler()"]
+Declaration:
+[code]
+FClientScrollHandler([ref FClientWindow "FClientWindow"] *pwnd);
+[ecode]
+This constructor just ensures that the handler is only attached to a client window.
+[etopic]
+
+
+[topic FClientScrollHandler_VScroll same "VScroll" "FClientScrollHandler::VScroll"]
+Declaration:
+[code]
+virtual Bool VScroll(FScrollEvent&);
+[ecode]
+This function is called when the user tires to modify the thumb position on
+the vertical scrollbar in the frame window.
+
+The default implementation calls
+[ref FClientScrollHandler_VScrollLineUp "VScrollLineUp()"],
+[ref FClientScrollHandler_VScrollLineDown "VScrollLineDown()"],
+[ref FClientScrollHandler_VScrollPageUp "VScrollPageUp()"],
+[ref FClientScrollHandler_VScrollPageDown "VScrollPageDown()"],
+[ref FClientScrollHandler_VScrollTop "VScrollTop()"],
+[ref FClientScrollHandler_VScrollBottom "VScrollBottom()"],
+[ref FClientScrollHandler_VScrollTo "VScrollTo()"] or
+[ref FClientScrollHandler_VScrollTrack "VScrollTrack()"]
+based on the the action specified in the event.
+[etopic]
+
+
+[topic FClientScrollHandler_VScrollLineUp same "VScrollLineUp()" "FClientScrollHandler::VScrollLineUp()"]
+Declaration:
+[code]
+virtual Bool VScrollLineUp([ref FScrollEvent "FScrollEvent"]&);
+[ecode]
+This function is called when the user wants to scroll one line up. This can 
+happen even if the thumb is at the start of the scrollbar so you have to test 
+for this.
+[etopic]
+
+[topic FClientScrollHandler_VScrollLineDown same "VScrollLineDown()" "FClientScrollHandler::VScrollLineDown()"]
+Declaration:
+[code]
+virtual Bool VScrollLineDown([ref FScrollEvent "FScrollEvent"]&);
+[ecode]
+This function is called when the user wants to scroll one line down. This can
+happen even if the thumb is at the end of the scrollbar so you have to test
+for this.
+[etopic]
+
+[topic FClientScrollHandler_VScrollPageUp same "VScrollPageUp()" "FClientScrollHandler::VScrollPageUp()"]
+Declaration:
+[code]
+virtual Bool VScrollPageUp([ref FScrollEvent "FScrollEvent"]&)
+[ecode]
+This function is called when the user wants to scroll a page up. This can happen
+even if the thumb is at the start of the scrollbar so the window has to ensure
+it doesn't scroll to a position before the data it is displaying.
+[etopic]
+
+[topic FClientScrollHandler_VScrollPageDown same "VScrollPageDown()" "FClientScrollHandler::VScrollPageDown()"]
+Declaration:
+[code]
+virtual Bool VScrollPageDown([ref FScrollEvent "FScrollEvent"]&)
+[ecode]
+This function is called when the user wants to scroll a page down. This can happen
+even if the thumb is at the end of the scrollbar so the window has to ensure
+it doesn't scroll to a position after the data it is displaying.
+[etopic]
+
+[topic FClientScrollHandler_VScrollTop same "VScrollTop()" "FClientScrollHandler::VScrollTop()"]
+Declaration:
+[code]
+virtual Bool VScrollTop(FScrollEvent&);
+[ecode]
+This function is called when the user wants to scroll to the very beginning of the data.
+[etopic]
+
+[topic FClientScrollHandler_VScrollBottom same "VScrollBottom()" "FClientScrollHandler::VScrollBottom()"]
+Declaration:
+[code]
+virtual Bool VScrollBottom(FScrollEvent&);
+[ecode]
+This function is called when the user wants to scroll to the very end of the data.
+[etopic]
+
+[topic FClientScrollHandler_VScrollTo same "VScrollTo()" "FClientScrollHandler::VScrollTo()"]
+Declaration:
+[code]
+virtual Bool VScrollTo([ref FScrollEvent "FScrollEvent"]&);
+[ecode]
+This function is called after the user has released the thumb. If the window 
+scrolled the view during [ref FClientScrollHandler_VScrollTrack "VScrollTrack()"] 
+it should not need to do anything here.
+[etopic]
+
+[topic FClientScrollHandler_VScrollTrack same "VScrollTrack()" "FClientScrollHandler::VScrollTrack()"]
+Declaration:
+[code]
+virtual Bool VScrollTrack([ref FScrollEvent "FScrollEvent"]&);
+[ecode]
+This function is called when the user har grabbed the thumb and is moving it. 
+The window can either scroll the view during tracking or after the user has 
+released the thumb.
+[etopic]
+
+[topic FClientScrollHandler_GetVScrollPos same "GetVScrollPos()" "FClientScrollHandler::GetVScrollPos()"]
+Declaration:
+[code]
+int GetVScrollPos();
+[ecode]
+This function return the current position of the thumb.
+
+[note]GetVScrollPos() returns the current position of the thumb,
+[ref FScrollEvent_where "FScrollEvent::where()"] returns the [hp 2]desired[ehp] 
+position of the thumb.
+[enote]
+[etopic]
+
+[topic FClientScrollHandler_SetVScrollPos same "SetVScrollPos()" "FClientScrollHandler::SetVScrollPos()"]
+Declaration:
+[code]
+Bool SetVScrollPos(int pos);
+[ecode]
+This function sets the position of the thumb.
+[etopic]
+
+[topic FClientScrollHandler_GetVScrollRange same "GetVScrollRange()" "FClientScrollHandler::GetVScrollRange()"]
+Declaration:
+[code]
+Bool GetVScrollRange(int *low, int *high);
+[ecode]
+This function retrieves the range of the scrollbar. [hp 1]*low[ehp] and [hp 1]*high[ehp]
+recives the lower and upper range of the scrollbar.
+
+The range can be set with [ref FClientScrollHandler_SetVScrollBar "SetVScrollBar()"]
+[etopic]
+
+[topic FClientScrollHandler_SetVScrollThumbSize same "SetVScrollThumbSize()" "FClientScrollHandler::SetVScrollThumbSize()"]
+Declaration:
+[code]
+Bool SetVScrollThumbSize(int visible, int total);
+[ecode]
+This function sets the logical size of the thumb. The physical size of 
+the thumb depends on the number of pixels available in the scrollbar shaft. The
+physical size will be approx. pixels/total*visible. The native GUI system ensures
+that the thumb does not become too small.
+[etopic]
+
+[topic FClientScrollHandler_SetVScrollBar upafter "SetVScrollBar()" "FClientScrollHandler::SetVScrollBar()"]
+Declaration:
+[code]
+Bool SetVScrollBar(int pos, int low, int high);
+[ecode]
+SetVScrollBar() sets the range and thumb position.
+[etopic]
+
+
+
+
+[topic FScrollEvent same "FScrollEvent"]
+Declaration:
+[code]
+class FScrollEvent : public [ref FEvent "FEvent"] {
+[ecode]
+This event is caught by [ref FClientScrollHandler_VScroll "VScroll()"] and HScroll(). 
+The default implementations of VScroll() and HScroll() splits the action based 
+on the type of the scroll event.
+
+Member functions:
+[sl]
+[li][ref FScrollEvent_GetType "GetType()"]
+[li][ref FScrollEvent_where "where()"]
+[esl]
+[etopic]
+
+[topic FScrollEvent_GetType down "GetType()" "FScrollEvent::GetType()"]
+Declaration:
+[code]
+enum type {
+  start, end,
+  oneLess, oneMore,
+  muchLess, muchMore,
+  track, setPos,
+  endScroll
+};
+type GetType() const;
+[ecode]
+GetType() returns the type of the scroll event.
+[etopic]
+
+[topic FScrollEvent_where upafter "where()" "FScrollEvent::where()"]
+Declaration:
+[code]
+int where() const;
+[ecode]
+This function returns the [hp 2]desired[ehp] position of the thumb. The return value is
+undefined when the type of the event is start, end or endScroll.
+[etopic]
+
+[topic scrollhandler_example upafter "Scrolling example"]
+This example show how to use the scroll handler. The code fragment has been 
+taken from an real-life application that displays "cells". It has been slightly 
+modified to make it more readable. The [hp 1]layout[ehp] variable is a 2-dimensional
+dynamic array of cells.
+
+[code]
+class MyWindow : public FClientWindow,
+                 public FClientScrollHandler,
+                 ...
+{
+  int scrollVertOffset; //to remember the curren scroll offset
+  int scrollHorzOffset;
+  int vertCellsVisible; //calculated whenever the size changes
+  int horzCellsVisible;
+
+  Bool HScrollLineLeft(FScrollEvent&);
+  Bool HScrollLineRight(FScrollEvent&);
+  Bool HScrollPageLeft(FScrollEvent&);
+  Bool HScrollPageRight(FScrollEvent&);
+  Bool HScrollStart(FScrollEvent&);
+  Bool HScrollEnd(FScrollEvent&);
+  Bool HScrollTo(FScrollEvent&);
+  Bool VScrollLineUp(FScrollEvent&);
+  Bool VScrollLineDown(FScrollEvent&);
+  Bool VScrollPageUp(FScrollEvent&);
+  Bool VScrollPageDown(FScrollEvent&);
+  Bool VScrollTop(FScrollEvent&);
+  Bool VScrollBottom(FScrollEvent&);
+  Bool VScrollTo(FScrollEvent&);
+  Bool SizeChanged(FSizeEvent&);
+  ...
+};
+
+
+MyWindow::MyWindow()
+  : FClientScrollHandler(this)
+{
+  //put initial values into these variables
+  scrollVertOffset = scrollHorzOffset = 0;
+  vertCellsVisible = horzCellsVisible = 1;
+  ...
+}
+
+void MyWindow::reload() {
+  //called after the contents of the window has changed completely
+  Invalidate();
+
+  //initialize scrollbars
+  scrollHorzOffset = 0;
+  SetHScrollBar(0,0,layout->getHorizontalCells()-horzCellsVisible);
+  scrollVertOffset = 0;
+  SetVScrollBar(0,0,layout->getVerticalCells()-vertCellsVisible);
+}
+
+
+//horizontal scrolling starts here ---------------------------------
+Bool MyWindow::HScrollLineLeft(FScrollEvent&) {
+  if(scrollHorzOffset>0) {
+    scrollHorzOffset--;
+    Invalidate();
+    SetHScrollPos(scrollHorzOffset);
+  }
+  return True;
+}
+
+Bool MyWindow::HScrollLineRight(FScrollEvent&) {
+  if(scrollHorzOffset<layout->getHorizontalCells()-horzCellsVisible) {
+    scrollHorzOffset++;
+    Invalidate();
+    SetHScrollPos(scrollHorzOffset);
+  }
+  return True;
+}
+
+Bool MyWindow::HScrollPageLeft(FScrollEvent&) {
+  scrollHorzOffset -= horzCellsVisible;
+  if(scrollHorzOffset<0)
+    scrollHorzOffset = 0;
+  Invalidate();
+  SetHScrollPos(scrollHorzOffset);
+  return True;
+}
+
+Bool MyWindow::HScrollPageRight(FScrollEvent&) {
+  scrollHorzOffset += horzCellsVisible;
+  if(scrollHorzOffset>layout->getHorizontalCells()-horzCellsVisible)
+    scrollHorzOffset = layout->getHorizontalCells()-horzCellsVisible;
+  Invalidate();
+  SetHScrollPos(scrollHorzOffset);
+  return True;
+}
+
+Bool MyWindow::HScrollStart(FScrollEvent&) {
+  scrollHorzOffset = 0;
+  Invalidate();
+  SetHScrollPos(scrollHorzOffset);
+  return True;
+}
+
+Bool MyWindow::HScrollEnd(FScrollEvent&) {
+  if(scrollHorzOffset<layout->getHorizontalCells()-horzCellsVisible) {
+    scrollHorzOffset = layout->getHorizontalCells()-horzCellsVisible;
+    Invalidate();
+    SetHScrollPos(scrollHorzOffset);
+  }
+  return True;
+}
+
+Bool MyWindow::HScrollTo(FScrollEvent& ev) {
+  scrollHorzOffset = ev.where();
+  if(scrollHorzOffset<0)
+    scrollHorzOffset = 0;
+  if(scrollHorzOffset>layout->getHorizontalCells()-horzCellsVisible)
+    scrollHorzOffset = layout->getHorizontalCells()-horzCellsVisible;
+
+  Invalidate();
+  SetHScrollPos(scrollHorzOffset);
+  return True;
+}
+
+
+//vertical scrolling starts here------------------------------------------
+Bool MyWindow::VScrollLineUp(FScrollEvent&) {
+  if(scrollVertOffset>0) {
+    scrollVertOffset--;
+    SetVScrollPos(scrollVertOffset);
+    Invalidate();
+  }
+  return True;
+}
+
+Bool MyWindow::VScrollLineDown(FScrollEvent&) {
+  if(scrollVertOffset<layout->getVerticalCells()-vertCellsVisible) {
+    scrollVertOffset++;
+    SetVScrollPos(scrollVertOffset);
+    Invalidate();
+  }
+  return True;
+}
+
+Bool MyWindow::VScrollPageUp(FScrollEvent&) {
+  if(scrollVertOffset>0) {
+    scrollVertOffset -= vertCellsVisible;
+    if(scrollVertOffset<0) 
+      scrollVertOffset = 0;
+    SetVScrollPos(scrollVertOffset);
+    Invalidate();
+  }
+  return True;
+}
+
+Bool MyWindow::VScrollPageDown(FScrollEvent&) {
+  if(scrollVertOffset<layout->getVerticalCells()-vertCellsVisible) {
+    scrollVertOffset += vertCellsVisible;
+    if(scrollVertOffset>layout->getVerticalCells()-vertCellsVisible)
+      scrollVertOffset = layout->getVerticalCells()-vertCellsVisible;
+    SetVScrollPos(scrollVertOffset);
+    Invalidate();
+  }
+  return True;
+}
+
+Bool MyWindow::VScrollTop(FScrollEvent&) {
+  if(scrollVertOffset>0) {
+    scrollVertOffset = 0;
+    SetVScrollPos(scrollVertOffset);
+    Invalidate();
+  }
+  return True;
+}
+
+Bool MyWindow::VScrollBottom(FScrollEvent&) {
+  if(scrollVertOffset<layout->getVerticalCells()-vertCellsVisible) {
+    scrollVertOffset = layout->getVerticalCells()-vertCellsVisible;
+    SetVScrollPos(scrollVertOffset);
+    Invalidate();
+  }
+  return True;
+}
+
+Bool MyWindow::VScrollTo(FScrollEvent& ev) {
+  scrollVertOffset = ev.where();
+  if(scrollVertOffset<0)
+    scrollVertOffset = 0;
+  if(scrollVertOffset>layout->getVerticalCells()-vertCellsVisible)
+    scrollVertOffset = layout->getVerticalCells()-vertCellsVisible;
+
+  SetVScrollPos(scrollVertOffset);
+  Invalidate();
+  return True;
+}
+
+
+//re-initialization when the window has changed size------------------
+Bool MyWindow::SizeChanged(FSizeEvent& ev) {
+  //The size of the window has changed
+  //Calculate how many cells are visible and initialize scrollbars
+  vertCellsVisible = ev.GetHeight()/cellHeight;
+  horzCellsVisible = ev.GetWidth()/cellWidth;
+
+  if(layout) {
+    SetHScrollBar(scrollHorzOffset,0,layout->getHorizontalCells()-horzCellsVisible);
+    SetVScrollBar(scrollVertOffset,0,layout->getVerticalCells()-vertCellsVisible);
+  }
+  return False;
+}
+[ecode]
+[etopic]
+
+

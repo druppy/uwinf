@@ -1,0 +1,81 @@
+[topic bifthread_buildingblocks same "Building blocks" "BIF/Thread building blocks"]
+BIF/Thread has two building blocks: threads and semaphores.
+
+What is a thread?
+
+A thread is a unit of execution. The operating system decides when to give 
+a thread time and how much. Every process has at least one thread: the main
+thread.
+
+A thread has its own stack, instruction pointer and register set, just like 
+a process in non-thread environments. A thread shares all other resources 
+(current directory, file handles, memory, etc) with the other threads in the
+process. In BIF/Thread a thread is an instance of [ref FThread "FThread"] or
+one of its subclasses. The states of a thread can be illustrated as this:
+[graphic bitmap "Thread states" "winbmp:thrstate.bmp"]
+
+
+What is a semaphore?
+
+Semaphores are used for synchronization and communication between threads.
+Semaphores comes in three flavors in BIF/Thread:
+[dl]
+[dt]Event semaphores. 
+[dd]Event semaphores are used to signal that an event has occured. In 
+BIF/Thread an event semaphore is an instance of [ref FEventSemaphore "FEventSemaphore"]
+[dt]Mutex semaphores (MUTual EXclusion semaphores).
+[dd]Mutex semaphores are used for serializing access to shared resources. In 
+BIF/Thread instances of [ref FMutexSemaphore "FMutexSemaphore"] are mutex seamphores.
+[dt]General semaphores.
+[dd]General semaphores are logically integers that can only be incremented or 
+decremented. If a thread tries to decrement the integer below zero it will 
+cause the thread to block until another thread has incremented the integer.
+General semaphores are implemented in BIF/Thread as [ref FSemaphore "FSemaphore"]
+[edl]
+[etopic]
+
+
+[topic tbasis_threadlifetime down "Keep-around versus Create-do-die"]
+There exist two aproaches to the lifetime of threads:
+[dl]
+[dt]Create-do-die
+[dd]Thread is created, does its job and then terminates. This approach is
+normally used when the job is a one-time task or when two jobs can be carried
+out simultaneously.
+[dt]Keep-around
+[dd]The thread is created and awaits work to arrive. When work arrives it performs
+it and then waits again. It first terminates when it is told to. This approach 
+is normally used when there normally is work to do and the
+jobs cannot be done simultaneously (usually due to a shared resource).
+[edl]
+
+[note]The two approaches does not refer to static/dynamic allocation of the
+Fhreads but rather to the logical lifetime of the threads from the perspective
+of the thread creator.
+[enote]
+
+Examples of jobs where create-do-die is likely to be suitable:
+[dl]
+[dt]Printing
+[dd]Documents are normally printed once. There should be no need to have a
+thread lying around.
+[dt]File loading/saving
+[dd]File loading and saving should be done in background threads since it may
+take a long time to do (just imagine your marvelous editor loading 10MB file
+from a CD...). Your program could potentionally load or save several files at a time
+[dt]Remote connection/disconnection
+[dd]A communication program can connect to seveal sources at the same time so
+several "connection"-threads should be created.
+[edl]
+
+Examples of jobs where keep-around is likely to be suitable:
+[dl]
+[dt]Background window painting
+[dd]The thread should be keept around for the lifetime
+of the window and notified when the window recieves a paint request.
+[dt]Background (re-)computation.
+[dd]A window that uses a thread to
+recompute/reformat something will normally want to keep the thread around and
+not create a new thread every time the (re-)computation has to be done.
+[edl]
+[etopic]

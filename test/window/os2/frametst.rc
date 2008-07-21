@@ -1,0 +1,26 @@
+#include <os2.h>
+#include "frametst.idh"
+
+ICON ID_TESTBW "../../../test/window/os2/frametst.ico"
+
+
+STRINGTABLE 
+BEGIN
+  ID_TESTBW "BIF/Window sample frame window"
+END
+
+
+MENU ID_TESTBW
+BEGIN
+  SUBMENU "Test1", 100
+  BEGIN
+    MENUITEM "Test Item 1", 101
+    MENUITEM "Test Item 2", 102
+  END
+  SUBMENU "Test2", 200
+  BEGIN
+    MENUITEM "Test Item 3", 201
+    MENUITEM "Test Item 4", 202
+  END
+END
+

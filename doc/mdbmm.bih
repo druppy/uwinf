@@ -1,0 +1,36 @@
+[topic DEFBIFMIXMAIN same "DEFBIFMIXMAIN macro" "DEFBIFMIXMAIN macro" only]
+Declaration:
+[code]
+#define DEFBIFMIXMAIN(appClass,mainThreadClass) <you really don't want to know!>
+[ecode]
+
+The DEFBIFMIXMAIN is used for starting up the application.
+
+[parml]
+[pt]appClass[pd]Your subclass of [ref FMTApplication "FMTApplication"]. An
+instance of this class will be the application object.
+[pt]mainThreadClass[pd]Main thread class. Normally [ref FMTApplication "FMTApplication"].
+[eparml]
+
+
+Example:
+[code]
+class MyApp : public FMTApplication {
+public:
+  Bool StartUp(int,char**);
+  int ShutDown();
+};
+
+
+Bool MyApp::StartUp(int , char **) {
+  ...
+}
+
+int MyApp::ShutDown() {
+  ...
+}
+
+
+DEFBIFMIXMAIN(MyApp,FWMainWindowThread);
+[ecode]
+[etopic]

@@ -1,0 +1,218 @@
+[topic FPaintHandler same "FPaintHandler"]
+Declaration:
+[code]
+class FPaintHandler : public [ref FHandler "FHandler"] {
+[ecode]
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_CLIENTHANDLERS
+
+The FPaintHandler is used for catching paint events.
+
+Notifications:
+[sl]
+[li][ref FPaintHandler_Paint "Paint()"]
+[esl]
+
+Operations:
+[sl]
+[li][ref FPaintHandler_Invalidate "Invalidate()"]
+[esl]
+[etopic]
+
+
+[topic FPaintHandler_Paint down "Paint()" "FPaintHandler::Paint()"]
+Declaration:
+[code]
+virtual Bool Paint(FPaintEvent &ev);
+[ecode]
+Paint() is called whenver the native GUI system thinks it's time to repaint a 
+portion of the window.
+
+In response to this you should paint the window.
+[etopic]
+
+[topic FPaintHandler_Invalidate upafter "Invalidate()" "FPaintHandler::Invalidate()"]
+Declaration:
+[code]
+Windows:
+  void Invalidate(FRect *pr=0, Bool eraseBackground=True);
+OS/2 PM and WMS:
+  void Invalidate(FRect *pr=0, Bool includeDescendands=True);
+[ecode]
+This function invalidates a rectangle of the window. If [hp 1]pr[ehp] is NULL 
+the whole window is invalidated.
+[etopic]
+
+[topic FCaretHandler same "FCaretHandler"]
+Declaration:
+[code]
+class FCaretHandler : public [ref FHandler "FHandler"] {
+[ecode]
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_CLIENTHANDLERS
+
+The FCaretHandler is used for showing and controlling that blinking blob on the 
+screen known under many names "Cursor" and "Caret". This handler controls the 
+visibility, shape and position of the caret. The caret is initially hidden and 
+must be shown with [ref FCaretHandler_ShowCaret "ShowCaret()"] before the caret 
+is visible. The FCaretHandler maintains a hide/show count, so if 5 calls to 
+HideCaret() the caret does not become visible again before ShowCaret() is 
+called 5 times.
+
+Operations:
+[sl]
+[li][ref FCaretHandler_SetCaretPos "SetCaretPos()"]
+[li][ref FCaretHandler_SetCaretShape1 "SetCaretShape(Shape)"] - set caret shap only
+[li][ref FCaretHandler_SetCaretShape2 "SetCaretShape(Shape,int,int)"] - set caret shape and size
+[li][ref FCaretHandler_ShowCaret "ShowCaret()"]
+[li][ref FCaretHandler_HideCaret "HideCaret()"]
+[esl]
+
+(Techinal note)
+FCaretHandler automatically creates and destroys the native 
+caret/cursor/whatever when the associated window recieves or loses the focus.
+[etopic]
+
+[topic FCaretHandler_SetCaretPos down "SetCaretPos()" "FCaretHandler::SetCaretPos()"]
+Declaration:
+[code]
+Bool SetCaretPos(int x, int y);
+[ecode]
+This function moves the caret to a new position in the window.
+[etopic]
+
+[topic FCaretHandler_SetCaretShape1 same "SetCaretShape(shape)" "FCaretHandler::SetCaretShape(shape)"]
+Declaration:
+[code]
+Bool SetCaretShape(Shape s);
+[ecode]
+This function simply calls [ref FCaretHandler_SetCaretShape2 "SetCaretShape(shape,w,h)"] 
+with the current size of the caret.
+[etopic]
+
+[topic FCaretHandler_SetCaretShape2 same "SetCaretShape(shape,w,h)" "FCaretHandler::SetCaretShape(shape,w,h)"]
+Declaration
+[code]
+Bool SetCaretShape(Shape s, int w, int h);
+[ecode]
+This function sets the shape, width and height of the caret.
+
+The [hp 1]Shape[ehp] enum is defined as:
+[code]
+enum Shape {
+        InsertCaret,
+        OverwriteCaret,
+        <additional non-portable shapes>
+};
+[ecode]
+
+Example:
+[code]
+if(insertMode)
+        SetCaretShape(InsertCaret, currentfont_width, currentfont_height);
+else
+        SetCaretShape(OverwritetCaret, currentfont_width, currentfont_height);
+[ecode]
+[etopic]
+
+
+[topic FCaretHandler_ShowCaret same "ShowCaret()" "FCaretHandler::ShowCaret()"]
+Declaration:
+[code]
+Bool ShowCaret();
+[ecode]
+This function increments the visibility counter. If the caret should be visible
+it is shown. A call to ShowCaret() should always be paired with a call to HideCaret().
+
+See also: [ref FCaretHandler_HideCaret "HideCaret()"]
+[etopic]
+
+[topic FCaretHandler_HideCaret upafter "HideCaret()" "FCaretHandler::HideCaret()"]
+Declaration:
+[code]
+Bool HideCaret();
+[ecode]
+This function decrements the visibility counter. If the caret should not be 
+visible it is hidden. A call to ShowCaret() should always be paired with a call
+to HideCaret().
+
+See also: [ref FCaretHandler_HideCaret "HideCaret()"]
+[etopic]
+
+
+[topic FTimerHandler same "FTimerHandler"]
+Declaration:
+[code]
+class FTimerHandler : public [ref FHandler "FHandler"] {
+[ecode]
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_CLIENTHANDLERS
+
+This handler is an interface to the timer functionallity of the native GUI system.
+Timers can be created, caught and destroyed.
+
+Operations:
+[sl]
+[li][ref FTimerHandler_StartTimer "StartTimer()"]
+[li][ref FTimerHandler_StopTimer "StopTimer()"]
+[esl]
+
+Notification:
+[sl]
+[li][ref FTimerHandler_Timer "Timer()"]
+[esl]
+[etopic]
+
+[topic FTimerHandler_StartTimer down "StartTimer()" "FTimerHandler::StartTimer()"]
+Declaration:
+[code]
+Bool StartTimer(int interval, int timerid);
+[ecode]
+This function creates a timer. If the function is successful timer events with
+and ID of [hp 1]timerid[ehp] will be occur in intervals of approximatly
+[hp 1]interval[ehp] milliseconds. A timer created with StartTimer() should
+later be destroyed with [ref FTimerHandler_StopTimer "StopTimer()"].
+
+[parml]
+[pt]interval
+[pd]The desired interval between the timer in milliseconds. This value is not
+guaranteed since the system may be busy doing other things. In particular,
+intervals below 100ms are very sensitive to the general load of the system.
+[pt]timerid
+[pd]ID of the timer. The ID of the timer can be chosen freely by the
+application, but it is recommended that ID above 0x7FFF are not used, since the
+these IDs may be used by the native GUI system for scrolling, blinking etc.
+[eparml]
+
+[caution]Timers are a limited resource. The native GUI system usually only
+restricts the number of timers systemwide to 32. The program should be able to
+function even if StartTimer() fails.
+[ecaution]
+[etopic]
+
+[topic FTimerHandler_StopTimer same "StopTimer()" "FTimerHandler::StopTimer()"]
+Declaration:
+[code]
+Bool StopTimer(int timerid);
+[ecode]
+This function destroys a timer previously created with
+[ref FTimerHandler_StartTimer "StartTimer()"].
+[etopic]
+
+[topic FTimerHandler_Timer same "Timer()" "FTimerHandler::Timer()"]
+Declaration:
+[code]
+virtual Bool Timer(FTimerEvent &ev);
+[ecode]
+This function is called when a timer event arrives to the handler. The subclass
+should test for timers it has created with [ref FTimerHandler_StartTimer "StartTimer()"] only
+
+Example:
+[code]
+Bool MyWindow::Timer(FTimerEvent &ev) {
+  if(ev.GetTimerID() == MYTIMERID) {
+    <do something interesting>
+    return True; //handled
+  } else
+    return False;
+}
+[ecode]
+[etopic]
+

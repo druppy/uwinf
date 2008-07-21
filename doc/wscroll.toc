@@ -1,0 +1,20 @@
+4 FClientScrollHandler FClientScrollHandler
+5 FClientScrollHandler_ctor FClientScrollHandler()
+5 FClientScrollHandler_VScroll VScroll
+5 FClientScrollHandler_VScrollLineUp VScrollLineUp()
+5 FClientScrollHandler_VScrollLineDown VScrollLineDown()
+5 FClientScrollHandler_VScrollPageUp VScrollPageUp()
+5 FClientScrollHandler_VScrollPageDown VScrollPageDown()
+5 FClientScrollHandler_VScrollTop VScrollTop()
+5 FClientScrollHandler_VScrollBottom VScrollBottom()
+5 FClientScrollHandler_VScrollTo VScrollTo()
+5 FClientScrollHandler_VScrollTrack VScrollTrack()
+5 FClientScrollHandler_GetVScrollPos GetVScrollPos()
+5 FClientScrollHandler_SetVScrollPos SetVScrollPos()
+5 FClientScrollHandler_GetVScrollRange GetVScrollRange()
+5 FClientScrollHandler_SetVScrollThumbSize SetVScrollThumbSize()
+5 FClientScrollHandler_SetVScrollBar SetVScrollBar()
+4 FScrollEvent FScrollEvent
+5 FScrollEvent_GetType GetType()
+5 FScrollEvent_where where()
+4 scrollhandler_example Scrolling example

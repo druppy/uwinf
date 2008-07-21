@@ -1,0 +1,61 @@
+x
+QUICK START ---
+
+Hvis i l‘gger denne pakke i ..\bihc, f.eks BIF i d:\bif, og BIHC i d:\bihc,
+s† kan i generere hj‘lpen vha kun 4 kommandolinier:
+  Windows hj‘lp:
+    copy dos\bihc.exe .
+    copy dos\mbihc.exe .
+    copy dos\mktoc.exe .
+    mbihc bif.mbc
+    hc31 bif.hpj
+  OS/2 hj‘lp:
+    copy os2\bihc.exe .
+    copy os2\mbihc.exe .
+    mbihc bif.mbc
+    ipfc /i bif.ipf
+B†de hc31 og ipfc vil vr‘le over visse ting - ignorer dem.
+
+
+
+
+COMPILER SETUP --
+Opret disse projekter:
+  Windows RTF:
+    bihc.exe:
+      bihc.cpp
+      bihcrtf.cpp
+    mktoc.exe
+      mktoc.cpp
+    mbihc.exe:
+      mbihc.cpp
+      mbihcrtf.cpp
+  OS/2 IPF:
+    bihc.exe:
+      bihc.cpp
+      bihcipf.cpp
+    mbihc.exe:
+      mbihc.cpp
+      mbihcipf.cpp
+
+
+
+Egentlig dokumentation starter her:
+
+BIHC:
+  BIHC laver en .BIH-fil om til en .RTF-fil eller .IPF-fil afh‘ngig af
+  om bihcrtf.cpp eller bihcipf.cpp er linket med.
+
+MBIHC:
+  MBIHC tager som input en liste over .BIH-filer samt deres
+  startniveau og kalder BIHC for her af dem for f† dem lavet om til
+  RTF/IPF. RTF-versionen af mbihc kalder desuden mktoc for at generere
+  et topic med table-of-contents.
+  MBIHC laver desuden en HPJ-fil eller en .IPF-fil som skal
+  specificeres som input til HC31 / IPFC
+
+MKTOC:
+  Bruges til RTF-filer. Den genererer et topic med tabl-of-contents ud
+  fra en r‘kke .toc filer (som laves af bihc)
+
+

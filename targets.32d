@@ -1,0 +1,58 @@
+Win32 DLL targets (and test and sample programs using these)
+Extra switches unless otherwise is specified:
+  Include directories: e:\source\bif\include
+  -zc Put constants in code segment (not needed but helps find errors and can improve swap performance)
+  -bm Multithreaded application
+define BIF_IN_DLL and BUILDING_BIF
+define STRICT if your want it (we recommend it)
+define WIN32_LEAN_AND_MEAN for (much) faster compilation
+------------------------------------------------------------------------------
+Target:
+  dll\win32\bift.dll
+Sources:
+  ..\..\source\thread\win32\*.cpp
+Switches:
+Description:
+  BIF/Thread DLL
+------------------------------------------------------------------------------
+Target:
+  dll\win32\win\bifwwin.dll
+Sources:
+  ..\..\..\source\window\win32\*.cpp
+  ..\..\..\source\window\winc\*.cpp
+Switches:
+Description:
+  BIF/Window DLL
+------------------------------------------------------------------------------
+Target:
+  lib\win32\win\biftwin.dll
+Sources:
+  ..\..\..\source\thread\win32\*.cpp
+  ..\bift.lib
+Switches:
+Description:
+  BIF/Thread support classes for Windows GUI
+------------------------------------------------------------------------------
+Target:
+  lib\win32\win\bifm.dll
+Sources:
+  ..\..\..\source\mix\win32\win\*.cpp
+  ..\bift.lib
+  biftwin.lib
+  bifwwin.lib
+Switches:
+Description:
+  BIF/Mix DLL
+------------------------------------------------------------------------------
+Target:
+  lib\win32\win\winsort.exe
+Sources:
+  ..\..\..\sample\mix\sort\*.cpp (except pmsort.cpp)
+  ..\bift.lib
+  biftwin.lib
+  bifwwin.lib
+  bifm.lib
+Switches:
+Description:
+  Sorting demonstration sample program
+

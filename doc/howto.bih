@@ -1,0 +1,12 @@
+[topic howto same "How to..."]
+This section contains suggested solutions to common problems. The
+problems solved ranges from simple protection of global variables
+using BIF/Thread to [todo "what?"]
+
+Select a topic:
+[sl]
+[li][ref thowto "How-to concerning BIF/Thread"]
+[li][ref whowto "How-to concerning BIF/Window"]
+[esl]
+[etopic]
+

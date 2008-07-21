@@ -1,0 +1,12 @@
+2 bifwindow_functions Functions
+3 getcurrentapp GetCurrentApp()
+3 getdesktop GetDesktop()
+3 GetSystemArrowPointer GetSystemArrowPointer()
+3 GetSystemTextPointer GetSystemTextPointer()
+3 GetSystemNESWPointer GetSystemNESWPointer()
+3 GetSystemNSPointer GetSystemNSPointer()
+3 GetSystemNWSEPointer GetSystemNWSEPointer()
+3 GetSystemWEPointer GetSystemWEPointer()
+3 GetSystemWaitPointer GetSystemWaitPointer()
+3 GetWndMan GetWndMan()
+3 MessageBox MessageBox()

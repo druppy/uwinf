@@ -1,0 +1,3 @@
+Contents: win32-specific files for BIF/Window for MS Windows GUI system
+applicat.cpp FModule and FApplication
+wndcore.cpp  BIF/Window core

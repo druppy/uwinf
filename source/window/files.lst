@@ -1,0 +1,6 @@
+Contents: BIF/Window split into 5 directories based on GUI system
+pm        OS/2 Presentation Manager
+win16     MS Windows, files specific for 16-bit
+win32     MS Windows, files specific for 32-bit
+winc      MS Windows, files common for 16- and 32-bit
+wms       Window Management System

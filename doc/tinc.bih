@@ -1,0 +1,26 @@
+[topic bifthread_include_hierachy same "Include hierachy" "BIF/Thread include hierachy" secondary]
+[code]
+BIFINCL_THREAD                       FThread
+                                     FThreadManager
+    *BIFINCL_THREADALL               (meta-#define)
+    BIFINCL_WINDOWTHREAD             FWindowThread
+    BIFINCL_MAINTHREAD               FMainThread
+    BIFINCL_SEMAPHORES               FMutexSemaphore
+                                     FEventSemaphore
+                                     FSemaphore
+    BIFINCL_SPINSEMAPHORES           FSpinMutexSemaphore
+                                     FSpinEventSemaphore
+                                     FSpinSemaphore
+    [reffootnote bt_inchie_note1 "(1)"]
+[ecode]
+[etopic]
+
+[footnote bt_inchie_note1]
+FMainWindowThread is included when both BIFINCL_WINDOWTHREAD and
+BIFINCL_MAINTHREAD are defined.
+
+When BIFINCL_SEMAPHORES is defined BIFINCL_SEMAPHORE is automatically defined
+since the spin-semaphores build upon the normal semaphores.
+[efootnote]
+
+

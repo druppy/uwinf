@@ -1,0 +1,18 @@
+#ifndef __BIFIMEX_DOS_INCLUDED
+#define __BIFIMEX_DOS_INCLUDED
+
+//BIFCLASS and BIFFUNCTION #defines for DOS 16- and 32-bit
+
+
+#if !defined(BIF_IN_SLL)
+#  define BIF_IN_SLL
+#endif
+#if defined(BIF_IN_SLL) && defined(BIF_IN_DLL)
+#  error You cannot define both BIF_IN_SLL and BIF_IN_DLL
+#endif
+
+#define BIFCLASS
+#define BIFFUNCTION
+
+#endif /*__BIFIMEX_DOS_INCLUDED*/
+

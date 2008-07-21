@@ -1,0 +1,229 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote FOwnerDrawOwner}
+${\footnote FOwnerDrawOwner}
++{\footnote defbrowse}
+K{\footnote FOwnerDrawOwner}
+{\fs26\cf1\b FOwnerDrawOwner}\par
+Declaration: 
+\line{\f1
+class FOwnerDrawOwner : public FHandler \{\line
+}
+\par
+
+The FOwnerDrawOwner handler is used in windows that contain owner-draw 
+controls. The "owner draw" name comes from the fact that the native GUI 
+system's controls that support specialized drawing does this by sending 
+drawing-requests to their owner window. Since BIF programs usually has 
+objects for each control BIF tries to let the BIF-object handle the 
+request instead of the owner window.\par
+
+This figure shows how this works: 
+\{bml ownerdrw.bmp\}\par
+
+When you use ownerdraw controls you must attach a FOwnerDrawOwner to the 
+owner of the controls (usually a dialog) and a {\uldb FOwnerDrawOwnee}{\v FOwnerDrawOwnee} 
+to the controls that are owner-draw. BIF support for owner-draw controls are 
+limited to routing the drawing and measurement requests to the BIF-objects. 
+What the windows should do with them are up to you - the in the handling of the 
+requests are too different on the two system to build a common interface upon.\par
+
+Member functions: (rarely overridden, except when ownerdraw menu item are used) 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb OwnerDraw()}{\v FOwnerDrawOwner_OwnerDraw} 
+\par
+\tab
+{\uldb OwnerMeasure()}{\v FOwnerDrawOwner_OwnerMeasure} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FOwnerDrawOwner_OwnerDraw}
+${\footnote FOwnerDrawOwner::OwnerDraw()}
++{\footnote defbrowse}
+K{\footnote OwnerDraw()}
+K{\footnote FOwnerDrawOwner::OwnerDraw()}
+{\fs26\cf1\b OwnerDraw()}\par
+Declaration: 
+\line{\f1
+virtual Bool OwnerDraw({\uldb FDrawItemEvent}{\v FDrawItemEvent}&);\line
+}
+\par
+
+This function is called when an ownee reqest the owner to draw an item. 
+The default implementation of OwnerDraw() searches the handler's list of 
+ownees and calls {\uldb FOwnerDrawOwnee::OwneeDraw()}{\v FOwnerDrawOwnee_OwneeDraw}.\par
+
+If you use owner-draw menu items you will have to override this function as BIF 
+does not have interface objects for the menu items. 
+\page
+
+#{\footnote FOwnerDrawOwner_OwnerMeasure}
+${\footnote FOwnerDrawOwner::OwnerMeasure()}
++{\footnote defbrowse}
+K{\footnote OwnerMeasure()}
+K{\footnote FOwnerDrawOwner::OwnerMeasure()}
+{\fs26\cf1\b OwnerMeasure()}\par
+Declaration: 
+\line{\f1
+virtual Bool OwnerMeasure({\uldb FMeasureItemEvent}{\v FMeasureItemEvent}&);\line
+}
+\par
+
+This function is called when an ownee reqests the size of an item. 
+The default implementation of OwnerMeasure() searches the handler's list of 
+ownees and calls {\uldb FOwnerDrawOwnee::OwneeMeasure()}{\v FOwnerDrawOwnee_OwneeMeasure}.\par
+
+If you use owner-draw menu items you will have to override this function as BIF 
+does not have interface objects for the menu items. 
+\page
+
+#{\footnote FOwnerDrawOwnee}
+${\footnote FOwnerDrawOwnee}
++{\footnote defbrowse}
+K{\footnote FOwnerDrawOwnee}
+{\fs26\cf1\b FOwnerDrawOwnee}\par
+Declaration: 
+\line{\f1
+class FOwnerDrawOwnee : public FHandler \{\line
+}
+\par
+
+This FOwnerDrawOwnee is attached to the control that is owner-draw. BIF has 
+already attached a FOwnerDrawOwnee to the predefined ownerdraw controls 
+({\uldb FODSelectionComboBox}{\v FODSelectionComboBox} and {\uldb FODListBox}{\v FODListBox})\par
+
+You must be very carefull when you override the functions in FOwnerDrawOwnee 
+as they may get called {\b{before}} the BIF-object has been initialized 
+(that is, before the BIF-object knows which native window it maps to).\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FOwnerDrawOwnee()}{\v FOwnerDrawOwnee_ctor} 
+\par
+\tab
+{\uldb OwneeDraw()}{\v FOwnerDrawOwnee_OwneeDraw} (pure virtual) 
+\par
+\tab
+{\uldb OwneeMeasure()}{\v FOwnerDrawOwnee_OwneeMeasure} (pure virtual) 
+\par\pard\sb100
+\par
+
+You will not have to override OwnerMeasure() in FODSelectionComboBox and 
+FODListBox, they have already mapped it to a GetItemHeight() member. 
+\page
+
+#{\footnote FOwnerDrawOwnee_ctor}
+${\footnote FOwnerDrawOwnee::FOwnerDrawOwnee()}
++{\footnote defbrowse}
+K{\footnote FOwnerDrawOwnee()}
+K{\footnote FOwnerDrawOwnee::FOwnerDrawOwnee()}
+{\fs26\cf1\b FOwnerDrawOwnee()}\par
+Declaration: 
+\line{\f1
+FOwnerDrawOwnee(FWnd *pwnd, {\uldb FOwnerDrawOwner}{\v FOwnerDrawOwner} *owner);\line
+}
+\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pwnd\tab
+Owner/parent window. 
+\par
+owner\tab
+The FOwnerDrawOwner handler attached to the owner window. 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FOwnerDrawOwnee_OwneeDraw}
+${\footnote FOwnerDrawOwnee::OwneeDraw()}
++{\footnote defbrowse}
+K{\footnote OwneeDraw()}
+K{\footnote FOwnerDrawOwnee::OwneeDraw()}
+{\fs26\cf1\b OwneeDraw()}\par
+Declaration: 
+\line{\f1
+virtual Bool OwneeDraw({\uldb FDrawItemEvent}{\v FDrawItemEvent}&) =0;\line
+}
+\par
+
+This function is called when the control should paint itself/part of itself/an item. 
+\page
+
+#{\footnote FOwnerDrawOwnee_OwneeMeasure}
+${\footnote FOwnerDrawOwnee::OwneeMeasure()}
++{\footnote defbrowse}
+K{\footnote OwneeMeasure()}
+K{\footnote FOwnerDrawOwnee::OwneeMeasure()}
+{\fs26\cf1\b OwneeMeasure()}\par
+Declaration: 
+\line{\f1
+virtual Bool OwneeMeasure(FMeasureItemEvent&) =0;\line
+}
+\par
+
+This function is called when the control should tell how tall/wide the item(s) are. 
+\page
+
+#{\footnote FMeasureItemEvent}
+${\footnote FMeasureItemEvent}
++{\footnote defbrowse}
+K{\footnote FMeasureItemEvent}
+{\fs26\cf1\b FMeasureItemEvent}\par
+Declaration: 
+\line{\f1
+class FMeasureItemEvent : public {\uldb FEvent}{\v FEvent} \{\line
+}
+\par
+
+The only common functions (both by name and in semantic) in both the Windows 
+and the OS/2 PM versions of the class are: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Bool IsFromControl() 
+\par
+\tab
+Bool IsFromMenu() 
+\par
+\tab
+int GetControlID() 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FDrawItemEvent}
+${\footnote FDrawItemEvent}
++{\footnote defbrowse}
+K{\footnote FDrawItemEvent}
+{\fs26\cf1\b FDrawItemEvent}\par
+Declaration: 
+\line{\f1
+class FDrawItemEvent : public FEvent \{\line
+}
+\par
+
+The only common function in both the Windows and the OS/2 PM versions are: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Bool IsFromControl() 
+\par
+\tab
+Bool IsFromMenu() 
+\par
+\tab
+int GetControlID() 
+\par\pard\sb100
+ 
+\page
+
+}

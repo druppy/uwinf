@@ -1,0 +1,35 @@
+#include <os2.h>
+
+
+#include "ale.h"
+
+
+#include "ale.mid"
+rcinclude "../../../sample/window/os2/ale/ale.mnu"
+
+ICON ID_ALE "../../../sample/window/os2/ale/ale.ico"
+
+STRINGTABLE
+BEGIN
+        ID_ALE "ArtLink Editor"
+END
+
+ACCELTABLE ID_ALE
+BEGIN
+        VK_NEWLINE,     MID_EDITLINK,   VIRTUALKEY
+        VK_DELETE,      MID_DELETELINK, VIRTUALKEY
+        VK_TAB,         MID_NEXTLINK,   VIRTUALKEY
+        VK_LEFT,        MID_MOVELINKLEFT,       VIRTUALKEY
+        VK_RIGHT,       MID_MOVELINKRIGHT,      VIRTUALKEY
+        VK_UP,          MID_MOVELINKUP,         VIRTUALKEY
+        VK_DOWN,        MID_MOVELINKDOWN,       VIRTUALKEY
+        VK_LEFT,        MID_NARROWER,           VIRTUALKEY , SHIFT
+        VK_RIGHT,       MID_BROADER,            VIRTUALKEY, SHIFT
+        VK_UP,          MID_TALLER,             VIRTUALKEY, SHIFT
+        VK_DOWN,        MID_SHORTER,            VIRTUALKEY, SHIFT
+END
+
+
+rcinclude "../../../sample/window/os2/ale/editlink.dlg"
+
+

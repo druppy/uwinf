@@ -1,0 +1,40 @@
+#ifndef OS2_INCLUDED
+   #include <os2.h>
+#endif
+#include "ALE.h"
+
+DLGTEMPLATE 100 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Edit link", 100, -91, 20, 263, 99, FS_MOUSEALIGN, FCF_SYSMENU | 
+            FCF_TITLEBAR
+    BEGIN
+        GROUPBOX        "Reference type", -1, 4, 44, 76, 54
+        GROUPBOX        "Coordinates", -1, 86, 44, 121, 54
+        AUTORADIOBUTTON "Heading", 101, 14, 79, 49, 10, WS_TABSTOP
+        AUTORADIOBUTTON "Footnote", 102, 14, 69, 49, 10, WS_TABSTOP
+        AUTORADIOBUTTON "Inform", 104, 14, 49, 49, 10, WS_TABSTOP
+        AUTORADIOBUTTON "Launch", 103, 14, 59, 49, 10, WS_TABSTOP
+        LTEXT           "x", -1, 93, 78, 10, 8
+        ENTRYFIELD      "", 105, 108, 78, 32, 8, ES_MARGIN
+        LTEXT           "y", -1, 149, 78, 10, 8, NOT WS_GROUP
+        ENTRYFIELD      "", 106, 165, 78, 32, 8, ES_MARGIN
+        LTEXT           "cx", -1, 93, 66, 10, 8, NOT WS_GROUP
+        ENTRYFIELD      "", 107, 108, 66, 32, 8, ES_MARGIN
+        LTEXT           "cy", -1, 149, 66, 10, 8, NOT WS_GROUP
+        ENTRYFIELD      "", 108, 165, 66, 32, 8, ES_MARGIN
+        PUSHBUTTON      "Apply", 109, 91, 48, 40, 13, BS_NOPOINTERFOCUS | 
+                        WS_GROUP
+        LTEXT           "res", -1, 5, 30, 14, 8
+        ENTRYFIELD      "", 110, 49, 30, 58, 8, ES_MARGIN
+        LTEXT           "refid", -1, 120, 30, 20, 8, NOT WS_GROUP
+        ENTRYFIELD      "", 111, 147, 30, 58, 8, ES_MARGIN
+        LTEXT           "database", -1, 5, 17, 37, 8, NOT WS_GROUP
+        ENTRYFIELD      "", 112, 49, 17, 58, 8, ES_MARGIN
+        LTEXT           "object", -1, 5, 4, 26, 8, NOT WS_GROUP
+        ENTRYFIELD      "", 113, 49, 4, 58, 8, ES_MARGIN
+        LTEXT           "data", -1, 120, 4, 18, 8, NOT WS_GROUP
+        ENTRYFIELD      "", 114, 147, 4, 58, 8, ES_MARGIN
+        DEFPUSHBUTTON   "Ok", ID_ALE, 217, 79, 40, 14
+        PUSHBUTTON      "Cancel", DID_CANCEL, 217, 61, 40, 14
+    END
+END

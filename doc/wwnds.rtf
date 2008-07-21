@@ -1,0 +1,2053 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote bw_window_classes}
+${\footnote BIF/Window window classes}
++{\footnote defbrowse}
+K{\footnote Window classes}
+K{\footnote BIF/Window window classes}
+{\fs26\cf1\b Window classes}\par
+BIF has only a few window classes (not counting control classes)\par
+
+The following picture shows the overall class hierarchy: 
+\{bml wndclass.shg\} 
+\page
+
+#{\footnote FWnd}
+${\footnote FWnd class}
++{\footnote defbrowse}
+K{\footnote FWnd}
+K{\footnote FWnd class}
+{\fs26\cf1\b FWnd}\par
+Declaration: 
+\line{\f1
+class FWnd \{ ...\line
+}
+\par
+
+The FWnd class is the base class of all window classes. It implements support for {\uldb FHandlers}{\v FHandler}\par
+
+FWnd has very few portable operations. These are: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FWnd()}{\v FWnd_ctor} 
+\par
+\tab
+{\uldb ~FWnd()}{\v FWnd_dtor} 
+\par
+\tab
+{\uldb Destroy()}{\v FWnd_Destroy} 
+\par
+\tab
+{\uldb Show()}{\v FWnd_Show} 
+\par
+\tab
+{\uldb Hide()}{\v FWnd_Hide} 
+\par
+\tab
+{\uldb IsVisible()}{\v FWnd_IsVisible} 
+\par
+\tab
+{\uldb Enable()}{\v FWnd_Enable} 
+\par
+\tab
+{\uldb Disable()}{\v FWnd_Disable} 
+\par
+\tab
+{\uldb IsEnabled()}{\v FWnd_IsEnabled} 
+\par
+\tab
+{\uldb GetParent()}{\v FWnd_GetParent} 
+\par
+\tab
+{\uldb SetParent()}{\v FWnd_SetParent} 
+\par
+\tab
+{\uldb GetOwner()}{\v FWnd_GetOwner} 
+\par
+\tab
+{\uldb SetOwner()}{\v FWnd_SetOwner} 
+\par
+\tab
+{\uldb IsValid()}{\v FWnd_IsValid} 
+\par
+\tab
+{\uldb Zorder()}{\v FWnd_Zorder} 
+\par
+\tab
+{\uldb GetFirstSibling()}{\v FWnd_GetFirstSibling} 
+\par
+\tab
+{\uldb GetNextSibling()}{\v FWnd_GetNextSibling} 
+\par\pard\sb100
+\par
+
+The following operations are common to both Windows 3.1, OS/2 PM and WMS but 
+still not portable. Whenever you use these operations, you will have to 
+review your source when you port your program. 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb GetHwnd()}{\v FWnd_GetHwnd} 
+\par
+\tab
+{\uldb PostEvent()}{\v FWnd_PostEvent} 
+\par
+\tab
+{\uldb SendEvent()}{\v FWnd_SendEvent} 
+\par
+\tab
+{\uldb GetStyle()}{\v FWnd_GetStyle} 
+\par
+\tab
+{\uldb SetStyle(style)}{\v FWnd_SetStyle1} 
+\par
+\tab
+{\uldb SetStyle(and_mask,or_mask)}{\v FWnd_SetStyle2} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FWnd_ctor}
+${\footnote FWnd::FWnd()}
++{\footnote defbrowse}
+K{\footnote FWnd()}
+K{\footnote FWnd::FWnd()}
+{\fs26\cf1\b FWnd()}\par
+Declaration: 
+\line{\f1
+FWnd( void );\line
+}
+\par
+
+FWnd's constructor just initializes various data members used by the FWnd class.\par
+
+{\b{Note:}} The "native" window is {\i{not}} created. This is done later by the 
+create mechanism in each subclasses. 
+ 
+\page
+
+#{\footnote FWnd_dtor}
+${\footnote FWnd::~FWnd()}
++{\footnote defbrowse}
+K{\footnote ~FWnd()}
+K{\footnote FWnd::~FWnd()}
+{\fs26\cf1\b ~FWnd()}\par
+Declaration: 
+\line{\f1
+virtual ~FWnd();\line
+}
+\par
+
+If the native window still exists the destructor will call {\uldb Destroy()}{\v FWnd_Destroy}.\par
+
+{\b{Note:}} Due to the semantics of destructors this will always call FWnd::Destroy(). 
+ 
+\page
+
+#{\footnote FWnd_Destroy}
+${\footnote FWnd::Destroy()}
++{\footnote defbrowse}
+K{\footnote Destroy()}
+K{\footnote FWnd::Destroy()}
+{\fs26\cf1\b Destroy()}\par
+Declaration: 
+\line{\f1
+virtual Bool Destroy( void );\line
+}
+\par
+
+Destroy() destroys the native window (if any). This function is called by {\uldb ~FWnd()}{\v FWnd_dtor}\par
+
+If the window has not been created calling Destroy() is harmless.\par
+
+You should destroy your windows explicitly instead of letting the destructors 
+do it. If you do not destroy the window yourself and the BIF-object goes out 
+of scope the C++ destructor mechanism will first destruct the member window 
+objects (which will destroy the native windows) then the window object itself. 
+Depending on GUI system and version of the GUI system this may cause 
+unnecessary repainting of windows that are going to be destroyed. Example: 
+\line{\f1
+class MyWindow : public ... \{\line
+  SubWindow subwindow1;\line
+  SubWindow subwindow2;\line
+  ...\line
+\};\line
+\line
+foo() \{\line
+  MyWindow window;\line
+  window.Create(...\line
+  \line
+  //'window' goes out of scope  \line
+\}\line
+}
+\par
+
+When window's destructor is called automatically when it goes out of scope, this may happen: 
+\line{\f1
+subwindow1's destructor called, which calls:\line
+    subwindow1.Destroy() which\line
+      destroys the native window, which can cause:\line
+        unnecessary repainting of the area in window that subwindow1 covered\line
+  subwindow2's destructor called, which calls:\line
+    subwindow2.Destroy() which\line
+      destroys the native window, which can cause:\line
+        unnecessary repainting of the area in window that subwindow2 covered\line
+  ...\line
+  window's destructor is called, which calls:\line
+    window's.Destroy(), which:\line
+      destroys the native window\line
+}
+\par
+
+The unnecessary repainting of the areas covered by the window's subwindows slows down a lot!\par
+
+If the foo() function explicitly called window.Destroy() before window goes out of scope this happens: 
+\line{\f1
+(window.Destroy() is called)\line
+    native window including its subwindows are destroyed\line
+  (window goes out of scope)\line
+  subwindow1's destrouctor is called\line
+  subwindow2's destrouctor is called\line
+  window's destrouctor is called\line
+}
+\par
+
+The rule is that you should always match a xxxx.Create(...) with a xxxx.Destroy().\par
+
+{\b{Note:}} Other rules apply to {\uldb modal dialogs}{\v FModalDialog} 
+ 
+\page
+
+#{\footnote FWnd_Show}
+${\footnote FWnd::Show()}
++{\footnote defbrowse}
+K{\footnote Show()}
+K{\footnote FWnd::Show()}
+{\fs26\cf1\b Show()}\par
+Declaration: 
+\line{\f1
+Bool Show();\line
+}
+\par
+
+This function sets a window's visibility to 'visible'. The window is repainted when appropriate.\par
+
+Example: 
+\line{\f1
+Bool MyApp::StartUp(int,char**) \{\line
+  if(!MyWindow.Create())\line
+    return False;\line
+  MyWindow.Show();\line
+  MyWindow.BringToFront();\line
+\}\line
+}
+\par
+
+See also: {\uldb Hide()}{\v FWnd_Hide}, {\uldb IsVisible()}{\v FWnd_IsVisible} 
+\page
+
+#{\footnote FWnd_Hide}
+${\footnote FWnd::Hide()}
++{\footnote defbrowse}
+K{\footnote Hide()}
+K{\footnote FWnd::Hide()}
+{\fs26\cf1\b Hide()}\par
+Declaration: 
+\line{\f1
+Bool Hide();\line
+}
+\par
+
+This function sets a window's visibility to 'invisible'. Invisible windows will 
+not receive mouse or keyboard event.\par
+
+See also: {\uldb Show()}{\v FWnd_Show}, {\uldb IsVisible()}{\v FWnd_IsVisible} 
+\page
+
+#{\footnote FWnd_IsVisible}
+${\footnote FWnd::IsVisible()}
++{\footnote defbrowse}
+K{\footnote IsVisible()}
+K{\footnote FWnd::IsVisible()}
+{\fs26\cf1\b IsVisible()}\par
+Declaration: 
+\line{\f1
+Bool IsVisible();\line
+}
+\par
+
+IsVisible() returns wheter or not the window is logically visible. A window 
+can be logically visible, but physically covered by other windows.\par
+
+See also: {\uldb Show()}{\v FWnd_Show}, {\uldb Hide()}{\v FWnd_Hide} 
+\page
+
+#{\footnote FWnd_Enable}
+${\footnote FWnd::Enable()}
++{\footnote defbrowse}
+K{\footnote Enable()}
+K{\footnote FWnd::Enable()}
+{\fs26\cf1\b Enable()}\par
+Declaration: 
+\line{\f1
+Bool Enable();\line
+}
+\par
+
+This function enables the window. 
+\page
+
+#{\footnote FWnd_Disable}
+${\footnote FWnd::Disable()}
++{\footnote defbrowse}
+K{\footnote Disable()}
+K{\footnote FWnd::Disable()}
+{\fs26\cf1\b Disable()}\par
+Declaration: 
+\line{\f1
+Bool Disable();\line
+}
+\par
+
+This function disables the window. A disabled window cannot receive mouse or keyboard events. 
+\page
+
+#{\footnote FWnd_IsEnabled}
+${\footnote FWnd::IsEnabled()}
++{\footnote defbrowse}
+K{\footnote IsEnabled()}
+K{\footnote FWnd::IsEnabled()}
+{\fs26\cf1\b IsEnabled()}\par
+Declaration: 
+\line{\f1
+Bool IsEnabled();\line
+}
+\par
+
+This function returns True if the window is enabled. 
+\page
+
+#{\footnote FWnd_GetParent}
+${\footnote FWnd::GetParent()}
++{\footnote defbrowse}
+K{\footnote GetParent()}
+K{\footnote FWnd::GetParent()}
+{\fs26\cf1\b GetParent()}\par
+Declaration: 
+\line{\f1
+FWnd *GetParent();\line
+}
+\par
+
+This function returns the window's parent window provided that BIF knows about 
+it. The parent window is the window that the window is visually subordinated. 
+Eg. a top-level frame window's parent is the desktop. A control in a dialog 
+has the dialog as parent.\par
+
+See also: {\uldb SetParent()}{\v FWnd_SetParent}, {\uldb GetOwner()}{\v FWnd_GetOwner} 
+\page
+
+#{\footnote FWnd_SetParent}
+${\footnote FWnd::SetParent()}
++{\footnote defbrowse}
+K{\footnote SetParent()}
+K{\footnote FWnd::SetParent()}
+{\fs26\cf1\b SetParent()}\par
+Declaration: 
+\line{\f1
+FWnd *SetParent(FWnd *pWnd );\line
+}
+\par
+
+This function reparents the window. The return value is the window's previous 
+parent window and NULL if the function fails.\par
+
+See {\ul Windows 3.1 restrictions}{\v windows_ownerparent_note}\par
+
+See also: {\uldb GetParent()}{\v FWnd_GetParent}, {\uldb SetOwner()}{\v FWnd_SetOwner} 
+\page
+
+#{\footnote windows_ownerparent_note}
+ 
+Windows 3.1 does not maintain separate parent and owner information for all windows. 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+Overlapped windows (top-level frame windows) always have the desktop as parent and owner. 
+\par
+{\f2\'B7}\tab
+Popup windows (non-top-level frame windows) have the desktop as parent and another window as owner. 
+\par
+{\f2\'B7}\tab
+Child windows' (eg.: controls') parent is always their owner 
+\par\pard\sb100
+\par
+
+Changing the parent or owner of a window is not recommended under Windows. 
+SetParent() always fails for frame windows and SetOwner() always fails for 
+top-level frame windows and child windows. 
+\page#{\footnote FWnd_GetOwner}
+${\footnote FWnd::GetOwner()}
++{\footnote defbrowse}
+K{\footnote GetOwner()}
+K{\footnote FWnd::GetOwner()}
+{\fs26\cf1\b GetOwner()}\par
+Declaration: 
+\line{\f1
+FWnd *GetOwner();\line
+}
+\par
+
+This function returns the window's owner window. The owner of a window is the 
+window that the window is logically subordinated. When windows send notification, 
+they send them to their owner.\par
+
+See also: {\uldb GetParent()}{\v FWnd_GetParent}, {\uldb SetOwner()}{\v FWnd_SetOwner} 
+\page
+
+#{\footnote FWnd_SetOwner}
+${\footnote FWnd::SetOwner()}
++{\footnote defbrowse}
+K{\footnote SetOwner()}
+K{\footnote FWnd::SetOwner()}
+{\fs26\cf1\b SetOwner()}\par
+Declaration: 
+\line{\f1
+FWnd *SetOwner( FWnd *pWnd );\line
+}
+\par
+
+This function changes the window's owner.\par
+
+See {\ul Windows 3.1 restrictions}{\v windows_ownerparent_note}\par
+
+See also: {\uldb SetParent()}{\v FWnd_SetParent}, {\uldb GetOwner()}{\v FWnd_GetOwner} 
+\page
+
+#{\footnote FWnd_GetHwnd}
+${\footnote FWnd::GetHwnd()}
++{\footnote defbrowse}
+K{\footnote GetHwnd()}
+K{\footnote FWnd::GetHwnd()}
+{\fs26\cf1\b GetHwnd()}\par
+Declaration: 
+\line{\f1
+HWND GetHwnd();\line
+}
+\par
+
+This function returns the handle to the native window under Windows, OS/2 PM 
+and WMS. This function is not portable. 
+\page
+
+#{\footnote FWnd_IsValid}
+${\footnote FWnd::IsValid()}
++{\footnote defbrowse}
+K{\footnote IsValid()}
+K{\footnote FWnd::IsValid()}
+{\fs26\cf1\b IsValid()}\par
+Declaration: 
+\line{\f1
+Bool IsValid();\line
+}
+\par
+
+This function returns True if the window is associated with a native window. Until 
+the window's Create() function has been called the return value is False. Then it 
+is True until the windows' Destroy() is called.\par
+
+This function can be handy when testing the return value from the window's 
+Create() is not suitable. 
+\page
+
+#{\footnote FWnd_Zorder}
+${\footnote FWnd::Zorder()}
++{\footnote defbrowse}
+K{\footnote Zorder()}
+K{\footnote FWnd::Zorder()}
+{\fs26\cf1\b Zorder()}\par
+Declaration: 
+\line{\f1
+enum zorder \{\line
+  zorder_first,\line
+  zorder_last,\line
+  zorder_before,\line
+  zorder_after\line
+\};\line
+\line
+Bool Zorder(zorder z, FWnd *pWnd = NULL );\line
+}
+\par
+
+This function changes the Z-order of the window.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+z\tab
+How to change the Z-order. 
+\par\pard\sb100\tx4000\li4000\fi-1999
+Value\tab
+Action\par
+zorder_first\tab
+The window is moved to the start of the Z-order. 
+\par
+zorder_last\tab
+The window is moved to the end of the Z-order. 
+\par
+zorder_before\tab
+The window is moved to the front of {\i{pWnd}}. 
+\par
+zorder_after\tab
+The window is moved to the back of {\i{pWnd}}. 
+\par\pard\sb100\tx2000\li2000\fi-1999
+ 
+\par
+pWnd\tab
+Pointer to sibling window. Must be NULL if {\i{z}} is zorder_first or zorder_lst. 
+\par\pard\sb100
+\par
+
+The return value is True on when the function is succesful.\par
+
+See also: {\uldb GetFirstSibling()}{\v FWnd_GetFirstSibling}, {\uldb GetNextSibling()}{\v FWnd_GetNextSibling} 
+\page
+
+#{\footnote FWnd_GetFirstSibling}
+${\footnote FWnd::GetFirstSibling()}
++{\footnote defbrowse}
+K{\footnote GetFirstSibling()}
+K{\footnote FWnd::GetFirstSibling()}
+{\fs26\cf1\b GetFirstSibling()}\par
+Declaration: 
+\line{\f1
+FWnd *GetFirstSibling();\line
+}
+\par
+
+This function returns a pointer to the first sibling. If BIF/Window does not 
+know the first sibling the return value is NULL.\par
+
+Example: 
+\line{\f1
+//how to enumerate a window's siblings\line
+FWnd *window= ...\line
+\line
+FWnd *pwnd = window->GetFirstSibling();\line
+while(pwnd) \{\line
+  ...\line
+  pwnd = pwnd->GetNextSibling();\line
+\}\line
+}
+\par
+
+See also: {\uldb GetNextSibling()}{\v FWnd_GetNextSibling} 
+\page
+
+#{\footnote FWnd_GetNextSibling}
+${\footnote Fwnd::GetNextSibling()}
++{\footnote defbrowse}
+K{\footnote GetNextSibling()}
+K{\footnote Fwnd::GetNextSibling()}
+{\fs26\cf1\b GetNextSibling()}\par
+Declaration: 
+\line{\f1
+FWnd *GetNextSibling();\line
+}
+\par
+
+This function returns a pointer to the next sibling of the window. If BIF/Window 
+does not know the next sibling or there are no siblings after the window the 
+return value is NULL.\par
+
+See also: {\uldb GetFirstSibling()}{\v FWnd_GetFirstSibling} 
+\page
+
+#{\footnote FWnd_PostEvent}
+${\footnote FWnd::PostEvent()}
++{\footnote defbrowse}
+K{\footnote PostEvent()}
+K{\footnote FWnd::PostEvent()}
+{\fs26\cf1\b PostEvent()}\par
+Declaration: 
+\line{\f1
+Bool PostEvent(const {\uldb FEvent}{\v FEvent} &event);\line
+}
+\par
+
+This function posts an event to a window. This can fail if the message 
+queue of the destination window is full.\par
+
+{\b{Note:}} The destination window is the window specified in {\i{event}}. 
+ 
+\page
+
+#{\footnote FWnd_SendEvent}
+${\footnote FWnd::SendEvent()}
++{\footnote defbrowse}
+K{\footnote SendEvent()}
+K{\footnote FWnd::SendEvent()}
+{\fs26\cf1\b SendEvent()}\par
+Declaration: 
+\line{\f1
+Bool SendEvent({\uldb FEvent}{\v FEvent} &event);\line
+}
+\par
+
+This function sends an event to a window. \par
+
+{\b{Note:}} The destination window is the window specified in {\i{event}}. 
+Under Windows 3.1 BIF/Window may bypass Windows' SendMessage() function and 
+transfer the event directly to the window. 
+ 
+\page
+
+#{\footnote FWnd_GetStyle}
+${\footnote FWnd::GetStyle()}
++{\footnote defbrowse}
+K{\footnote GetStyle()}
+K{\footnote FWnd::GetStyle()}
+{\fs26\cf1\b GetStyle()}\par
+Declaration: 
+\line{\f1
+Windows:\line
+  LONG GetStyle();\line
+OS/2 PM:\line
+  ULONG GetStyle();\line
+WMS:\line
+  uint32 GetStyle();\line
+}
+\par
+
+This function returns the style bits of the native window.\par
+
+See also: {\uldb SetStyle()}{\v FWnd_SetStyle1}, {\uldb SetStyle(and_mask,or_mask)}{\v FWnd_SetStyle2} 
+\page
+
+#{\footnote FWnd_SetStyle1}
+${\footnote FWnd::SetStyle()}
++{\footnote defbrowse}
+K{\footnote SetStyle()}
+K{\footnote FWnd::SetStyle()}
+{\fs26\cf1\b SetStyle()}\par
+Declaration: 
+\line{\f1
+Windows:\line
+  void SetStyle(LONG style);\line
+OS/2 PM:\line
+  void SetStyle(ULONG style);\line
+WMS:\line
+  void SetStyle(uint32 style);\line
+}
+\par
+
+This function sets the style bits of the antive window.\par
+
+{\b{Caution: }}You should use {\uldb SetStyle(and_mask,or_mask)}{\v FWnd_SetStyle2} instead of a GetStyle/SetStyle pair 
+ 
+\page
+
+#{\footnote FWnd_SetStyle2}
+${\footnote FWnd::SetStyle(and_mask,or_mask)}
++{\footnote defbrowse}
+K{\footnote SetStyle(and_mask,or_mask)}
+K{\footnote FWnd::SetStyle(and_mask,or_mask)}
+{\fs26\cf1\b SetStyle(and_mask,or_mask)}\par
+Declaration: 
+\line{\f1
+Windows:\line
+  void SetStyle(LONG and_mask, LONG or_mask);\line
+OS/2 PM:\line
+  void SetStyle(ULONG and_mask, ULONG or_mask);\line
+WMS:\line
+  void SetStyle(uint32 and_mask, uint32 or_mask);\line
+}
+\par
+
+This function changes the style bits specified by 0s in {\i{and_mask}} to 
+{\i{or_mask}}. This function is safe in multitasking GUIs which 
+GetStyle/SetStyle pairs are not. The new style is computed as follows: 
+\line{\f1
+newstyle = (oldstyle & and_mask) | or_mask;\line
+}
+\par
+
+Example: This piece of code removes the "tabstop" style bit of a window 
+\line{\f1
+FWnd *pwnd = ...\line
+pwnd->SetStyle(~WS_TABSTOP,0);\line
+}
+\par
+
+This piece of code adds the "tabstop" style bit of a window 
+\line{\f1
+FWnd *pwnd = ...\line
+pwnd->SetStyle(~WS_TABSTOP,WS_TABSTOP);\line
+}
+\par
+
+See also: {\uldb GetStyle()}{\v FWnd_GetStyle} 
+\page
+
+#{\footnote FDesktop}
+${\footnote FDesktop}
++{\footnote defbrowse}
+K{\footnote FDesktop}
+{\fs26\cf1\b FDesktop}\par
+K{\footnote desktop alias}
+Declaration: 
+\line{\f1
+class FDesktop : public FWnd \{\line
+}
+\par
+
+The FDesktop class is the interface to the desktop. There exists only one 
+instance of this class (gettable with {\uldb GetDesktop()}{\v GetDesktop})\par
+
+FDesktop has two member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+int GetWidth(); 
+\par
+\tab
+int GetHeight();         
+\par\pard\sb100
+\par
+
+See also: {\uldb GetDesktop()}{\v GetDesktop} 
+\page
+
+#{\footnote FFrameWindow}
+${\footnote FFrameWindow}
++{\footnote defbrowse}
+K{\footnote FFrameWindow}
+{\fs26\cf1\b FFrameWindow}\par
+K{\footnote frame window}
+Declaration: 
+\line{\f1
+class FFrameWindow : public FWnd, ...\line
+}
+\par
+
+A FFrameWindow encapsulates the "frame windows". Frame windows are the windows that have titlebar, menus, ... 
+The FrameWindow class is the superclass of {\uldb FAppWindow}{\v FAppWindow} and {\uldb FDialog}{\v FDialog}. 
+An application will rarely instantiate a FFrameWindow but rather one of its two 
+subclasses.\par
+
+A frame window consists of several items (not always present): 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+Border 
+\par
+{\f2\'B7}\tab
+System menu 
+\par
+{\f2\'B7}\tab
+Titlebar 
+\par
+{\f2\'B7}\tab
+Minimize button 
+\par
+{\f2\'B7}\tab
+Maximize/restore button 
+\par
+{\f2\'B7}\tab
+Menu 
+\par
+{\f2\'B7}\tab
+Scrollbars 
+\par\pard\sb100
+\par
+
+\{bml winframe.bmp\}\par{\fs16{FFrameWindow snapshot}}\par
+\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Create()}{\v FFrameWindow_Create} 
+\par
+\tab
+{\uldb BringToFront()}{\v FFrameWindow_BringToFront} 
+\par
+\tab
+{\uldb BringToBack()}{\v FFrameWindow_BringToBack} 
+\par
+\tab
+{\uldb Minimize()}{\v FFrameWindow_Minimize} 
+\par
+\tab
+{\uldb Maximize()}{\v FFrameWindow_Maximize} 
+\par
+\tab
+{\uldb Restore()}{\v FFrameWindow_Restore} 
+\par
+\tab
+{\uldb GetMenu()}{\v FFrameWindow_GetMenu} 
+\par
+\tab
+{\uldb SetMenu()}{\v FFrameWindow_SetMenu} 
+\par
+\tab
+{\uldb GetSystemMenu()}{\v FFrameWindow_GetSystemMenu} 
+\par
+\tab
+{\uldb RedrawMenu()}{\v FFrameWindow_RedrawMenu} 
+\par
+\tab
+{\uldb SetCaption()}{\v FFrameWindow_SetCaption} 
+\par
+\tab
+{\uldb GetCaption()}{\v FFrameWindow_GetCaption} 
+\par
+\tab
+{\uldb SetSubtitle()}{\v FFrameWindow_SetSubtitle} 
+\par
+\tab
+{\uldb GetSubtitle()}{\v FFrameWindow_GetSubtitle} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FFrameWindow_Create}
+${\footnote FFrameWindow::Create()}
++{\footnote defbrowse}
+K{\footnote Create()}
+K{\footnote FFrameWindow::Create()}
+{\fs26\cf1\b Create()}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pParent, int Id, long fcf, long alf, FRect *pRect = NULL, FModule *module=0 );\line
+}
+\par
+
+Create() creates the frame window with the specified items and loads menu, 
+icon, title etc. as specified.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pParent\tab
+Parent window. If {\i{pParent}} is NULL the desktop will be the parent. 
+\par
+Id\tab
+Window ID of the frame window. The ID is used for loading title, icon, accelerator table and menu. 
+\par
+fcf\tab
+Frame creation flags specifying what items should be present in the 
+frame window. This can be a combination of the following: 
+\par\pard\sb100\tx3801\li3801\fi-1800
+fcf_sysmenu\tab
+System menu contains standard menu items (restore/minimize/move...) 
+\par
+fcf_titlebar\tab
+Title bar/Caption 
+\par
+fcf_minbutton\tab
+Minimize button (and minimize item in the system menu) 
+\par
+fcf_maxbutton\tab
+Maximize button (and maximize item in the system menu) 
+\par
+fcf_bothbuttons\tab
+Both minimize and maximize button 
+\par
+fcf_menu\tab
+The frame window will have room for a menu 
+\par
+fcf_horzscroll\tab
+Horizontal scrollbar. 
+\par
+fcf_vertscroll\tab
+Vertical scrollbar. 
+\par\pard\sb100\tx2000\li2000\fi-1999
+\par
+\tab
+And one of these: 
+\par\pard\sb100\tx3801\li3801\fi-1800
+fcf_border\tab
+Tiny border 
+\par
+fcf_sizeborder\tab
+Thick border used for sizing the frame window. 
+\par
+fcf_dialogborder\tab
+Dialog border used for signalling to the user 
+that he must dismiss the window before he can interact with the rest of 
+the application 
+\par\pard\sb100\tx2000\li2000\fi-1999
+\par
+\tab
+Note that some combinations of fcf_ flags can leave visual holes in the 
+frame window (such a fcf_sysmenu but no fcf_titlebar) 
+\par
+alf\tab
+Auto-load flags. Specifies which items should be automatically 
+loaded from the resources. This can be a combination of: 
+\par\pard\sb100\tx3801\li3801\fi-1800
+alf_icon\tab
+Icon is automatically loaded from the resources. The icon ID is {\i{Id}}. 
+\par
+alf_menu\tab
+Menu is automatically loaded from the resources. The menu ID is {\i{Id}}. 
+\par
+alf_accelerator\tab
+Accelerator table is automatically loaded from the resources. 
+\par
+alf_caption\tab
+The caption is automatically loaded from the resources (string table) 
+\par\pard\sb100\tx2000\li2000\fi-1999
+ 
+\par
+pRect\tab
+Initial position of the frame window. If NULL BIF/Window will let the native GUI system decide where the window is put. 
+\par
+module\tab
+Module containing icon, menu, accelerator etc. 
+\par\pard\sb100
+\par
+
+{\b{Note:}} Frame windows are initially invisible to improve performance. Use {\uldb Show()}{\v FWnd_Show} to make them visible. 
+\par
+
+The following example creates a frame window with system menu, titlebar minimize button, and menu. 
+\line{\f1
+//resources (Windows format)\line
+ID_MYAPP ICON "myapp.ico"\line
+STRINGTABLE\line
+BEGIN\line
+  ID_MYAPP "My application"\line
+END\line
+ID_MYAPP MENU\line
+BEGIN\line
+  MENUITEM "Item 1", 100\line
+  MENUITEM "Item 2", 101\line
+END\line
+\line
+//source\line
+FFrameWindow frame;\line
+\line
+Frame.Create(GetDesktop(),\line
+             ID_MYAPP,\line
+             FFrameWindow::fcf_sysmenu|\line
+             FFrameWindow::fcf_titlebar|\line
+             FFrameWindow::fcf_minbutton|\line
+             FFrameWindow::fcf_menu,\line
+             FFrameWindow::alf_icon|\line
+             FFrameWindow::alf_caption|\line
+             FFrameWindow::alf_menu,\line
+             (FRect*)0\line
+            );\line
+}
+\par
+
+\page
+
+#{\footnote FFrameWindow_BringToFront}
+${\footnote FFrameWindow::BringToFront()}
++{\footnote defbrowse}
+K{\footnote BringToFront()}
+K{\footnote FFrameWindow::BringToFront()}
+{\fs26\cf1\b BringToFront()}\par
+Declaration: 
+\line{\f1
+Bool BringToFront();\line
+}
+\par
+
+This function brings the frame window to the front of the other frame 
+windows. It depends on the native GUI wether a frame window initially 
+is at the front or not. When you create a frame window is is recommended 
+to call BringToFront()\par
+
+Example: 
+\line{\f1
+frame.Create(...\line
+frame.Show();         //show window\line
+frame.BringToFront();\line
+}
+\par
+
+See also: {\uldb BringToBack()}{\v FFrameWindow_BringToBack}, {\uldb Show()}{\v FWnd_Show} 
+\page
+
+#{\footnote FFrameWindow_BringToBack}
+${\footnote FFrameWindow::BringToBack()}
++{\footnote defbrowse}
+K{\footnote BringToBack()}
+K{\footnote FFrameWindow::BringToBack()}
+{\fs26\cf1\b BringToBack()}\par
+Declaration: 
+\line{\f1
+Bool BringToBack();\line
+}
+\par
+
+This function puts the frame window behind all the other frame windows.\par
+
+See also: {\uldb BringToFront()}{\v FFrameWindow_BringToFront}, {\uldb Hide()}{\v FWnd_Hide} 
+\page
+
+#{\footnote FFrameWindow_Minimize}
+${\footnote FFrameWindow::Minimize()}
++{\footnote defbrowse}
+K{\footnote Minimize()}
+K{\footnote FFrameWindow::Minimize()}
+{\fs26\cf1\b Minimize()}\par
+Declaration: 
+\line{\f1
+Bool Minimize();\line
+}
+\par
+
+This function minimizes the window (= turns it into an icon). This works even 
+if the frame window does not have a minimize button\par
+
+See also: {\uldb Maximize()}{\v FFrameWindow_Maximize}, {\uldb Restore()}{\v FFrameWindow_Restore} 
+\page
+
+#{\footnote FFrameWindow_Maximize}
+${\footnote FFrameWindow::Maximize()}
++{\footnote defbrowse}
+K{\footnote Maximize()}
+K{\footnote FFrameWindow::Maximize()}
+{\fs26\cf1\b Maximize()}\par
+Declaration: 
+\line{\f1
+Bool Maximize();\line
+}
+\par
+
+This function maximizes the window (= turns it into a fullscreen window). This works even 
+if the frame window does not have a maximize button\par
+
+See also: {\uldb Minimize()}{\v FFrameWindow_Minimize}, {\uldb Restore()}{\v FFrameWindow_Restore} 
+\page
+
+#{\footnote FFrameWindow_Restore}
+${\footnote FFrameWindow::Restore()}
++{\footnote defbrowse}
+K{\footnote Restore()}
+K{\footnote FFrameWindow::Restore()}
+{\fs26\cf1\b Restore()}\par
+Declaration: 
+\line{\f1
+Bool Restore();\line
+}
+\par
+
+This function restores the window from its minimized or maximized state.\par
+
+See also: {\uldb Minimize()}{\v FFrameWindow_Minimize}, {\uldb Maximize()}{\v FFrameWindow_Maximize} 
+\page
+
+#{\footnote FFrameWindow_GetMenu}
+${\footnote FFrameWindow::GetMenu()}
++{\footnote defbrowse}
+K{\footnote GetMenu()}
+K{\footnote FFrameWindow::GetMenu()}
+{\fs26\cf1\b GetMenu()}\par
+Declaration: 
+\line{\f1
+{\uldb FMenu}{\v FMenu} *GetMenu();\line
+}
+\par
+
+This function returns the current menu of the frame window. This is 
+either the menu that was automatically loaded when the frame window 
+was created or the menu specified in a {\uldb SetMenu()}{\v FFrameWindow_SetMenu} 
+call. The return value is NULL if the frame window does not have a menu.\par
+
+Example: 
+\line{\f1
+FMenu *pmenu = frame.GetMenu();\line
+pmenu->EnableItem(IDM_SAVE, True);\line
+frame.RedrawMenu();\line
+}
+\par
+
+See also: {\uldb SetMenu()}{\v FFrameWindow_SetMenu}, {\uldb GetSystemMenu()}{\v FFrameWindow_GetSystemMenu} 
+\page
+
+#{\footnote FFrameWindow_SetMenu}
+${\footnote FFrameWindow::SetMenu()}
++{\footnote defbrowse}
+K{\footnote Setmenu()}
+K{\footnote FFrameWindow::SetMenu()}
+{\fs26\cf1\b Setmenu()}\par
+Declaration: 
+\line{\f1
+void SetMenu({\uldb FMenu}{\v FMenu} *m);\line
+}
+\par
+
+This function assign the menu {\i{m}} to the frame window.\par
+
+See also: {\uldb GetMenu()}{\v FFrameWindow_GetMenu}, {\uldb GetSystemMenu()}{\v FFrameWindow_GetSystemMenu} 
+\page
+
+#{\footnote FFrameWindow_GetSystemMenu}
+${\footnote FFrameWindow::GetSystemMenu()}
++{\footnote defbrowse}
+K{\footnote GetSystemMenu()}
+K{\footnote FFrameWindow::GetSystemMenu()}
+{\fs26\cf1\b GetSystemMenu()}\par
+Declaration: 
+\line{\f1
+FMenu *GetSystemMenu();\line
+}
+\par
+
+This function returns the system menu of the frame window (if any). Modifying 
+the system menu is never portable and there are differences between Windows, 
+OS/2 PM and WMS. For instance, command events from the menu items in system 
+menu is intercepted with {\uldb FCommandHandler::SysCommand()}{\v FCommandHandler_SysCommand} 
+under Windows. But under OS/2 PM and WMS the events depends on the menu item's 
+style and attribute. 
+\page
+
+#{\footnote FFrameWindow_RedrawMenu}
+${\footnote FFrameWindow::RedrawMenu()}
++{\footnote defbrowse}
+K{\footnote RedrawMenu()}
+K{\footnote FFrameWindow::RedrawMenu()}
+{\fs26\cf1\b RedrawMenu()}\par
+Declaration: 
+\line{\f1
+void RedrawMenu();\line
+}
+\par
+
+This function redraws the menu in the frame window (if any). This function must 
+be called after modifying a menu that is attached to a frame window.\par
+
+Example: 
+\line{\f1
+FMenu *pmenu = frame.GetMenu();\line
+pmenu->EnableItem(IDM_SAVE, True);\line
+frame.RedrawMenu();\line
+}
+\par
+
+\page
+
+#{\footnote FFrameWindow_SetCaption}
+${\footnote FFrameWindow::SetCaption()}
++{\footnote defbrowse}
+K{\footnote SetCaption()}
+K{\footnote FFrameWindow::SetCaption()}
+{\fs26\cf1\b SetCaption()}\par
+Declaration: 
+\line{\f1
+Bool SetCaption(const char *s);\line
+}
+\par
+
+SetCaption() changes the caption of the frame window. Under BIF/Window the full 
+title of the frame window consists of two strings: the caption and the 
+subtitle concatenated with a hyphen. If the subtitle is NULL the full title 
+of the frame window consists of just the caption.\par
+
+Application-oriented frame windows should use the application name as the 
+caption and the current file as the subtitle. Eg.: If the application name is 
+"WizardWord" and the current file is "project.wzw" the full title of the frame 
+window should be "WizardWord - project.wzw".\par
+
+Object-oriented frame windows should use the object name as the caption and the 
+view/action as the subtitle. Eg.: If the current object/file is "project.wzw" and 
+the frame window is a settings dialog the full title should be "project.wzw - Settings".\par
+
+If the caption is automatically loaded from the resources (see {\uldb Create()}{\v FFrameWindow_Create}) 
+and it starts with a hyphen it is treated as the subtitle.\par
+
+Example: (an object-oriented window) 
+\line{\f1
+//resources\line
+  STRINGTABLE\line
+  BEGIN\line
+    ID_DETAILSVIEW, "-Details view"\line
+  END\line
+//source\line
+  frame.Create(.... alf_caption ...\line
+  LoadFile(...\line
+  frame.SetCaption(filename);\line
+}
+\par
+
+See also: {\uldb Create()}{\v FFrameWindow_Create}, {\uldb GetCaption()}{\v FFrameWindow_GetCaption}, {\uldb SetSubtitle()}{\v FFrameWindow_SetSubtitle} 
+\page
+
+#{\footnote FFrameWindow_GetCaption}
+${\footnote FFrameWindow::GetCaption()}
++{\footnote defbrowse}
+K{\footnote GetCaption()}
+K{\footnote FFrameWindow::GetCaption()}
+{\fs26\cf1\b GetCaption()}\par
+Declaration: 
+\line{\f1
+int GetCaption(char *buf, int buflen);\line
+}
+\par
+
+This function retrieves the caption previously set with {\uldb SetCaption()}{\v FFrameWindow_SetCaption} or automatically loaded during the 
+window creation.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+buf\tab
+Buffer for receiving the caption string 
+\par
+buflen\tab
+Length of {\i{buf}} 
+\par\pard\sb100
+\par
+
+The return value is the length of the caption or 0 if the buffer is too small.\par
+
+See also: {\uldb SetCaption()}{\v FFrameWindow_SetCaption}, {\uldb GetSubtitle()}{\v FFrameWindow_GetSubtitle} 
+\page
+
+#{\footnote FFrameWindow_SetSubtitle}
+${\footnote FFrameWindow::SetSubtitle(}
++{\footnote defbrowse}
+K{\footnote SetSubtitle()}
+K{\footnote FFrameWindow::SetSubtitle(}
+{\fs26\cf1\b SetSubtitle()}\par
+Declaration: 
+\line{\f1
+Bool SetSubtitle(const char *s);\line
+}
+\par
+
+This function sets the subtitle of the window. See 
+{\uldb SetCaption()}{\v FFrameWindow_SetCaption} for an explanation of the caption+subtitle concept.\par
+
+See also: {\uldb GetSubtitle()}{\v FFrameWindow_GetSubtitle} 
+\page
+
+#{\footnote FFrameWindow_GetSubtitle}
+${\footnote FFrameWindow::GetSubtitle()}
++{\footnote defbrowse}
+K{\footnote GetSubtitle()}
+K{\footnote FFrameWindow::GetSubtitle()}
+{\fs26\cf1\b GetSubtitle()}\par
+Declaration: 
+\line{\f1
+int GetSubtitle(char *buf, int buflen);\line
+}
+\par
+
+This function retrieves the subtitle of the frame window previously set with 
+{\uldb SetSubtitle()}{\v FFrameWindow_SetSubtitle} or autoamtically set during 
+creation of the window.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+buf\tab
+Buffer for receiving the subtitle string 
+\par
+buflen\tab
+Length of {\i{buf}} 
+\par\pard\sb100
+\par
+
+The return value is the length of the subtitle or 0 if the buffer is too small 
+\page
+
+#{\footnote FAppWindow}
+${\footnote FAppWindow}
++{\footnote defbrowse}
+K{\footnote FAppWindow}
+{\fs26\cf1\b FAppWindow}\par
+Declaration: 
+\line{\f1
+class FAppWindow : public {\uldb FFrameWindow}{\v FFrameWindow}, ... \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_APPWINDOW\par
+
+FAppWindow (silly name, but we could not come up with a better name) is a frame 
+window which contains a client window. The client window is resized to fit 
+when the FAppWindow is resized and the FAppWindow automatically forwards the 
+focus to the client window. {\uldb Command events}{\v FCommandHandler} (among others) 
+are forwarded to the client window.\par
+
+The FAppWindow is normally used for the main window of the application for 
+displaying whatever the application is processing.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb SetClient()}{\v FAppWindow_SetClient} 
+\par
+\tab
+{\uldb GetClient()}{\v FAppWindow_SetClient} 
+\par
+\tab
+{\uldb SavePosition()}{\v FAppWindow_SavePosition} 
+\par
+\tab
+{\uldb RestorePosition()}{\v FAppWindow_RestorePosition} 
+\par\pard\sb100
+\par
+
+See also: {\uldb FClientWindow}{\v FClientWindow} 
+\page
+
+#{\footnote FAppWindow_SetClient}
+${\footnote FAppWindow::SetClient()}
++{\footnote defbrowse}
+K{\footnote SetClient()}
+K{\footnote FAppWindow::SetClient()}
+{\fs26\cf1\b SetClient()}\par
+Declaration: 
+\line{\f1
+FWnd *SetClient(FWnd *pNewClient);\line
+}
+\par
+
+This function tells the FAppWindow which window is the client window. The new 
+client window {\i{pNewClient}} is resized and positioned to fit the 
+FAppWindow. The new client window must have been Create()'d before the call.\par
+
+Return value: The old client window, if any.\par
+
+{\b{Note:}} {\uldb FClientWindow::Create()}{\v FClientWindow_Create} automatically calls 
+this function. 
+\par
+
+{\b{Note:}} (OS/2 PM and WMS) The Window ID of the new client window is set to FID_CLIENT. 
+\par
+
+Example: This example show a code fragment of a simple editor which uses a 
+FMLE for the edit window. 
+\line{\f1
+FAppWindow fappwnd;\line
+\line
+FMLE client.\line
+\line
+fappwnd.Create(...);\line
+\line
+client.Create(...);\line
+fappwnd.SetClient(&client);\line
+}
+\par
+
+See also: {\uldb FAppWindow}{\v FAppWindow}, {\uldb GetClient()}{\v FAppWindow_GetClient} 
+\page
+
+#{\footnote FAppWindow_GetClient}
+${\footnote FAppWindow::GetClient()}
++{\footnote defbrowse}
+K{\footnote GetClient()}
+K{\footnote FAppWindow::GetClient()}
+{\fs26\cf1\b GetClient()}\par
+Declaration: 
+\line{\f1
+FWnd *GetClient();\line
+}
+\par
+
+This function returns the current client window of the FAppWindow.\par
+
+The return value is NULL if there is no current client window.\par
+
+See also: {\uldb FAppWindow}{\v FAppWindow}, {\uldb SetClient()}{\v FAppWindow_SetClient} 
+\page
+
+#{\footnote FAppWindow_SavePosition}
+${\footnote FAppWindow::SavePosition()}
++{\footnote defbrowse}
+K{\footnote SavePosition()}
+K{\footnote FAppWindow::SavePosition()}
+{\fs26\cf1\b SavePosition()}\par
+Decalration: 
+\line{\f1
+Bool SavePosition();\line
+}
+\par
+
+SavePosition() saves the position, size and state 
+(minimized/maximized/normal/visible/hidden) of the FAppWindow to an .INI file. 
+This is normally done just before the window is destroyed.\par
+
+The FAppWindow's position, size and state can later be restored with 
+{\uldb RestorePosition()}{\v FAppWindow_RestorePosition}.\par
+
+Return value: True on success.\par
+
+Example: This code fragment shows how you can use the save/restore feature of 
+FAppWindow. 
+\line{\f1
+class MyApplication : public FApplication \{\line
+  MyFrameWindow fw;\line
+public:\line
+  Bool StartUp(int argc, char **argv) \{\line
+    if(!fw.Create(0))\line
+      return False;\line
+    if(!fw.RestorePosition()) \{\line
+      fw.Show();\line
+      fw.BringToFront().\line
+    \}\line
+    return True;\line
+  \}\line
+  int ShutDown() \{\line
+    fw.SavePosition();\line
+    fw.Destroy();\line
+    return 0;\line
+  \}\line
+\};\line
+}
+\par
+
+See also: {\uldb FAppWindow}{\v FAppWindow}, 
+{\uldb RestorePosition()}{\v FAppWindow_RestorePosition} 
+\page
+
+#{\footnote FAppWindow_RestorePosition}
+${\footnote FAppWindow::RestorePosition()}
++{\footnote defbrowse}
+K{\footnote RestorePosition()}
+K{\footnote FAppWindow::RestorePosition()}
+{\fs26\cf1\b RestorePosition()}\par
+Declaration: 
+\line{\f1
+Bool RestorePosition();\line
+}
+\par
+
+This function restores the position, size and state previously saved with 
+{\uldb SavePosition()}{\v FAppWindow_SavePosition}.\par
+
+Return value: True on success, False otherwise (usually because SavePosition() 
+has not previously been called).\par
+
+{\b{Note:}} If RestorePosition() returns False you should call {\uldb Show()}{\v FWnd_Show} 
+yourself. 
+\par
+
+See also: {\uldb FAppWindow}{\v FAppWindow}, {\uldb SavePosition()}{\v FAppWindow_SavePosition} 
+\page
+
+#{\footnote FClientWindow}
+${\footnote FClientWindow}
++{\footnote defbrowse}
+K{\footnote FClientWindow}
+{\fs26\cf1\b FClientWindow}\par
+Declaration: 
+\line{\f1
+class FClientWindow : public {\uldb FWnd}{\v FWnd},\line
+                      public {\uldb FSizeHandler}{\v FSizeHandler}\line
+                      ...\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_APPWINDOW\par
+
+FClientWindow is the normal base class for client windows. The FSizeHandler is 
+mixed in because it is very unusual to have a client window that doesn't care 
+abouts its size.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Create()}{\v FClientWindow_Create} 
+\par
+\tab
+{\uldb GetAppWindow()}{\v FClientWindow_GetAppWindow} 
+\par\pard\sb100
+\par
+
+See also: {\uldb FAppWindow}{\v FAppWindow} 
+\page
+
+#{\footnote FClientWindow_Create}
+${\footnote FClientWindow::Create()}
++{\footnote defbrowse}
+K{\footnote Create()}
+K{\footnote FClientWindow::Create()}
+{\fs26\cf1\b Create()}\par
+Declaration: 
+\line{\f1
+Bool Create(FAppWindow *pParent);\line
+}
+\par
+
+This function creates the client window and automatically calls 
+{\uldb FAppWindow::SetClient()}{\v FAppWindow_SetClient}.\par
+
+Return value: True on success. 
+\page
+
+#{\footnote FClientWindow_GetAppWindow}
+${\footnote FClientWindow::GetAppWndow()}
++{\footnote defbrowse}
+K{\footnote GetAppWindow()}
+K{\footnote FClientWindow::GetAppWndow()}
+{\fs26\cf1\b GetAppWindow()}\par
+Declaration: 
+\line{\f1
+FAppWindow *GetAppWindow();\line
+}
+\par
+
+This function returns a pointer the FAppWindow in which the client window is. It 
+is the {\i{pParent}} pointer passed {\uldb Create()}{\v FClientWindow_Create}. 
+\page
+
+#{\footnote FDialog}
+${\footnote FDialog}
++{\footnote defbrowse}
+K{\footnote FDialog}
+{\fs26\cf1\b FDialog}\par
+Declaration: 
+\line{\f1
+class FDialog : public {\uldb FFrameWindow}{\v FFrameWindow},\line
+                public {\uldb FCloseHandler}{\v FCloseHandler},\line
+                public {\uldb FCommandHandler}{\v FCommandHandler}\line
+                ...\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_DIALOG\par
+
+The FDialog class is the base class of all dialog-style windows. The dialog can 
+have several {\uldb control windows}{\v FControl} inside it (in contrast to 
+{\uldb FAppWindow}{\v FAppWindow} which only have one window inside it - the client 
+window). Dialog offers a keyboard interface to the user enabling him to jump 
+between the controls with the tab and arrow keys. The controls in the dialog are 
+specified in a dialog template in the resources. 
+{\ul (*)}{\v dialog_resource_note}.\par
+
+The default behaviour of the dialog when a FCloseEvent (see {\uldb FCloseHandler}{\v FCloseHandler}) is 
+recieved is to translate it to a {\uldb FCommandEvent}{\v FCommandEvent} with 
+IDCANCEL/DID_CANCEL as the item (even if the dialog does not have a cancel 
+button.)\par
+
+The default behaviour of a dialog when it recieves a 
+{\uldb FCommandEvent}{\v FCommandEvent} is to hide the dialog (in 
+{\uldb modal dialogs}{\v FModalDialog} this also terminates 
+{\uldb DoModal()}{\v FModalDialog_DoModal}).\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Create()}{\v FDialog_Create} 
+\par
+\tab
+{\uldb CreateControls()}{\v FDialog_CreateControls} 
+\par\pard\sb100
+\par
+
+See also: {\uldb FFrameWindow}{\v FFrameWindow}, {\uldb FModalDialog}{\v FModalDialog} 
+\page
+
+#{\footnote dialog_resource_note}
+ 
+In this version of BIF/Window dialogs must be loaded from the resources. It is not 
+possible to create dialogs at runtime. This will probably change in future 
+versions of BIF/Window. 
+\page#{\footnote FDialog_Create}
+${\footnote FDialog::Create()}
++{\footnote defbrowse}
+K{\footnote Create()}
+K{\footnote FDialog::Create()}
+{\fs26\cf1\b Create()}\par
+Declaration: 
+\line{\f1
+Bool Create(FWnd *pOwner, int resID, FModule *module=0);\line
+}
+\par
+
+This function creates the dialog based on the dialog template with the ID 
+{\i{resID}} in the resources.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pOwner\tab
+Owner window of the dialog. The dialog will be kept in front of 
+the owner window even if the owner window is the active window. The owner window 
+specified with this parameter may not be the final owner of the dialog, because 
+the final owner of the dialog is the first window frame window at or above 
+pOwner in the owner hierachy. I.e., if you specify the client window in a 
+FAppWindow the final owner of the dialog will be the FAppWindow. 
+\par
+resID\tab
+Resource ID of the dialog template. 
+\par
+module\tab
+Module containing dialog template, if 0 then the application is used. 
+\par\pard\sb100
+\par
+
+{\b{Note:}} Before Create() returns it will call {\uldb CreateControls()}{\v FDialog_CreateControls} 
+\par
+
+The return value is True on succes, False otherwise (usually because the 
+dialog template could not be found in the resources) 
+\page
+
+#{\footnote FDialog_CreateControls}
+${\footnote FDialog::CreateControls()}
++{\footnote defbrowse}
+K{\footnote CreateControls}
+K{\footnote FDialog::CreateControls()}
+{\fs26\cf1\b CreateControls}\par
+Declaration: 
+\line{\f1
+virtual Bool CreateControls() \{ return True; \}\line
+}
+\par
+
+CreateControls() is called by {\uldb Create()}{\v FDialog_Create} when the native 
+controls have been created but before Create() returns.\par
+
+This function is meant to be overridden and contain code that calls Create() for 
+the BIF control objects and fills the controls with data.\par
+
+Example: This is a fragment of a simple dialog used for entering/editing a 
+persons name and sex. 
+\line{\f1
+class MyDialog : public FDialog \{\line
+  FSLE         c_Name;\line
+  FRadioButton c_Male;\line
+  FRadioButton c_Female;\line
+\line
+  char *name;\line
+  int  *sex;\line
+public:\line
+  MyDialog(char *n, int *s)\line
+    : name(n), sex(s)\line
+    \{\}\line
+\line
+  Bool CreateControls();\line
+\line
+  ...\line
+\};\line
+\line
+Bool MyDialog::CreateControls() \{\line
+  //associate the BIF-objects with the native controls\line
+  if(!c_Name.Create(this, DID_NAME))\line
+    return False;\line
+  if(!c_Male.Create(this, DID_MALE))\line
+    return False;\line
+  if(!c_Female.Create(this, DID_FEMALE))\line
+    return False;\line
+\line
+  //Now initialize the controls\line
+  c_Name.SetSext(name);\line
+  if(sex==0)\line
+    c_Male.Check();\line
+  else\line
+    c_Female.Check();\line
+\line
+  return True; //succesful initialization\line
+\}\line
+}
+\par
+
+\page
+
+#{\footnote FModalDialog}
+${\footnote FModalDialog}
++{\footnote defbrowse}
+K{\footnote FModalDialog}
+{\fs26\cf1\b FModalDialog}\par
+Declaration: 
+\line{\f1
+class FModalDialog : public {\uldb FDialog}{\v FDialog} \{\line
+}
+\par
+
+A FModalDialog is a dialog that stops the user's interaction wiht the modal 
+dialog's owner. The user must dismiss the dialog before he can continue 
+interacting with the modal dialog's owner.\par
+
+Public member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb DoModal()}{\v FModalDialog_DoModal} 
+\par\pard\sb100
+\par
+
+Protected member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb EndDialog()}{\v FModalDialog_EndDialog} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FModalDialog_DoModal}
+${\footnote FModalDialog::DoModal()}
++{\footnote defbrowse}
+K{\footnote DoModal()}
+K{\footnote FModalDialog::DoModal()}
+{\fs26\cf1\b DoModal()}\par
+Declaration: 
+\line{\f1
+int DoModal(FWnd *pOwner, int resID, FModule *module=0);\line
+}
+\par
+
+This function is used for "prompting" the user with the dialog. It performs 
+(among others) the following tasks: 
+\par\pard\sb100\tx550\li550\fi-300
+1.\tab
+Creates the dialog from the dialog template 
+\par
+2.\tab
+Disables the owner window, if any 
+\par
+3.\tab
+Shows the dialog 
+\par
+4.\tab
+Waits for EndDialog() to be called 
+\par
+5.\tab
+Destroys the dialog 
+\par
+6.\tab
+Enables the owner window again, if any. 
+\par
+7.\tab
+Returns the value passed to EndDialog() 
+\par\pard\sb100
+\par
+
+The return value is the value of the {\i{iReturn}} parameter passed to 
+EndDialog() or -1 if an error occurred.\par
+
+Example: (use of the dialog declared in the example under {\uldb CreateControls()}{\v FDialog_CreateControls} 
+\line{\f1
+MyDialog dlg.\line
+if(MyDialog.DoModal(this,IDD_NAMESEX) == DID_OK) \{\line
+  //user dismissed the dialog with the OK button\line
+  ...\line
+\}\line
+}
+\par
+
+\page
+
+#{\footnote FModalDialog_EndDialog}
+${\footnote FModalDialog::EndDialog()}
++{\footnote defbrowse}
+K{\footnote EndDialog()}
+K{\footnote FModalDialog::EndDialog()}
+{\fs26\cf1\b EndDialog()}\par
+Declaration: 
+\line{\f1
+void EndDialog(int iReturn=0);\line
+}
+\par
+
+The EndDialog() member function dismisses the dialog. You will usually call it 
+when your dialog recieves a {\uldb FCommandEvent}{\v FCommandEvent}.\par
+
+Example: 
+\line{\f1
+Bool MyDialog::Command(FCommandEvent &ev) \{\line
+  if(ev.GetItem()==DID_OK ||\line
+     ev.GetItem()==DID_CANCEL)\line
+  \{\line
+    EndDialog(ev.GetItem());\line
+    return True;\line
+  \} else if(ev.GetItem()==DID_LOOKUPNAME) \{\line
+    ...\line
+    return True;\line
+  \} else\line
+    return False;\line
+\}\line
+}
+\par
+
+\page
+
+#{\footnote FStdFileDialog}
+${\footnote FStdFileDialog}
++{\footnote defbrowse}
+K{\footnote FStdFileDialog}
+{\fs26\cf1\b FStdFileDialog}\par
+Declaration: 
+\line{\f1
+class FStdFileDialog : public {\uldb FModalDialog}{\v FModalDialog} ...\line
+}
+\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_DIALOG and BIFINCL_STDFILEDIALOG\par
+
+The FStdFileDialog class just serves as the base class for 
+{\uldb FStdOpenFileDialog}{\v FStdOpenFileDialog} and 
+{\uldb FStdSaveFileDialog}{\v FStdSaveFileDialog} classes. The standard file dialogs 
+are dialogs that use an OS-specific dialog for filename querying. 
+\page
+
+#{\footnote FStdOpenFileDialog}
+${\footnote FStdOpenFileDialog}
++{\footnote defbrowse}
+K{\footnote FStdOpenFileDialog}
+{\fs26\cf1\b FStdOpenFileDialog}\par
+Declaration: 
+\line{\f1
+class FStdOpenFileDialog : public {\uldb FStdFileDialog}{\v FStdFileDialog} \{\line
+}
+\par
+
+The FStdOpenFileDialog class is used for prompting the user for filename(s).\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb DoModal()}{\v FStdOpenFileDialog_DoModal1} - single file 
+\par
+\tab
+{\uldb DoModal()}{\v FStdOpenFileDialog_DoModal2} - multiple files 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FStdOpenFileDialog_DoModal1}
+${\footnote FStdOpenFileDialog::DoModal()}
++{\footnote defbrowse}
+K{\footnote DoModal() - single file}
+K{\footnote FStdOpenFileDialog::DoModal()}
+{\fs26\cf1\b DoModal() - single file}\par
+Declaration: 
+\line{\f1
+Bool DoModal(FWnd *pOwner,\line
+             char *filename,\line
+             const char *filterMask=0,\line
+             const char *dlgTitle=0, const char *okButtonText=0\line
+            );\line
+}
+\par
+
+This function prompts the user for a single filename.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pOwner\tab
+Dialog owner. See {\uldb FDialog::Create()}{\v FDialog_Create} for 
+details. 
+\par
+filename\tab
+Initial and final filename. On input {\i{filename}} is the 
+initial filename in the dialog (empty if none). On output it is the filename 
+that the user has entered. The {\i{filename}} must have enough room for the 
+maximum filename length allowed by the OS. (Windows 3.1: approx. 140, OS/2: 256 
+Windows NT: 256). 
+\par
+filterMask\tab
+Wildcard mask. eg. "*.cpp". If {\i{filterMask}} is NULL 
+the mask will be "*.*". Note: The user can enter filenames not matching the 
+filter mask. 
+\par
+dlgTitle\tab
+Dialog title. If NULL it will be the default title such as 
+"Open File" or whatever default the native GUI system sets. 
+\par
+okButtonText\tab
+Button text on the "OK" button. This can be used when the 
+default text is inappropriate. The default buttons text is set by the GUI and is 
+usually "Ok" or "Open". 
+\par\pard\sb100
+\par
+
+The return value is True on success, False otherwise (error or user cancelled)\par
+
+Example: 
+\line{\f1
+Bool MyWindow::Command(FCommandEvent &ev) \{\line
+  if(ev.GetItem()==ID_OPENFILE) \{\line
+    char filename[128]="test.wiz";\line
+    FStdOpenFileDialog dlg.\line
+    if(dlg.DoModal(this,filename,"*.wiz")) \{\line
+      ReadFile(filename);\line
+    \}\line
+  \} else\line
+    ...\line
+  return True.\line
+\}\line
+}
+\par
+
+\page
+
+#{\footnote FStdOpenFileDialog_DoModal2}
+${\footnote FStdOpenFileDialog::DoModal()}
++{\footnote defbrowse}
+K{\footnote DoModal() - multiple files}
+K{\footnote FStdOpenFileDialog::DoModal()}
+{\fs26\cf1\b DoModal() - multiple files}\par
+Declaration: 
+\line{\f1
+Bool DoModal(FWnd *pOwner,\line
+             char *filenameBuffer, int maxFilenameBuffer,\line
+             char **filename, int maxFiles,\line
+             const char *filterMask=0,\line
+             const char *dlgTitle=0, const char *okButtonText=0\line
+            );\line
+}
+\par
+
+This function prompts the user for multiple filenames.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pOwner\tab
+Dialog owner. See {\uldb FDialog::Create()}{\v FDialog_Create} for 
+details. 
+\par
+filenameBuffer\tab
+Buffer for filenames. The filenames are returned with '\\0' 
+between them. The last filename will have two '\\0' after it. 
+\par
+maxFilenameBuffer\tab
+Size of {\i{filenameBuffer}} 
+\par
+filename\tab
+Pointer to array for string pointers. This array will be filled 
+on output. The elements will point into {\i{filenameBuffer}}. The last pointer 
+will be NULL. 
+\par
+maxFiles\tab
+Maximum number of elements in {\i{filename}} 
+\par
+filterMask\tab
+Wildcard mask. eg. "*.cpp". If {\i{filterMask}} is NULL 
+the mask will be "*.*". Note: The user can enter filenames not matching the 
+filter mask. 
+\par
+dlgTitle\tab
+Dialog title. If NULL it will be the default title such as 
+"Open File" or whatever default the native GUI system sets. 
+\par
+okButtonText\tab
+Button text on the "OK" button. This can be used when the 
+default text is inappropriate. The default buttons text is set by the GUI and is 
+usually "Ok" or "Open". 
+\par\pard\sb100
+\par
+
+The return value is True on success and False if the user cancelled the dialog 
+or an error occurred.\par
+
+Example: 
+\line{\f1
+Bool MyWindow::Command(FCommandEvent &ev) \{\line
+  if(ev.GetItem()==ID_OPENFILE) \{\line
+    char filenameBuffer[1024];\line
+    char *filename[20];\line
+    FStdOpenFileDialog dlg.\line
+    if(dlg.DoModal(this,filename,1024,filename,20,"*.wiz")) \{\line
+      for(int f=0; filename[f]; f++)\line
+        ReadFile(filename[f]);\line
+    \}\line
+  \} else\line
+    ...\line
+  return True.\line
+\}\line
+}
+\par
+
+\page
+
+#{\footnote FStdSaveFileDialog}
+${\footnote FStdSaveFileDialog}
++{\footnote defbrowse}
+K{\footnote FStdSaveFileDialog}
+{\fs26\cf1\b FStdSaveFileDialog}\par
+Declaration: 
+\line{\f1
+class FStdSaveFileDialog : public FStdFileDialog \{\line
+}
+\par
+
+A FStdSaveFileDialog is used for prompting the user for filename for saving a 
+file.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb DoModal()}{\v FStdSaveFileDialog_DoModal} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FStdSaveFileDialog_DoModal}
+${\footnote FStdSaveFileDialog::DoModal()}
++{\footnote defbrowse}
+K{\footnote DoModal()}
+K{\footnote FStdSaveFileDialog::DoModal()}
+{\fs26\cf1\b DoModal()}\par
+Declaration: 
+\line{\f1
+Bool DoModal(FWnd *pOwner,\line
+             char *filename,\line
+             const char *filterMask=0,\line
+             const char *dlgTitle=0, const char *okButtonText=0\line
+            )\line
+}
+\par
+
+This function prompts the user for a "save"-filename.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+pOwner\tab
+Dialog owner. See {\uldb FDialog::Create()}{\v FDialog_Create} for 
+details. 
+\par
+filename\tab
+Initial and final filename. On input {\i{filename}} is the 
+initial filename in the dialog (empty if none). On output it is the filename 
+that the user has entered. The {\i{filename}} must have enough room for the 
+maximum filename length allowed by the OS. (Windows 3.1: approx. 140, OS/2: 256 
+Windows NT: 256). 
+\par
+filterMask\tab
+Wildcard mask. eg. "*.cpp". If {\i{filterMask}} is NULL 
+the mask will be "*.*". Note: The user can enter filenames not matching the 
+filter mask. 
+\par
+dlgTitle\tab
+Dialog title. If NULL it will be the default title such as 
+"Save File" or whatever default the native GUI system sets. 
+\par
+okButtonText\tab
+Button text on the "OK" button. This can be used when the 
+default text is inappropriate. The default buttons text is set by the GUI and is 
+usually "Ok" or "Save". 
+\par\pard\sb100
+\par
+
+The return value is True on success, False otherwise (error or user cancelled)\par
+
+Example: 
+\line{\f1
+Bool MyWindow::Command(FCommandEvent &ev) \{\line
+  if(ev.GetItem()==ID_SAVEAS) \{\line
+    char savefilename[128];\line
+    strcpy(savefilename,currentFilename);\line
+    FStdSaveFileDialog dlg.\line
+    if(dlg.DoModal(this,savefilename,"*.wiz")) \{\line
+      SaveFile(filename);\line
+      strcpy(currentFilename,savefilename);\line
+      GetAppWindow()->SetSubtitle(currentFilename);\line
+    \}\line
+  \} else\line
+    ...\line
+  return True.\line
+\}\line
+}
+\par
+
+\page
+
+}

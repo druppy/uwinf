@@ -1,0 +1,22 @@
+#ifndef OS2_INCLUDED
+   #include <os2.h>
+#endif
+DLGINCLUDE 1 "E:\SOURCE\BIF\SAMPLE\WINDOW\OS2\DEFRES\DEFRES.H"
+
+DLGTEMPLATE DIALOG_1 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "English Dialog", DIALOG_1, 12, 5, 174, 77, WS_VISIBLE, 
+            FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        GROUPBOX        "Compression", 104, 3, 17, 100, 54
+        AUTORADIOBUTTON "None", MID_EXIT, 11, 51, 54, 10, WS_TABSTOP
+        AUTORADIOBUTTON "Fast", MID_TESTDIALOG, 11, 38, 54, 10, WS_TABSTOP
+        AUTORADIOBUTTON "Best", 103, 11, 25, 54, 10, WS_TABSTOP
+        AUTOCHECKBOX    "Include subdirectories", 105, 5, 2, 113, 10, 
+                        WS_GROUP
+        DEFPUSHBUTTON   "Ok", ID_DEFRES, 128, 57, 40, 14, WS_GROUP
+        PUSHBUTTON      "Cancel", DID_CANCEL, 128, 39, 40, 14, NOT 
+                        WS_TABSTOP
+        PUSHBUTTON      "Help", -1, 128, 21, 40, 14, NOT WS_TABSTOP
+    END
+END

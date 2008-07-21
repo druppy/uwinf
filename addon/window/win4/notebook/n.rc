@@ -1,0 +1,7 @@
+#include <windows.h>
+#include "notebook.dlg"
+#include "page1.dlg"
+#include "page2.dlg"
+#include "page3.dlg"
+#include "page4.dlg"
+#include "page5.dlg"

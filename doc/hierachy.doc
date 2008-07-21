@@ -1,0 +1,89 @@
+emne                                            filnavn
+-----------------------------------------------------------------
+Introduction and background                     intro.bih
+  Short story
+  Design goals
+  Future
+  The authors
+Overview of subsystems                          overview.bih
+  BIF/Thread
+  BIF/Window
+  BIF/Mix
+  WMS
+BIF/Window                                      bifwnd.bih
+  The building blocks                           wbasis
+    FWnd
+    FHandler
+    FApplication
+    Summary
+  Include hierachy                              winc.bih
+  Classes                                       wclasses.bih
+    Class hierachy
+    Windows                                     wwnds.bih, control.bih
+      FFrameWindow
+        FFrameWindow()
+        SetCaption()
+        SetSubtitle()
+        GetCaption()
+        ...
+      FAppWindow
+        FAppWindow()
+        ...
+      ...
+    Handlers and events                         whndl.bih, comhndl.bih, csi.bih, wmouse.bih, wscroll.bih, wszrest.bih, wctlhndl.bih, wownerdr.bih, wclhndls.bih
+      FEvent
+      FFocusHandler
+        SetFocus
+        GotFocus
+        ...
+      FCommandHandler
+        ...
+      ...
+    Miscellaneous classes                       wmisc.bih
+      FPointer
+      FMenu
+      ...
+  Functions                                     wfuncs.bih
+  Hello world! sample                           whello
+  Compiler setup                                wcmplr.bih
+    Windows 3.x
+    OS/2
+BIF/Thread                                      bifthrea.bih
+  Overview
+  The building blocks                           tbasis
+    FThread
+    FMainThread
+    Semaphores
+  Include hierachy                              tinc.bih
+  Classes                                       tclasses.bih
+    Class Hierachy
+    FThread                                     thread.bih
+      ...
+    FMainThread                         
+      ...
+    ...
+  Hello world! sample                           thello.bih
+  Compiler setup                                tcmplr.bih
+    Windows 3.x
+    OS/2
+BIF/Mix                                         bifmix.bih
+  How to mix BIF/Window and BIF/Thread          mmix.bih
+  Include hierachy                              minc.bih
+  Classes                                       mclasses.bih
+  DEFBIFMIXMAIN macro                           mdbmm.bih
+  (Hello world! sample)
+  Compiler setup                                mcmplr.bih
+    Windows 3.x
+    OS/2
+How to...                                       howto.bih
+  BIF/Thread                                    thowto.bih
+    Protecting shared variables
+    A "external-wait-thing" under Windows 3.1
+    Solving the "bounded buffer" problem
+    Solving the "readers and writers" problem
+    Painting a window in the background
+    Background job status feedback
+  BIF/Window                                    whowto
+    Create a drag&drop handler under Windows
+    ...
+

@@ -1,0 +1,41 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote bifthread_include_hierachy}
+${\footnote BIF/Thread include hierachy}
++{\footnote defbrowse}
+K{\footnote Include hierachy}
+K{\footnote BIF/Thread include hierachy}
+{\fs26\cf1\b Include hierachy}\par
+\line{\f1
+BIFINCL_THREAD                       FThread\line
+                                     FThreadManager\line
+    *BIFINCL_THREADALL               (meta-#define)\line
+    BIFINCL_WINDOWTHREAD             FWindowThread\line
+    BIFINCL_MAINTHREAD               FMainThread\line
+    BIFINCL_SEMAPHORES               FMutexSemaphore\line
+                                     FEventSemaphore\line
+                                     FSemaphore\line
+    BIFINCL_SPINSEMAPHORES           FSpinMutexSemaphore\line
+                                     FSpinEventSemaphore\line
+                                     FSpinSemaphore\line
+    {\ul (1)}{\v bt_inchie_note1}\line
+}
+\par
+
+\page
+
+#{\footnote bt_inchie_note1}
+ 
+FMainWindowThread is included when both BIFINCL_WINDOWTHREAD and 
+BIFINCL_MAINTHREAD are defined.\par
+
+When BIFINCL_SEMAPHORES is defined BIFINCL_SEMAPHORE is automatically defined 
+since the spin-semaphores build upon the normal semaphores. 
+\page}

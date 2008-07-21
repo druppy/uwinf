@@ -1,0 +1,3 @@
+Contents: BIF/Thread support classes for win16 windows
+mwthread.cpp FMainWindowThread
+wthread.cpp  FWindowThread

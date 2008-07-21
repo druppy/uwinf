@@ -1,0 +1,4 @@
+2 bifmix_classes Classes
+3 FWWindowThread FWWindowThread
+3 FMTApplication FMTApplication
+3 FWMainWindowThread FWMainWindowThread

@@ -1,0 +1,329 @@
+/*************************************************************************
+FILE
+        BihC.Cpp
+AUTHOR
+        Ivan J›rgensen & Bo Lorentsen.
+DESCRIPTION
+        To convert a BIH format to a nativ format, like WinHelp or OS/2
+        INF format, this is the one utility to use.
+HISTORY
+        21.03.95 : Making HLP support.
+        13.06.95 : Implemented the new BIH format
+*************************************************************************/
+#include <stdio.h>
+#include <stdarg.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "bihc.h"
+
+static FILE *ifp;
+static int inputLine=1;
+static int c=0;
+static int nTotalLines = 0;        // Total lines compiled
+int autoIndex;
+int multiHelp = 0;
+
+static char outputFilename[128];
+
+void GetNext()
+{
+        if(c=='\n') inputLine++;
+        c=getc(ifp);
+        if(c=='\t')
+                c=' ';          //tabs are translated into spaces
+}
+
+void error(const char *fmt, ...)
+{
+        va_list ap;
+        va_start(ap,fmt);
+        fprintf(stderr,"Bihc error: (line %d) :",inputLine);
+        vfprintf(stderr,fmt,ap);
+        va_end(ap);
+        CancelOutput(outputFilename);
+        exit(1);
+}
+
+void warning(const char *fmt, ...)
+{
+        va_list ap;
+        va_start(ap,fmt);
+        fprintf(stderr,"Bihc warning: (line %d) :",inputLine);
+        vfprintf(stderr,fmt,ap);
+        va_end(ap);
+}
+
+
+/**********************************
+*        Now to the parser part.
+*/
+
+typedef void (*directive_func)(int argc, char **argv);
+struct directive_info {
+        const char *directive;
+        directive_func func;
+        int minargs,maxargs;
+        enum dir_type { open, start_closed, end_closed, nested } type;
+        int x;  //type dependent:
+        //  open: unused
+        //  start_close: flag for nesteability
+        //  end_closed: index of what it closes
+        //  nested: index of what it should be inside
+} dirs[]={
+        {"todo",        dir_todo,               1,1, directive_info::open,0},
+        {"caution",     dir_caution,            0,0, directive_info::start_closed,0},   //1
+        {"ecaution",    dir_ecaution,           0,0, directive_info::end_closed,1},     //2
+        {"dl",          dir_dl,                 0,3, directive_info::start_closed,1},   //3
+        {"edl",         dir_edl,                0,0, directive_info::end_closed,3},     //4
+        {"dt",          dir_dt,                 0,0, directive_info::nested,3},         //5
+        {"dd",          dir_dd,                 0,0, directive_info::nested,3},         //6
+        {"footnote",    dir_footnote,           1,1, directive_info::start_closed,0},   //7
+        {"efootnote",   dir_efootnote,          0,0, directive_info::end_closed,7},     //8
+        {"topic",       dir_topic,              3,5, directive_info::start_closed,0},   //9
+        {"etopic",      dir_etopic,             0,0, directive_info::end_closed,9},     //10
+        {"key",         dir_key,                1,2, directive_info::nested,9},         //11
+        {"ref",         dir_ref,                2,2, directive_info::open,0},           //12
+        {"reffootnote", dir_reffootnote,        2,2, directive_info::open,0},           //13
+        {"hp",          dir_hp,                 1,1, directive_info::start_closed,0},   //14
+        {"ehp",         dir_ehp,                0,0, directive_info::end_closed,14},    //15
+        {"note",        dir_note,               0,0, directive_info::start_closed,0},   //16
+        {"enote",       dir_enote,              0,0, directive_info::end_closed,16},    //17
+        {"ol",          dir_ol,                 0,0, directive_info::start_closed,1},   //18
+        {"eol",         dir_eol,                0,0, directive_info::end_closed,18},    //19
+        {"li",          dir_li,                 0,0, directive_info::open,0},           //20
+        {"parml",       dir_parml,              0,1, directive_info::start_closed,1},   //21
+        {"eparml",      dir_eparml,             0,0, directive_info::end_closed,21},    //22
+        {"pt",          dir_pt,                 0,0, directive_info::nested,21},        //23
+        {"pd",          dir_pd,                 0,0, directive_info::nested,21},        //24
+        {"sl",          dir_sl,                 0,0, directive_info::start_closed,1},   //25
+        {"esl",         dir_esl,                0,0, directive_info::end_closed,25},    //26
+        {"ul",          dir_ul,                 0,0, directive_info::start_closed,1},   //27
+        {"eul",         dir_eul,                0,0, directive_info::end_closed,27},    //28
+        {"code",        dir_code,               0,0, directive_info::start_closed,0},   //29
+        {"ecode",       dir_ecode,              0,0, directive_info::end_closed,29},    //30
+        {"graphic",     dir_graphic,            3,5, directive_info::open,0},           //31
+        {0,0,0,0,directive_info::dir_type(0),0}
+};
+
+void DoDirective(int argc, char **argv)
+{
+        static int stack[30];
+        static int sp=0;
+
+        //find directive
+        directive_info *p=0;
+        for(int i=0; dirs[i].directive && p==0; i++) {
+                if(stricmp(dirs[i].directive,argv[0])==0) {
+                        p=dirs+i;
+                        break;
+                }
+        }
+        if(p==0)
+                error("Unknown directive: '%s'\n",argv[0]);
+        if(argc-1<p->minargs)
+                error("Directive '%s' takes at least %d arguments (%d was specified)\n",p->directive,p->minargs,argc-1);
+        if(argc-1>p->maxargs)
+                error("Directive '%s' takes at most %d arguments (%d was specified)\n",p->directive,p->maxargs,argc-1);
+
+        if(sp==30)
+                error("Too deep nesting of directives");
+        switch(p->type) {
+        case directive_info::open:
+                //nothing
+                break;
+        case directive_info::start_closed: {
+                        if(!p->x) {
+                                //the directive is not nesteable, ensure it is not already nested
+                                for(int j=0; j<sp; j++)
+                                        if(stack[j]==i)
+                                                error("%s cannot be nested",p->directive);
+                        }
+                        //push directive index onto the stack
+                        stack[sp++]=i;
+                        break;
+                }
+        case directive_info::end_closed: {
+                        //pop the directive off the stack
+                        //directives must be balanced so it must be at the top of the stack
+                        if(sp==0)
+                                error("%s must be used withing block",p->directive);
+                        if(stack[sp-1]!=p->x)
+                                error("%s is not balanced (currently within '%s'-block",p->directive,dirs[stack[sp-1]].directive);
+                        sp--;
+                        break;
+                }
+        case directive_info::nested: {
+                        //ensure the directive is within a block
+                        if(sp==0)
+                                error("%s can only be used withing a '%s'-block",p->directive,dirs[p->x].directive);
+                        if(stack[sp-1]!=p->x)
+                                error("%s must be used inside '%s'-block (currently within '%s'-block)",p->directive,dirs[p->x].directive,dirs[stack[sp-1]].directive);
+                        break;
+                }
+        }
+
+        p->func(argc-1,argv+1);
+}
+
+void skipWhite()
+{
+        while(c==' ' || c=='\t')
+                GetNext();
+}
+
+void skipWhiteAndNL()
+{
+        while(c==' ' || c=='\t' || c=='\n')
+                GetNext();
+}
+
+void ParseDirective()
+{
+        char element[10][128];
+        int e=0;
+        for(;;) {
+                int i=0;
+                skipWhite();
+                if(c == '"') {
+                        //quoted word
+                        GetNext();
+                        while(c != '"') {
+                                if(c == EOF)
+                                        error("EOF in directive");
+                                if(c == '\n')
+                                        error("newline in directive");
+                                element[e][i++] = (char)c;
+                                GetNext();
+                        }
+                        element[e++][i]='\0';
+                        GetNext();
+                } else {
+                        while(c!=' ' && c!=']') {
+                                if(c==EOF)
+                                        error("EOF in directive");
+                                element[e][i++]=(char)c;
+                                GetNext();
+                        }
+                        element[e++][i]='\0';
+                }
+
+                skipWhite();
+                if(c==']')
+                        break;
+                else if(c==EOF)
+                        error("expected ']' but found EOF");
+                else if(e==10)
+                        error("too many elements in directive");
+        }
+        char *argv[10];
+        for(int a=0; a<10; a++)
+                argv[a]=element[a];
+        GetNext();
+        DoDirective(e,argv);
+}
+
+void ParseEscape()
+{
+        switch( c ) {
+        case '\\':
+                //literal backslash
+                OutputChar('\\');
+                break;
+        case '[':
+                //literal open bracket
+                OutputChar( '[' );
+                break;
+        case ']':
+                //literal closing bracket
+                OutputChar( ']' );
+                break;
+        default:
+                error("unknown escape: %c",c);
+        }
+        GetNext();
+}
+
+void skipBlankLines()
+{
+        while(c==' ' || c=='\t' || c=='\n')
+                GetNext();
+}
+
+void ParseFile()
+{
+        while(c!=EOF) {
+                switch(c) {
+                case '[':
+                        GetNext();
+                        ParseDirective();
+                        break;
+                case '\\':
+                        GetNext();
+                        ParseEscape();
+                        break;
+                case '\n':
+                        if(!inCode) {
+                                //2 * NL => new paragraph
+                                nTotalLines++;
+                                GetNext();
+                                if(c=='\n') {
+                                        OutputNewParagraph();
+                                        skipBlankLines();
+                                } else {
+                                        OutputChar('\n');
+                                }
+                                break;
+                        }
+                        //fallthrough
+                default:
+                        OutputChar((char)c);
+                        GetNext();
+                }
+        }
+}
+
+
+int main(int argc, char *argv[])
+{
+        puts("BIHC (compiled: "__DATE__"/"__TIME__")");
+
+        if(argc<3 || argc>6) {
+                puts("Usage: Bihc input output [/ai|/nai [level [/multi]]]\n" );
+                return -1;
+        }
+        if(argc>=4) {
+                if(stricmp(argv[3],"/autoindex")==0 ||
+                                        stricmp(argv[3],"/ai")==0)
+                        autoIndex=1;
+                else if(stricmp(argv[3],"/noautoindex")==0 ||
+                                        stricmp(argv[3],"/nai")==0)
+                        autoIndex=0;
+                else
+                        error("unknown option: %S",argv[3]);
+        } else
+                autoIndex=1;
+        if(argc>=5)
+                currentLevel=atoi(argv[4]);
+        if(argc>=6)
+                multiHelp=strcmp(argv[5],"/multi")==0;
+
+        ifp = fopen(argv[1],"rt");
+        if(!ifp) {
+                fprintf(stderr,"bihc: Could not open '%s'\n",argv[1]);
+                perror("bihc");
+                return -2;
+        }
+
+        nTotalLines = 0;
+        GetNext();
+        OutputFileStart(argv[2]); strcpy(outputFilename,argv[2]);
+        ParseFile();
+        OutputFileEnd();
+        printf("Compiled %d lines OK.\n", nTotalLines );
+
+        fclose(ifp);
+
+        return 0;
+}
+

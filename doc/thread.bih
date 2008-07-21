@@ -1,0 +1,1165 @@
+[topic FThread same "FThread"]
+[key "multitasking"][key "BIF/Thread"][key "thread" primary]
+WYDIWYG: BIFINC_THREAD
+
+A thread is a process that shares address space with the other threads in
+a process.
+
+Member functions:
+[sl]
+[li]Public:
+[sl]
+[li][ref FThread_ctor        "Thread()"]
+[li][ref FThread_dtor        "~Thread()"]
+[li][ref FThread_oktogo      "OkToGo()"]
+[li][ref FThread_go          "Go()"]
+[li][ref FThread_start       "Start()"]
+[li][ref FThread_setpriority "SetPriority()"]
+[li][ref FThread_getpriority "GetPriority()"]
+[li][ref FThread_suspend     "Suspend()"]
+[li][ref FThread_resume      "Resume()"]
+[li][ref FThread_getstate    "GetState()"]
+[li][ref FThread_kill        "Kill()"]
+[li][ref FThread_wait        "Wait()"]
+[esl]
+[li]Protected:
+[sl]
+[li][ref FThread_sleep "Sleep()"]
+[li][ref FThread_yield "Yield()"]
+[esl]
+[esl]
+
+[etopic]
+
+
+
+[topic FThread_ctor down "FThread()" "FThread::FThread()"]
+Declaration:
+[code]
+FThread::FThread();
+[ecode]
+The constructor creates a thread. The thread first starts running when
+[ref FThread_start "Start()"] has been called.
+
+See also: [ref FThread "FThread"]
+[etopic]
+
+
+[topic FThread_dtor same "~FThread()" "FThread::~FThread()"]
+Declaration:
+[code]
+FThread::~FThread();
+[ecode]
+The destructor destroys the thread killing it if neccesary.
+
+See also: [ref FThread "FThread"]
+[etopic]
+
+
+
+[topic FThread_oktogo same "OkToGo()" "FThread::OkToGo()"]
+Declaration:
+[code]
+virtual bool FThread::OkToGo();
+[ecode]
+This function returns wether or not the constructor succeeded.
+okToGo() is meant to be overridden by subclasses.
+
+This function us used by [ref FThread_start "Start()"] to assure that the
+thread has been initialized.
+
+See also: [ref FThread "FThread"], [ref FThread_start "Start()"],
+[ref FThread_go "Go()"],
+[etopic]
+
+
+
+[topic FThread_go same "Go()" "FThread::Go()"]
+Declaration:
+[code]
+virtual void FThread::Go() = 0;
+[ecode]
+This function is the real code to be executed in the thread.
+This function must be overridden by subclasses to implement the actual code
+of the thread.
+
+See also: [ref FThread "FThread"], [ref FThread_start "Start()"],
+[ref FThread_oktogo "OkToGo()"],
+[etopic]
+
+
+
+
+[topic FThread_start same "Start()" "FThread::Start()"]
+Declaration:
+[code]
+int FThread::Start();
+[ecode]
+This function starts the thread. The return value is 0 on success.
+Start() will call [ref FThread_oktogo "OkToGo()"] to ensure that the thread
+has been initialized properly.
+
+Return value:
+This the return value is 0 if the thread has been started.
+
+[note]Under OS/2 this function will either use DosCreateThread or _beginthread
+to create the thread depending on the value of startMethod. By default OS/2 only
+allows 256 thread to be created. This can be changed from 64 to 4096 by
+altering config.sys. Under win32 this function will use
+_beginthreadex()/_beginthreadNT() or CreateTread().
+[enote]
+
+See also: [ref FThread "FThread"], [ref FThread_go "Go()"],
+[etopic]
+
+
+
+
+[topic FThread_setpriority same "SetPriority()" "FThread::SetPriority()"]
+Declaration:
+[code]
+void FThread::SetPriority(int p);
+[ecode]
+This function sets the priority of the thread. [hp 1]p[ehp] can be in the range -15..15.
+-15 is low priority and 15 is high priority. By default threads is
+initially given the priority 0.
+
+Don't use priorities unless it is absolutely necessary. It
+should be enough to ensure that all threads perform some sort of blocking
+operation. If you have to use priorities it is usually better to lower the
+priority of the less important threads than raising the priority of all
+other threads.
+
+[note]Under OS/2 and win32 lower-priority thread will only be given timeslices when no
+higher-priority threads are ready to run. If you give a polling-loop-thread
+a high priority then you risk that all your other threads will not be
+given any timeslices.
+[enote]
+
+See also: [ref FThread "FThread"], [ref FThread_getpriority "GetPriority()"],
+[etopic]
+
+
+
+[topic FThread_getpriority same "GetPriority()" "FThread::GetPriority()"]
+Declaration:
+[code]
+int FThread::GetPriority() const;
+[ecode]
+This function returns the current priority of the thread.
+
+See also: [ref FThread "FThread"], [ref FThread_setpriority "SetPriority()"],
+[etopic]
+
+
+
+[topic FThread_suspend same "Suspend()" "FThread::Suspend()"]
+Declaration:
+[code]
+int FThread::Suspend();
+[ecode]
+This function suspends the thread. Bif/Thread maintains a suspend count on
+each thread. When the suspend count is above 0 the thread will not be given
+any timeslices. Suspend() increments this counter.
+
+To resume the thread use [ref FThread_resume "Resume()"].
+
+Return value: The return value is 0 if the thread has been suspended.
+
+[note](OS/2) Only one thread at a time can be suspended.
+[enote]
+
+See also: [ref FThread "FThread"], [ref FThread_resume "Resume()"],
+[etopic]
+
+
+
+[topic FThread_resume same "Resume()" "FThread::Resume()"]
+Declaration:
+[code]
+int FThread::Resume();
+[ecode]
+This function decrements the suspend count of the thread. If the suspend
+count is already 0 the return value will be non-0 signalling an error.
+
+See also: [ref FThread "FThread"], [ref FThread_suspend "Suspend()"],
+[etopic]
+
+
+
+[topic FThread_getstate same "GetState()" "FThread::GetState()"]
+Declaration:
+[code]
+state FThread::GetState() const;
+[ecode]
+This function returns the current state of the thread (either initialized,
+running or terminated).
+
+[note]If you want to wait for a thread to terminate use
+[ref FThread_wait "Wait()"]
+[enote]
+
+See also: [ref FThread "FThread"]
+[etopic]
+
+
+
+[topic FThread_kill same "Kill()" "FThread::Kill()"]
+Declaration:
+[code]
+int FThread::Kill();
+[ecode]
+This function kills the thread. It is not recommended to kill at thread as
+resources held by the thread is not necessarily released.
+
+Return: The return value is 0 if the thread was killed, and non-zero if the
+thread was not killed.
+
+[note]Suicide is not allowed. The thread itself should just return
+from [ref FThread_go "Go()"].
+[enote]
+
+[note](OS/2) If the thread is currently executing 16-bit code the thread cannot
+be killed.
+[enote]
+
+See also: [ref FThread "FThread"]
+[etopic]
+
+
+
+[topic FThread_wait same "Wait()" "FThread::Wait()" secondary]
+Declaration:
+[code]
+int FThread::Wait();
+[ecode]
+This function blocks the calling thread until the specified thread has
+terminated.
+
+Return Value: The return value is 0 if the thread terminated normally. The
+return value is non-zero if the thread terminated abnormally (eg. killed), or
+if the thread is not running.
+
+Example:
+[code]
+FThread *pthread = new HelperThread(...)
+...
+pthread->Start();  //start the helper thread
+...
+//do some work
+...
+pthread->Wait();   //wait for the helper thread to finished
+//use whatever results the helper thread has created
+...
+[ecode]
+
+See also: [ref FThread "FThread"], [ref FThread_start "Start()"]
+[etopic]
+
+
+
+[topic FThread_yield same "Yield()" "FThread::Yield()"]
+Declaration:
+[code]
+void FThread::Yield();
+[ecode]
+This function gives up the rest of the current timeslice letting other
+threads do their job.
+
+[note](OS/2) this function currently does absolutely nothing. In future
+versions of BIF/Thread it may do a ::DosSleep(0L)
+[enote]
+
+[note](Win32) this function does absolutely nothing.
+[enote]
+
+[note](win16) This function must be called from the thread in order to let
+other threads run.
+[enote]
+
+Example:
+[code]
+void MyThread::Go() {
+  for(int i=0; i<1000; i++) {
+    <do something useful>
+    Yield();
+  }
+}
+[ecode]
+Only the thread itself should call Yield(). For speed reasons BIF/Thread
+does not check this.
+
+See also: [ref FThread "FThread"], [ref FThread_sleep "Sleep"], [ref FThreadManager_Yield "FThreadManager::Yield"]
+[etopic]
+
+
+
+
+[topic FThread_sleep upafter "Sleep()" "FThread::Sleep()"]
+Declaration:
+[code]
+void FThread::Sleep(long ms);
+[ecode]
+This function suspends the thread for the specified number of milliseconds.
+
+[note]The thread will usually sleep for a longer time because of other
+threads or if the system has other thing to do. The parameter only
+specifies the [hp 1] minimum [ehp] time to sleep.
+[enote]
+
+See also: [ref FThread "FThread"], [ref FThread_yield "Yield"]
+[etopic]
+
+
+
+
+
+
+
+[topic FWindowThread same "FWindowThread"]
+declaration:
+[code]
+class BIFCLASS FWindowThread : public virtual [ref FThread "FThread"] {
+[ecode]
+
+WYDIWYG: BIFINCL_THREAD and BIFINCL_WINDOWTHREAD
+
+A FWindowThread is a thread that knows about Windows/OS/2-PM windows
+and messages.
+
+Public member functions:
+[sl]
+[li][ref fwindowthread_ctor "FWindowThread()"]
+[li][ref fwindowthread_dtor "~FWindowThread()"]
+[esl]
+
+Protected member functions:
+[sl]
+[li][ref fwindowthread_messageloop "MessageLoop()"]
+[esl]
+
+[note]
+Under OS/2 FWindowThread creates an anchor block and a message queue
+accessible by GetHAB() and GetHMQ().
+[enote]
+
+[etopic]
+
+
+
+[topic FWindowThread_ctor down "FWindowThread()" "FWindowThread::FWindowThread()"]
+Declaration:
+[code]
+FWindowThread::FWindowThread([hp 1]os-specific default arguments[ehp]);
+[ecode]
+This constructor does nothing special.
+
+See also: [ref FWindowThread "FWindowThread"]
+[etopic]
+
+
+
+[topic FWindowThread_dtor same "~FWindowThread()" "FWindowThread::~FWindowThread()"]
+Declaration:
+[code]
+FWindowThread::~FWindowThread();
+[ecode]
+This destructor does nothing special.
+
+See also: [ref FWindowThread "FWindowThread"]
+[etopic]
+
+
+
+[topic FWindowThread_messageloop upafter "MessageLoop()" "FWindowThread::MessageLoop()" secondary]
+Declaration:
+[code]
+virtual void FWindowThread::MessageLoop();
+[ecode]
+This function performs a "normal" message-loop.
+
+[note]Under Win16 this function will yield to other threads when appropriate.
+[enote]
+
+See also: [ref FWindowThread "FWindowThread"]
+[etopic]
+
+
+
+
+
+[topic FMainThread same "FMainThread"]
+Declaration:
+[code]
+class BIFCLASS FMainThread : public virtual [ref FThread "FThread"] {
+[ecode]
+
+WYDIWYG: BIFINCL_THREAD and BIFINCL_MAINTHREAD
+
+A FMainThread is the initially thread of the application. You have to create
+your own subclass of FMainThread.
+
+Public member functions:
+[sl]
+[li][ref fmainthread_ctor "FMainThread()"]
+[li][ref fmainthread_dtor "~FMainThread()"]
+[esl]
+Protected member functions:
+[sl]
+[li][ref fmainthread_main "Main()"]
+[esl]
+
+[note]Under win16 you will normally use [ref fmainwindowthread "FMainWindowThread"]
+instead.
+[enote]
+
+[etopic]
+
+
+
+[topic FMainThread_ctor down "FMainThread()" "FMainThread::FMainThread()"]
+Declaration:
+[code]
+FMainThread::MainThread(int argc, char *argv\[]);
+[ecode]
+This constructor does nothing special except for remembering argc and
+argv for use in FMainThread::Main.
+
+See also: [ref FMainThread "FMainThread"]
+[etopic]
+
+
+[topic FMainThread_dtor same "~FMainThread()" "FMainThread::~FMainThread()"]
+Declaration:
+[code]
+FMainThread::~MainThread();
+[ecode]
+This destructor does nothing special.
+
+See also: [ref FMainThread "FMainThread"]
+[etopic]
+
+
+
+[topic FMainThread_main upafter "Main()" "FMainThread::Main()" primary]
+Declaration:
+[code]
+virtual int FMainThread::Main(int argc, char *argv\[\]) = 0;
+[ecode]
+This function must be overridden in you subclass. It is the main entry
+point in your application.
+
+
+[hp 1]argc[ehp] and [hp 1]argv[ehp] has the familiar values that you know from
+DOS, Unix and OS/2.
+
+[parml]
+[pt]argc[pd]the number of elements in argc\[\].
+[pt]argv[pd]array of pointers to command-line arguments. Note that the first
+argument (argv\[0\]) points to the name of the program.
+[eparml]
+
+Return value: The return value is passed back to the operating system as the
+program exit code.
+
+Example: (this is stupid, but what ...)
+[code]
+int MyMainThread::Main(int argc, char *argv\[\]) {
+  printf("The program is: %s",argv\[0]);
+  printf("Arguments:");
+  for(int i=1; i<argc; i++)
+    printf("%d: %s\\n",i,argv\[i\]);
+  return 0;
+}
+[ecode]
+
+See also: [ref FMainThread "FMainThread"]
+[etopic]
+
+
+
+
+
+[topic FMainWindowThread same "FMainWindowThread"]
+Declaration:
+[code]
+class BIFCLASS FMainWindowThread : public virtual [ref FThread "FThread"],
+                                   public [ref FMainThread "FMainThread"],
+                                   public [ref FWindowThread "FWindowThread"]
+[ecode]
+
+WYDIWYG: BIFINCL_THREAD and BIFINCL_WINDOWTHREAD and BIFINCL_MAINTHREAD
+
+A FMainWindowThread is a thread that is the main thread of your application
+and knows how to do a message-loop.
+
+FMainWindowThread has both [ref FMainThread "FMainThread"] and
+[ref FWindowThread "FWindowThread"] as its base classes.
+
+Public member functions:
+[sl]
+[li][ref FMainWindowThread_ctor "FMainWindowThread()"]
+[li][ref FMainWindowThread_dtor "~FMainWindowThread()"]
+[esl]
+
+[note](Win16) Only the FMainWindowThread should create windows or send
+messages. All other threads should not use windows except posting
+messages to them (otherwise the stack may be wrong when wndprocs are called).
+[enote]
+[etopic]
+
+
+
+[topic FMainWindowThread_ctor down "FMainWindowThread()" "FMainWindowThread::FMainWindowThread()"]
+Declaration:
+[code]
+FMainWindowThread::FMainWindowThread(int argc, char *argv\[]);
+[ecode]
+This constructor does nothing special except for remembering argc and argv.
+
+See also: [ref FMainWindowThread "FMainWindowThread"],
+[ref FMainThread_ctor "FMainThread::FMainThread()"]
+[etopic]
+
+
+[topic FMainWindowThread_dtor upafter "~FMainWindowThread()" "FMainWindowThread::~FMainWindowThread()"]
+Declaration:
+[code]
+FMainWindowThread::~FMainWindowThread();
+[ecode]
+This destructor does nothing special.
+
+See also: [ref FMainWindowThread "FMainWindowThread"]
+[etopic]
+
+
+
+
+
+
+
+
+[topic FThreadManager same "FThreadManager"]
+WYDIWYG: BIFINCL_THREAD
+
+The thread manager manages the threads.
+
+There are no instance of FThreadManager as all members are static.
+
+Public member functions:
+[sl]
+[li][ref fthreadmanager_getfirstthread "GetFirstThread()"]
+[li][ref fthreadmanager_getnextthread "GetNextThread()"]
+[li][ref fthreadmanager_getcurrentthread "GetCurrentThread()"]
+[li][ref fthreadmanager_yield "Yield()"]
+[esl]
+[etopic]
+
+
+
+
+[topic FThreadmanager_getfirstthread down "GetFirstThread()" "FThreadManager::GetFirstThread()"]
+Declaration:
+[code]
+static FThread *FThreadManager::GetFirstThread();
+[ecode]
+This function returns the first thread known to the FThreadManager.
+The return value is null if an error occurred or if the threadmanager
+did not know any threads.
+
+See also: [ref fthreadmanager_getnextthread "GetNextThread()"],
+[ref fthreadmanager "FThreadManager"]
+[etopic]
+
+
+
+
+[topic FThreadmanager_getnextthread same "GetNextThread()" "FThreadManager::GetNextThread()"]
+Declaration:
+[code]
+static FThread *FThreadManager::GetNextThread(FThread *prev);
+[ecode]
+This function returns the next thread after prev known to the
+FThreadManager.
+
+[note]It is impossible to guarantee that all thread are
+enumerated because of the very nature of multitasking.
+[enote]
+
+Example:
+[code]
+Thread *tp = FThreadManager::GetFirstThread();
+while(tp) {
+  <do something with the thread>
+  tp = FThreadmanager::GetNextThread(tp);
+}
+[ecode]
+
+See also: [ref fthreadmanager_getfirstthread "GetFirstThread()"],
+[ref fthreadmanager "FThreadManager"]
+[etopic]
+
+
+
+[topic FThreadmanager_getcurrentthread same "GetCurrentThread()" "FThreadManager::GetCurrentThread)="]
+Declaration:
+[code]
+static FThread *FThreadManager::GetCurrentThread();
+[ecode]
+This function returns a pointer to the current thread. This is useful if
+the thread pointer is needed in a non-member function. The return value is
+null if the thread could not be found.
+
+Example: This example shows how to temporarily raise the priority of
+some (hopefully) important task in a non-member function.
+[code]
+void foo() {
+  Thread *ctp = FThreadManager::GetCurrentThread();
+  int oldPriority;
+  if(ctp) {
+    oldPriority = ctp->GetPriority()
+    ctp->SetPriority(15);     //boosts the priority of the important thread
+  }
+  <do something very important>
+  if(ctp)
+    ctp->SetPriority(oldPriority);
+}
+[ecode]
+
+See also: [ref fthread "FThread"], [ref fthreadmanager "FThreadManager"]
+[etopic]
+
+
+[topic FThreadmanager_yield upafter "Yield()" "FThreadManager::Yield" secondary]
+Declaration:
+[code]
+static void FThreadManager::Yield();
+[ecode]
+Yield yields controls to other threads. This function is useful if a function 
+which is not a member of a thread, but is aware of multithreading.
+
+See also: [ref fthread "FThread"], [ref fthreadmanager "FThreadManager"], [ref fthread_yield "FThread::Yield"]
+[etopic]
+
+
+
+[topic fmutexsemaphore same "FMutexSemaphore"]
+[key "Synchronization" primary][key "mutex" primary][key "semaphores" primary]
+WYDIWYG: BIFINCL_THREAD and BIFINCL_SEMAPHORES
+
+A mutex is a MUTual EXclusion mecanism used for protection of a resource
+that can only be used by one thread at a time. This is sometimes called
+a binary semaphore.
+
+A mutex can be either "unowned" or "owned". When the mutex is "unowned" the
+resource it is protecting is not being used. When the mutex is "owned" a
+thread is using the resource. Only one thread can "own" the mutex at a
+time.
+
+Example of protection:
+[code]
+<shared resouce>
+FMutexSemaphore mutex;
+
+thread 1:
+  ...
+  mutex.request();
+  <use the shared resource>
+  mutex.release();
+
+thread 2:
+  ...
+  mutex.request();
+  <use the shared resource>
+  mutex.release();
+[ecode]
+
+Public member functions:
+[sl]
+[li][ref fmutexsemaphore_ctor1 "FMutexSemaphore()"]
+[li][ref fmutexsemaphore_ctor2 "FMutexSemaphore(owned)"]
+[li][ref fmutexsemaphore_dtor  "~FMutexSemaphore()"]
+[li][ref fmutexsemaphore_fail  "Fail()"]
+[li][ref fmutexsemaphore_request "Request()"]
+[li][ref fmutexsemaphore_release "Release()"]
+[esl]
+[etopic]
+
+
+
+
+[topic fmutexsemaphore_ctor1 down "FMutexSemaphore()" "FMutexSemaphore::FMutexSemaphore()" secondary]
+Declaration:
+[code]
+FMutexSemaphore::FMutexSemaphore();
+[ecode]
+The constructor creates the mutex. The mutex is initially unowned.
+
+See also: [ref fmutexsemaphore "FMutexSemaphore"]
+[etopic]
+
+
+
+[topic fmutexsemaphore_ctor2 same "FMutexSemaphore()" "FMutexSemaphore::FMutexSemaphore(owned)" secondary]
+Declaration:
+[code]
+FMutexSemaphore::FMutexSemaphore(int owned);
+[ecode]
+The constructor creates the mutex. If [hp 1]owned[ehp] is true, the mutex is
+initially owned by the creating thread. Otherwise the mutex is unowned.
+
+See also: [ref fmutexsemaphore "FMutexSemaphore"]
+[etopic]
+
+
+
+
+[topic fmutexsemaphore_dtor same "~FMutexSemaphore()" "FMutexSemaphore::~FMutexSemaphore()"]
+Declaration:
+[code]
+FMutexSemaphore::~FMutexSemaphore();
+[ecode]
+The destructor destroys the mutex releasing all waiting thread with an
+error code.
+
+See also: [ref fmutexsemaphore "FMutexSemaphore"],
+[ref fmutexsemaphore_request "Request()"]
+[etopic]
+
+
+
+[topic fmutexsemaphore_fail same "Fail()" "FMutexSemaphore::Fail()" primary]
+Declaration:
+[code]
+int FMutexSemaphore::Fail();
+[ecode]
+This function returns wether or not the mutex has been constructed.
+The constructor can fail under OS/2 and win32.
+
+See also: [ref fmutexsemaphore "FMutexSemaphore"],
+[etopic]
+
+
+
+[topic fmutexsemaphore_request same "Request()" "FMutexSemaphore::Request()"]
+Declaration:
+[code]
+int FMutexSemaphore::Request(long timeout=-1);
+[ecode]
+Request() requests ownership of the mutex. If the mutex is currently owned
+by another thread the thread will block until the mutex becomes available.
+If [hp 1]timeout[ehp] is not -1 this function will unblock the thread after the
+specified number of milliseconds. If [hp 1]timeout[ehp] is -1 there is no
+timeout. The return value is 0 on success.
+
+[note]When a thread has requested a mutex it must release it later.
+If a thread owning a mutex dies, the mutex will be unusable. The mutex must
+then be destroyed.
+[enote]
+
+See also: [ref fmutexsemaphore "FMutexSemaphore"],
+[ref fmutexsemaphore_release "Release()"]
+[etopic]
+
+
+
+[topic fmutexsemaphore_release upafter "Release()" "FMutexSemaphore::Release()"]
+Declaration:
+[code]
+int FMutexSemaphore::Release();
+[ecode]
+Release() releases ownership of the mutex. If threads are waiting for the
+mutex, one of them will be given the ownership of the mutex.
+The return value is 0 on success. It is an error to release a mutex that
+the thread does not own.
+
+See also: [ref fmutexsemaphore "FMutexSemaphore"],
+[ref fmutexsemaphore_request "Request()"]
+[etopic]
+
+
+
+
+
+[topic feventsemaphore same "FEventSemaphore"]
+[key "Synchronization" secondary][key "semaphores" secondary]
+WYDIWYG: BIFINCL_THREAD and BIFINCL_SEMAPHORES
+
+An event semaphore is used for synchronization of threads. It is usually
+used for signalling that something has happened.
+
+An event semaphore can be in two states: "posted" and "non-posted"
+
+Public member functions:
+[sl]
+[li][ref feventsemaphore_ctor1 "FEventSemaphore()"]
+[li][ref feventsemaphore_ctor2 "FEventSemaphore(posted)"]
+[li][ref feventsemaphore_fail  "Fail()"]
+[li][ref feventsemaphore_post  "Post()"]
+[li][ref feventsemaphore_wait  "Wait()"]
+[li][ref feventsemaphore_reset "Reset()"]
+[esl]
+[etopic]
+
+
+
+
+[topic feventsemaphore_ctor1 down "FEventSemaphore()" "FEventSemaphore::FEventSemaphore()" secondary]
+Declaration:
+[code]
+FEventSemaphore::FEventSemaphore();
+[ecode]
+The contructor creates the event semaphore. The event semaphore is
+initially "unposted".
+
+See also: [ref feventsemaphore "FEventSemaphore"]
+[etopic]
+
+
+
+
+[topic feventsemaphore_ctor2 same "FEventSemaphore()" "FEventSemaphore::FEventSemaphore(posted)" secondary]
+Declaration:
+[code]
+FEventSemaphore::FEventSemaphore(int posted);
+[ecode]
+The constructor creates the event semaphore. If [hp 1]posted[ehp] is true the event
+semaphore will initially be posted.
+
+See also: [ref feventsemaphore "FEventSemaphore"]
+[etopic]
+
+
+
+[topic feventsemaphore_dtor same "~FEventSemaphore()" "FEventSemaphore::~FEventSemaphore()"]
+Declaration:
+[code]
+FEventSemaphore::~FEventSemaphore();
+[ecode]
+The destructor destroys the event semaphore relasing all waiting threads
+with an error code.
+
+See also: [ref feventsemaphore "FEventSemaphore"]
+[etopic]
+
+
+
+[topic feventsemaphore_fail same "Fail()" "FEventSemaphore::Fail()" secondary]
+Declaration:
+[code]
+int FEventSemaphore::Fail();
+[ecode]
+This function returns wether or not the constructor failed initializing the event semaphore.
+
+See also: [ref feventsemaphore "FEventSemaphore"]
+[etopic]
+
+
+
+
+[topic feventsemaphore_post same "Post()" "FEventSemaphore::Post()"]
+Declaration:
+[code]
+int FEventSemaphore::Post();
+[ecode]
+The function posts the event semaphore relasing all waiting threads. The
+event semaphore will remain posted until reset() is called. The return
+value is 0 on success.
+
+See also: [ref feventsemaphore "FEventSemaphore"],
+[ref feventsemaphore_wait "Wait()"], [ref feventsemaphore_reset "Reset()"]
+[etopic]
+
+
+
+
+[topic feventsemaphore_wait same "Wait()" "FEventSemaphore::Wait()" primary]
+Declaration:
+[code]
+int FEventSemaphore::wait(long timeout=-1);
+[ecode]
+This function waits for the event semaphore to be posted. If the timeout
+parameter is not -1 this function will return with an error code after
+the specified number of milliseconds if the event semaphore has not been
+posted before the timeout.
+
+See also: [ref feventsemaphore "FEventSemaphore"],
+[ref feventsemaphore_post "Post()"], [ref feventsemaphore_reset "Reset()"]
+[etopic]
+
+
+[topic feventsemaphore_reset upafter "Reset()" "FEventSemaphore::Reset()"]
+Declaration:
+[code]
+int FEventSemaphore::reset();
+[ecode]
+This function resets the event semaphore to a non-posted state.
+The return value is 0 on success.
+
+See also: [ref feventsemaphore "FEventSemaphore"],
+[ref feventsemaphore_post "Post()"], [ref feventsemaphore_wait "Wait()"]
+[etopic]
+
+
+
+
+
+
+[topic fsemaphore same "FSemaphore"]
+[key "Synchronization"][key "semaphores"]
+WYDIWYG: BIFINCL_THREAD and BIFINCL_SEMAPHORES
+
+This is a general semaphore as specified by Dijkstra.
+
+Public member functions:
+[sl]
+[li][ref fsemaphore_ctor "FSemaphore()"]
+[li][ref fsemaphore_dtor "~FSemaphore()"]
+[li][ref fsemaphore_fail "Fail()"]
+[li][ref fsemaphore_signal "Signal()"]
+[li][ref fsemaphore_wait   "Wait()"]
+[esl]
+[etopic]
+
+
+
+[topic fsemaphore_ctor down "FSemaphore()" "FSemaphore::FSemaphore()"]
+Declaration:
+[code]
+FSemaphore::FSemaphore(long initialCount);
+[ecode]
+The constructor creates a semaphore with an initial count of initialCount.
+
+See also: [ref fsemaphore "FSemaphore"], [ref fsemaphore_fail "Fail()"]
+[etopic]
+
+
+
+[topic fsemaphore_dtor same "~FSemaphore()" "FSemaphore::~FSemaphore()"]
+Declaration:
+[code]
+FSemaphore::~FSemaphore();
+[ecode]
+The destructor destroys the semaphore releasing all waiting threads with
+an error code.
+
+See also: [ref fsemaphore "FSemaphore"]
+[etopic]
+
+
+[topic fsemaphore_fail same "Fail()" "FSemaphore::Fail()" secondary]
+Declaration:
+[code]
+int FSemaphore::Fail();
+[ecode]
+This function returns wether or not the construtor failed initializing the
+semaphore.
+
+See also: [ref fsemaphore "FSemaphore"]
+[etopic]
+
+
+
+[topic fsemaphore_signal same "Signal()" "FSemaphore::Signal()"]
+Declaration:
+[code]
+int FSemaphore::Signal();
+[ecode]
+This function increment the count of the semaphore if no threads are
+waiting. If one or more threads are waiting on the semaphore one of them
+is awakened. The return value is non-zero if an error occurs.
+This operation is sometimes called UP (because it attempts to
+increment the counter) or V (original notation).
+
+See also: [ref fsemaphore "FSemaphore"], [ref fsemaphore_wait "Wait()"]
+[etopic]
+
+
+
+[topic fsemaphore_wait upafter "Wait()" "FSemaphore::Wait()" secondary]
+Declaration:
+[code]
+int FSemaphore::Wait(long timeout=-1);
+[ecode]
+This function decrements the semaphore count unless the count is zero in
+which case the thread is blocked.
+This operation is sometimes called DOWN (because it attempts to
+decrement the counter) or P (original notation).
+
+See also: [ref fsemaphore "FSemaphore"], [ref fsemaphore_signal "Signal()"]
+[etopic]
+
+
+
+[topic fspinmutexsemaphore same "FSpinMutexSemaphore"]
+[key "Synchronization"][key "semaphores"][key "spinning semaphores" secondary]
+WYDIWYG: BIFINCL_THREAD and BIFINCL_SPINSEMAPHORES
+
+FSpinMutexSemaphore is the spinning versions of
+[ref fmutexsemaphore "FMutexSemaphore"]. FSpinMutexSemaphore is in some
+circumstances much faster than FMutexSemaphore (75 to 200 times faster),
+but not always.
+
+Members functions:
+[sl]
+[li][ref fspinmutexsemaphore_ctor "FSpinMutexSemaphore()"]
+[li][ref fspinmutexsemaphore_dtor "~FSpinMutexSemaphore()"]
+[li][ref fspinmutexsemaphore_request "Request()"]
+[li][ref fspinmutexsemaphore_release "Release()"]
+[esl]
+
+See also: [ref fmutexsemaphore "FMutexSemaphore"],
+[ref thowto_spin "When to use a spinning semaphore"].
+
+[note]FSpinMutexsemaphore is not based on OS/2 SMP's spinlocks, neither
+is it based on win32's critical regions.
+[enote]
+[etopic]
+
+[topic fspinmutexsemaphore_ctor down "FSpinMutexSemaphore()" "FSpinMutexSemaphore::FSpinMutexSemaphore()"]
+Declaration:
+[code]
+FSpinMutexSemaphore::FSpinMutexSemaphore();
+[ecode]
+The constructor initializes the the mutex to an unowned state.
+[etopic]
+
+[topic fspinmutexsemaphore_dtor same "~FSpinMutexSemaphore()" "FSpinMutexSemaphore::~FSpinMutexSemaphore()"]
+Declaration:
+[code]
+FSpinMutexSemaphore::~FSpinMutexSemaphore();
+[ecode]
+The destructor free any resources associated with the mutex.
+Waiting threads are not in general woken.
+[etopic]
+
+[topic fspinmutexsemaphore_request same "Request()" "FSpinMutexSemaphore::Request()" secondary]
+Declaration:
+[code]
+void FSpinMutexSemaphore::Request();
+[ecode]
+Request() requests the mutex. Requests cannot be nested.
+
+See also: [ref fspinmutexsemaphore_release "Release()"]
+[etopic]
+
+[topic fspinmutexsemaphore_release upafter "Release()" "FSpinMutexSemaphore::Release()" secondary]
+Declaration:
+[code]
+void FSpinMutexSemaphore::Release();
+[ecode]
+Request() releases the mutex previously requested with Request().
+
+See also: [ref fspinmutexsemaphore_release "Request()"]
+[etopic]
+
+
+[topic fspineventsemaphore same "FSpinEventSemaphore"]
+[key "Synchronization"][key "semaphores"][key "spinning semaphores"]
+WYDIWYG: BIFINCL_THREAD and BIFINCL_SPINSEMAPHORES
+
+FSpinEventSemaphore is the spinning version of FEventSemaphore. It can be much
+faster the FEventSemaphore when the event is usually signalled.
+
+Member functions:
+[sl]
+[li][ref fspineventsemaphore_ctor "FSpinEventSemaphore()"]
+[li][ref fspineventsemaphore_dtor "~FSpinEventSemaphore"]
+[li][ref fspineventsemaphore_post "Post()"]
+[li][ref fspineventsemaphore_reset "Reset()"]
+[li][ref fspineventsemaphore_wait "Wait()"]
+[esl]
+
+See also: [ref feventsemaphore "FEventSemaphore"],
+[ref thowto_spin "When to use a spinning semaphore"]
+[etopic]
+
+[topic fspineventsemaphore_ctor down "FSpinEventSemaphore()" "FSpinEventSemaphore::FSpinEventSemaphore()"]
+Declaration:
+[code]
+FSpinEventSemaphore::FSpinEventSemaphore();
+[ecode]
+The constructor initializes the event to a the reset state.
+[etopic]
+
+[topic fspineventsemaphore_dtor same "~FSpinEventSemaphore()" "FSpinEventSemaphore::~FSpinEventSemaphore()"]
+Declaration:
+[code]
+FSpinEventSemaphore::~FSpinEventSemaphore();
+[ecode]
+The destructor free any resources associated with the object. Waiting threads
+are not necessarily woken.
+[etopic]
+
+[topic fspineventsemaphore_post same "Post()" "FSpinEventSemaphore::Post()" secondary]
+Declaration:
+[code]
+void FSpinEventSemaphore::Post();
+[ecode]
+This member functions put the event into the "posted" state. All waiting threads are woken.
+[etopic]
+
+[topic fspineventsemaphore_reset same "Reset()" "FSpinEventSemaphore::Reset()" secondary]
+Declaration:
+[code]
+void FSpinEventSemaphore::Reset();
+[ecode]
+This member function puts the event into the "reset" state.
+[etopic]
+
+[topic fspineventsemaphore_wait upafter "Wait()" "FSpinEventSemaphore::Wait()" secondary]
+Declaration:
+[code]
+void FSpinEventSemaphore::Wait();
+[ecode]
+This function blocks until the semaphore is posted.
+[etopic]
+
+
+[topic fspinsemaphore same "FSpinSemaphore"]
+[key "Synchronization"][key "semaphores"][key "spinning semaphores"]
+WYDIWYG: BIFINCL_THREAD and BIFINCL_SPINSEMAPHORES
+FSpinSemaphore is the spinning version of FSemaphore.
+For a description of general semaphores see [ref fsemaphore "FSemaphore"].
+
+Member functions:
+[sl]
+[li][ref fspinsemaphore_ctor "FSemaphore()"]
+[li][ref fspinsemaphore_dtor "~FSemaphore()"]
+[li][ref fspinsemaphore_signal "Signal()"]
+[li][ref fspinsemaphore_wait "Wait()"]
+[esl]
+
+See also: [ref fsemaphore "FSemaphore"],
+[ref thowto_spin "When to use a spinning semaphore"]
+[etopic]
+
+[topic fspinsemaphore_ctor down "FSpinSemaphore()" "FSpinSemaphore::FSpinSemaphore()"]
+Declaration:
+[code]
+FSpinSemaphore::FSpinSemaphore();
+[ecode]
+[etopic]
+
+[topic fspinsemaphore_dtor same "~FSpinSemaphore()" "FSpinSemaphore::~FSpinSemaphore()"]
+Declaration:
+[code]
+FSpinSemaphore::~FSpinSemaphore();
+[ecode]
+[etopic]
+
+[topic fspinsemaphore_signal same "Signal()" "FSpinSemaphore::Signal()" secondary]
+Declaration:
+[code]
+void FSpinSemaphore::Signal();
+[ecode]
+[etopic]
+
+[topic fspinsemaphore_wait upafter "Wait()" "FSpinSemaphore::Wait()" secondary]
+Declaration:
+[code]
+void FSpinSemaphore::Wait();
+[ecode]
+[etopic]
+
+

@@ -1,0 +1,38 @@
+#include <os2.h>
+
+#include "pmsort.rh"
+
+ICON IDSORT "../../../sample/mix/sort/pmsort.ico"
+
+MENU IDSORT
+BEGIN
+ SUBMENU "~Algorithm",9000
+ BEGIN
+  MENUITEM "QuickSort",         IDM_QUICKSORT
+  MENUITEM "HeapSort",          IDM_HEAPSORT
+  MENUITEM "ShellSort",         IDM_SHELLSORT
+  MENUITEM "CombSort",          IDM_COMBSORT
+  MENUITEM "BatcherSort",       IDM_BATCHERSORT
+  MENUITEM "Radix Exchange",    IDM_RADIXEXCHANGE
+ END
+
+ SUBMENU "~Data set",9001
+ BEGIN
+  MENUITEM "Random",		IDM_RANDOM
+  MENUITEM "Mostly sorted",	IDM_MOSTLYSORTED
+  MENUITEM "Almost sorted",	IDM_ALMOSTSORTED
+  MENUITEM "Sorted",		IDM_SORTED
+  MENUITEM "Reverse sorted",	IDM_REVERSESORTED
+  MENUITEM "Small value range",	IDM_SMALLVALUERANGE
+ END
+
+ MENUITEM "~Next", IDM_NEXT
+ MENUITEM "~Sort!", IDM_SORT
+END
+
+ACCELTABLE IDSORT
+BEGIN
+  "N",	IDM_NEXT
+  "S",	IDM_SORT
+END
+

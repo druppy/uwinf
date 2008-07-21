@@ -1,0 +1,21 @@
+This directory contains a sample project that shows how to specify which module
+that contains the resources. It does this by supporting two languages: English
+and Danish.
+
+Files:
+DEFRES.CPP  The main program
+DEFRES.H    Resource IDs
+
+English resource module:
+ENGLISH.CPP
+ENGLISH.ICO
+ENGLISH.RC
+UKDLG.DLG
+UKDLG.RES
+
+Danish resource module:
+DADLG.DLG
+DADLG.RES
+DANSK.CPP
+DANSK.ICO
+DANSK.RC

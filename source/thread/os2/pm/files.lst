@@ -1,0 +1,3 @@
+Contents: BIF/Thread suport classes for OS/2 PM
+mwthread.cpp
+wthread.cpp

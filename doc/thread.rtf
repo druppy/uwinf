@@ -1,0 +1,1629 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote FThread}
+${\footnote FThread}
++{\footnote defbrowse}
+K{\footnote FThread}
+{\fs26\cf1\b FThread}\par
+K{\footnote multitasking}
+K{\footnote BIF/Thread}
+K{\footnote thread}
+WYDIWYG: BIFINC_THREAD\par
+
+A thread is a process that shares address space with the other threads in 
+a process.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+Public: 
+\par\pard\sb100\tx1100\li1100\fi-549
+\tab
+{\uldb Thread()}{\v FThread_ctor} 
+\par
+\tab
+{\uldb ~Thread()}{\v FThread_dtor} 
+\par
+\tab
+{\uldb OkToGo()}{\v FThread_oktogo} 
+\par
+\tab
+{\uldb Go()}{\v FThread_go} 
+\par
+\tab
+{\uldb Start()}{\v FThread_start} 
+\par
+\tab
+{\uldb SetPriority()}{\v FThread_setpriority} 
+\par
+\tab
+{\uldb GetPriority()}{\v FThread_getpriority} 
+\par
+\tab
+{\uldb Suspend()}{\v FThread_suspend} 
+\par
+\tab
+{\uldb Resume()}{\v FThread_resume} 
+\par
+\tab
+{\uldb GetState()}{\v FThread_getstate} 
+\par
+\tab
+{\uldb Kill()}{\v FThread_kill} 
+\par
+\tab
+{\uldb Wait()}{\v FThread_wait} 
+\par\pard\sb100\tx550\li550\fi-549
+ 
+\par
+\tab
+Protected: 
+\par\pard\sb100\tx1100\li1100\fi-549
+\tab
+{\uldb Sleep()}{\v FThread_sleep} 
+\par
+\tab
+{\uldb Yield()}{\v FThread_yield} 
+\par\pard\sb100\tx550\li550\fi-549
+ 
+\par\pard\sb100
+\par
+
+\page
+
+#{\footnote FThread_ctor}
+${\footnote FThread::FThread()}
++{\footnote defbrowse}
+K{\footnote FThread()}
+K{\footnote FThread::FThread()}
+{\fs26\cf1\b FThread()}\par
+Declaration: 
+\line{\f1
+FThread::FThread();\line
+}
+\par
+
+The constructor creates a thread. The thread first starts running when 
+{\uldb Start()}{\v FThread_start} has been called.\par
+
+See also: {\uldb FThread}{\v FThread} 
+\page
+
+#{\footnote FThread_dtor}
+${\footnote FThread::~FThread()}
++{\footnote defbrowse}
+K{\footnote ~FThread()}
+K{\footnote FThread::~FThread()}
+{\fs26\cf1\b ~FThread()}\par
+Declaration: 
+\line{\f1
+FThread::~FThread();\line
+}
+\par
+
+The destructor destroys the thread killing it if neccesary.\par
+
+See also: {\uldb FThread}{\v FThread} 
+\page
+
+#{\footnote FThread_oktogo}
+${\footnote FThread::OkToGo()}
++{\footnote defbrowse}
+K{\footnote OkToGo()}
+K{\footnote FThread::OkToGo()}
+{\fs26\cf1\b OkToGo()}\par
+Declaration: 
+\line{\f1
+virtual bool FThread::OkToGo();\line
+}
+\par
+
+This function returns wether or not the constructor succeeded. 
+okToGo() is meant to be overridden by subclasses.\par
+
+This function us used by {\uldb Start()}{\v FThread_start} to assure that the 
+thread has been initialized.\par
+
+See also: {\uldb FThread}{\v FThread}, {\uldb Start()}{\v FThread_start}, 
+{\uldb Go()}{\v FThread_go}, 
+\page
+
+#{\footnote FThread_go}
+${\footnote FThread::Go()}
++{\footnote defbrowse}
+K{\footnote Go()}
+K{\footnote FThread::Go()}
+{\fs26\cf1\b Go()}\par
+Declaration: 
+\line{\f1
+virtual void FThread::Go() = 0;\line
+}
+\par
+
+This function is the real code to be executed in the thread. 
+This function must be overridden by subclasses to implement the actual code 
+of the thread.\par
+
+See also: {\uldb FThread}{\v FThread}, {\uldb Start()}{\v FThread_start}, 
+{\uldb OkToGo()}{\v FThread_oktogo}, 
+\page
+
+#{\footnote FThread_start}
+${\footnote FThread::Start()}
++{\footnote defbrowse}
+K{\footnote Start()}
+K{\footnote FThread::Start()}
+{\fs26\cf1\b Start()}\par
+Declaration: 
+\line{\f1
+int FThread::Start();\line
+}
+\par
+
+This function starts the thread. The return value is 0 on success. 
+Start() will call {\uldb OkToGo()}{\v FThread_oktogo} to ensure that the thread 
+has been initialized properly.\par
+
+Return value: 
+This the return value is 0 if the thread has been started.\par
+
+{\b{Note:}} Under OS/2 this function will either use DosCreateThread or _beginthread 
+to create the thread depending on the value of startMethod. By default OS/2 only 
+allows 256 thread to be created. This can be changed from 64 to 4096 by 
+altering config.sys. Under win32 this function will use 
+_beginthreadex()/_beginthreadNT() or CreateTread(). 
+\par
+
+See also: {\uldb FThread}{\v FThread}, {\uldb Go()}{\v FThread_go}, 
+\page
+
+#{\footnote FThread_setpriority}
+${\footnote FThread::SetPriority()}
++{\footnote defbrowse}
+K{\footnote SetPriority()}
+K{\footnote FThread::SetPriority()}
+{\fs26\cf1\b SetPriority()}\par
+Declaration: 
+\line{\f1
+void FThread::SetPriority(int p);\line
+}
+\par
+
+This function sets the priority of the thread. {\i{p}} can be in the range -15..15. 
+-15 is low priority and 15 is high priority. By default threads is 
+initially given the priority 0.\par
+
+Don't use priorities unless it is absolutely necessary. It 
+should be enough to ensure that all threads perform some sort of blocking 
+operation. If you have to use priorities it is usually better to lower the 
+priority of the less important threads than raising the priority of all 
+other threads.\par
+
+{\b{Note:}} Under OS/2 and win32 lower-priority thread will only be given timeslices when no 
+higher-priority threads are ready to run. If you give a polling-loop-thread 
+a high priority then you risk that all your other threads will not be 
+given any timeslices. 
+\par
+
+See also: {\uldb FThread}{\v FThread}, {\uldb GetPriority()}{\v FThread_getpriority}, 
+\page
+
+#{\footnote FThread_getpriority}
+${\footnote FThread::GetPriority()}
++{\footnote defbrowse}
+K{\footnote GetPriority()}
+K{\footnote FThread::GetPriority()}
+{\fs26\cf1\b GetPriority()}\par
+Declaration: 
+\line{\f1
+int FThread::GetPriority() const;\line
+}
+\par
+
+This function returns the current priority of the thread.\par
+
+See also: {\uldb FThread}{\v FThread}, {\uldb SetPriority()}{\v FThread_setpriority}, 
+\page
+
+#{\footnote FThread_suspend}
+${\footnote FThread::Suspend()}
++{\footnote defbrowse}
+K{\footnote Suspend()}
+K{\footnote FThread::Suspend()}
+{\fs26\cf1\b Suspend()}\par
+Declaration: 
+\line{\f1
+int FThread::Suspend();\line
+}
+\par
+
+This function suspends the thread. Bif/Thread maintains a suspend count on 
+each thread. When the suspend count is above 0 the thread will not be given 
+any timeslices. Suspend() increments this counter.\par
+
+To resume the thread use {\uldb Resume()}{\v FThread_resume}.\par
+
+Return value: The return value is 0 if the thread has been suspended.\par
+
+{\b{Note:}} (OS/2) Only one thread at a time can be suspended. 
+\par
+
+See also: {\uldb FThread}{\v FThread}, {\uldb Resume()}{\v FThread_resume}, 
+\page
+
+#{\footnote FThread_resume}
+${\footnote FThread::Resume()}
++{\footnote defbrowse}
+K{\footnote Resume()}
+K{\footnote FThread::Resume()}
+{\fs26\cf1\b Resume()}\par
+Declaration: 
+\line{\f1
+int FThread::Resume();\line
+}
+\par
+
+This function decrements the suspend count of the thread. If the suspend 
+count is already 0 the return value will be non-0 signalling an error.\par
+
+See also: {\uldb FThread}{\v FThread}, {\uldb Suspend()}{\v FThread_suspend}, 
+\page
+
+#{\footnote FThread_getstate}
+${\footnote FThread::GetState()}
++{\footnote defbrowse}
+K{\footnote GetState()}
+K{\footnote FThread::GetState()}
+{\fs26\cf1\b GetState()}\par
+Declaration: 
+\line{\f1
+state FThread::GetState() const;\line
+}
+\par
+
+This function returns the current state of the thread (either initialized, 
+running or terminated).\par
+
+{\b{Note:}} If you want to wait for a thread to terminate use 
+{\uldb Wait()}{\v FThread_wait} 
+\par
+
+See also: {\uldb FThread}{\v FThread} 
+\page
+
+#{\footnote FThread_kill}
+${\footnote FThread::Kill()}
++{\footnote defbrowse}
+K{\footnote  Kill()}
+K{\footnote FThread::Kill()}
+{\fs26\cf1\b Kill()}\par
+Declaration: 
+\line{\f1
+int FThread::Kill();\line
+}
+\par
+
+This function kills the thread. It is not recommended to kill at thread as 
+resources held by the thread is not necessarily released.\par
+
+Return: The return value is 0 if the thread was killed, and non-zero if the 
+thread was not killed.\par
+
+{\b{Note:}} Suicide is not allowed. The thread itself should just return 
+from {\uldb Go()}{\v FThread_go}. 
+\par
+
+{\b{Note:}} (OS/2) If the thread is currently executing 16-bit code the thread cannot 
+be killed. 
+\par
+
+See also: {\uldb FThread}{\v FThread} 
+\page
+
+#{\footnote FThread_wait}
+${\footnote FThread::Wait()}
++{\footnote defbrowse}
+K{\footnote Wait()}
+K{\footnote FThread::Wait()}
+{\fs26\cf1\b Wait()}\par
+Declaration: 
+\line{\f1
+int FThread::Wait();\line
+}
+\par
+
+This function blocks the calling thread until the specified thread has 
+terminated.\par
+
+Return Value: The return value is 0 if the thread terminated normally. The 
+return value is non-zero if the thread terminated abnormally (eg. killed), or 
+if the thread is not running.\par
+
+Example: 
+\line{\f1
+FThread *pthread = new HelperThread(...)\line
+...\line
+pthread->Start();  //start the helper thread\line
+...\line
+//do some work\line
+...\line
+pthread->Wait();   //wait for the helper thread to finished\line
+//use whatever results the helper thread has created\line
+...\line
+}
+\par
+
+See also: {\uldb FThread}{\v FThread}, {\uldb Start()}{\v FThread_start} 
+\page
+
+#{\footnote FThread_yield}
+${\footnote FThread::Yield()}
++{\footnote defbrowse}
+K{\footnote Yield()}
+K{\footnote FThread::Yield()}
+{\fs26\cf1\b Yield()}\par
+Declaration: 
+\line{\f1
+void FThread::Yield();\line
+}
+\par
+
+This function gives up the rest of the current timeslice letting other 
+threads do their job.\par
+
+{\b{Note:}} (OS/2) this function currently does absolutely nothing. In future 
+versions of BIF/Thread it may do a ::DosSleep(0L) 
+\par
+
+{\b{Note:}} (Win32) this function does absolutely nothing. 
+\par
+
+{\b{Note:}} (win16) This function must be called from the thread in order to let 
+other threads run. 
+\par
+
+Example: 
+\line{\f1
+void MyThread::Go() \{\line
+  for(int i=0; i<1000; i++) \{\line
+    <do something useful>\line
+    Yield();\line
+  \}\line
+\}\line
+}
+\par
+
+Only the thread itself should call Yield(). For speed reasons BIF/Thread 
+does not check this.\par
+
+See also: {\uldb FThread}{\v FThread}, {\uldb Sleep}{\v FThread_sleep}, {\uldb FThreadManager::Yield}{\v FThreadManager_Yield} 
+\page
+
+#{\footnote FThread_sleep}
+${\footnote FThread::Sleep()}
++{\footnote defbrowse}
+K{\footnote Sleep()}
+K{\footnote FThread::Sleep()}
+{\fs26\cf1\b Sleep()}\par
+Declaration: 
+\line{\f1
+void FThread::Sleep(long ms);\line
+}
+\par
+
+This function suspends the thread for the specified number of milliseconds.\par
+
+{\b{Note:}} The thread will usually sleep for a longer time because of other 
+threads or if the system has other thing to do. The parameter only 
+specifies the {\i{ minimum }} time to sleep. 
+\par
+
+See also: {\uldb FThread}{\v FThread}, {\uldb Yield}{\v FThread_yield} 
+\page
+
+#{\footnote FWindowThread}
+${\footnote FWindowThread}
++{\footnote defbrowse}
+K{\footnote FWindowThread}
+{\fs26\cf1\b FWindowThread}\par
+declaration: 
+\line{\f1
+class BIFCLASS FWindowThread : public virtual {\uldb FThread}{\v FThread} \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_THREAD and BIFINCL_WINDOWTHREAD\par
+
+A FWindowThread is a thread that knows about Windows/OS/2-PM windows 
+and messages.\par
+
+Public member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FWindowThread()}{\v fwindowthread_ctor} 
+\par
+\tab
+{\uldb ~FWindowThread()}{\v fwindowthread_dtor} 
+\par\pard\sb100
+\par
+
+Protected member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb MessageLoop()}{\v fwindowthread_messageloop} 
+\par\pard\sb100
+\par
+
+{\b{Note:}} Under OS/2 FWindowThread creates an anchor block and a message queue 
+accessible by GetHAB() and GetHMQ(). 
+\par
+
+\page
+
+#{\footnote FWindowThread_ctor}
+${\footnote FWindowThread::FWindowThread()}
++{\footnote defbrowse}
+K{\footnote FWindowThread()}
+K{\footnote FWindowThread::FWindowThread()}
+{\fs26\cf1\b FWindowThread()}\par
+Declaration: 
+\line{\f1
+FWindowThread::FWindowThread({\i{os-specific default arguments}});\line
+}
+\par
+
+This constructor does nothing special.\par
+
+See also: {\uldb FWindowThread}{\v FWindowThread} 
+\page
+
+#{\footnote FWindowThread_dtor}
+${\footnote FWindowThread::~FWindowThread()}
++{\footnote defbrowse}
+K{\footnote ~FWindowThread()}
+K{\footnote FWindowThread::~FWindowThread()}
+{\fs26\cf1\b ~FWindowThread()}\par
+Declaration: 
+\line{\f1
+FWindowThread::~FWindowThread();\line
+}
+\par
+
+This destructor does nothing special.\par
+
+See also: {\uldb FWindowThread}{\v FWindowThread} 
+\page
+
+#{\footnote FWindowThread_messageloop}
+${\footnote FWindowThread::MessageLoop()}
++{\footnote defbrowse}
+K{\footnote MessageLoop()}
+K{\footnote FWindowThread::MessageLoop()}
+{\fs26\cf1\b MessageLoop()}\par
+Declaration: 
+\line{\f1
+virtual void FWindowThread::MessageLoop();\line
+}
+\par
+
+This function performs a "normal" message-loop.\par
+
+{\b{Note:}} Under Win16 this function will yield to other threads when appropriate. 
+\par
+
+See also: {\uldb FWindowThread}{\v FWindowThread} 
+\page
+
+#{\footnote FMainThread}
+${\footnote FMainThread}
++{\footnote defbrowse}
+K{\footnote FMainThread}
+{\fs26\cf1\b FMainThread}\par
+Declaration: 
+\line{\f1
+class BIFCLASS FMainThread : public virtual {\uldb FThread}{\v FThread} \{\line
+}
+\par
+
+WYDIWYG: BIFINCL_THREAD and BIFINCL_MAINTHREAD\par
+
+A FMainThread is the initially thread of the application. You have to create 
+your own subclass of FMainThread.\par
+
+Public member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FMainThread()}{\v fmainthread_ctor} 
+\par
+\tab
+{\uldb ~FMainThread()}{\v fmainthread_dtor} 
+\par\pard\sb100
+ 
+Protected member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Main()}{\v fmainthread_main} 
+\par\pard\sb100
+\par
+
+{\b{Note:}} Under win16 you will normally use {\uldb FMainWindowThread}{\v fmainwindowthread} 
+instead. 
+\par
+
+\page
+
+#{\footnote FMainThread_ctor}
+${\footnote FMainThread::FMainThread()}
++{\footnote defbrowse}
+K{\footnote FMainThread()}
+K{\footnote FMainThread::FMainThread()}
+{\fs26\cf1\b FMainThread()}\par
+Declaration: 
+\line{\f1
+FMainThread::MainThread(int argc, char *argv[]);\line
+}
+\par
+
+This constructor does nothing special except for remembering argc and 
+argv for use in FMainThread::Main.\par
+
+See also: {\uldb FMainThread}{\v FMainThread} 
+\page
+
+#{\footnote FMainThread_dtor}
+${\footnote FMainThread::~FMainThread()}
++{\footnote defbrowse}
+K{\footnote ~FMainThread()}
+K{\footnote FMainThread::~FMainThread()}
+{\fs26\cf1\b ~FMainThread()}\par
+Declaration: 
+\line{\f1
+FMainThread::~MainThread();\line
+}
+\par
+
+This destructor does nothing special.\par
+
+See also: {\uldb FMainThread}{\v FMainThread} 
+\page
+
+#{\footnote FMainThread_main}
+${\footnote FMainThread::Main()}
++{\footnote defbrowse}
+K{\footnote Main()}
+K{\footnote FMainThread::Main()}
+{\fs26\cf1\b Main()}\par
+Declaration: 
+\line{\f1
+virtual int FMainThread::Main(int argc, char *argv[]) = 0;\line
+}
+\par
+
+This function must be overridden in you subclass. It is the main entry 
+point in your application.\par
+
+{\i{argc}} and {\i{argv}} has the familiar values that you know from 
+DOS, Unix and OS/2.\par
+
+{\b{Parameters:}}
+\par\pard\sb100\tx2000\li2000\fi-1999
+argc\tab
+the number of elements in argc[]. 
+\par
+argv\tab
+array of pointers to command-line arguments. Note that the first 
+argument (argv[0]) points to the name of the program. 
+\par\pard\sb100
+\par
+
+Return value: The return value is passed back to the operating system as the 
+program exit code.\par
+
+Example: (this is stupid, but what ...) 
+\line{\f1
+int MyMainThread::Main(int argc, char *argv[]) \{\line
+  printf("The program is: %s",argv[0]);\line
+  printf("Arguments:");\line
+  for(int i=1; i<argc; i++)\line
+    printf("%d: %s\\n",i,argv[i]);\line
+  return 0;\line
+\}\line
+}
+\par
+
+See also: {\uldb FMainThread}{\v FMainThread} 
+\page
+
+#{\footnote FMainWindowThread}
+${\footnote FMainWindowThread}
++{\footnote defbrowse}
+K{\footnote FMainWindowThread}
+{\fs26\cf1\b FMainWindowThread}\par
+Declaration: 
+\line{\f1
+class BIFCLASS FMainWindowThread : public virtual {\uldb FThread}{\v FThread},\line
+                                   public {\uldb FMainThread}{\v FMainThread},\line
+                                   public {\uldb FWindowThread}{\v FWindowThread}\line
+}
+\par
+
+WYDIWYG: BIFINCL_THREAD and BIFINCL_WINDOWTHREAD and BIFINCL_MAINTHREAD\par
+
+A FMainWindowThread is a thread that is the main thread of your application 
+and knows how to do a message-loop.\par
+
+FMainWindowThread has both {\uldb FMainThread}{\v FMainThread} and 
+{\uldb FWindowThread}{\v FWindowThread} as its base classes.\par
+
+Public member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FMainWindowThread()}{\v FMainWindowThread_ctor} 
+\par
+\tab
+{\uldb ~FMainWindowThread()}{\v FMainWindowThread_dtor} 
+\par\pard\sb100
+\par
+
+{\b{Note:}} (Win16) Only the FMainWindowThread should create windows or send 
+messages. All other threads should not use windows except posting 
+messages to them (otherwise the stack may be wrong when wndprocs are called). 
+ 
+\page
+
+#{\footnote FMainWindowThread_ctor}
+${\footnote FMainWindowThread::FMainWindowThread()}
++{\footnote defbrowse}
+K{\footnote FMainWindowThread()}
+K{\footnote FMainWindowThread::FMainWindowThread()}
+{\fs26\cf1\b FMainWindowThread()}\par
+Declaration: 
+\line{\f1
+FMainWindowThread::FMainWindowThread(int argc, char *argv[]);\line
+}
+\par
+
+This constructor does nothing special except for remembering argc and argv.\par
+
+See also: {\uldb FMainWindowThread}{\v FMainWindowThread}, 
+{\uldb FMainThread::FMainThread()}{\v FMainThread_ctor} 
+\page
+
+#{\footnote FMainWindowThread_dtor}
+${\footnote FMainWindowThread::~FMainWindowThread()}
++{\footnote defbrowse}
+K{\footnote ~FMainWindowThread()}
+K{\footnote FMainWindowThread::~FMainWindowThread()}
+{\fs26\cf1\b ~FMainWindowThread()}\par
+Declaration: 
+\line{\f1
+FMainWindowThread::~FMainWindowThread();\line
+}
+\par
+
+This destructor does nothing special.\par
+
+See also: {\uldb FMainWindowThread}{\v FMainWindowThread} 
+\page
+
+#{\footnote FThreadManager}
+${\footnote FThreadManager}
++{\footnote defbrowse}
+K{\footnote FThreadManager}
+{\fs26\cf1\b FThreadManager}\par
+WYDIWYG: BIFINCL_THREAD\par
+
+The thread manager manages the threads.\par
+
+There are no instance of FThreadManager as all members are static.\par
+
+Public member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb GetFirstThread()}{\v fthreadmanager_getfirstthread} 
+\par
+\tab
+{\uldb GetNextThread()}{\v fthreadmanager_getnextthread} 
+\par
+\tab
+{\uldb GetCurrentThread()}{\v fthreadmanager_getcurrentthread} 
+\par
+\tab
+{\uldb Yield()}{\v fthreadmanager_yield} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FThreadmanager_getfirstthread}
+${\footnote FThreadManager::GetFirstThread()}
++{\footnote defbrowse}
+K{\footnote GetFirstThread()}
+K{\footnote FThreadManager::GetFirstThread()}
+{\fs26\cf1\b GetFirstThread()}\par
+Declaration: 
+\line{\f1
+static FThread *FThreadManager::GetFirstThread();\line
+}
+\par
+
+This function returns the first thread known to the FThreadManager. 
+The return value is null if an error occurred or if the threadmanager 
+did not know any threads.\par
+
+See also: {\uldb GetNextThread()}{\v fthreadmanager_getnextthread}, 
+{\uldb FThreadManager}{\v fthreadmanager} 
+\page
+
+#{\footnote FThreadmanager_getnextthread}
+${\footnote FThreadManager::GetNextThread()}
++{\footnote defbrowse}
+K{\footnote GetNextThread()}
+K{\footnote FThreadManager::GetNextThread()}
+{\fs26\cf1\b GetNextThread()}\par
+Declaration: 
+\line{\f1
+static FThread *FThreadManager::GetNextThread(FThread *prev);\line
+}
+\par
+
+This function returns the next thread after prev known to the 
+FThreadManager.\par
+
+{\b{Note:}} It is impossible to guarantee that all thread are 
+enumerated because of the very nature of multitasking. 
+\par
+
+Example: 
+\line{\f1
+Thread *tp = FThreadManager::GetFirstThread();\line
+while(tp) \{\line
+  <do something with the thread>\line
+  tp = FThreadmanager::GetNextThread(tp);\line
+\}\line
+}
+\par
+
+See also: {\uldb GetFirstThread()}{\v fthreadmanager_getfirstthread}, 
+{\uldb FThreadManager}{\v fthreadmanager} 
+\page
+
+#{\footnote FThreadmanager_getcurrentthread}
+${\footnote FThreadManager::GetCurrentThread)=}
++{\footnote defbrowse}
+K{\footnote GetCurrentThread()}
+K{\footnote FThreadManager::GetCurrentThread)=}
+{\fs26\cf1\b GetCurrentThread()}\par
+Declaration: 
+\line{\f1
+static FThread *FThreadManager::GetCurrentThread();\line
+}
+\par
+
+This function returns a pointer to the current thread. This is useful if 
+the thread pointer is needed in a non-member function. The return value is 
+null if the thread could not be found.\par
+
+Example: This example shows how to temporarily raise the priority of 
+some (hopefully) important task in a non-member function. 
+\line{\f1
+void foo() \{\line
+  Thread *ctp = FThreadManager::GetCurrentThread();\line
+  int oldPriority;\line
+  if(ctp) \{\line
+    oldPriority = ctp->GetPriority()\line
+    ctp->SetPriority(15);     //boosts the priority of the important thread\line
+  \}\line
+  <do something very important>\line
+  if(ctp)\line
+    ctp->SetPriority(oldPriority);\line
+\}\line
+}
+\par
+
+See also: {\uldb FThread}{\v fthread}, {\uldb FThreadManager}{\v fthreadmanager} 
+\page
+
+#{\footnote FThreadmanager_yield}
+${\footnote FThreadManager::Yield}
++{\footnote defbrowse}
+K{\footnote Yield()}
+K{\footnote FThreadManager::Yield}
+{\fs26\cf1\b Yield()}\par
+Declaration: 
+\line{\f1
+static void FThreadManager::Yield();\line
+}
+\par
+
+Yield yields controls to other threads. This function is useful if a function  
+which is not a member of a thread, but is aware of multithreading.\par
+
+See also: {\uldb FThread}{\v fthread}, {\uldb FThreadManager}{\v fthreadmanager}, {\uldb FThread::Yield}{\v fthread_yield} 
+\page
+
+#{\footnote fmutexsemaphore}
+${\footnote FMutexSemaphore}
++{\footnote defbrowse}
+K{\footnote FMutexSemaphore}
+{\fs26\cf1\b FMutexSemaphore}\par
+K{\footnote Synchronization}
+K{\footnote mutex}
+K{\footnote semaphores}
+WYDIWYG: BIFINCL_THREAD and BIFINCL_SEMAPHORES\par
+
+A mutex is a MUTual EXclusion mecanism used for protection of a resource 
+that can only be used by one thread at a time. This is sometimes called 
+a binary semaphore.\par
+
+A mutex can be either "unowned" or "owned". When the mutex is "unowned" the 
+resource it is protecting is not being used. When the mutex is "owned" a 
+thread is using the resource. Only one thread can "own" the mutex at a 
+time.\par
+
+Example of protection: 
+\line{\f1
+<shared resouce>\line
+FMutexSemaphore mutex;\line
+\line
+thread 1:\line
+  ...\line
+  mutex.request();\line
+  <use the shared resource>\line
+  mutex.release();\line
+\line
+thread 2:\line
+  ...\line
+  mutex.request();\line
+  <use the shared resource>\line
+  mutex.release();\line
+}
+\par
+
+Public member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FMutexSemaphore()}{\v fmutexsemaphore_ctor1} 
+\par
+\tab
+{\uldb FMutexSemaphore(owned)}{\v fmutexsemaphore_ctor2} 
+\par
+\tab
+{\uldb ~FMutexSemaphore()}{\v fmutexsemaphore_dtor} 
+\par
+\tab
+{\uldb Fail()}{\v fmutexsemaphore_fail} 
+\par
+\tab
+{\uldb Request()}{\v fmutexsemaphore_request} 
+\par
+\tab
+{\uldb Release()}{\v fmutexsemaphore_release} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote fmutexsemaphore_ctor1}
+${\footnote FMutexSemaphore::FMutexSemaphore()}
++{\footnote defbrowse}
+K{\footnote FMutexSemaphore()}
+K{\footnote FMutexSemaphore::FMutexSemaphore()}
+{\fs26\cf1\b FMutexSemaphore()}\par
+Declaration: 
+\line{\f1
+FMutexSemaphore::FMutexSemaphore();\line
+}
+\par
+
+The constructor creates the mutex. The mutex is initially unowned.\par
+
+See also: {\uldb FMutexSemaphore}{\v fmutexsemaphore} 
+\page
+
+#{\footnote fmutexsemaphore_ctor2}
+${\footnote FMutexSemaphore::FMutexSemaphore(owned)}
++{\footnote defbrowse}
+K{\footnote FMutexSemaphore()}
+K{\footnote FMutexSemaphore::FMutexSemaphore(owned)}
+{\fs26\cf1\b FMutexSemaphore()}\par
+Declaration: 
+\line{\f1
+FMutexSemaphore::FMutexSemaphore(int owned);\line
+}
+\par
+
+The constructor creates the mutex. If {\i{owned}} is true, the mutex is 
+initially owned by the creating thread. Otherwise the mutex is unowned.\par
+
+See also: {\uldb FMutexSemaphore}{\v fmutexsemaphore} 
+\page
+
+#{\footnote fmutexsemaphore_dtor}
+${\footnote FMutexSemaphore::~FMutexSemaphore()}
++{\footnote defbrowse}
+K{\footnote ~FMutexSemaphore()}
+K{\footnote FMutexSemaphore::~FMutexSemaphore()}
+{\fs26\cf1\b ~FMutexSemaphore()}\par
+Declaration: 
+\line{\f1
+FMutexSemaphore::~FMutexSemaphore();\line
+}
+\par
+
+The destructor destroys the mutex releasing all waiting thread with an 
+error code.\par
+
+See also: {\uldb FMutexSemaphore}{\v fmutexsemaphore}, 
+{\uldb Request()}{\v fmutexsemaphore_request} 
+\page
+
+#{\footnote fmutexsemaphore_fail}
+${\footnote FMutexSemaphore::Fail()}
++{\footnote defbrowse}
+K{\footnote Fail()}
+K{\footnote FMutexSemaphore::Fail()}
+{\fs26\cf1\b Fail()}\par
+Declaration: 
+\line{\f1
+int FMutexSemaphore::Fail();\line
+}
+\par
+
+This function returns wether or not the mutex has been constructed. 
+The constructor can fail under OS/2 and win32.\par
+
+See also: {\uldb FMutexSemaphore}{\v fmutexsemaphore}, 
+\page
+
+#{\footnote fmutexsemaphore_request}
+${\footnote FMutexSemaphore::Request()}
++{\footnote defbrowse}
+K{\footnote Request()}
+K{\footnote FMutexSemaphore::Request()}
+{\fs26\cf1\b Request()}\par
+Declaration: 
+\line{\f1
+int FMutexSemaphore::Request(long timeout=-1);\line
+}
+\par
+
+Request() requests ownership of the mutex. If the mutex is currently owned 
+by another thread the thread will block until the mutex becomes available. 
+If {\i{timeout}} is not -1 this function will unblock the thread after the 
+specified number of milliseconds. If {\i{timeout}} is -1 there is no 
+timeout. The return value is 0 on success.\par
+
+{\b{Note:}} When a thread has requested a mutex it must release it later. 
+If a thread owning a mutex dies, the mutex will be unusable. The mutex must 
+then be destroyed. 
+\par
+
+See also: {\uldb FMutexSemaphore}{\v fmutexsemaphore}, 
+{\uldb Release()}{\v fmutexsemaphore_release} 
+\page
+
+#{\footnote fmutexsemaphore_release}
+${\footnote FMutexSemaphore::Release()}
++{\footnote defbrowse}
+K{\footnote Release()}
+K{\footnote FMutexSemaphore::Release()}
+{\fs26\cf1\b Release()}\par
+Declaration: 
+\line{\f1
+int FMutexSemaphore::Release();\line
+}
+\par
+
+Release() releases ownership of the mutex. If threads are waiting for the 
+mutex, one of them will be given the ownership of the mutex. 
+The return value is 0 on success. It is an error to release a mutex that 
+the thread does not own.\par
+
+See also: {\uldb FMutexSemaphore}{\v fmutexsemaphore}, 
+{\uldb Request()}{\v fmutexsemaphore_request} 
+\page
+
+#{\footnote feventsemaphore}
+${\footnote FEventSemaphore}
++{\footnote defbrowse}
+K{\footnote FEventSemaphore}
+{\fs26\cf1\b FEventSemaphore}\par
+K{\footnote Synchronization}
+K{\footnote semaphores}
+WYDIWYG: BIFINCL_THREAD and BIFINCL_SEMAPHORES\par
+
+An event semaphore is used for synchronization of threads. It is usually 
+used for signalling that something has happened.\par
+
+An event semaphore can be in two states: "posted" and "non-posted"\par
+
+Public member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FEventSemaphore()}{\v feventsemaphore_ctor1} 
+\par
+\tab
+{\uldb FEventSemaphore(posted)}{\v feventsemaphore_ctor2} 
+\par
+\tab
+{\uldb Fail()}{\v feventsemaphore_fail} 
+\par
+\tab
+{\uldb Post()}{\v feventsemaphore_post} 
+\par
+\tab
+{\uldb Wait()}{\v feventsemaphore_wait} 
+\par
+\tab
+{\uldb Reset()}{\v feventsemaphore_reset} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote feventsemaphore_ctor1}
+${\footnote FEventSemaphore::FEventSemaphore()}
++{\footnote defbrowse}
+K{\footnote FEventSemaphore()}
+K{\footnote FEventSemaphore::FEventSemaphore()}
+{\fs26\cf1\b FEventSemaphore()}\par
+Declaration: 
+\line{\f1
+FEventSemaphore::FEventSemaphore();\line
+}
+\par
+
+The contructor creates the event semaphore. The event semaphore is 
+initially "unposted".\par
+
+See also: {\uldb FEventSemaphore}{\v feventsemaphore} 
+\page
+
+#{\footnote feventsemaphore_ctor2}
+${\footnote FEventSemaphore::FEventSemaphore(posted)}
++{\footnote defbrowse}
+K{\footnote FEventSemaphore()}
+K{\footnote FEventSemaphore::FEventSemaphore(posted)}
+{\fs26\cf1\b FEventSemaphore()}\par
+Declaration: 
+\line{\f1
+FEventSemaphore::FEventSemaphore(int posted);\line
+}
+\par
+
+The constructor creates the event semaphore. If {\i{posted}} is true the event 
+semaphore will initially be posted.\par
+
+See also: {\uldb FEventSemaphore}{\v feventsemaphore} 
+\page
+
+#{\footnote feventsemaphore_dtor}
+${\footnote FEventSemaphore::~FEventSemaphore()}
++{\footnote defbrowse}
+K{\footnote ~FEventSemaphore()}
+K{\footnote FEventSemaphore::~FEventSemaphore()}
+{\fs26\cf1\b ~FEventSemaphore()}\par
+Declaration: 
+\line{\f1
+FEventSemaphore::~FEventSemaphore();\line
+}
+\par
+
+The destructor destroys the event semaphore relasing all waiting threads 
+with an error code.\par
+
+See also: {\uldb FEventSemaphore}{\v feventsemaphore} 
+\page
+
+#{\footnote feventsemaphore_fail}
+${\footnote FEventSemaphore::Fail()}
++{\footnote defbrowse}
+K{\footnote Fail()}
+K{\footnote FEventSemaphore::Fail()}
+{\fs26\cf1\b Fail()}\par
+Declaration: 
+\line{\f1
+int FEventSemaphore::Fail();\line
+}
+\par
+
+This function returns wether or not the constructor failed initializing the event semaphore.\par
+
+See also: {\uldb FEventSemaphore}{\v feventsemaphore} 
+\page
+
+#{\footnote feventsemaphore_post}
+${\footnote FEventSemaphore::Post()}
++{\footnote defbrowse}
+K{\footnote Post()}
+K{\footnote FEventSemaphore::Post()}
+{\fs26\cf1\b Post()}\par
+Declaration: 
+\line{\f1
+int FEventSemaphore::Post();\line
+}
+\par
+
+The function posts the event semaphore relasing all waiting threads. The 
+event semaphore will remain posted until reset() is called. The return 
+value is 0 on success.\par
+
+See also: {\uldb FEventSemaphore}{\v feventsemaphore}, 
+{\uldb Wait()}{\v feventsemaphore_wait}, {\uldb Reset()}{\v feventsemaphore_reset} 
+\page
+
+#{\footnote feventsemaphore_wait}
+${\footnote FEventSemaphore::Wait()}
++{\footnote defbrowse}
+K{\footnote Wait()}
+K{\footnote FEventSemaphore::Wait()}
+{\fs26\cf1\b Wait()}\par
+Declaration: 
+\line{\f1
+int FEventSemaphore::wait(long timeout=-1);\line
+}
+\par
+
+This function waits for the event semaphore to be posted. If the timeout 
+parameter is not -1 this function will return with an error code after 
+the specified number of milliseconds if the event semaphore has not been 
+posted before the timeout.\par
+
+See also: {\uldb FEventSemaphore}{\v feventsemaphore}, 
+{\uldb Post()}{\v feventsemaphore_post}, {\uldb Reset()}{\v feventsemaphore_reset} 
+\page
+
+#{\footnote feventsemaphore_reset}
+${\footnote FEventSemaphore::Reset()}
++{\footnote defbrowse}
+K{\footnote Reset()}
+K{\footnote FEventSemaphore::Reset()}
+{\fs26\cf1\b Reset()}\par
+Declaration: 
+\line{\f1
+int FEventSemaphore::reset();\line
+}
+\par
+
+This function resets the event semaphore to a non-posted state. 
+The return value is 0 on success.\par
+
+See also: {\uldb FEventSemaphore}{\v feventsemaphore}, 
+{\uldb Post()}{\v feventsemaphore_post}, {\uldb Wait()}{\v feventsemaphore_wait} 
+\page
+
+#{\footnote fsemaphore}
+${\footnote FSemaphore}
++{\footnote defbrowse}
+K{\footnote FSemaphore}
+{\fs26\cf1\b FSemaphore}\par
+K{\footnote Synchronization}
+K{\footnote semaphores}
+WYDIWYG: BIFINCL_THREAD and BIFINCL_SEMAPHORES\par
+
+This is a general semaphore as specified by Dijkstra.\par
+
+Public member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FSemaphore()}{\v fsemaphore_ctor} 
+\par
+\tab
+{\uldb ~FSemaphore()}{\v fsemaphore_dtor} 
+\par
+\tab
+{\uldb Fail()}{\v fsemaphore_fail} 
+\par
+\tab
+{\uldb Signal()}{\v fsemaphore_signal} 
+\par
+\tab
+{\uldb Wait()}{\v fsemaphore_wait} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote fsemaphore_ctor}
+${\footnote FSemaphore::FSemaphore()}
++{\footnote defbrowse}
+K{\footnote FSemaphore()}
+K{\footnote FSemaphore::FSemaphore()}
+{\fs26\cf1\b FSemaphore()}\par
+Declaration: 
+\line{\f1
+FSemaphore::FSemaphore(long initialCount);\line
+}
+\par
+
+The constructor creates a semaphore with an initial count of initialCount.\par
+
+See also: {\uldb FSemaphore}{\v fsemaphore}, {\uldb Fail()}{\v fsemaphore_fail} 
+\page
+
+#{\footnote fsemaphore_dtor}
+${\footnote FSemaphore::~FSemaphore()}
++{\footnote defbrowse}
+K{\footnote ~FSemaphore()}
+K{\footnote FSemaphore::~FSemaphore()}
+{\fs26\cf1\b ~FSemaphore()}\par
+Declaration: 
+\line{\f1
+FSemaphore::~FSemaphore();\line
+}
+\par
+
+The destructor destroys the semaphore releasing all waiting threads with 
+an error code.\par
+
+See also: {\uldb FSemaphore}{\v fsemaphore} 
+\page
+
+#{\footnote fsemaphore_fail}
+${\footnote FSemaphore::Fail()}
++{\footnote defbrowse}
+K{\footnote Fail()}
+K{\footnote FSemaphore::Fail()}
+{\fs26\cf1\b Fail()}\par
+Declaration: 
+\line{\f1
+int FSemaphore::Fail();\line
+}
+\par
+
+This function returns wether or not the construtor failed initializing the 
+semaphore.\par
+
+See also: {\uldb FSemaphore}{\v fsemaphore} 
+\page
+
+#{\footnote fsemaphore_signal}
+${\footnote FSemaphore::Signal()}
++{\footnote defbrowse}
+K{\footnote Signal()}
+K{\footnote FSemaphore::Signal()}
+{\fs26\cf1\b Signal()}\par
+Declaration: 
+\line{\f1
+int FSemaphore::Signal();\line
+}
+\par
+
+This function increment the count of the semaphore if no threads are 
+waiting. If one or more threads are waiting on the semaphore one of them 
+is awakened. The return value is non-zero if an error occurs. 
+This operation is sometimes called UP (because it attempts to 
+increment the counter) or V (original notation).\par
+
+See also: {\uldb FSemaphore}{\v fsemaphore}, {\uldb Wait()}{\v fsemaphore_wait} 
+\page
+
+#{\footnote fsemaphore_wait}
+${\footnote FSemaphore::Wait()}
++{\footnote defbrowse}
+K{\footnote Wait()}
+K{\footnote FSemaphore::Wait()}
+{\fs26\cf1\b Wait()}\par
+Declaration: 
+\line{\f1
+int FSemaphore::Wait(long timeout=-1);\line
+}
+\par
+
+This function decrements the semaphore count unless the count is zero in 
+which case the thread is blocked. 
+This operation is sometimes called DOWN (because it attempts to 
+decrement the counter) or P (original notation).\par
+
+See also: {\uldb FSemaphore}{\v fsemaphore}, {\uldb Signal()}{\v fsemaphore_signal} 
+\page
+
+#{\footnote fspinmutexsemaphore}
+${\footnote FSpinMutexSemaphore}
++{\footnote defbrowse}
+K{\footnote FSpinMutexSemaphore}
+{\fs26\cf1\b FSpinMutexSemaphore}\par
+K{\footnote Synchronization}
+K{\footnote semaphores}
+K{\footnote spinning semaphores}
+WYDIWYG: BIFINCL_THREAD and BIFINCL_SPINSEMAPHORES\par
+
+FSpinMutexSemaphore is the spinning versions of 
+{\uldb FMutexSemaphore}{\v fmutexsemaphore}. FSpinMutexSemaphore is in some 
+circumstances much faster than FMutexSemaphore (75 to 200 times faster), 
+but not always.\par
+
+Members functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FSpinMutexSemaphore()}{\v fspinmutexsemaphore_ctor} 
+\par
+\tab
+{\uldb ~FSpinMutexSemaphore()}{\v fspinmutexsemaphore_dtor} 
+\par
+\tab
+{\uldb Request()}{\v fspinmutexsemaphore_request} 
+\par
+\tab
+{\uldb Release()}{\v fspinmutexsemaphore_release} 
+\par\pard\sb100
+\par
+
+See also: {\uldb FMutexSemaphore}{\v fmutexsemaphore}, 
+{\uldb When to use a spinning semaphore}{\v thowto_spin}.\par
+
+{\b{Note:}} FSpinMutexsemaphore is not based on OS/2 SMP's spinlocks, neither 
+is it based on win32's critical regions. 
+ 
+\page
+
+#{\footnote fspinmutexsemaphore_ctor}
+${\footnote FSpinMutexSemaphore::FSpinMutexSemaphore()}
++{\footnote defbrowse}
+K{\footnote FSpinMutexSemaphore()}
+K{\footnote FSpinMutexSemaphore::FSpinMutexSemaphore()}
+{\fs26\cf1\b FSpinMutexSemaphore()}\par
+Declaration: 
+\line{\f1
+FSpinMutexSemaphore::FSpinMutexSemaphore();\line
+}
+\par
+
+The constructor initializes the the mutex to an unowned state. 
+\page
+
+#{\footnote fspinmutexsemaphore_dtor}
+${\footnote FSpinMutexSemaphore::~FSpinMutexSemaphore()}
++{\footnote defbrowse}
+K{\footnote ~FSpinMutexSemaphore()}
+K{\footnote FSpinMutexSemaphore::~FSpinMutexSemaphore()}
+{\fs26\cf1\b ~FSpinMutexSemaphore()}\par
+Declaration: 
+\line{\f1
+FSpinMutexSemaphore::~FSpinMutexSemaphore();\line
+}
+\par
+
+The destructor free any resources associated with the mutex. 
+Waiting threads are not in general woken. 
+\page
+
+#{\footnote fspinmutexsemaphore_request}
+${\footnote FSpinMutexSemaphore::Request()}
++{\footnote defbrowse}
+K{\footnote Request()}
+K{\footnote FSpinMutexSemaphore::Request()}
+{\fs26\cf1\b Request()}\par
+Declaration: 
+\line{\f1
+void FSpinMutexSemaphore::Request();\line
+}
+\par
+
+Request() requests the mutex. Requests cannot be nested.\par
+
+See also: {\uldb Release()}{\v fspinmutexsemaphore_release} 
+\page
+
+#{\footnote fspinmutexsemaphore_release}
+${\footnote FSpinMutexSemaphore::Release()}
++{\footnote defbrowse}
+K{\footnote Release()}
+K{\footnote FSpinMutexSemaphore::Release()}
+{\fs26\cf1\b Release()}\par
+Declaration: 
+\line{\f1
+void FSpinMutexSemaphore::Release();\line
+}
+\par
+
+Request() releases the mutex previously requested with Request().\par
+
+See also: {\uldb Request()}{\v fspinmutexsemaphore_release} 
+\page
+
+#{\footnote fspineventsemaphore}
+${\footnote FSpinEventSemaphore}
++{\footnote defbrowse}
+K{\footnote FSpinEventSemaphore}
+{\fs26\cf1\b FSpinEventSemaphore}\par
+K{\footnote Synchronization}
+K{\footnote semaphores}
+K{\footnote spinning semaphores}
+WYDIWYG: BIFINCL_THREAD and BIFINCL_SPINSEMAPHORES\par
+
+FSpinEventSemaphore is the spinning version of FEventSemaphore. It can be much 
+faster the FEventSemaphore when the event is usually signalled.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FSpinEventSemaphore()}{\v fspineventsemaphore_ctor} 
+\par
+\tab
+{\uldb ~FSpinEventSemaphore}{\v fspineventsemaphore_dtor} 
+\par
+\tab
+{\uldb Post()}{\v fspineventsemaphore_post} 
+\par
+\tab
+{\uldb Reset()}{\v fspineventsemaphore_reset} 
+\par
+\tab
+{\uldb Wait()}{\v fspineventsemaphore_wait} 
+\par\pard\sb100
+\par
+
+See also: {\uldb FEventSemaphore}{\v feventsemaphore}, 
+{\uldb When to use a spinning semaphore}{\v thowto_spin} 
+\page
+
+#{\footnote fspineventsemaphore_ctor}
+${\footnote FSpinEventSemaphore::FSpinEventSemaphore()}
++{\footnote defbrowse}
+K{\footnote FSpinEventSemaphore()}
+K{\footnote FSpinEventSemaphore::FSpinEventSemaphore()}
+{\fs26\cf1\b FSpinEventSemaphore()}\par
+Declaration: 
+\line{\f1
+FSpinEventSemaphore::FSpinEventSemaphore();\line
+}
+\par
+
+The constructor initializes the event to a the reset state. 
+\page
+
+#{\footnote fspineventsemaphore_dtor}
+${\footnote FSpinEventSemaphore::~FSpinEventSemaphore()}
++{\footnote defbrowse}
+K{\footnote ~FSpinEventSemaphore()}
+K{\footnote FSpinEventSemaphore::~FSpinEventSemaphore()}
+{\fs26\cf1\b ~FSpinEventSemaphore()}\par
+Declaration: 
+\line{\f1
+FSpinEventSemaphore::~FSpinEventSemaphore();\line
+}
+\par
+
+The destructor free any resources associated with the object. Waiting threads 
+are not necessarily woken. 
+\page
+
+#{\footnote fspineventsemaphore_post}
+${\footnote FSpinEventSemaphore::Post()}
++{\footnote defbrowse}
+K{\footnote Post()}
+K{\footnote FSpinEventSemaphore::Post()}
+{\fs26\cf1\b Post()}\par
+Declaration: 
+\line{\f1
+void FSpinEventSemaphore::Post();\line
+}
+\par
+
+This member functions put the event into the "posted" state. All waiting threads are woken. 
+\page
+
+#{\footnote fspineventsemaphore_reset}
+${\footnote FSpinEventSemaphore::Reset()}
++{\footnote defbrowse}
+K{\footnote Reset()}
+K{\footnote FSpinEventSemaphore::Reset()}
+{\fs26\cf1\b Reset()}\par
+Declaration: 
+\line{\f1
+void FSpinEventSemaphore::Reset();\line
+}
+\par
+
+This member function puts the event into the "reset" state. 
+\page
+
+#{\footnote fspineventsemaphore_wait}
+${\footnote FSpinEventSemaphore::Wait()}
++{\footnote defbrowse}
+K{\footnote Wait()}
+K{\footnote FSpinEventSemaphore::Wait()}
+{\fs26\cf1\b Wait()}\par
+Declaration: 
+\line{\f1
+void FSpinEventSemaphore::Wait();\line
+}
+\par
+
+This function blocks until the semaphore is posted. 
+\page
+
+#{\footnote fspinsemaphore}
+${\footnote FSpinSemaphore}
++{\footnote defbrowse}
+K{\footnote FSpinSemaphore}
+{\fs26\cf1\b FSpinSemaphore}\par
+K{\footnote Synchronization}
+K{\footnote semaphores}
+K{\footnote spinning semaphores}
+WYDIWYG: BIFINCL_THREAD and BIFINCL_SPINSEMAPHORES 
+FSpinSemaphore is the spinning version of FSemaphore. 
+For a description of general semaphores see {\uldb FSemaphore}{\v fsemaphore}.\par
+
+Member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb FSemaphore()}{\v fspinsemaphore_ctor} 
+\par
+\tab
+{\uldb ~FSemaphore()}{\v fspinsemaphore_dtor} 
+\par
+\tab
+{\uldb Signal()}{\v fspinsemaphore_signal} 
+\par
+\tab
+{\uldb Wait()}{\v fspinsemaphore_wait} 
+\par\pard\sb100
+\par
+
+See also: {\uldb FSemaphore}{\v fsemaphore}, 
+{\uldb When to use a spinning semaphore}{\v thowto_spin} 
+\page
+
+#{\footnote fspinsemaphore_ctor}
+${\footnote FSpinSemaphore::FSpinSemaphore()}
++{\footnote defbrowse}
+K{\footnote FSpinSemaphore()}
+K{\footnote FSpinSemaphore::FSpinSemaphore()}
+{\fs26\cf1\b FSpinSemaphore()}\par
+Declaration: 
+\line{\f1
+FSpinSemaphore::FSpinSemaphore();\line
+}
+\par
+
+\page
+
+#{\footnote fspinsemaphore_dtor}
+${\footnote FSpinSemaphore::~FSpinSemaphore()}
++{\footnote defbrowse}
+K{\footnote ~FSpinSemaphore()}
+K{\footnote FSpinSemaphore::~FSpinSemaphore()}
+{\fs26\cf1\b ~FSpinSemaphore()}\par
+Declaration: 
+\line{\f1
+FSpinSemaphore::~FSpinSemaphore();\line
+}
+\par
+
+\page
+
+#{\footnote fspinsemaphore_signal}
+${\footnote FSpinSemaphore::Signal()}
++{\footnote defbrowse}
+K{\footnote Signal()}
+K{\footnote FSpinSemaphore::Signal()}
+{\fs26\cf1\b Signal()}\par
+Declaration: 
+\line{\f1
+void FSpinSemaphore::Signal();\line
+}
+\par
+
+\page
+
+#{\footnote fspinsemaphore_wait}
+${\footnote FSpinSemaphore::Wait()}
++{\footnote defbrowse}
+K{\footnote Wait()}
+K{\footnote FSpinSemaphore::Wait()}
+{\fs26\cf1\b Wait()}\par
+Declaration: 
+\line{\f1
+void FSpinSemaphore::Wait();\line
+}
+\par
+
+\page
+
+}

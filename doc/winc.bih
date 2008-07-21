@@ -1,0 +1,97 @@
+[topic bifwindow_include_hierachy same "Include hierachy" "BIF/Window include hierachy"]
+The term "WYDIWYG" used in the class descriptions is an abbreversion of
+"What You Define Is What You Get".
+
+BIF/Window uses the following #define hierachy:
+[code]
+BIFINCL_WINDOW                        FWnd
+                                      FHandler
+                                      FWndMan
+                                      FRect
+                                      FIcon/FMenu/FPointer/F....
+                                      GetWndman()
+                                      GetSystemXxxxxxPointer()
+    *BIFINCL_WINALL                   (meta-#define)
+    BIFINCL_FRAME                     FFrameWindow
+    BIFINCL_APPWINDOW                 FAppWindow
+                                      FClientWindow
+    BIFINCL_DIALOG                    FDialog
+        *BIFINCL_STDDIALOGS           (meta-#define)
+        BIFINCL_STDFILEDIALOG         FStdOpenFileDialog
+                                      FStdSaveFileDialog
+    BIFINCL_COMMONHANDLERS [reffootnote bw_inchie_note1 "(1)"]        FCreateDestroyHandler
+                                      FCommandHandler
+                                      FEnableHandler
+                                      FFocusHandler
+                                      FSizeEvent
+                                      FMoveHandler
+                                      FCloseHandler
+    BIFINCL_FRAMEHANDLERS             [reffootnote bw_inchie_note2 "(2)"]
+    BIFINCL_CLIENTHANDLERS            FPaintHandler
+                                      FCaretHandler
+                                      FTimerHandler
+    BIFINCL_MOUSEHANDLERS             FMouseHandler
+                                      FExtendedMouseHandler
+                                      FTranslatedMouseHandler
+    BIFINCL_ADVANCEDHANDLERS
+        *BIFINCL_ALLADVANCEDHANDLERS  (meta-#define)
+        BIFINCL_SCROLLHANDLER         FClientScrollHandler
+        BIFINCL_CSIHANDLERS           FCSIMoveHandler
+                                      FCSISizeHandler
+    BIFINCL_CONTROLS                  FOwnerNotifyHandler
+                                      FControl
+        *BIFINCL_ALLCONTROLS          (meta-#define)
+        BIFINCL_SLE                   FSLE
+        BIFINCL_MLE                   FMLE
+        BIFINCL_CHECKBOX              FCheckBox
+        BIFINCL_RADIOBUTTON           FRadioButton
+        BIFINCL_STATICTEXT            FStaticText
+        BIFINCL_GROUPBOX              FGroupBox
+        BIFINCL_PUSHBUTTON            FPushButton
+        BIFINCL_LISTBOX               FListBox
+                                      FTextListBox
+                                      FSingleSelectionListBox
+                                      FMultipleSelectionListBox
+                                      FSingleSelectionTextListBox
+                                      FMultipleSelectionTextListBox
+                                      FODListBox
+                                      FSingleSelectionODListBox
+                                      FMultipleSelectionODListBox
+        BIFINCL_COMBOBOX              FComboBox
+                                      FEditComboBox
+                                      FSimpleComboBox
+                                      FDropDownComboBox
+                                      FSelectionComboBox
+                                      FTextSelectionComboBox
+                                      FODSelectionComboBox
+        BIFINCL_OWNERDRAW [reffootnote bw_inchie_note3 "(3)"]         FOwnerDrawOwner
+                                      FOwnerDrawOwnee
+        BIFINCL_SLIDER                FSlider
+    BIFINCL_MODULE [reffootnote bw_inchie_note4 "(4)"]                FModule
+    BIFINCL_APPLICATION               FApplication
+                                      GetCurrentApp()
+    BIFINCL_MESSAGEBOX                MessageBox
+[ecode]
+
+Example: If you need a FClientScrollHandler:
+[code]
+#define BIFINCL_ADVANCEDHANDLERS
+#define BIFINCL_SCROLLHANDLER
+#include <bif.h>
+[ecode]
+[etopic]
+
+[footnote bw_inchie_note1]
+BIFINCL_COMMONHANDLERS is automatically defined if BIFINCL_DIALOG is defined
+[efootnote]
+[footnote bw_inchie_note2]
+There are currently no frame-specific handlers.
+[efootnote]
+[footnote bw_inchie_note3]
+BIFINCL_OWNERDRAW is  automatically defined if BIFINCL_LISTBOX or BIFINCL_COMBOBOX
+is defined because owner-draw listboxes/comboxes need the ownerdraw handlers.
+[efootnote]
+[footnote bw_inchie_note4]
+BIFINCL_MODULE is automatically defined if BIFINCL_APPLICATION is defined
+[efootnote]
+

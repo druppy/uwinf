@@ -1,0 +1,11 @@
+:artlink.
+:link reftype=fn refid=FFrameWindow_fcf_sysmenu x=16 y=309 cx=73 cy=16.
+:link reftype=fn refid=FFrameWindow_fcf_titlebar x=114 y=298 cx=41 cy=15.
+:link reftype=fn refid=FFrameWindow_fcf_minbutton x=279 y=310 cx=82 cy=15.
+:link reftype=fn refid=FFrameWindow_fcf_maxbutton x=300 y=287 cx=85 cy=15.
+:link reftype=fn refid=FFrameWindow_fcf_menu x=373 y=227 cx=34 cy=14.
+:link reftype=fn refid=FFrameWindow_fcf_sizeborder x=373 y=200 cx=60 cy=16.
+:link reftype=fn refid=FFrameWindow_fcf_vertscroll x=375 y=142 cx=87 cy=16.
+:link reftype=fn refid=FFrameWindow_fcf_clientwindow x=360 y=98 cx=71 cy=16.
+:link reftype=fn refid=FFrameWindow_fcf_horzscrollbar x=138 y=14 cx=98 cy=16.
+:eartlink.

@@ -1,0 +1,141 @@
+[topic FOwnerDrawOwner same "FOwnerDrawOwner"]
+Declaration:
+[code]
+class FOwnerDrawOwner : public FHandler {
+[ecode]
+
+The FOwnerDrawOwner handler is used in windows that contain owner-draw
+controls. The "owner draw" name comes from the fact that the native GUI
+system's controls that support specialized drawing does this by sending
+drawing-requests to their owner window. Since BIF programs usually has
+objects for each control BIF tries to let the BIF-object handle the
+request instead of the owner window.
+
+This figure shows how this works:
+[graphic bitmap "" "winbmp:ownerdrw.bmp" "os2bmp:ownerdrw.bmp"]
+
+When you use ownerdraw controls you must attach a FOwnerDrawOwner to the
+owner of the controls (usually a dialog) and a [ref FOwnerDrawOwnee "FOwnerDrawOwnee"]
+to the controls that are owner-draw. BIF support for owner-draw controls are
+limited to routing the drawing and measurement requests to the BIF-objects.
+What the windows should do with them are up to you - the in the handling of the
+requests are too different on the two system to build a common interface upon.
+
+Member functions: (rarely overridden, except when ownerdraw menu item are used)
+[sl]
+[li][ref FOwnerDrawOwner_OwnerDraw "OwnerDraw()"]
+[li][ref FOwnerDrawOwner_OwnerMeasure "OwnerMeasure()"]
+[esl]
+[etopic]
+
+
+[topic FOwnerDrawOwner_OwnerDraw down "OwnerDraw()" "FOwnerDrawOwner::OwnerDraw()"]
+Declaration:
+[code]
+virtual Bool OwnerDraw([ref FDrawItemEvent "FDrawItemEvent"]&);
+[ecode]
+This function is called when an ownee reqest the owner to draw an item.
+The default implementation of OwnerDraw() searches the handler's list of
+ownees and calls [ref FOwnerDrawOwnee_OwneeDraw "FOwnerDrawOwnee::OwneeDraw()"].
+
+If you use owner-draw menu items you will have to override this function as BIF
+does not have interface objects for the menu items.
+[etopic]
+
+[topic FOwnerDrawOwner_OwnerMeasure upafter "OwnerMeasure()" "FOwnerDrawOwner::OwnerMeasure()"]
+Declaration:
+[code]
+virtual Bool OwnerMeasure([ref FMeasureItemEvent "FMeasureItemEvent"]&);
+[ecode]
+This function is called when an ownee reqests the size of an item.
+The default implementation of OwnerMeasure() searches the handler's list of
+ownees and calls [ref FOwnerDrawOwnee_OwneeMeasure "FOwnerDrawOwnee::OwneeMeasure()"].
+
+If you use owner-draw menu items you will have to override this function as BIF
+does not have interface objects for the menu items.
+[etopic]
+
+
+
+[topic FOwnerDrawOwnee same "FOwnerDrawOwnee"]
+Declaration:
+[code]
+class FOwnerDrawOwnee : public FHandler {
+[ecode]
+
+This FOwnerDrawOwnee is attached to the control that is owner-draw. BIF has
+already attached a FOwnerDrawOwnee to the predefined ownerdraw controls
+([ref FODSelectionComboBox "FODSelectionComboBox"] and [ref FODListBox "FODListBox"])
+
+You must be very carefull when you override the functions in FOwnerDrawOwnee
+as they may get called [hp 2]before[ehp] the BIF-object has been initialized
+(that is, before the BIF-object knows which native window it maps to).
+
+Member functions:
+[sl]
+[li][ref FOwnerDrawOwnee_ctor "FOwnerDrawOwnee()"]
+[li][ref FOwnerDrawOwnee_OwneeDraw "OwneeDraw()"] (pure virtual)
+[li][ref FOwnerDrawOwnee_OwneeMeasure "OwneeMeasure()"] (pure virtual)
+[esl]
+
+You will not have to override OwnerMeasure() in FODSelectionComboBox and
+FODListBox, they have already mapped it to a GetItemHeight() member.
+[etopic]
+
+[topic FOwnerDrawOwnee_ctor down "FOwnerDrawOwnee()" "FOwnerDrawOwnee::FOwnerDrawOwnee()"]
+Declaration:
+[code]
+FOwnerDrawOwnee(FWnd *pwnd, [ref FOwnerDrawOwner "FOwnerDrawOwner"] *owner);
+[ecode]
+[parml]
+[pt]pwnd[pd]Owner/parent window.
+[pt]owner[pd]The FOwnerDrawOwner handler attached to the owner window.
+[eparml]
+[etopic]
+
+
+[topic FOwnerDrawOwnee_OwneeDraw same "OwneeDraw()" "FOwnerDrawOwnee::OwneeDraw()"]
+Declaration:
+[code]
+virtual Bool OwneeDraw([ref FDrawItemEvent "FDrawItemEvent"]&) =0;
+[ecode]
+This function is called when the control should paint itself/part of itself/an item.
+[etopic]
+
+[topic FOwnerDrawOwnee_OwneeMeasure upafter "OwneeMeasure()" "FOwnerDrawOwnee::OwneeMeasure()"]
+Declaration:
+[code]
+virtual Bool OwneeMeasure(FMeasureItemEvent&) =0;
+[ecode]
+This function is called when the control should tell how tall/wide the item(s) are.
+[etopic]
+
+[topic FMeasureItemEvent same "FMeasureItemEvent"]
+Declaration:
+[code]
+class FMeasureItemEvent : public [ref FEvent "FEvent"] {
+[ecode]
+
+The only common functions (both by name and in semantic) in both the Windows
+and the OS/2 PM versions of the class are:
+[sl]
+[li]Bool IsFromControl()
+[li]Bool IsFromMenu()
+[li]int GetControlID()
+[esl]
+[etopic]
+
+[topic FDrawItemEvent same "FDrawItemEvent"]
+Declaration:
+[code]
+class FDrawItemEvent : public FEvent {
+[ecode]
+
+The only common function in both the Windows and the OS/2 PM versions are:
+[sl]
+[li]Bool IsFromControl()
+[li]Bool IsFromMenu()
+[li]int GetControlID()
+[esl]
+[etopic]
+

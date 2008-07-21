@@ -1,0 +1,426 @@
+/***
+Filename: appwnd.cpp
+Description:
+  Implementation of applicationwindow and client
+Host:
+  win16: BC40, WC10-10.6, SC61
+  win32: WC10.6
+History:
+  ISJ 94-11-?? Creation
+  ISJ 96-09-01 Added forwarding of win95 and NT3.51 messages WM_NOTIFY and
+               WM_NOTIFYFORMAT
+  ISJ 96-10-06 Under win32 the window position will be saved in the registry
+               instead of an INI file
+               WM_SYSCOLORCHANGE is forwarded to the client, so it has a chance
+               to forward the message if it has/is common controls
+  ISJ 96-11-16 Forwarded palette messages to client too
+**/
+#define BIFINCL_WINDOW
+#define BIFINCL_APPWND
+#define BIFINCL_APPLICATION
+#include <bif.h>
+#include <dbglog.h>
+
+FClientForwardHandler::FClientForwardHandler(FWnd *pwnd)
+  : FHandler(pwnd)
+{
+        SetDispatch(dispatchFunc_t(&FClientForwardHandler::Dispatch));
+}
+
+/***
+Visibility: protected
+Description:
+        Forward certain messages to the client window
+***/
+Bool FClientForwardHandler::Dispatch(FEvent& ev) {
+        unsigned id=ev.GetID();
+
+        //scroll commands
+        if(id==WM_VSCROLL ||
+           id==WM_HSCROLL)
+                return ForwardToClient(ev);
+        //close command
+        if(id==WM_CLOSE)
+                return ForwardToClient(ev);
+        //menu notifications
+        if(id==WM_INITMENU      ||
+           id==WM_INITMENUPOPUP ||
+           id==WM_MENUCHAR      ||
+           id==WM_MENUSELECT)
+                return ForwardToClient(ev);
+        //control notifications&commands, menu commands and accelerator commands
+        if(id==WM_COMMAND)
+                return ForwardToClient(ev);
+        //ownerdraw menu item drawing
+        if(id==WM_MEASUREITEM && ev.GetWParam()==0 ||
+           id==WM_DRAWITEM && ev.GetWParam()==0)
+                return ForwardToClient(ev);
+#if (BIFOS_==BIFOS_WIN32_)
+#  if (WINVER >= 0x0400)
+        if(id==WM_NOTIFY ||
+           id==WM_NOTIFYFORMAT)
+                return ForwardToClient(ev);
+        if(id==WM_SYSCOLORCHANGE)
+                return ForwardToClient(ev);
+        if(id==WM_DISPLAYCHANGE)
+                return ForwardToClient(ev);
+#  endif
+#endif
+        if(id==WM_PALETTECHANGED ||
+           id==WM_PALETTEISCHANGING ||
+           id==WM_QUERYNEWPALETTE)
+                return ForwardToClient(ev);
+        return False;
+}
+
+
+
+FAppWindowResizeHandler::FAppWindowResizeHandler(FAppWindow *pwnd)
+  : FSizeHandler(pwnd),
+    appwnd(pwnd)
+{}
+
+/***
+Visibility: ?
+Description:
+        React on size changes. The client window must have its size adjusted
+***/
+Bool FAppWindowResizeHandler::SizeChanged(FSizeEvent&) {
+        TRACE_METHOD0("FAppWindowResizeHandler::SizeChanged");
+
+        appwnd->MakeClientFit();
+        return True;
+}
+
+
+FAppWindowFocusForwarder::FAppWindowFocusForwarder(FAppWindow *pwnd)
+  : FFocusHandler(pwnd),
+    appwnd(pwnd)
+{}
+
+/***
+Visibility: ?
+Description:
+        Pass the focus on the the client window.
+***/
+Bool FAppWindowFocusForwarder::GotFocus(FSetFocusEvent&) {
+        //pass the focus to the client
+        if(appwnd->theClient && appwnd->theClient->IsValid()) {
+                ForwardFocus(appwnd->theClient);
+                return True;
+        } else
+                return False;
+}
+
+
+
+FAppWindow::FAppWindow()
+  : FFrameWindow(),
+    FClientForwardHandler(this),
+    resizehandler(this),
+    focusforwarder(this)
+{
+        TRACE_METHOD1("FAppWindow::FAppWindow");
+        theClient=0;
+}
+
+FAppWindow::~FAppWindow() {
+        TRACE_METHOD1("FAppWindow::~FAppWindow");
+        //nothing
+}
+
+
+
+
+/***
+Visibility: public
+Description:
+        Set the clientwindow.
+Return:
+        The old client window, NULL if none
+***/
+FWnd *FAppWindow::SetClient(FWnd *pNewClient) {
+        TRACE_METHOD1("FAppWindow::SetClient");
+        FWnd *old=theClient;
+        theClient=pNewClient;
+        MakeClientFit();
+        return old;
+}
+
+/***
+Visibility: public
+Return:
+        The current client window
+***/
+FWnd *FAppWindow::GetClient() {
+        TRACE_METHOD1("FAppWindow::GetClient");
+        return theClient;
+}
+
+
+
+
+/***
+Visibility: ?
+Description:
+        Adjust the size of the client _window_, so that it exactly covers the
+        client area_
+***/
+Bool FAppWindow::MakeClientFit() {
+        TRACE_METHOD0("FAppWindow::MakeClientFit");
+
+        //size the client to fill the entire client area
+        if(IsValid() && theClient && theClient->IsValid()) {
+                FRect r;
+                GetClientRect(GetHwnd(),&r);
+                SetWindowPos(theClient->GetHwnd(),
+                             NULL,
+                             0,0,
+                             r.GetRight(),r.GetBottom(),
+                             SWP_NOMOVE|SWP_NOZORDER);
+        }
+        return True;
+}
+
+/***
+Visibility: private
+Description:
+        Forward an event to the client window (if any)
+***/
+Bool FAppWindow::ForwardToClient(FEvent& ev) {
+        TRACE_METHOD0("FAppWindow::ForwardToClient");
+        if(theClient) {
+                FEvent forwardEvent=ev;
+                forwardEvent.SetHwnd(theClient->GetHwnd());
+                SendEvent(forwardEvent);
+                ev.SetResult(forwardEvent.GetResult());
+                return True;
+        } else
+                return False;
+}
+
+
+//position save & restore---
+
+/***
+Visibility: local to this module
+Description:
+        Figure out the name of the current application
+***/
+static void getAppName(char *pszAppName) {
+        //get application name of current application
+        HINSTANCE hinst=GetCurrentApp()->GetHINSTANCE();
+        char filename[255];
+        GetModuleFileName(hinst,filename,255);
+        //skip drive and directory
+        char *p=filename+lstrlen(filename);
+        while(p>filename && *p!='\\') p--;
+        if(*p=='\\') p++;
+        lstrcpy(pszAppName,p);
+}
+
+
+#if (BIFOS_==BIFOS_WIN16_)
+/***
+Visibility: local to this module
+Description:
+***/
+static BOOL WritePrivateProfileInt(const char *app, const char *key, int value, BOOL fSigned, const char *iniFile)
+{
+        //This is silly, Windows doesn't provide at WriteXxxxInt even though it
+        //provides a GetXxxxInt
+        char buf[10];
+        if(fSigned)
+                wsprintf(buf,"%d",value);
+        else
+                wsprintf(buf,"%u",value);
+        return WritePrivateProfileString(app,key,buf,iniFile);
+}
+#define WP_ININAME "wnd-pos.ini"
+#endif
+
+/***
+Visibility: public
+Description:
+        Save the current position, size and state of the framewindow. The data
+        is stored in a profile file
+***/
+Bool FAppWindow::SavePosition() {
+        if(!IsValid()) return False;
+
+        char szAppName[128];
+        getAppName(szAppName);
+        char szKeyName[128];
+        GetCaption(szKeyName,128);
+
+        WINDOWPLACEMENT wndpl;
+        wndpl.length=sizeof(wndpl);
+        if(!GetWindowPlacement(GetHwnd(),&wndpl))
+                return False;
+        else {
+#if (BIFOS_==BIFOS_WIN16_)
+                BOOL f=TRUE;
+                char entry[128];
+                f=f&&WritePrivateProfileInt(szAppName,szKeyName,1,FALSE,WP_ININAME);
+                wsprintf(entry,"%s.showCmd",szKeyName);
+                f=f&&WritePrivateProfileInt(szAppName,entry,(int)wndpl.showCmd,FALSE,WP_ININAME);
+                wsprintf(entry,"%s.min.x",szKeyName);
+                f=f&&WritePrivateProfileInt(szAppName,entry,(int)wndpl.ptMinPosition.x,FALSE,WP_ININAME);
+                wsprintf(entry,"%s.min.y",szKeyName);
+                f=f&&WritePrivateProfileInt(szAppName,entry,(int)wndpl.ptMinPosition.y,FALSE,WP_ININAME);
+                wsprintf(entry,"%s.max.x",szKeyName);
+                f=f&&WritePrivateProfileInt(szAppName,entry,(int)wndpl.ptMaxPosition.x,FALSE,WP_ININAME);
+                wsprintf(entry,"%s.max.y",szKeyName);
+                f=f&&WritePrivateProfileInt(szAppName,entry,(int)wndpl.ptMaxPosition.y,FALSE,WP_ININAME);
+                wsprintf(entry,"%s.normal.left",szKeyName);
+                f=f&&WritePrivateProfileInt(szAppName,entry,(int)wndpl.rcNormalPosition.left,FALSE,WP_ININAME);
+                wsprintf(entry,"%s.normal.top",szKeyName);
+                f=f&&WritePrivateProfileInt(szAppName,entry,(int)wndpl.rcNormalPosition.top,FALSE,WP_ININAME);
+                wsprintf(entry,"%s.normal.right",szKeyName);
+                f=f&&WritePrivateProfileInt(szAppName,entry,(int)wndpl.rcNormalPosition.right,FALSE,WP_ININAME);
+                wsprintf(entry,"%s.normal.bottom",szKeyName);
+                f=f&&WritePrivateProfileInt(szAppName,entry,(int)wndpl.rcNormalPosition.bottom,FALSE,WP_ININAME);
+                return (Bool)f;
+#else
+                //Use registry as nice application should do
+                HKEY hk;
+                DWORD disposition;
+                LONG l;
+                l=RegCreateKeyEx(HKEY_CURRENT_USER,             //window positions is saved per user
+                                 "Software\\SavedWindowPositions",
+                                 0,                             //reserved
+                                 0,                             //No class
+                                 REG_OPTION_NON_VOLATILE,
+                                 KEY_READ|KEY_WRITE,
+                                 0,                             //no security
+                                 &hk,
+                                 &disposition
+                                );
+                if(l!=ERROR_SUCCESS)
+                        return False;
+
+                HKEY hkapp;
+                l=RegCreateKeyEx(hk,
+                                 szAppName,
+                                 0,
+                                 0,
+                                 REG_OPTION_NON_VOLATILE,
+                                 KEY_ALL_ACCESS,
+                                 0,
+                                 &hkapp,
+                                 &disposition
+                                );
+                RegCloseKey(hk);
+                if(l!=ERROR_SUCCESS)
+                        return False;
+                                 
+                l=RegSetValueEx(hkapp, szKeyName, 0, REG_BINARY, (BYTE *)&wndpl, sizeof(wndpl));
+                RegCloseKey(hkapp);
+                
+                if(l!=ERROR_SUCCESS)
+                        return False;
+                else
+                        return True;
+#endif
+        }
+}
+
+/***
+Visibility: public
+Description:
+        Restore the positio, size and state from a profile file. If the data is
+        not stored, or an error occurs, False is returned
+***/
+Bool FAppWindow::RestorePosition() {
+        if(!IsValid()) return False;
+
+        char szAppName[128];
+        getAppName(szAppName);
+        char szKeyName[128];
+        GetCaption(szKeyName,128);
+
+#if (BIFOS_==BIFOS_WIN16_)
+        if(!GetPrivateProfileInt(szAppName,szKeyName,0,WP_ININAME))
+                return False;
+        else {
+                WINDOWPLACEMENT wndpl;
+                char entry[128];
+                wndpl.length=sizeof(wndpl);
+                wndpl.flags=0;
+                wsprintf(entry,"%s.showCmd",szKeyName);
+                wndpl.showCmd=GetPrivateProfileInt(szAppName,entry,0,WP_ININAME);
+                wsprintf(entry,"%s.min.x",szKeyName);
+                wndpl.ptMinPosition.x=GetPrivateProfileInt(szAppName,entry,0,WP_ININAME);
+                wsprintf(entry,"%s.min.y",szKeyName);
+                wndpl.ptMinPosition.y=GetPrivateProfileInt(szAppName,entry,0,WP_ININAME);
+                wsprintf(entry,"%s.max.x",szKeyName);
+                wndpl.ptMaxPosition.x=GetPrivateProfileInt(szAppName,entry,0,WP_ININAME);
+                wsprintf(entry,"%s.max.y",szKeyName);
+                wndpl.ptMaxPosition.y=GetPrivateProfileInt(szAppName,entry,0,WP_ININAME);
+                wsprintf(entry,"%s.normal.left",szKeyName);
+                wndpl.rcNormalPosition.left=GetPrivateProfileInt(szAppName,entry,0,WP_ININAME);
+                wsprintf(entry,"%s.normal.top",szKeyName);
+                wndpl.rcNormalPosition.top=GetPrivateProfileInt(szAppName,entry,0,WP_ININAME);
+                wsprintf(entry,"%s.normal.right",szKeyName);
+                wndpl.rcNormalPosition.right=GetPrivateProfileInt(szAppName,entry,0,WP_ININAME);
+                wsprintf(entry,"%s.normal.bottom",szKeyName);
+                wndpl.rcNormalPosition.bottom=GetPrivateProfileInt(szAppName,entry,0,WP_ININAME);
+                if(SetWindowPlacement(GetHwnd(),&wndpl))
+                        return True;
+                else
+                        return False;
+        }
+#else
+        //use registry
+        HKEY hk;
+        LONG l;
+        l=RegOpenKeyEx(HKEY_CURRENT_USER,
+                       "Software\\SavedWindowPositions",
+                       0,
+                       KEY_READ,
+                       &hk);
+        if(l!=ERROR_SUCCESS)
+                return False;
+
+        HKEY hkapp;
+        l=RegOpenKeyEx(hk,
+                       szAppName,
+                       0,
+                       KEY_READ,
+                       &hkapp);
+        RegCloseKey(hk);
+        if(l!=ERROR_SUCCESS)
+                return False;
+
+        WINDOWPLACEMENT wndpl;
+        DWORD dwType;
+        DWORD cbData=sizeof(wndpl);
+        l=RegQueryValueEx(hkapp, szKeyName, (LPDWORD)0, &dwType, (BYTE*)&wndpl, &cbData);
+        RegCloseKey(hkapp);
+        if(l!=ERROR_SUCCESS || dwType!=REG_BINARY || cbData!=sizeof(wndpl))
+                return False;
+        if(SetWindowPlacement(GetHwnd(),&wndpl))
+                return True;
+        else
+                return False;
+#endif
+}
+
+
+//client----------------------------------------------------------------------
+Bool FClientWindow::Create(FAppWindow *pParent) {
+        appwnd=pParent;
+        FRect rect(0,0,0,0);
+        Bool r=FWnd::Create(0, WS_CHILD|WS_VISIBLE, &rect, pParent->GetHwnd());
+        if(r) {
+                pParent->SetClient(this);
+                pParent->MakeClientFit();
+        } else
+                appwnd=0;
+        return r;
+}
+
+FClientWindow::~FClientWindow() {
+        if(appwnd && appwnd->IsValid())
+                appwnd->SetClient(0);
+}

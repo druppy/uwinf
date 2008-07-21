@@ -1,0 +1,197 @@
+This directory contains a multi-threaded multi-connection program
+starter. It can redirect input and output of the program it starts to
+the client that requested it. It works over networks.
+
+The client comes in 3 flavours: single-thread DOS, single-threaded
+OS/2 and multi-threaded OS/2 (allows both input and output
+redirection)
+
+===============================================================================
+How to run:
+  make brserver.exe
+  make brstart (preferrably the multi-threaded OS/2 version)
+  run brserver
+The server should now be ready.
+Start an os/2 session and issue "brstart -joblist". If brstart says
+"0 jobs" it works!
+Just for fun:
+  brstart -prgcmd.exe -oredir -parm/c -parmdir
+
+And if your are reeeaaaally mean:
+  start brserver on your friends computer, minimize it, and then at
+  irregular intervals issue this command from your PC:
+    brstart -serverHISPC -prgepm.exe -nowait
+                   ^name of your friend's PC goes here
+  fun, fun, fun !
+===============================================================================
+3 targets:
+  brstart.exe  (dos or os/2)
+    brsdos.cpp
+    clnpipe.cpp
+  brstart.exe  (os/2)
+    brsos2.cpp
+    clnpipe.cpp
+  brserver.exe (os/2)
+    conlist.cpp
+    constrt.cpp
+    conthrd.cpp
+    dispjobs.cpp
+    job.cpp
+    joblist.cpp
+    jobstart.cpp
+    smthrd.cpp
+    srvmain.cpp
+    srvpipe.cpp
+    tdelthrd.cpp
+
+===============================================================================
+Filename      Description
+------------  -----------
+brlimits.hpp  Defines limits for command length, pipe name length, ...
+protocol.hpp  Defines constants, structures and wrappers for the
+              protocal between brstart and brserver.
+
+brsdos.cpp    brstart - dos version. This version of brstart does not
+              use threads. It does not support input and output
+              redirection at the same time. This program can be
+              compiled as both a DOS executable and a OS/2 executable.
+brsos2.cpp    brstart - OS/2 version. This version of brstart uses
+              multiple threads: one main thread for communication with
+              the server, one for reading standard input and passing
+              it on to the program, and one for reading output from
+              the program putting it to standard output.
+clnpipe.cpp   Implementation of the client end of a pipe.
+clnpipe.hpp   Declaration of ClientPipe, ClientIPipe, ClientOPipe and
+              ClientIOPipe.
+
+brserver.hpp  Global declarations for brserver
+conlist.cpp   Implementatio of connectionList
+conlist.hpp   Declaration of connectionList
+connecti.hpp  Declaration of connection
+constrt.cpp   Implemenation of ConnectionStarterThread
+constrt.hpp   declaration of -"-
+conthrd.cpp   Implementation of ConnectionThread
+conthrd.hpp   declaration of -"-
+dispjobs.cpp  Implementation of DisplayJobList()
+dispjobs.hpp  declaration of -"-
+job.cpp       Implementation of Job
+job.hpp       declaration of -"-
+joblist.cpp   Implementation of JobList
+joblist.hpp   declaration of -"-
+jobstart.cpp  Implementation of StartJob()
+jobstart.hpp  declaration of -"-
+smthrd.cpp    Implementation of SMThread.
+smthrd.hpp    declaration of -"-
+srvmain.cpp   Implementation fo main thread and server startup&shutdown
+srvpipe.cpp   Implementation of server end of named pipe
+srvpipe.hpp   declaration of -"-
+tdelthrd.cpp  Implementation of ThreadDeleteThread
+tdelthrd.hpp  declaration of -"-
+
+===============================================================================
+Description
+
+The server consists of 5 type of threads
+
+Main thread
+  The main thread main purpose is to start the "Connection starter thread",
+  the "Session monitor thread" and the "Thread deleter thread"; and
+  then handle the user interface <G>. The main thread is also
+  responsible for shutting the program down
+Connection starter thread
+  This thread's purpose is to create instances of the pipe and when a
+  client connects, start a thread to handle the connection. It does
+  that over and over again.
+Connection thread
+  The connection thread handles the actual communication with the
+  client. It recieves messages from the client, replies, and starts
+  the job.
+Session monitor thread
+  This thread monitors the queue where OS/2 puts session termination
+  notification, in order to: A) detect when a session has ended, and
+  B) pick up the result code from the session.
+Thread deleter thread
+  This reusable thread handles deallocation of "connection threads".
+  The connection threads are allocated on the heap and they must be
+  delete'ed somehow. When a "connection thread" is about to terminate
+  it tells the "thread deleter thread" that it will terminate in short
+  time (usually a matter of microseconds). The "thread deleter thread"
+  will then wait for the thread terminate and the delete it.
+
+
+------------
+Nice drawing (sorry, codepage 865 or 437 is best)
+Notation
+  s = starts
+  w = wait for or makes a blocking call involving
+  u = posts, signals, etc, which causes thread(s) to unblock
+
+
+                       ⁄ƒƒƒƒƒƒƒƒƒƒ>|result|.................
+                       ≥           |queue |                .
+                       ≥                                   .
+                       w                               <result code
+                 …ÕÕÕÕÕÕÕª                              from session>
+                 ∫session∫uƒƒƒƒƒƒƒƒ>job                    .
+            ⁄ƒƒƒ>∫monitor∫                                 .
+            ≥    ∫thread ∫           ^                     .
+            ≥    »ÕÕÕÕÕÕÕº           ≥                     .
+            ≥    …ÕÕÕÕÕÕÕª<ƒƒƒƒƒƒƒƒƒø≥                     .
+            ≥    ∫thread ∫          ≥≥                     .
+            ≥ ⁄ƒ>∫deleter∫wƒƒƒƒø    ≥≥                     .
+            ≥ ≥  ∫thread ∫     ≥    ≥≥                     .
+            ≥ ≥  »ÕÕÕÕÕÕÕº     ≥    uw                     .
+ …ÕÕÕÕÕÕªsƒƒŸ ≥  …ÕÕÕÕÕÕÕÕÕÕª  ¿ƒƒ>…ÕÕÕÕÕÕÕÕÕÕª        |session|
+ ∫main  ∫sƒƒƒƒŸ  ∫connection∫      ∫connection∫
+ ∫thread∫sƒƒƒƒƒƒ>∫starter   ∫sƒƒƒƒ>∫thread    ∫
+ »ÕÕÕÕÕÕº        ∫thread    ∫      »ÕÕÕÕÕÕÕÕÕÕº
+                 »ÕÕÕÕÕÕÕÕÕÕº            .
+                                         .
+                                         .
+                                         .
+                                       request
+                                       answer
+                                         .
+                                         .
+                                         .
+                                         .
+                                         .
+                                      |client|
+
+
+
+===============================================================================
+Thing to do:
+DOS input/output redirection
+  DOS programs cannot have their input/output redirected, since
+  stdin/stdout ignored when DosStartSession() starts a DOS session.
+  The input/output redirection can be done if dos programs are started
+  through a DOS helper program that redirects input/output to two
+  named pipes. This will require the server to be expanded with two
+  threads and two pipes for each connection that starts a DOS program.
+DOS result code
+  The result code from DOS programs are not picked up. It seems that
+  the result code is clobbered by VDM layer. If the DOS
+  programs are started through a DOS helper program that transmits the
+  result code to the server through a named pipe, it should be
+  possible to pick up the result code from DOS programs
+move UI to seperate thread in order to implement crt_stopserver
+  The clietn request crt_stopserver is not implemented. In order to
+  implement this the UI must be moved from the main thread to a
+  separate thread, so the main thread doesn't block on the UI.
+Implement job numbers
+  It would be nice if it was possible to kill a job. In order to do
+  this the jobs must be assigned a unique identification (such as a
+  number) which can be read in the job list by the client, and add a
+  crt_killjob request.
+Error testing
+  The server should test for errors more often.
+Graceful shutdown
+  Currently the main thread just shuts down the threads it can (= 1
+  thread), and then terminates, which causes the remaining threads to
+  be killed. If the various named pipes were associated with event
+  semaphores it should be possible to terminate all thread in anice
+  and clean manner.
+
+This is left as an execise for the reader.
+

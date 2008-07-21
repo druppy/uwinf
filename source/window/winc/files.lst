@@ -1,0 +1,30 @@
+Contents: BIF/Window for MS Windows GUI system common to win16 and win32
+appwnd.cpp   FApplication
+checkbox.cpp FAppWindow
+clhndl.cpp   FCheckBox
+combobox.cpp Client handlers
+comhndl.cpp  FXxxxxxComboBox
+control.cpp  Common handlers
+csi.cpp      FControl
+dialog.cpp   Coordinate-system independent handlers
+filedlg.bak  FDialog, FModalDialog
+filedlg.cpp  Standard file dialogs
+files.lst
+frame.cpp    FFrameWindow
+groupbox.cpp FGroupBox
+keyboard.cpp FKeyboardHandler
+listbox.cpp  FXxxxxxListBox
+mle.cpp      FMLE
+mouse.cpp    Mouse handlers
+msgbox.cpp   MessageBox
+ownerdrw.cpp Ownerdraw handlers
+pushbut.cpp  FPushButton
+radiobut.cpp FRadioButton
+scroll.cpp   Scrollbar handlers
+sizerest.cpp Window size restriction handlers
+sle.cpp      FSLE
+slider.cpp   FSlider
+slider31.cpp Implementation of low-level slider control
+slider31.h   Header file for file above
+stext.cpp    FStaticText
+wndmisc.cpp  BIF/Window core misc.

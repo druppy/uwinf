@@ -1,0 +1,51 @@
+[topic bifmix_howto same "How to mix BIF/Window and BIF/Thread"]
+BIF/Mix contains a few classes that enable you to use both BIF/Thread
+and BIF/Window in the same program.
+
+In general you will only have to do three things:
+[ul]
+[li]Use the [ref FMTApplication "FMTApplication"] as base class for you application class instad of FApplication.
+[li]The threads that use BIF/Window should be a subclass of [ref FWWindowThread "FWWindowThread"] instead of FWindowThread.
+[li]Use the [ref DEFBIFMIXMAIN "DEFBIFMIXMAIN"] macro instead of DEFBIFTHREADMAIN or DEFBIFWINDOWMAIN
+[eul]
+
+Example: (taken from \\sample\\mix\\sort)
+[code]
+class SortThread : public FWWindowThread {
+  //A thread that sorts the array in the background. It is a
+  //subclass of FWWindowThread instead of FWindowThread
+  ...
+};
+
+class FSortApplication : public FMTApplication {
+  //The application class is a subclass of FMTApplication instead of FApplication
+  SortFrame frame;
+public:
+  Bool StartUp(int,char**);
+  int ShutDown();
+};
+
+
+Bool FSortApplication::StartUp(int , char **) {
+  //the startup and shutdown is just as in normal BIF/Window programs
+  if(frame.Create(GetDesktop())) {
+    frame.Show();
+    frame.BringToFront();
+    return True;
+  } else
+    return False;
+}
+
+int FSortApplication::ShutDown() {
+        frame.Destroy();
+        return 0;
+}
+
+
+//Use the DEFBIFMIXMAIN macro to specify the main thread and the application class
+//The application class is normally your subclass of FMTApplication. The main
+//thread class is FWMainWindowThread. It is rarely anything else.
+DEFBIFMIXMAIN(FSortApplication,FWMainWindowThread);
+[ecode]
+[etopic]
+

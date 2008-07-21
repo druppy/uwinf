@@ -1,0 +1,310 @@
+Tokens befinder sig indenfor nogle klammer. For at klammer ogs† kan v‘re 
+normale klammer og ikke token-startere, s† er der tre escapes:
+  \[      normal [ inds‘ttes i teksten
+  \]      (kun for at v‘re konsekvent, - et ›nske fra BL)
+  \\      En backslash inds‘ttes i teksten
+Bem‘rk: tidligere escapes \e, \t, \i og  \n er fjernet. \e er mappet til
+tokens [hp][ehp], \t og \i skulle v‘re un›dvendige med de nye liste-tokens. 
+\n skulle heller ikke v‘re n›dvendig l‘ngere.
+
+
+
+--- ToDo
+[todo "what"]
+Output bliver noget, som f†r hc31/ipfc til at give en fejl eller en advarsel
+Eksempel:
+  [todo "Bo har ikke lavet dette topic endnu"]
+
+
+--- Caution
+[caution]
+[ecaution]
+Eksempel:
+  [caution]bla bla bla bla bla[ecaution]
+Output bliver:
+  Caution:
+  bla bla bla bla bla
+
+
+--- Definition list
+[dl("term-heading" "description-heading" (tsize))]
+[edl]
+[dt]
+[dd]
+Bruges til definitionslister. Hvis <term-heading> og <description-heading>
+specificeres vises de som titler på de to kolonner. <tsize> er bredden
+af term-kolonnen. Hvis <tsize> ikke specificeres er default omkring 10
+tegn.
+Eksempel:
+  [edl "Ting" "Beskrivelse"]
+  [dt]Bamse[dd]Bl›dt t›jdyr, som b›rn ofte kan lide
+  [dt]Johnny Reimar[dd]Sanger, som b›rn angiveligt kan lide
+  [dt]Spinat[dd]En gr›ntsag, som mange b›rn ikke kan lide
+  [edl]
+Output:
+  Ting      Beskrivelse
+  Bamse     Bl›dt t›jdyr, som b›rn ofte kan lide
+  Johnny Reimar Sanger, som b›rn angiveligt kan lide
+  Spinat    En gr›ntsag, som mange b›rn ikke kan lide
+
+
+
+--- footnote
+[footnote id]
+[efootnote]
+Bruges til popup-fodnoter. Virker p† samme m†de som topic/etopic,
+borset fra at der _ikke_ m† specificeres titel eller s›geord. Bruges sammen med 
+[reffootnote]
+<id> er fodnote-ID, som skal v‘re entydigt.
+Eksempel:
+  ...
+  bla bla bla [reffootnote bamse "bamse"] bla bla bla
+  ...
+  [etopic]
+
+  [footnote bamse]
+  Bamser kan ofte k›bes i leget›jsforretninger
+  [efootnote]
+
+
+
+--- topics
+[topic id level "Titel" ("fuldnavn")]
+[etopic]
+Bruges til at starte og slutte et topic.
+<id> er det interne id, som bruges til at referere til topic'et med i [ref]
+<level> er niveauet p† topic'et i forhold til det forrige topic. Gyldige
+        v‘rdier er: down, same, upafter og downonce.
+<titel> er den titel som vises p† i selv topic'et og i indholdsfortegnelsen
+<fuldnavn> (titel er default) Det fulde navn p† topic'et, f.eks 
+           "FCommandHandler::SysCommand()". Det fulde navn vises i den 2. 
+           listbox i s›g-dialogen i winhelp og som andet niveau i 
+           INF-stikordsregistret
+Eksempel:
+  [topic FMouseHandler same "FMouseHandler"]
+  ....
+  [etopic]
+
+  [topic FMouseHandler_Button1Down down "Button1Down()" "FMouseHandler::Button1Down()"]
+  ...
+  [etopic]
+
+  [topic FMouseHandler_Button2Down same "Button2Down" "FMouseHandler::Button2Down()"]
+  ...
+  [etopic]
+  ...
+  ...
+  [topic FMouseHandler_Button3Down upafter "Button3Down" "FMouseHandler::Button3Down()"]
+  ...
+  [etopic]
+
+  [topic FMoveHandler same "FMoveHandler"]
+  ...
+  [etopic]
+Output (indholdsfortegnelsen):
+  FMouseHandler
+    Button1Down
+    Button2Down
+    Button3Down
+  FMoveHandler
+
+
+
+--- n›gleord/s›geord
+[key "keyword"]
+Bruges til at specificere hvilke s›geord, som leder til topic'et. Der kan
+v‘re flere keys i hvert topic.
+
+
+
+--- jumps/referencer
+[ref id "jumptext"]
+[reffootnote id "jumptext"]
+Bruges til inds‘tte et jump til et topic eller en popup-fodnote
+<id> er topic-/fodnote-ID'et
+<jumptext> er den tekst som brugeren skal trykke p†.
+Eksempel:
+  bla bla bla [ref FMoveHandler "FMoveHandler"] bla bla bla [reffootnote myfoot "My foot"] bla bla
+Output:
+  bla bla bla FMoveHandler bla bla bla My foot bla bla
+              ^^^^^^^^^^^^             ^^^^^^^
+Hvis brugeren trykker p† FMoveHandler ([ref...]), så vil der blive sprunget
+til et nyt topic. Hvis han derimod trykker på My foot, så vil der blive vist
+et pop-up vindue.
+
+
+
+--- highlight phrase
+[hp level]
+[ehp]
+Bruges til at fremh‘ve en tekst. Bem‘rk: hightlights kan _ikke_ nestes
+<level> er graden af fremh‘vning. 1 er svagest, 9 er st‘rkest. I RTF: 1=italic,
+        2=bold, 3=??; I IPF: 1=italic, 2=bold, 3=bold italic, ... 9= bold pink (adrv!)
+Eksempel:
+  Hvis man kan lide [hp 1]Bamsen[ehp], s† bla bla bla
+
+
+
+--- note
+[note]
+[enote]
+Bruges til noter. Noter kan ikke nestes. Ordet "Note:" bliver automatisk indsat
+Eksempel:
+  [note]
+  This does not work under OS/2
+  [enote]
+Output:
+  Note: This does not work under OS/2
+
+
+--- ordered list
+[ol]
+[li]
+[eol]
+Bruges til nummererede lister. Lister kan nestes. Bem‘rk: "li" token'et
+bruges ogs† til "sl"
+Eksempel:
+  For at installere Windows95:
+  [ol]
+  [li]Lav en tom partition p† mindst 95Mb
+  [ol]
+  [li]Start fdisk
+  [li]V‘lg "Create partition"
+  [li]indtast midst 95MB
+  [eol]
+  [li]S‘t Windows95 installationsdiskette i diskettedrevet
+  [li]Genstart computeren
+  [li]N†r programmet sp›rger om hvilken partition der skal installeres p† , s† indtast den du oprette lige f›r
+  [eol]
+Output:
+  For at installere Windows95:
+   1. Lav en tom partition p† mindst 95Mb
+       a. Start fdisk
+       b. V‘lg "Create partition"
+       c indtast midst 95MB
+   2. S‘t Windows95 installationsdiskette i diskettedrevet
+   3. Genstart computeren
+   4. N†r programmet sp›rger om hvilken partition der skal installeres p† , s† 
+      indtast den du oprette lige f›r
+
+
+
+
+--- parameterlister
+[parml (tsize)]
+[eparml]
+[pt]
+[pd]
+Bruges til parameterlister. Bem‘rk: Ordet "Parameters:" bliver automatisk
+indsat. <tsize> er bredden af term-kolonnen. Hvis <tsize> ikke
+specificeres er default omkring 10 tegn.
+Eksempel:
+  [parml]
+  [pt]pParent[pd]Parent window. If pParent is NULL the desktop is assumed
+  [pt]ID[pd]resource-ID for the menu/icon/whatever
+  [eparml]
+Output:
+  Parameters:
+  pParent
+            Parent window. If pParent is NULL the desktop is assumed
+  ID
+            resource-ID for the menu/icon/whatever
+
+
+
+--- simple list
+[sl]
+[esl]
+[li]
+Bruges til simple, ikke-ordnede lister.
+Eksempel:
+  Bring f›lgende til skovturen:
+  [sl]
+  [li]Frugt, f.eks:
+  [sl]
+  [li]En banan
+  [li]En p‘re
+  [li]en appelsin
+  [esl]
+  [li]En sandwich
+  [li]Noget at drikke, f.eks:
+  [sl]
+  [li]M‘lk
+  [li]Sodavand
+  [li]Juice
+  [esl]
+  [esl]
+Output:
+  Bring f›lgende til skovturen:
+     Frugt, f.eks:
+        En banan
+        En p‘re
+        En appelsin
+     En sandwich
+     Noget at drikke, f.eks:
+       M‘lk
+       Sodavand
+       Juice
+
+
+--- unordered list
+[ul]
+[eul]
+[li]
+Bruges til uordnede lister. Hvert listeelement starter med en bullet.
+Eksempel:
+  F›r du g†r hjem, s† husk:
+  [ul]
+  [li]Sluk for computeren
+  [li]Sluk for lyset:
+  [ul]
+  [li]Loftslamper
+  [li]bordlamper
+  [eul]
+  [li]L†s d›ren
+  [eul]
+Output:
+  F›r du g†r hjem, s† husk:
+    o Sluk for computeren
+    o Sluk for lyset:
+        - Loftslamper
+        - bordlamper
+    o L†s d›ren
+
+
+
+--- sourcecode
+[code]
+[ecode]
+Bruges til at indlejre noget source, som vil blive vist i en font med fast 
+tegnbredde, og der vil ikke ske wordwrap.
+Eksempel:
+  [code]
+    class FCommandHandler : public FHandler {
+  [ecode]
+
+
+--- graphic/hypergraphic
+[graphic <type> <graphic title> <filename> (<filename> ...)]
+<type>          bitmap, multiresolutionbitmap, hypergraphic.
+<graphic title> Titel p† grafikken. Hvis der ikke ›nskes noget titel,
+                s† kan man angive en tom streng
+<filename>      format og filnavn p† grafikken. BIHC vil v‘lge det
+                beste format til target-systemet. type kan v‘re
+                winbmp,os2bmp,gif,ascii,ansi. filnavnet skal angives
+                uden extension.
+Eksempel (simpelt):
+  Bo Lorentsen looks like this:
+  [graphic bitmap "Bo Lorentsen" "winbmp:bl"]
+Eksempel (mere interessant):
+  A FFrameWindow consist of several elements:
+  [graphic hypergraphic "" "winbmp:winframe" "os2bmp:pmframe"]
+Under windows vil winframe.shg blive brugt, men der under os/2 vil
+blive brugt pmframe.bmp og pmframe.dat
+
+Endnu et eksempel:
+  MFM encoding kan be illustrated like this:
+  [graphic bitmap "" "winbmp:winmfm" "os2bmp:pmmfm" "ascii:mfm"]
+Under Windows og PM vil man s† se et p‘nt billede, mens man i (den
+potentielle) tekstmode vil se en ascii-tegning.
+

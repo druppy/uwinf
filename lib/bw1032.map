@@ -1,0 +1,1462 @@
+WATCOM Linker Version 10.6
+Copyright by WATCOM International Corp. 1985, 1996. All rights reserved.
+Created on:       98/12/30 22:09:17
+Executable Image: WIN32\BW1032.DLL
+creating a Windows NT dynamic link library
+
+
+                        +------------+
+                        |   Groups   |
+                        +------------+
+
+Group                           Address              Size
+=====                           =======              ====
+
+DGROUP                          0002:00000000        0001b690
+
+
+
+                        +--------------+
+                        |   Segments   |
+                        +--------------+
+
+Segment                Class          Group          Address         Size
+=======                =====          =====          =======         ====
+
+BEGTEXT                CODE                          0001:00000000   00000007
+_TEXT                  CODE                          0001:00000010   000114ac
+TRANSFER CODE          CODE                          0001:000114bc   000004bc
+_NULL                  BEGDATA        DGROUP         0002:00000000   00000004
+_AFTERNULL             BEGDATA        DGROUP         0002:00000004   00000000
+CONST                  DATA           DGROUP         0002:00000004   0000063c
+CONST2                 DATA           DGROUP         0002:00000640   00000eec
+_DATA                  DATA           DGROUP         0002:0000152c   000014b0
+XIB                    DATA           DGROUP         0002:000029dc   00000000
+XI                     DATA           DGROUP         0002:000029dc   0000002a
+XIE                    DATA           DGROUP         0002:00002a06   00000000
+YIB                    DATA           DGROUP         0002:00002a06   00000000
+YI                     DATA           DGROUP         0002:00002a06   00000012
+YIE                    DATA           DGROUP         0002:00002a18   00000000
+TIB                    DATA           DGROUP         0002:00002a18   00000000
+TI                     DATA           DGROUP         0002:00002a18   00000000
+TIE                    DATA           DGROUP         0002:00002a18   00000000
+DATA                   DATA           DGROUP         0002:00002a18   00000000
+_BSS                   BSS            DGROUP         0002:00003010   00008674
+STACK                  STACK          DGROUP         0002:0000b690   00010000
+
+
+                        +----------------+
+                        |   Memory Map   |
+                        +----------------+
+
+* = unreferenced symbol
++ = symbol only referenced locally
+
+Address        Symbol
+=======        ======
+
+Module: C:\TEMP\applicat.obj(T:\PROJECT\BIF\source\window\win32\applicat.cpp)
+0001:00000448  Bool near FWnd::PumpEvent( FEvent near & )
+0001:00000438  near FControl::FControl()
+0001:000003ec  near FModule::~FModule()
+0001:000003e8  Bool near FApplication::StartUp( int, char near * near * )
+0001:000003e4  int near FApplication::ShutDown()
+0001:00000010  FModule near * near FModule::GetDefaultResourceModule()
+0001:00000024+ void near FModule::SetDefaultResourceModule( FModule near * )
+0001:0000002c  FApplication near * near GetCurrentApp()
+0001:00000034  near FApplication::FApplication()
+0001:00000084  int near FApplication::Main( int, char near * near * )
+0001:000000b0  near FApplication::~FApplication()
+0001:00000134  int near FApplication::DoMessageBox( HWND__ near *, char const near *, char const near *, int unsigned )
+0001:00000148  Bool near FApplication::GetEvent( FEvent near & )
+0001:0000015c  void near FApplication::MessageLoop()
+0001:00000190  void near FApplication::TerminateApp()
+0001:000001a8  void near FApplication::SetHINSTANCE( HINSTANCE__ near *, HINSTANCE__ near * )
+0001:00000264+ int near _BIFWindowMain( HINSTANCE__ near *, HINSTANCE__ near *, char near *, int, FApplication near * (near *)())
+0001:000003a8  near FControlTextHandler::~FControlTextHandler()
+0001:0000036c  near FControl::~FControl()
+0001:00000364  near FRect::FRect( FRect const near & )
+0002:00003010+ FModule near * near FModule::defresmodule
+0001:00000348  near tagRECT::tagRECT( tagRECT const near & )
+Module: C:\TEMP\wndcore.obj(T:\PROJECT\BIF\source\window\win32\wndcore.cpp)
+0001:0000044c  FDesktop near * near GetDesktop()
+0001:00000474  FWndMan near * near GetWndMan()
+0001:0000047c  near FHandler::FHandler( FWnd near * )
+0001:000004ac  near FHandler::~FHandler()
+0001:000004f0+ Bool near FHandler::DoDispatch( FEvent near & )
+0001:0000051c  near FWnd::FWnd()
+0001:00000538  near FWnd::~FWnd()
+0001:00000578+ Bool near FWnd::BeforeDestroy()
+0001:000005a0  Bool near FWnd::Destroy()
+0001:000005c4  Bool near FWnd::AfterDestroy()
+0001:000005e4  void near FWnd::Default( FEvent near & )
+0001:00000650  Bool near FWnd::Create( long unsigned, char const near *, char const near *, long unsigned, FRect near *, HWND__ near *, HMENU__ near * )
+0001:000006f4+ void near FWnd::Dispatch( FEvent near & )
+0001:00000710  Bool near FWnd::DispatchNoDefault( FEvent near & )
+0001:00000738+ Bool near FWnd::CallHandlerChain( FEvent near &, FHandler near *, Bool )
+0001:00000788+ void near FWnd::addHandler( FHandler near * )
+0001:00000798+ void near FWnd::removeHandler( FHandler near * )
+0001:000007bc  Bool near FWnd::PostEvent( FEvent const near & )
+0001:000007d4  Bool near FWnd::SendEvent( FEvent near & )
+0001:000007f4  Bool near FWnd::Show()
+0001:00000808+ Bool near FWnd::Hide()
+0001:0000081c+ Bool near FWnd::IsVisible()
+0001:0000082c  Bool near FWnd::Enable()
+0001:00000840  Bool near FWnd::Disable()
+0001:00000854+ Bool near FWnd::IsEnabled()
+0001:00000864  FWnd near * near FWnd::GetParent()
+0001:00000898+ FWnd near * near FWnd::SetParent( FWnd near * )
+0001:000008d0+ FWnd near * near FWnd::GetOwner()
+0001:00000908+ FWnd near * near FWnd::SetOwner( FWnd near * )
+0001:0000094c+ Bool near FWnd::Zorder( FWnd::zorder, FWnd near * )
+0001:000009c8+ FWnd near * near FWnd::GetFirstSibling()
+0001:000009e8+ FWnd near * near FWnd::GetNextSibling()
+0001:00000a08  long near FWnd::GetStyle()
+0001:00000a1c+ void near FWnd::SetStyle( long )
+0001:00000a2c+ void near FWnd::SetStyle( long, long )
+0001:00000a44+ near FDesktop::FDesktop()
+0001:00000a64+ near FDesktop::~FDesktop()
+0001:00000aac+ int near FDesktop::GetWidth()
+0001:00000abc+ int near FDesktop::GetHeight()
+0001:00000acc  near FWndMan::FWndMan( HINSTANCE__ near *, HINSTANCE__ near * )
+0001:00000b9c  near FWndMan::~FWndMan()
+0001:00000c04+ void near FWndMan::AddWnd( FWnd near * )
+0001:00000c4c+ Bool near FWndMan::RemoveWnd( FWnd near * )
+0001:00000d1c  FWnd near * near FWndMan::FindWnd( HWND__ near * )
+0001:00000d9c  Bool near FWndMan::AddPumpWindow( FWnd near * )
+0001:00000e30  void near FWndMan::RemovePumpWindow( FWnd near * )
+0001:00000e9c+ Bool near FWndMan::CheckPumpWindows( FEvent near & )
+0001:00000f34  void near FWndMan::PumpEvent( FEvent near & )
+0001:00000f58  Bool near FWndMan::RegisterThread( long unsigned )
+0001:00000fb0  Bool near FWndMan::DeregisterThread( long unsigned )
+0001:00001028  Bool near FWndMan::SetCreationWindow( FWnd near *, long unsigned )
+0001:00001090  FWnd near * near FWndMan::GetCreationWindow( long unsigned )
+0001:000010f0  void near FWndMan::SubRegWnd( FWnd near *, HWND__ near * )
+0001:00001128+ long near BifInitProc( HWND__ near *, int unsigned, int unsigned, long )
+0001:000011b0+ long near BifSubclassProc( HWND__ near *, int unsigned, int unsigned, long )
+Module: C:\TEMP\appwnd.obj(T:\PROJECT\BIF\source\window\winc\appwnd.cpp)
+0001:00001ec0  Bool near FFocusHandler::LostFocus( FKillFocusEvent near & )
+0001:00001ebc  Bool near FSizeHandler::SizeChanged( FSizeEvent near & )
+0001:00001eb8+ Bool near FFrameFormatHandler::UpdateFrame( FEvent near & )
+0001:00001eb4+ Bool near FFrameFormatHandler::QueryFrameCtlCount( FEvent near & )
+0001:00001eb0+ Bool near FFrameFormatHandler::FormatFrame( FEvent near & )
+0001:00001e80+ near FClientWindow::FClientWindow()
+0001:00001224+ near FClientForwardHandler::FClientForwardHandler( FWnd near * )
+0001:00001270+ Bool near FClientForwardHandler::Dispatch( FEvent near & )
+0001:00001308+ Bool near FAppWindowResizeHandler::SizeChanged( FSizeEvent near & )
+0001:00001324+ near FAppWindowFocusForwarder::FAppWindowFocusForwarder( FAppWindow near * )
+0001:00001340+ near FFrameFormatHandler::FFrameFormatHandler( FWnd near * )
+0001:000013f8+ Bool near FFrameFormatHandler::Dispatch( FEvent near & )
+0001:00001444+ Bool near FAppWindowFocusForwarder::GotFocus( FSetFocusEvent near & )
+0001:00001474+ near FAppWindow::FAppWindow()
+0001:00001500+ near FAppWindow::~FAppWindow()
+0001:000015a4+ FWnd near * near FAppWindow::SetClient( FWnd near * )
+0001:000015f8+ FWnd near * near FAppWindow::GetClient()
+0001:00001600+ Bool near FAppWindow::ForwardToClient( FEvent near & )
+0001:00001644+ Bool near FAppWindow::UpdateFrame( FEvent near & )
+0001:0000176c+ Bool near FAppWindow::QueryFrameCtlCount( FEvent near & )
+0001:0000179c+ Bool near FAppWindow::FormatFrame( FEvent near & )
+0001:00001870+ Bool near FAppWindow::SavePosition()
+0001:00001968+ Bool near FAppWindow::RestorePosition()
+0001:00001a58+ Bool near FClientWindow::Create( FAppWindow near * )
+0001:00001ac4  near FClientWindow::~FClientWindow()
+0001:00001dc4+ near FAppWindowFocusForwarder::~FAppWindowFocusForwarder()
+0001:00001d88+ near FFrameFormatHandler::~FFrameFormatHandler()
+0001:00001d4c  near FAppWindowResizeHandler::~FAppWindowResizeHandler()
+0001:00001d40+ near FClientForwardHandler::~FClientForwardHandler()
+0001:00001d04  near FFrameAccelHandler::~FFrameAccelHandler()
+0001:00001cc8  near FFrameMenuDestroyHandler::~FFrameMenuDestroyHandler()
+0001:00001c8c  near FFrameIconHandler::~FFrameIconHandler()
+0001:00001c50  near FSizeHandler::~FSizeHandler()
+0001:00001c14  near FFocusHandler::~FFocusHandler()
+0001:00001c04  near FEvent::FEvent( FEvent const near & )
+0001:00001bd4  near tagMSG::tagMSG( tagMSG const near & )
+0001:00001bc4  near tagPOINT::tagPOINT( tagPOINT const near & )
+Module: C:\TEMP\checkbox.obj(T:\PROJECT\BIF\source\window\winc\checkbox.cpp)
+0001:00001f7c+ near FCheckBox::FCheckBox()
+0001:00001ec4+ Bool near FCheckBox::Create( FWnd near *, int, FRect near *, char const near *, int )
+0001:00001ef0+ int near FCheckBox::GetCheck()
+0001:00001f08+ Bool near FCheckBox::SetCheck( int )
+0001:00001f28+ near FCheckBox::~FCheckBox()
+Module: C:\TEMP\clhndl.obj(T:\PROJECT\BIF\source\window\winc\clhndl.cpp)
+0001:00002324+ Bool near FPaintHandler::Paint( FPaintEvent near & )
+0001:00001fb4+ near FPaintHandler::FPaintHandler( FWnd near * )
+0001:00002000+ Bool near FPaintHandler::Dispatch( FEvent near & )
+0001:00002018+ void near FPaintHandler::Invalidate( FRect near *, Bool )
+0001:00002030+ near FCaretHandler::FCaretHandler( FWnd near * )
+0001:000020a4+ Bool near FCaretHandler::SetCaretPos( int, int )
+0001:000020c4+ Bool near FCaretHandler::SetCaretShape( FCaretHandler::Shape, int, int )
+0001:000020ec+ Bool near FCaretHandler::ShowCaret()
+0001:00002118+ Bool near FCaretHandler::HideCaret()
+0001:00002138+ Bool near FCaretHandler::Dispatch( FEvent near & )
+0001:00002168+ void near FCaretHandler::UpdateCaret()
+0001:000021e0+ void near FCaretHandler::UpdateCaretPos()
+0001:00002210+ Bool near FTimerHandler::StartTimer( int, int )
+0001:0000222c+ Bool near FTimerHandler::StopTimer( int )
+0001:00002240+ Bool near FTimerHandler::Dispatch( FEvent near & )
+0001:000022d0+ near FTimerHandler::~FTimerHandler()
+0001:00002294+ near FCaretHandler::~FCaretHandler()
+0001:00002258+ near FPaintHandler::~FPaintHandler()
+Module: C:\TEMP\combobox.obj(T:\PROJECT\BIF\source\window\winc\combobox.cpp)
+0001:00002768+ near FEditComboBox::FEditComboBox()
+0001:0000274c+ near FTextSelectionComboBox::FTextSelectionComboBox()
+0001:00002328+ int near FComboBox::GetCount()
+0001:00002340+ void near FComboBox::Clear()
+0001:00002358+ Bool near FComboBox::RemoveItem( int )
+0001:00002374+ Bool near FComboBox::SetCurrentSelection( int )
+0001:000023b0+ Bool near FComboBox::Create( FWnd near *, int )
+0001:000023b8+ Bool near FComboBox::Create( FWnd near *, int, char const near *, long unsigned, FRect near * )
+0001:000023d0+ Bool near FComboTextItem_mixin::InsertItem( int, char const near * )
+0001:000023f8+ Bool near FComboTextItem_mixin::AddItem( char const near * )
+0001:00002420+ Bool near FComboTextItem_mixin::GetItemText( int, char near *, int )
+0001:00002474+ int near FComboTextItem_mixin::GetItemTextLen( int )
+0001:0000248c+ Bool near FEditComboBox::SetText( char const near * )
+0001:0000249c+ Bool near FEditComboBox::GetText( char near *, int )
+0001:000024b0+ int near FEditComboBox::GetTextLength()
+0001:000024c0+ Bool near FEditComboBox::LimitText( int )
+0001:000024dc+ Bool near FSimpleComboBox::Create( FWnd near *, int, char const near *, FRect near * )
+0001:000024f0+ Bool near FDropDownComboBox::Create( FWnd near *, int, char const near *, FRect near * )
+0001:00002504+ Bool near FSelectionComboBox::Create( FWnd near *, int, long unsigned, FRect near * )
+0001:0000251c+ int near FSelectionComboBox::GetCurrentSelection()
+0001:00002538+ near FODSelectionComboBox::FODSelectionComboBox( FOwnerDrawOwner near * )
+0001:00002564+ near FODSelectionComboBox::~FODSelectionComboBox()
+0001:0000258c+ Bool near FODSelectionComboBox::Create( FWnd near *, int, FRect near * )
+0001:00002598+ Bool near FODSelectionComboBox::AddItem( long )
+0001:000025c0+ Bool near FODSelectionComboBox::InsertItem( int, long )
+0001:000025e4+ Bool near FODSelectionComboBox::GetItemData( int, long near * )
+0001:00002608+ Bool near FODSelectionComboBox::OwneeMeasure( FMeasureItemEvent near & )
+0001:00002700+ near FTextSelectionComboBox::~FTextSelectionComboBox()
+0001:000026f0+ near FSelectionComboBox::FSelectionComboBox()
+0001:000026b4+ near FSelectionComboBox::~FSelectionComboBox()
+0001:00002678+ near FEditComboBox::~FEditComboBox()
+0001:00002668+ near FComboBox::FComboBox()
+0001:0000262c+ near FComboBox::~FComboBox()
+Module: C:\TEMP\comhndl.obj(T:\PROJECT\BIF\source\window\winc\comhndl.cpp)
+0001:00002df0+ Bool near FCreateDestroyHandler::Created( FCreatedEvent near & )
+0001:00002dec+ Bool near FCreateDestroyHandler::Destroying( FDestroyingEvent near & )
+0001:00002de8+ Bool near FCommandHandler::Command( FCommandEvent near & )
+0001:00002de4  Bool near FCommandHandler::SysCommand( FSysCommandEvent near & )
+0001:00002de0+ Bool near FEnableHandler::Enabled( FEnableEvent near & )
+0001:00002ddc+ Bool near FEnableHandler::Disabled( FEnableEvent near & )
+0001:00002dd8+ Bool near FFocusHandler::GotFocus( FSetFocusEvent near & )
+0001:00002dd4+ Bool near FMoveHandler::Moved( FMoveEvent near & )
+0001:00002dd0+ Bool near FCloseHandler::Close( FEvent near & )
+0001:00002dcc  Bool near FCloseHandler::CloseUnconditionally( FEvent near & )
+0001:00002784+ near FCreateDestroyHandler::FCreateDestroyHandler( FWnd near * )
+0001:000027d0+ Bool near FCreateDestroyHandler::Dispatch( FEvent near & )
+0001:00002804  near FCommandHandler::FCommandHandler( FWnd near * )
+0001:00002850+ Bool near FCommandHandler::Dispatch( FEvent near & )
+0001:000028b4+ near FEnableHandler::FEnableHandler( FWnd near * )
+0001:00002900+ Bool near FEnableHandler::Dispatch( FEvent near & )
+0001:00002924  near FFocusHandler::FFocusHandler( FWnd near * )
+0001:00002970+ Bool near FFocusHandler::Dispatch( FEvent near & )
+0001:00002998+ Bool near FFocusHandler::HasFocus()
+0001:000029b4+ Bool near FFocusHandler::SetFocus()
+0001:000029c8  Bool near FFocusHandler::ForwardFocus( FWnd near * )
+0001:000029d8  near FSizeHandler::FSizeHandler( FWnd near * )
+0001:00002a24+ Bool near FSizeHandler::SetSize( int, int )
+0001:00002a40+ Bool near FSizeHandler::GetSize( int near *, int near * )
+0001:00002a70+ Bool near FSizeHandler::Dispatch( FEvent near & )
+0001:00002a88+ near FMoveHandler::FMoveHandler( FWnd near * )
+0001:00002ad4+ Bool near FMoveHandler::Move( int, int )
+0001:00002af0+ Bool near FMoveHandler::GetPosition( int near *, int near * )
+0001:00002b3c+ Bool near FMoveHandler::Dispatch( FEvent near & )
+0001:00002b54  near FCloseHandler::FCloseHandler( FWnd near * )
+0001:00002bb0+ void near FCloseHandler::Close()
+0001:00002bc8+ void near FCloseHandler::CloseUnconditionally()
+0001:00002c0c+ Bool near FCloseHandler::Dispatch( FEvent near & )
+0001:00002d58  near FCloseHandler::~FCloseHandler()
+0001:00002d1c+ near FMoveHandler::~FMoveHandler()
+0001:00002ce0+ near FEnableHandler::~FEnableHandler()
+0001:00002ca4  near FCommandHandler::~FCommandHandler()
+0001:00002c68+ near FCreateDestroyHandler::~FCreateDestroyHandler()
+Module: C:\TEMP\control.obj(T:\PROJECT\BIF\source\window\winc\control.cpp)
+0001:00002fe8+ Bool near FOwnerNotifyHandler::Notify( FOwnerNotifyEvent near & )
+0001:00002df4+ near FOwnerNotifyHandler::FOwnerNotifyHandler( FWnd near * )
+0001:00002e40+ Bool near FOwnerNotifyHandler::Dispatch( FEvent near & )
+0001:00002e94  Bool near FControl::Create( FWnd near *, int )
+0001:00002ec0  Bool near FControl::Create( FWnd near *, int, char const near *, char const near *, long unsigned, FRect near * )
+0001:00002f30  int near FControl::GetID()
+0001:00002f40+ int near FControlTextHandler::GetTextLen()
+0001:00002f58+ Bool near FControlTextHandler::GetText( char near *, int )
+0001:00002f74  Bool near FControlTextHandler::SetText( char const near * )
+0001:00002fa4+ near FOwnerNotifyHandler::~FOwnerNotifyHandler()
+0001:00002f94  FRect near & near FRect::operator =( FRect const near & )
+Module: C:\TEMP\csi.obj(T:\PROJECT\BIF\source\window\winc\csi.cpp)
+0001:00002fec+ Bool near FCSIBaseHandler::IsSibling( FWnd near * )
+0001:00003014+ void near FCSIBaseHandler::gwripc( FWnd near *, FRect near * )
+0001:00003050+ void near FCSIMoveHandler::AlignTop( int )
+0001:00003084+ void near FCSIMoveHandler::AlignBottom( int )
+0001:000030c0+ void near FCSIMoveHandler::AlignLeft( int )
+0001:000030f4+ void near FCSIMoveHandler::AlignRight( int )
+0001:00003128+ Bool near FCSIMoveHandler::AlignTTParent()
+0001:00003134+ Bool near FCSIMoveHandler::AlignBBParent()
+0001:0000316c+ Bool near FCSIMoveHandler::AlignLLParent()
+0001:00003178+ Bool near FCSIMoveHandler::AlignRRParent()
+0001:000031b0+ Bool near FCSIMoveHandler::AlignLLSibling( FWnd near * )
+0001:000031e4+ Bool near FCSIMoveHandler::AlignRRSibling( FWnd near * )
+0001:00003218+ Bool near FCSIMoveHandler::AlignTTSibling( FWnd near * )
+0001:0000324c+ Bool near FCSIMoveHandler::AlignBBSibling( FWnd near * )
+0001:00003280+ Bool near FCSIMoveHandler::AlignLRSibling( FWnd near * )
+0001:000032b4+ Bool near FCSIMoveHandler::AlignRLSibling( FWnd near * )
+0001:000032e8+ Bool near FCSIMoveHandler::AlignTBSibling( FWnd near * )
+0001:0000331c+ Bool near FCSIMoveHandler::AlignBTSibling( FWnd near * )
+0001:00003350+ void near FCSISizeHandler::SizeTop( int )
+0001:00003390+ void near FCSISizeHandler::SizeBottom( int )
+0001:000033cc+ void near FCSISizeHandler::SizeLeft( int )
+0001:0000340c+ void near FCSISizeHandler::SizeRight( int )
+0001:00003448+ Bool near FCSISizeHandler::SizeTTParent()
+0001:00003454+ Bool near FCSISizeHandler::SizeBBParent()
+0001:0000348c+ Bool near FCSISizeHandler::SizeLLParent()
+0001:00003498+ Bool near FCSISizeHandler::SizeRRParent()
+0001:000034d0+ Bool near FCSISizeHandler::SizeLLSibling( FWnd near * )
+0001:00003504+ Bool near FCSISizeHandler::SizeRRSibling( FWnd near * )
+0001:00003538+ Bool near FCSISizeHandler::SizeTTSibling( FWnd near * )
+0001:0000356c+ Bool near FCSISizeHandler::SizeBBSibling( FWnd near * )
+0001:000035a0+ Bool near FCSISizeHandler::SizeLRSibling( FWnd near * )
+0001:000035d4+ Bool near FCSISizeHandler::SizeRLSibling( FWnd near * )
+0001:00003608+ Bool near FCSISizeHandler::SizeTBSibling( FWnd near * )
+0001:0000363c+ Bool near FCSISizeHandler::SizeBTSibling( FWnd near * )
+0001:000036e8+ near FCSISizeHandler::~FCSISizeHandler()
+0001:000036ac+ near FCSIMoveHandler::~FCSIMoveHandler()
+0001:00003670+ near FCSIBaseHandler::~FCSIBaseHandler()
+Module: C:\TEMP\dialog.obj(T:\PROJECT\BIF\source\window\winc\dialog.cpp)
+0001:00003dd4  Bool near FDialog::CreateControls()
+0001:00003724+ Bool near FDialogTerminationhandler::RegTerminateMsg()
+0001:00003750+ near FDialogTerminationhandler::FDialogTerminationhandler( FDialog near * )
+0001:000037b0+ Bool near FDialogTerminationhandler::Dispatch( FEvent near & )
+0001:000037e4  near FDialog::FDialog()
+0001:00003838+ int near BifDlgInitProc( HWND__ near *, int unsigned, int unsigned, long )
+0001:0000393c+ Bool near FDialog::Create( FWnd near *, int, FModule near * )
+0001:00003944+ Bool near FDialog::Create( FWnd near *, char const near *, FModule near * )
+0001:000039f4  Bool near FDialog::Close( FEvent near & )
+0001:00003a34+ Bool near FDialog::Command( FCommandEvent near & )
+0001:00003a4c  Bool near FDialog::PumpEvent( FEvent near & )
+0001:00003a78  near FModalDialog::FModalDialog()
+0001:00003ad0+ int near FModalDialog::DoModal( FWnd near *, int, FModule near * )
+0001:00003ad8+ int near FModalDialog::DoModal( FWnd near *, char const near *, FModule near * )
+0001:00003bd0+ void near FModalDialog::EndDialog( int )
+0001:00003cb8  near FModalDialog::~FModalDialog()
+0001:00003c5c  near FDialog::~FDialog()
+0001:00003c20  near FDialogTerminationhandler::~FDialogTerminationhandler()
+0002:00003054+ int unsigned near FDialogTerminationhandler::wm_terminatedialog
+Module: C:\TEMP\filedlg.obj(T:\PROJECT\BIF\source\window\winc\filedlg.cpp)
+0001:000045b8+ near FStdFileDialog::FStdFileDialog()
+0001:00004560+ Bool near FStdFileDialog::Command( FCommandEvent near & )
+0001:000044dc+ near FStdOpenFileDialog::FStdOpenFileDialog()
+0001:00004404+ near FStdSaveFileDialog::FStdSaveFileDialog()
+0001:00003dd8+ int unsigned near StdFileHack::StdFileInitProc( HWND__ near *, int unsigned, int unsigned, long )
+0001:00003ee8+ Bool near FStdFileDialog::DoModal( FWnd near *, FStdFileDialog::sfd_type, char near *, char const near *, char const near *, char const near * )
+0001:00004004+ Bool near FStdFileDialog::DoModal( FWnd near *, FStdFileDialog::sfd_type, char near *, int, char near * near *, int, char const near *, char const near *, char const near * )
+0001:00004348+ near FStdSaveFileDialog::~FStdSaveFileDialog()
+0001:000042e0+ near FStdOpenFileDialog::~FStdOpenFileDialog()
+0001:00004278+ near FStdFileDialog::~FStdFileDialog()
+Module: C:\TEMP\frame.obj(T:\PROJECT\BIF\source\window\winc\frame.cpp)
+0001:00005034+ Bool near FFrameIconHandler::EraseIconBkgnd( FEvent near & )
+0001:00005030+ Bool near FFrameIconHandler::PaintIcon( FEvent near & )
+0001:0000502c+ Bool near FFrameIconHandler::QueryDragIcon( FEvent near & )
+0001:00004604+ near FFrameIconHandler::FFrameIconHandler( FFrameWindow near * )
+0001:0000465c+ Bool near FFrameIconHandler::Dispatch( FEvent near & )
+0001:000046ec+ near FFrameMenuDestroyHandler::FFrameMenuDestroyHandler( FFrameWindow near * )
+0001:0000473c+ Bool near FFrameMenuDestroyHandler::Dispatch( FEvent near & )
+0001:00004758+ near FFrameAccelHandler::FFrameAccelHandler( FFrameWindow near * )
+0001:000047a8+ Bool near FFrameAccelHandler::Dispatch( FEvent near & )
+0001:000047e4  near FFrameWindow::FFrameWindow()
+0001:00004870  near FFrameWindow::~FFrameWindow()
+0001:00004990  Bool near FFrameWindow::PumpEvent( FEvent near & )
+0001:000049d8+ Bool near FFrameWindow::Create( FWnd near *, int, long, long, FRect near *, FModule near * )
+0001:00004b9c+ Bool near FFrameWindow::BringToFront()
+0001:00004bbc+ Bool near FFrameWindow::BringToBack()
+0001:00004bdc+ Bool near FFrameWindow::Minimize()
+0001:00004bf0+ Bool near FFrameWindow::Maximize()
+0001:00004c04+ Bool near FFrameWindow::Restore()
+0001:00004c18+ FMenu near * near FFrameWindow::GetMenu()
+0001:00004c1c+ void near FFrameWindow::SetMenu( FMenu near * )
+0001:00004c48+ FMenu near * near FFrameWindow::GetSystemMenu()
+0001:00004cac+ void near FFrameWindow::RedrawMenu()
+0001:00004cc0+ FIcon near * near FFrameWindow::GetIcon()
+0001:00004cc4+ void near FFrameWindow::SetIcon( FIcon near * )
+0001:00004d1c  Bool near FFrameWindow::SetCaption( char const near * )
+0001:00004d80  int near FFrameWindow::GetCaption( char near *, int )
+0001:00004dbc  Bool near FFrameWindow::SetSubtitle( char const near * )
+0001:00004e20+ int near FFrameWindow::GetSubtitle( char near *, int )
+0001:00004e5c+ void near FFrameWindow::UpdateTitle()
+0001:00004ee0+ void near FFrameWindow::SetAccel( HACCEL__ near * )
+0001:00004ee4+ HACCEL__ near * near FFrameWindow::GetAccel()
+0001:00004ee8  Bool near FFrameWindow::EraseIconBkgnd( FEvent near & )
+0001:00004f18  Bool near FFrameWindow::PaintIcon( FEvent near & )
+0001:00004fb4  Bool near FFrameWindow::QueryDragIcon( FEvent near & )
+Module: C:\TEMP\groupbox.obj(T:\PROJECT\BIF\source\window\winc\groupbox.cpp)
+0001:000050b0+ near FGroupBox::FGroupBox()
+0001:00005038+ Bool near FGroupBox::Create( FWnd near *, int, FRect near *, char const near * )
+0001:0000505c+ near FGroupBox::~FGroupBox()
+Module: C:\TEMP\keyboard.obj(T:\PROJECT\BIF\source\window\winc\keyboard.cpp)
+0001:000050e8+ logical_key near FKeyboardEvent::GetLogicalKey() const
+0001:00005158+ Bool near FKeyboardEvent::IsShiftDown() const
+0001:00005168+ Bool near FKeyboardEvent::IsCtrlDown() const
+0001:00005178+ Bool near FKeyboardHandler::Dispatch( FEvent near & )
+0001:000051ac+ near FKeyboardHandler::~FKeyboardHandler()
+Module: C:\TEMP\listbox.obj(T:\PROJECT\BIF\source\window\winc\listbox.cpp)
+0001:00005c34+ near FSingleSelectionListBox::FSingleSelectionListBox()
+0001:00005bf4+ near FMultipleSelectionListBox::FMultipleSelectionListBox()
+0001:000051f0+ Bool near FListBox::Create( FWnd near *, int, FRect near *, long )
+0001:00005214+ int near FListBox::GetCount()
+0001:0000522c+ void near FListBox::Clear()
+0001:00005244+ int near FListBox::GetTopIndex()
+0001:0000525c+ Bool near FListBox::SetTopIndex( int )
+0001:00005278+ void near FListBox::DisableRedraw()
+0001:00005290+ void near FListBox::EnableRedraw()
+0001:000052b8+ Bool near FTextListBox::Create( FWnd near *, int, FRect near *, Bool )
+0001:000052e0+ Bool near FTextListBox::AddItem( char const near * )
+0001:00005300+ Bool near FTextListBox::InsertItem( int, char const near * )
+0001:00005320+ Bool near FTextListBox::GetItemText( int, char near *, int )
+0001:00005354+ int near FTextListBox::GetItemTextLen( int )
+0001:00005378+ Bool near FTextListBox::RemoveItem( int )
+0001:00005398+ Bool near FTextListBox::ReplaceItem( int, char const near * )
+0001:000053e4+ int near FTextListBox::FindItem( char const near *, int )
+0001:00005408+ int near FSingleSelectionListBox::GetCurrentSelection()
+0001:00005428+ Bool near FSingleSelectionListBox::SetCurrentSelection( int )
+0001:00005458+ Bool near FMultipleSelectionListBox::SetSelState( int, Bool )
+0001:00005480+ Bool near FMultipleSelectionListBox::SetSelStateAll( Bool )
+0001:000054a8+ int near FMultipleSelectionListBox::GetSelCount()
+0001:000054c8+ Bool near FMultipleSelectionListBox::GetSelItems( int near *, int )
+0001:000054e8+ near FSingleSelectionTextListBox::FSingleSelectionTextListBox()
+0001:00005560+ Bool near FSingleSelectionTextListBox::Create( FWnd near *, int )
+0001:00005574+ Bool near FSingleSelectionTextListBox::Create( FWnd near *, int, FRect near *, Bool )
+0001:00005590+ near FMultipleSelectionTextListBox::FMultipleSelectionTextListBox()
+0001:00005608+ Bool near FMultipleSelectionTextListBox::Create( FWnd near *, int )
+0001:0000561c+ Bool near FMultipleSelectionTextListBox::Create( FWnd near *, int, FRect near *, FMultipleSelectionListBox::lbs_multiselectstyle, Bool )
+0001:00005660+ near FODListBox::FODListBox( FOwnerDrawOwner near * )
+0001:000056b0+ Bool near FODListBox::Create( FWnd near *, int, FRect near * )
+0001:000056c8+ Bool near FODListBox::AddItem( long )
+0001:000056ec+ Bool near FODListBox::InsertItem( int, long )
+0001:00005710+ Bool near FODListBox::GetItemData( int, long near * )
+0001:00005734+ Bool near FODListBox::RemoveItem( int )
+0001:00005758+ Bool near FODListBox::ReplaceItem( int, long )
+0001:000057a4+ near FSingleSelectionODListBox::FSingleSelectionODListBox( FOwnerDrawOwner near * )
+0001:00005820+ Bool near FSingleSelectionODListBox::Create( FWnd near *, int )
+0001:00005834+ Bool near FSingleSelectionODListBox::Create( FWnd near *, int, FRect near * )
+0001:0000584c+ near FMultipleSelectionODListBox::FMultipleSelectionODListBox( FOwnerDrawOwner near * )
+0001:000058c8+ Bool near FMultipleSelectionODListBox::Create( FWnd near *, int )
+0001:000058dc+ Bool near FMultipleSelectionODListBox::Create( FWnd near *, int, FRect near *, FMultipleSelectionListBox::lbs_multiselectstyle )
+0001:00005b7c+ near FMultipleSelectionODListBox::~FMultipleSelectionODListBox()
+0001:00005b54+ near FSingleSelectionODListBox::~FSingleSelectionODListBox()
+0001:00005b2c+ near FODListBox::~FODListBox()
+0001:00005ae4+ near FMultipleSelectionTextListBox::~FMultipleSelectionTextListBox()
+0001:00005a9c+ near FSingleSelectionTextListBox::~FSingleSelectionTextListBox()
+0001:00005a54+ near FMultipleSelectionListBox::~FMultipleSelectionListBox()
+0001:00005a0c+ near FSingleSelectionListBox::~FSingleSelectionListBox()
+0001:000059cc+ near FTextListBox::FTextListBox()
+0001:0000597c+ near FTextListBox::~FTextListBox()
+0001:0000596c+ near FListBox::FListBox()
+0001:00005930+ near FListBox::~FListBox()
+Module: C:\TEMP\mle.obj(T:\PROJECT\BIF\source\window\winc\mle.cpp)
+0001:00005e2c+ near FMLE::FMLE()
+0001:00005c6c+ Bool near FMLE::Create( FWnd near *, int, FRect near *, long, char const near * )
+0001:00005cb8+ Bool near FMLE::Cut()
+0001:00005cd0+ Bool near FMLE::Copy()
+0001:00005ce8+ Bool near FMLE::Clear()
+0001:00005d00+ Bool near FMLE::Paste()
+0001:00005d18+ Bool near FMLE::ReplaceSelection( char const near * )
+0001:00005d30+ Bool near FMLE::HasBeenModified()
+0001:00005d48+ Bool near FMLE::SetModify( Bool )
+0001:00005d64+ int near FMLE::GetTextLen()
+0001:00005d7c+ Bool near FMLE::GetText( char near *, int )
+0001:00005d94+ Bool near FMLE::SetText( char const near * )
+0001:00005dac+ Bool near FMLE::LimitText( int )
+0001:00005dc4+ Bool near FMLE::IsReadonly()
+0001:00005dd0+ Bool near FMLE::SetReadonly( Bool )
+0001:00005df0+ near FMLE::~FMLE()
+Module: C:\TEMP\mouse.obj(T:\PROJECT\BIF\source\window\winc\mouse.cpp)
+0001:000067c0+ Bool near FMouseHandler::Button1Down( FButtonDownEvent near & )
+0001:000067bc+ Bool near FMouseHandler::Button1Up( FButtonUpEvent near & )
+0001:000067b8+ Bool near FMouseHandler::Button1DblClk( FButtonDblClkEvent near & )
+0001:000067b4+ Bool near FMouseHandler::Button2Down( FButtonDownEvent near & )
+0001:000067b0+ Bool near FMouseHandler::Button2Up( FButtonUpEvent near & )
+0001:000067ac+ Bool near FMouseHandler::Button2DblClk( FButtonDblClkEvent near & )
+0001:000067a8+ Bool near FMouseHandler::Button3Down( FButtonDownEvent near & )
+0001:000067a4+ Bool near FMouseHandler::Button3Up( FButtonUpEvent near & )
+0001:000067a0+ Bool near FMouseHandler::Button3DblClk( FButtonDblClkEvent near & )
+0001:0000679c+ Bool near FMouseHandler::MouseMove( FMouseMoveEvent near & )
+0001:00006798+ Bool near FMouseHandler::ControlPointer( FControlPointerEvent near & )
+0001:00006794+ Bool near FMouseHandler::ControlPointerNonWindow( FControlPointerEvent near & )
+0001:00006790+ Bool near FExtendedMouseHandler::Button1MotionStart( FMouseEvent near & )
+0001:0000678c+ Bool near FExtendedMouseHandler::Button1MotionEnd( FMouseEvent near & )
+0001:00006788+ Bool near FExtendedMouseHandler::Button1Click( FMouseEvent near & )
+0001:00006784+ Bool near FExtendedMouseHandler::Button2MotionStart( FMouseEvent near & )
+0001:00006780+ Bool near FExtendedMouseHandler::Button2MotionEnd( FMouseEvent near & )
+0001:0000677c+ Bool near FExtendedMouseHandler::Button2Click( FMouseEvent near & )
+0001:00006778+ Bool near FExtendedMouseHandler::Button3MotionStart( FMouseEvent near & )
+0001:00006774+ Bool near FExtendedMouseHandler::Button3MotionEnd( FMouseEvent near & )
+0001:00006770+ Bool near FExtendedMouseHandler::Button3Click( FMouseEvent near & )
+0001:0000676c+ Bool near FExtendedMouseHandler::ButtonChord( FMouseEvent near & )
+0001:00006768+ Bool near FTranslatedMouseHandler::MouseDragStart( FMouseEvent near & )
+0001:00006764+ Bool near FTranslatedMouseHandler::MouseDragEnd( FMouseEvent near & )
+0001:00006760+ Bool near FTranslatedMouseHandler::MouseSingleSelect( FMouseEvent near & )
+0001:0000675c+ Bool near FTranslatedMouseHandler::MouseOpen( FMouseEvent near & )
+0001:00006758+ Bool near FTranslatedMouseHandler::MouseContextMenu( FMouseEvent near & )
+0001:00006754+ Bool near FTranslatedMouseHandler::MouseTextEdit( FMouseEvent near & )
+0001:00006750+ Bool near FTranslatedMouseHandler::MouseSelectStart( FMouseEvent near & )
+0001:0000674c+ Bool near FTranslatedMouseHandler::MouseSelectEnd( FMouseEvent near & )
+0001:00005e3c+ Bool near FMouseEvent::IsButtonDown( int ) const
+0001:00005e58+ int near FButtonDownEvent::GetButton() const
+0001:00005e7c+ int near FButtonUpEvent::GetButton() const
+0001:00005ea0+ int near FButtonDblClkEvent::GetButton() const
+0001:00005ec4+ void near FControlPointerEvent::SetPointer( FPointer near & )
+0001:00005ee4+ near FMouseHandler::FMouseHandler( FWnd near * )
+0001:00005f86+ Bool near FMouseHandler::Dispatch( FEvent near & )
+0001:00006028+ Bool near FMouseHandler::SetCapture()
+0001:0000606c+ Bool near FMouseHandler::ReleaseCapture()
+0001:0000608c+ Bool near FMouseHandler::GetCurrentMousePosition( int near *, int near * )
+0001:0000610c+ Bool near FMouseHandler::ButtonDown( FButtonDownEvent near & )
+0001:00006144+ Bool near FMouseHandler::ButtonUp( FButtonUpEvent near & )
+0001:0000617c+ Bool near FMouseHandler::ButtonDblClk( FButtonDblClkEvent near & )
+0001:000061b4+ void near FExtendedMouseHandler::button_down( int, FMouseEvent near & )
+0001:00006220+ void near FExtendedMouseHandler::button_up( int, FMouseEvent near & )
+0001:000062f8+ near FExtendedMouseHandler::FExtendedMouseHandler( FWnd near * )
+0001:000063c6+ Bool near FExtendedMouseHandler::Dispatch( FEvent near & )
+0001:00006588+ near FTranslatedMouseHandler::FTranslatedMouseHandler( FWnd near * )
+0001:000065d4+ Bool near FTranslatedMouseHandler::Dispatch( FEvent near & )
+0001:000065dc+ Bool near FTranslatedMouseHandler::Button1MotionStart( FMouseEvent near & )
+0001:000065e8+ Bool near FTranslatedMouseHandler::Button1MotionEnd( FMouseEvent near & )
+0001:000065f4+ Bool near FTranslatedMouseHandler::Button1Click( FMouseEvent near & )
+0001:00006628+ Bool near FTranslatedMouseHandler::Button2MotionStart( FMouseEvent near & )
+0001:00006634+ Bool near FTranslatedMouseHandler::Button2MotionEnd( FMouseEvent near & )
+0001:00006640+ Bool near FTranslatedMouseHandler::Button2Click( FMouseEvent near & )
+0001:0000664c+ Bool near FTranslatedMouseHandler::Button1DblClk( FButtonDblClkEvent near & )
+0001:000066f8+ near FTranslatedMouseHandler::~FTranslatedMouseHandler()
+0001:000066bc+ near FExtendedMouseHandler::~FExtendedMouseHandler()
+0001:00006680+ near FMouseHandler::~FMouseHandler()
+0001:00006674+ FPoint near & near FPoint::operator =( FPoint const near & )
+Module: C:\TEMP\msgbox.obj(T:\PROJECT\BIF\source\window\winc\msgbox.cpp)
+0001:000067c4+ mbid near MessageBoxA( FWnd near *, char const near *, char const near *, mb_buttons, mb_icon )
+0001:00006810+ mbid near MessageBoxA( HWND__ near *, char const near *, char const near *, mb_buttons, mb_icon )
+0001:0000689c+ mbid near bw_MessageBox( HWND__ near *, char const near *, char const near *, int unsigned )
+Module: C:\TEMP\ownerdrw.obj(T:\PROJECT\BIF\source\window\winc\ownerdrw.cpp)
+0001:000068e8+ Bool near FMeasureItemEvent::IsFromControl()
+0001:000068f4+ Bool near FMeasureItemEvent::IsFromMenu()
+0001:00006900+ int near FMeasureItemEvent::GetControlID()
+0001:00006904+ tagMEASUREITEMSTRUCT near * near FMeasureItemEvent::GetMis()
+0001:00006908+ int near FMeasureItemEvent::GetControlType()
+0001:00006910+ int near FMeasureItemEvent::GetItemID()
+0001:0000691c+ int near FMeasureItemEvent::GetItemWidth()
+0001:00006928+ void near FMeasureItemEvent::SetItemWidth( int )
+0001:00006934+ int near FMeasureItemEvent::GetItemHeight()
+0001:00006940  void near FMeasureItemEvent::SetItemHeight( int )
+0001:0000694c+ long near FMeasureItemEvent::GetItemData()
+0001:00006958+ Bool near FDrawItemEvent::IsFromControl()
+0001:00006964+ Bool near FDrawItemEvent::IsFromMenu()
+0001:00006970+ int near FDrawItemEvent::GetControlID()
+0001:00006974+ tagDRAWITEMSTRUCT near * const near FDrawItemEvent::GetDis()
+0001:00006978+ int near FDrawItemEvent::GetControlType()
+0001:00006980+ int near FDrawItemEvent::GetItemID()
+0001:0000698c+ int near FDrawItemEvent::GetAction()
+0001:00006998+ int near FDrawItemEvent::GetItemState()
+0001:000069a4+ HWND__ near * near FDrawItemEvent::GetControlHwnd()
+0001:000069c0+ HMENU__ near * near FDrawItemEvent::GetHmenu()
+0001:000069dc+ HDC__ near * near FDrawItemEvent::GetHdc()
+0001:000069e8+ FRect near FDrawItemEvent::GetItemRect()
+0001:00006a20+ long near FDrawItemEvent::GetItemData()
+0001:00006a2c+ void near FOwnerDrawOwner::AddOwnee( FOwnerDrawOwnee near * )
+0001:00006a38+ FOwnerDrawOwnee near * near FOwnerDrawOwner::findOwnee( int )
+0001:00006a5c+ near FOwnerDrawOwner::FOwnerDrawOwner( FWnd near * )
+0001:00006aac+ Bool near FOwnerDrawOwner::Dispatch( FEvent near & )
+0001:00006ad0+ Bool near FOwnerDrawOwner::OwnerDraw( FDrawItemEvent near & )
+0001:00006b08+ Bool near FOwnerDrawOwner::OwnerMeasure( FMeasureItemEvent near & )
+0001:00006b40+ int near FOwnerDrawOwnee::GetOwneeID()
+0001:00006b68  near FOwnerDrawOwnee::FOwnerDrawOwnee( FWnd near *, FOwnerDrawOwner near * )
+0001:00006b90  near FOwnerDrawOwnee::~FOwnerDrawOwnee()
+0001:00006ba4+ near FOwnerDrawOwner::~FOwnerDrawOwner()
+Module: C:\TEMP\pushbut.obj(T:\PROJECT\BIF\source\window\winc\pushbut.cpp)
+0001:00006cb0+ near FPushButton::FPushButton()
+0001:00006be8+ Bool near FPushButton::Create( FWnd near *, int, FRect near *, char const near *, Bool )
+0001:00006c10+ void near FPushButton::Push()
+0001:00006c5c+ near FPushButton::~FPushButton()
+Module: C:\TEMP\radiobut.obj(T:\PROJECT\BIF\source\window\winc\radiobut.cpp)
+0001:00006ecc+ near FRadioButton::FRadioButton()
+0001:00006ce8+ Bool near FRadioButton::Create( FWnd near *, int, FRect near *, char const near * )
+0001:00006d00+ Bool near FRadioButton::IsChecked()
+0001:00006d20+ Bool near FRadioButton::Check()
+0001:00006d3c+ Bool near FRadioButton::UnCheck()
+0001:00006d90+ int near FRadioButton::GetCheckIndex()
+0001:00006e00+ Bool near FRadioButton::CheckIndex( int )
+0001:00006e78+ near FRadioButton::~FRadioButton()
+Module: C:\TEMP\scroll.obj(T:\PROJECT\BIF\source\window\winc\scroll.cpp)
+0001:0000746c+ Bool near FClientScrollHandler::HScrollLineLeft( FScrollEvent near & )
+0001:00007468+ Bool near FClientScrollHandler::HScrollLineRight( FScrollEvent near & )
+0001:00007464+ Bool near FClientScrollHandler::HScrollPageLeft( FScrollEvent near & )
+0001:00007460+ Bool near FClientScrollHandler::HScrollPageRight( FScrollEvent near & )
+0001:0000745c+ Bool near FClientScrollHandler::HScrollStart( FScrollEvent near & )
+0001:00007458+ Bool near FClientScrollHandler::HScrollEnd( FScrollEvent near & )
+0001:00007454+ Bool near FClientScrollHandler::HScrollTo( FScrollEvent near & )
+0001:00007450+ Bool near FClientScrollHandler::HScrollTrack( FScrollEvent near & )
+0001:0000744c+ Bool near FClientScrollHandler::VScrollLineUp( FScrollEvent near & )
+0001:00007448+ Bool near FClientScrollHandler::VScrollLineDown( FScrollEvent near & )
+0001:00007444+ Bool near FClientScrollHandler::VScrollPageUp( FScrollEvent near & )
+0001:00007440+ Bool near FClientScrollHandler::VScrollPageDown( FScrollEvent near & )
+0001:0000743c+ Bool near FClientScrollHandler::VScrollTop( FScrollEvent near & )
+0001:00007438+ Bool near FClientScrollHandler::VScrollBottom( FScrollEvent near & )
+0001:00007434+ Bool near FClientScrollHandler::VScrollTo( FScrollEvent near & )
+0001:00007430+ Bool near FClientScrollHandler::VScrollTrack( FScrollEvent near & )
+0001:00006f28+ FScrollEvent::type near FScrollEvent::GetType() const
+0001:00006f5c+ int near FScrollEvent::where() const
+0001:00006f6c+ near FClientScrollHandler::FClientScrollHandler( FClientWindow near * )
+0001:00006fbc+ int near FClientScrollHandler::GetHScrollPos()
+0001:00006fd8+ Bool near FClientScrollHandler::SetHScrollPos( int )
+0001:00007000+ Bool near FClientScrollHandler::GetHScrollRange( int near *, int near * )
+0001:0000701c+ Bool near FClientScrollHandler::SetHScrollThumbSize( int, int )
+0001:00007020+ Bool near FClientScrollHandler::SetHScrollBar( int, int, int )
+0001:0000707c+ int near FClientScrollHandler::GetVScrollPos()
+0001:00007098+ Bool near FClientScrollHandler::SetVScrollPos( int )
+0001:000070c0+ Bool near FClientScrollHandler::GetVScrollRange( int near *, int near * )
+0001:000070dc+ Bool near FClientScrollHandler::SetVScrollThumbSize( int, int )
+0001:000070e0+ Bool near FClientScrollHandler::SetVScrollBar( int, int, int )
+0001:0000713c+ void near FClientScrollHandler::UpdateHArrows()
+0001:000071c0+ void near FClientScrollHandler::UpdateVArrows()
+0001:00007244+ Bool near FClientScrollHandler::Dispatch( FEvent near & )
+0001:000072d8+ Bool near FClientScrollHandler::HScroll( FScrollEvent near & )
+0001:00007374+ Bool near FClientScrollHandler::VScroll( FScrollEvent near & )
+0001:000073ec+ near FClientScrollHandler::~FClientScrollHandler()
+Module: C:\TEMP\sizerest.obj(T:\PROJECT\BIF\source\window\winc\sizerest.cpp)
+0001:00007470+ near FSizeRestrictionFrameHandler::FSizeRestrictionFrameHandler( FFrameWindow near * )
+0001:000074c0+ Bool near FSizeRestrictionFrameHandler::Dispatch( FEvent near & )
+0001:000074dc+ Bool near FSizeRestrictionFrameHandler::ApplySizeRestrictions()
+0001:000074f0+ void near FSizeRestrictionClientHandler::ModifyMMI( FGetMinMaxInfoEvent near & )
+0001:00007650+ Bool near FSizeRestrictionClientHandler::ApplySizeRestrictions()
+0001:0000795c+ near FSizeRestrictionClientHandler::~FSizeRestrictionClientHandler()
+0001:00007920+ near FSizeRestrictionFrameHandler::~FSizeRestrictionFrameHandler()
+Module: C:\TEMP\sle.obj(T:\PROJECT\BIF\source\window\winc\sle.cpp)
+0001:00007b34+ near FSLE::FSLE()
+0001:000079a0+ Bool near FSLE::Create( FWnd near *, int, FRect near *, long, char const near * )
+0001:000079e8+ Bool near FSLE::Cut()
+0001:00007a00+ Bool near FSLE::Copy()
+0001:00007a18+ Bool near FSLE::Clear()
+0001:00007a30+ Bool near FSLE::Paste()
+0001:00007a48+ Bool near FSLE::LimitText( int )
+0001:00007a60+ Bool near FSLE::IsReadonly()
+0001:00007a6c+ Bool near FSLE::SetReadonly( Bool )
+0001:00007a84+ Bool near FSLE::GetSelection( int near *, int near * )
+0001:00007ab8+ Bool near FSLE::SetSelection( int, int )
+0001:00007ae0+ near FSLE::~FSLE()
+Module: C:\TEMP\slider.obj(T:\PROJECT\BIF\source\window\winc\slider.cpp)
+0001:00007b6c+ near FSlider::FSlider()
+0001:00007b8c+ Bool near FSlider::Create( FWnd near *, int, int, int, int )
+0001:00007bc8+ Bool near FSlider::Create( FWnd near *, int, FRect near *, long, int, int, int )
+0001:00007c10+ int unsigned near FSlider::AddDetent( int )
+0001:00007c30+ Bool near FSlider::RemoveDetent( int unsigned )
+0001:00007c48+ int near FSlider::GetDetentPos( int unsigned )
+0001:00007c6c+ Bool near FSlider::SetTickText( int, char const near * )
+0001:00007c90+ Bool near FSlider::GetTickText( int, char near *, int )
+0001:00007cbc+ int near FSlider::GetTickSize( int )
+0001:00007ce0+ Bool near FSlider::SetTickSize( int, int )
+0001:00007d18+ int near FSlider::GetArmPosition()
+0001:00007d40+ Bool near FSlider::SetArmPosition( int )
+0001:00007d60+ Bool near FSlider::ResetTranslation( int, int, int )
+0001:00007de0+ int near FSlider::pel2LV( int )
+0001:00007e14+ int near FSlider::LV2pel( int )
+0001:00007e40+ int near FSlider::pos2ticknum( int )
+0001:00007e88+ int near FSlider::ticknum2pos( int )
+0001:00007ea0+ near FSlider::~FSlider()
+Module: C:\TEMP\slider31.obj(T:\PROJECT\BIF\source\window\winc\slider31.cpp)
+0001:00009b90+ Slider near * near GetSLP( HWND__ near * )
+0001:0000a334+ long near SliderWndProc( HWND__ near *, int unsigned, int unsigned, long )
+0002:0000305c+ __2ipssdformatMetrics near formatMetrics
+0001:0000a6e8  int near RegisterSlider( HINSTANCE__ near * )
+Module: C:\TEMP\stext.obj(T:\PROJECT\BIF\source\window\winc\stext.cpp)
+0001:0000a8d8+ near FStaticText::FStaticText()
+0001:0000a764+ Bool near FStaticText::Create( FWnd near *, int, FRect near *, long, char const near * )
+0001:0000a7b4+ Bool near FStaticText::SetText( char const near * )
+0001:0000a7bc+ Bool near FStaticText::SetText_ul( long unsigned )
+0001:0000a7e8+ Bool near FStaticText::SetText_l( long )
+0001:0000a814+ Bool near FStaticText::SetText_u( int unsigned )
+0001:0000a840+ Bool near FStaticText::SetText_i( int )
+0001:0000a884+ near FStaticText::~FStaticText()
+Module: C:\TEMP\wndmisc.obj(T:\PROJECT\BIF\source\window\winc\wndmisc.cpp)
+0001:0000aa74+ near FResourceObject::FResourceObject( Bool )
+0001:0000aaa4+ near FResourceObject::FResourceObject( FResourceObject const near & )
+0001:0000aabc  near FResourceObject::~FResourceObject()
+0001:0000aafc+ void near FResourceObject::operator =( FResourceObject const near & )
+0001:0000ab18+ int near FResourceObject::inc()
+0001:0000ab24+ int near FResourceObject::dec()
+0001:0000ab30+ near FIcon::FIcon( HICON__ near *, Bool )
+0001:0000ab4c  near FIcon::FIcon( int, FModule near * )
+0001:0000ab8c+ near FIcon::FIcon( char const near *, FModule near * )
+0001:0000abc8+ near FIcon::FIcon( FIcon const near & )
+0001:0000abd8+ near FIcon::~FIcon()
+0001:0000ac44  HICON__ near * near FIcon::GetHandle()
+0001:0000ac4c+ FIcon near & near FIcon::operator =( FIcon const near & )
+0001:0000ac88+ near FPointer::FPointer( HICON__ near *, Bool )
+0001:0000aca4+ near FPointer::FPointer( FPointer const near & )
+0001:0000acb4+ near FPointer::FPointer( int, FModule near * )
+0001:0000acf4+ near FPointer::FPointer( char const near *, FModule near * )
+0001:0000ad30+ near FPointer::~FPointer()
+0001:0000ad9c  HICON__ near * near FPointer::GetHandle()
+0001:0000ada4+ FPointer near & near FPointer::operator =( FPointer const near & )
+0001:0000ade0+ FPointer near * const near GetSystemArrowPointer()
+0001:0000ade8+ FPointer near * const near GetSystemTextPointer()
+0001:0000adf0+ FPointer near * const near GetSystemNESWPointer()
+0001:0000adf8+ FPointer near * const near GetSystemNSPointer()
+0001:0000ae00+ FPointer near * const near GetSystemNWSEPointer()
+0001:0000ae08+ FPointer near * const near GetSystemWEPointer()
+0001:0000ae10+ FPointer near * const near GetSystemWaitPointer()
+0001:0000ae18  near FMenu::FMenu( int, FModule near * )
+0001:0000ae58+ near FMenu::FMenu( char const near *, FModule near * )
+0001:0000ae94+ near FMenu::FMenu( FWnd near *, int, FModule near * )
+0001:0000aed0+ near FMenu::FMenu( FWnd near *, char const near *, FModule near * )
+0001:0000af08  near FMenu::FMenu( HMENU__ near *, Bool )
+0001:0000af24+ near FMenu::FMenu( FMenu const near & )
+0001:0000af34+ near FMenu::~FMenu()
+0001:0000afa0+ FMenu near & near FMenu::operator =( FMenu const near & )
+0001:0000afdc  HMENU__ near * near FMenu::GetHandle()
+0001:0000afe4+ Bool near FMenu::Popup( FWnd near *, FWnd near *, FPoint const near * )
+0001:0000b0ac+ Bool near FMenu::AppendItem( char const near *, int, Bool, Bool )
+0001:0000b0e8+ Bool near FMenu::AppendItem( char const near *, FMenu near *, Bool )
+0001:0000b114+ void near FMenu::AppendSeparator()
+0001:0000b130+ Bool near FMenu::DeleteItem( int )
+0001:0000b144+ Bool near FMenu::GetItem( int, char near *, int )
+0001:0000b15c+ FMenu near FMenu::GetSubmenuFromPos( int )
+0001:0000b184+ void near FMenu::CheckItem( int, Bool )
+0001:0000b1a4+ void near FMenu::EnableItem( int, Bool )
+0001:0000b1c4+ Bool near FMenu::IsItemEnabled( int )
+0001:0000b1e8+ Bool near FMenu::IsItemChecked( int )
+0001:0000b20c+ near FResourceString::FResourceString( int, FModule near * )
+0001:0000b274+ near FResourceString::~FResourceString()
+0001:0000b2b0+ near FResourceString::FResourceString( FResourceString const near & )
+0001:0000b2f0+ FResourceString near & near FResourceString::operator =( FResourceString const near & )
+0001:0000b358+ near FSystemPointer::~FSystemPointer()
+0001:0000b350+ near FPoint::FPoint( FPoint const near & )
+Module: C:\TEMP\bifmain.obj(T:\PROJECT\BIF\source\thread\win32\bifmain.cpp)
+0001:0000b394  HINSTANCE__ near * near BIFTGet_hInstance()
+0001:0000b39c  HINSTANCE__ near * near BIFTGet_hPrevInstance()
+0001:0000b3a4+ char near * near BIFTGet_lpszCmdLine()
+0001:0000b3ac+ int near BIFTGet_nCmdShow()
+0001:0000b3b4+ int near _BIFThreadMain( int, char near * near *, FMainThread near * (near *)())
+0001:0000b490+ int near _BIFThreadMain( HINSTANCE__ near *, HINSTANCE__ near *, char near *, int, FMainThread near * (near *)())
+Module: C:\TEMP\eventsem.obj(T:\PROJECT\BIF\source\thread\win32\eventsem.cpp)
+0001:0000b528  near FEventSemaphore::FEventSemaphore()
+0001:0000b55c+ near FEventSemaphore::FEventSemaphore( int )
+0001:0000b598  near FEventSemaphore::~FEventSemaphore()
+0001:0000b5e0+ int near FEventSemaphore::Fail()
+0001:0000b5ec  int near FEventSemaphore::Post()
+0001:0000b628  int near FEventSemaphore::Wait( long )
+0001:0000b660  int near FEventSemaphore::Reset()
+Module: C:\TEMP\mthread.obj(T:\PROJECT\BIF\source\thread\win32\mthread.cpp)
+0001:0000b828  near FMainThread::FMainThread( int, char near * near * )
+0001:0000b86c  near FMainThread::~FMainThread()
+0001:0000b8a8  void near FMainThread::Go()
+Module: C:\TEMP\mutexsem.obj(T:\PROJECT\BIF\source\thread\win32\mutexsem.cpp)
+0001:0000b8d4+ near FMutexSemaphore::FMutexSemaphore()
+0001:0000b908+ near FMutexSemaphore::FMutexSemaphore( int )
+0001:0000b940+ near FMutexSemaphore::~FMutexSemaphore()
+0001:0000b988+ int near FMutexSemaphore::Fail()
+0001:0000b994+ int near FMutexSemaphore::Request( long )
+0001:0000b9cc+ int near FMutexSemaphore::Release()
+Module: C:\TEMP\semaphor.obj(T:\PROJECT\BIF\source\thread\win32\semaphor.cpp)
+0001:0000baec+ near FSemaphore::FSemaphore( long )
+0001:0000bb3c+ near FSemaphore::~FSemaphore()
+0001:0000bb84+ int near FSemaphore::Fail()
+0001:0000bb90+ int near FSemaphore::Signal()
+0001:0000bbc0+ int near FSemaphore::Wait( long )
+Module: C:\TEMP\spinsem.obj(T:\PROJECT\BIF\source\thread\win32\spinsem.cpp)
+0001:0000bc9c  void near FSpinMutexSemaphore::Request()
+0001:0000bd04  void near FSpinMutexSemaphore::Release()
+0001:0000bd1c+ void near FSpinEventSemaphore::Post()
+0001:0000bd4c+ void near FSpinEventSemaphore::Reset()
+0001:0000bd7c+ void near FSpinEventSemaphore::Wait()
+0001:0000bda0+ void near FSpinSemaphore::Signal()
+0001:0000bdd0+ void near FSpinSemaphore::Wait()
+0001:0000be54  near FSpinSemaphore::~FSpinSemaphore()
+0001:0000be3c  near FSpinEventSemaphore::~FSpinEventSemaphore()
+0001:0000be2c  near FSpinMutexSemaphore::~FSpinMutexSemaphore()
+Module: C:\TEMP\thread1.obj(T:\PROJECT\BIF\source\thread\win32\thread1.cpp)
+0001:0000be78  near FThread::FThread( int unsigned )
+0001:0000beac  near FThread::~FThread()
+0001:0000bed4  int near FThread::OkToGo()
+0001:0000bedc  FThread::state near FThread::GetState() const
+0001:0000bee0+ void near FThread::Sleep( long )
+Module: C:\TEMP\thread2.obj(T:\PROJECT\BIF\source\thread\win32\thread2.cpp)
+0001:0000beec+ void near FThread::SetPriority( int )
+0001:0000bf84+ int near FThread::GetPriority() const
+Module: C:\TEMP\thread3.obj(T:\PROJECT\BIF\source\thread\win32\thread3.cpp)
+0001:0000c014+ int near FThread::Suspend()
+0001:0000c038+ int near FThread::Resume()
+Module: C:\TEMP\thread4.obj(T:\PROJECT\BIF\source\thread\win32\thread4.cpp)
+0001:0000c060  long unsigned near FThread::GetTID() const
+0001:0000c064+ void near * near FThread::GetHandle() const
+0001:0000c068+ int near FThread::Wait()
+0001:0000c094  int near FThread::Run( FThreadActivationRecord near * )
+0001:0000c0f4  int near FThread::PreGo()
+0001:0000c0fc+ int near FThread::_PreGo()
+0001:0000c10c  void near FThread::PostGo()
+0001:0000c114+ void near FThread::_PostGo()
+0001:0000c170+ int near FThread::Start()
+Module: C:\TEMP\thread5.obj(T:\PROJECT\BIF\source\thread\win32\thread5.cpp)
+0001:0000c2b8  int near FThread::Kill()
+Module: C:\TEMP\threadma.obj(T:\PROJECT\BIF\source\thread\win32\threadma.cpp)
+0001:0000c2e0  int near FThreadManager::Insert( FThread near * )
+0001:0000c35c  int near FThreadManager::Remove( FThread near * )
+0001:0000c3e4  int near FThreadManager::Init()
+0001:0000c41c  void near FThreadManager::Done()
+0001:0000c42c+ FThread near * near FThreadManager::GetFirstThread()
+0001:0000c468+ FThread near * near FThreadManager::GetNextThread( FThread near * )
+0001:0000c4dc+ FThread near * near FThreadManager::GetCurrentThread()
+Module: C:\TEMP\mwthread.obj(T:\PROJECT\BIF\source\thread\win32\win\mwthread.cpp)
+0001:0000c59c+ near FMainWindowThread::FMainWindowThread( int, char near * near * )
+0001:0000c600  near FMainWindowThread::~FMainWindowThread()
+Module: C:\TEMP\wthread.obj(T:\PROJECT\BIF\source\thread\win32\win\wthread.cpp)
+0001:0000c678  near FWindowThread::FWindowThread( int unsigned )
+0001:0000c6c8  near FWindowThread::~FWindowThread()
+0001:0000c704  void near FWindowThread::MessageLoop()
+Module: C:\TEMP\bwwinth.obj(T:\PROJECT\BIF\source\mix\win32\win\bwwinth.cpp)
+0001:0000c744  int near FWWindowThread::PreGo()
+0001:0000c77c+ int near FWWindowThread::_PreGo()
+0001:0000c7a0  void near FWWindowThread::PostGo()
+0001:0000c7b8+ void near FWWindowThread::_PostGo()
+0001:0000c7d4  near FWWindowThread::~FWWindowThread()
+Module: C:\TEMP\mtappmwt.obj(T:\PROJECT\BIF\source\mix\win32\win\mtappmwt.cpp)
+0001:0000c9f4+ near FMTApplication::FMTApplication()
+0001:0000c814+ int near FWMainWindowThread::Main( int, char near * near * )
+0001:0000c980+ near FWMainWindowThread::~FWMainWindowThread()
+0001:0000c944+ near FMTApplication::~FMTApplication()
+Module: C:\TEMP\dbglog.obj(T:\PROJECT\BIF\source\dbglog.cpp)
+0001:0000ca04* void near TRACE_FORMAT0( char const near *, ... )
+0001:0000ca34* void near TRACE_FORMAT1( char const near *, ... )
+0001:0000ca64* void near TRACE_FORMAT2( char const near *, ... )
+0001:0000ca94* void near NOTE0( char const near *, ... )
+0001:0000cac4+ void near NOTE1( char const near *, ... )
+0001:0000caf4* void near NOTE2( char const near *, ... )
+0001:0000cb24+ void near WARN( char const near *, ... )
+0001:0000cb84* void near ERROR( char const near *, ... )
+0001:0000cbc0* void near FATAL( char const near *, ... )
+Module: C:\TEMP\log.obj(T:\PROJECT\BIF\source\log.cpp)
+0001:0000d0bc+ void near Log::out( char const near *, int )
+0001:0000d0b0+ void near Log::out( char const near *, int unsigned )
+0001:0000d0a8+ void near FileLog::out( char const near *, long )
+0001:0000d0a0+ void near FileLog::out( char const near *, long unsigned )
+0001:0000d094+ void near FileLog::out( char const near *, int )
+0001:0000d088+ void near FileLog::out( char const near *, int unsigned )
+0001:0000cc58* near LOGProcedure::LOGProcedure( char const near * )
+0001:0000cc80* near LOGProcedure::~LOGProcedure()
+0001:0000cca8* near LOGMethod::LOGMethod( void const near *, char const near * )
+0001:0000ccd4* near LOGMethod::~LOGMethod()
+0001:0000ccfc* void near LOG_FORMAT( char const near *, ... )
+0001:0000cd2c+ near Log::Log()
+0001:0000cd44+ near Log::~Log()
+0001:0000cd54+ void near Log::printf( char const near *, ... )
+0001:0000cd7c  void near Log::vprintf( char const near *, char near * near * )
+0001:0000cda0+ void near Log::out( char const near *, long )
+0001:0000cdd0+ void near Log::out( char const near *, long unsigned )
+0001:0000d074+ near FileLogMutex::FileLogMutex()
+0001:0000d060+ near FileLogMutex::~FileLogMutex()
+0001:0000d048+ near LogLock::LogLock()
+0001:0000d030+ near LogLock::~LogLock()
+0001:0000ce00* near FileLog::FileLog( char const near * )
+0001:0000ce2c+ near FileLog::~FileLog()
+0002:0000b0d4  Log near * near LOGPtr
+0001:0000ce80+ void near FileLog::out( char const near * )
+Module: d:\WATCOM\lib386\plibmt3r.lib(dtorarst)
+0001:0000d0c8  __wcpp_2_dtor_array_store__
+Module: d:\WATCOM\lib386\plibmt3r.lib(opdelarr)
+0001:0000d0e8  void near operator delete []( void near * )
+Module: d:\WATCOM\lib386\plibmt3r.lib(opdel)
+0001:0000d0f0  void near operator delete( void near * )
+Module: d:\WATCOM\lib386\plibmt3r.lib(vfun_err)
+0001:0000d0f9  __wcpp_2_undef_vfun__
+Module: d:\WATCOM\lib386\plibmt3r.lib(opnewarr)
+0001:0000d120  void near * near operator new []( int unsigned )
+Module: d:\WATCOM\lib386\plibmt3r.lib(undefed)
+0001:0000d128  __wcpp_2_undefed_cdtor__
+Module: d:\WATCOM\lib386\nt\clib3r.lib(dstrt386)
+0001:0000d13a  __DLLstart_
+Module: d:\WATCOM\lib386\plibmt3r.lib(opnew)
+0001:0000d1b0  void near * near operator new( int unsigned )
+Module: d:\WATCOM\lib386\nt\clib3r.lib(set386)
+0001:0000d210  memset_
+Module: d:\WATCOM\lib386\plibmt3r.lib(pure_err)
+0001:0000d228  __wcpp_2_pure_error__
+Module: d:\WATCOM\lib386\nt\clib3r.lib(atoi)
+0001:0000d24d  atoi_
+Module: d:\WATCOM\lib386\plibmt3r.lib(stabmod)
+0001:0000d2bc  __wcpp_2_module_dtor__
+0001:0000d352  __wcpp_2_mod_register__
+0002:000029e8* rt_init __based("XI") __wcpp_2_data_stab_init_mod_
+Module: d:\WATCOM\lib386\plibmt3r.lib(moddtorr)
+0002:00002a06  ___wcpp_2_data_module_dtor_ref_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(register)
+0001:0000d383* _beginthread_
+0001:0000d38a  _endthread_
+0001:0000d391  __initthread_
+0001:0000d398* __RegisterThreadData_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(registrx)
+0001:0000d3d7  _beginthreadex_
+0001:0000d3ee  _endthreadex_
+Module: d:\WATCOM\lib386\plibmt3r.lib(opnewp)
+0001:0000d3f8  void near * near operator new( int unsigned, void near * )
+Module: d:\WATCOM\lib386\nt\clib3r.lib(vsprintf)
+0001:0000d40e  vsprintf_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(sprintf)
+0001:0000d436  sprintf_
+Module: d:\WATCOM\lib386\plibmt3r.lib(stabadt)
+0001:0000d468  __wcpp_2_dtor_array__
+Module: d:\WATCOM\lib386\nt\clib3r.lib(nfree)
+0001:0000d495  _nfree_
+0001:0000d495  free_
+0002:0000b0f0  ___MiniHeapFreeRover
+Module: d:\WATCOM\lib386\plibmt3r.lib(prwdata)
+0002:000017ec  __wint_static_init_sema
+0002:0000180c  __wint_pure_error_flag
+0002:0000180e  __wint_undef_vfun_flag
+0002:00001810  __wint_module_init
+Module: d:\WATCOM\lib386\plibmt3r.lib(fatalerr)
+0001:0000d524  __wcpp_2_fatal_runtime_error__
+Module: d:\WATCOM\lib386\nt\clib3r.lib(dmainwnt)
+0001:0000d551  __LibMain
+Module: d:\WATCOM\lib386\nt\clib3r.lib(segdefns)
+0001:00000003  ___begtext
+0002:00000000* __nullarea
+Module: d:\WATCOM\lib386\nt\clib3r.lib(nmalloc)
+0001:0000d6a0  _nmalloc_
+0001:0000d6a0  malloc_
+0002:00001814  ___nheapbeg
+0002:00001818  ___MiniHeapRover
+0002:0000181c  ___LargestSizeB4MiniHeapRover
+Module: d:\WATCOM\lib386\nt\clib3r.lib(mainwnt)
+0002:00001820  ___TlsIndex
+0002:00001824  ___GetThreadPtr
+0002:00001828  __AccessFileH
+0002:0000182c  __ReleaseFileH
+0002:00001830  __InitAccessH
+0002:00001834  __FiniAccessH
+0002:00001838  __AccessIOB
+0002:0000183c  __ReleaseIOB
+0002:00001840  __AccessNHeap
+0002:00001844  __AccessFHeap
+0002:00001848  __ReleaseNHeap
+0001:0000d78f* __threadid_
+0001:0000d7ab  __NTInit_
+0001:0000d8d2* __NTMainInit_
+0001:0000d918  __exit_
+0002:0000184c  __ReleaseFHeap
+0002:00001850  __AccessTDList
+0002:00001854  __ReleaseTDList
+0002:00001858  __AccessFList
+0002:0000185c  __ReleaseFList
+0002:00001860  __ThreadExitRtn
+0002:00001864  ___sig_init_rtn
+0002:00001868  ___sig_fini_rtn
+0002:0000b0f8  ___Is_DLL
+0002:0000b0fc  ___FirstThreadData
+Module: d:\WATCOM\lib386\plibmt3r.lib(cppdata)
+0002:0000b100  __wint_thread_data_offset
+0002:0000b104* ___wcpp_2_data_catch_completed_
+0002:0000b108  ___wcpp_2_data_dtreg_vfptrs_
+0002:0000b11c* __compiled_under_generic
+0002:000029ee* rt_init __based("XI") __wcpp_2_data_multi_thread_init_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(__stos)
+0001:0000d940  __STOSB
+0001:0000d977* __STOSD
+Module: d:\WATCOM\lib386\nt\clib3r.lib(istable)
+0002:00001428  __IsTable
+Module: d:\WATCOM\lib386\plibmt3r.lib(lock)
+0001:0000d9e4* near __lock::__lock()
+0001:0000d9fb+ near __lock::~__lock()
+0001:0000da08  void near __lock::p()
+0001:0000da0f  void near __lock::v()
+0002:00002a0c* rt_init __based("YI") __wcpp_2_data_fini_sisema_
+Module: d:\WATCOM\lib386\plibmt3r.lib(stabdtor)
+0001:0000dbec  __wcpp_2_destruct_internal__
+0001:0000dbf6  __wcpp_2_destruct_all__
+0001:0000dbf8* __wcpp_2_destruct__
+0001:0000dc18* __wcpp_2_destruct_after_all__
+0001:0000dc1a* __wcpp_2_destruct_after__
+Module: d:\WATCOM\lib386\nt\clib3r.lib(thredwnt)
+0001:0000dcde  __CBeginThread_
+0001:0000ddb2  __CEndThread_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(thrdxwnt)
+0001:0000de6b  __CBeginThreadEx_
+0001:0000dee2  __CEndThreadEx_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(prtf)
+0001:0000df0d  __prtf_
+Module: d:\WATCOM\lib386\plibmt3r.lib(stabarr)
+0001:0000eb19  __wcpp_2_arr_register__
+0002:000029f4* rt_init __based("XI") __wcpp_2_data_stab_init_arr_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(memalloc)
+0001:0000eb4a  __MemAllocator
+0001:0000ebf2  __MemFree
+Module: d:\WATCOM\lib386\nt\clib3r.lib(heapmod)
+0002:0000b120  ___nheap_clean
+0002:0000b121  ___fheap_clean
+Module: d:\WATCOM\lib386\nt\clib3r.lib(enterdb)
+0001:0000ecfd  __EnterWVIDEO_
+0002:00001878+ ___WD_Present
+Module: d:\WATCOM\lib386\nt\clib3r.lib(xmsgwnt)
+0001:0000ed23  __exit_with_msg_
+0001:0000ed5a  __fatal_runtime_error_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(mthread)
+0001:0000ed78+ __CloseSemaphore_
+0001:0000eda4+ __AccessIOB_
+0001:0000edae+ __ReleaseIOB_
+0001:0000edb8+ __AccessFileH_
+0001:0000edc5+ __ReleaseFileH_
+0001:0000edd5+ __InitAccessH_
+0001:0000edda+ __FiniAccessH_
+0001:0000edf6+ __AccessNHeap_
+0001:0000edfd+ __ReleaseNHeap_
+0001:0000ee07+ __AccessFHeap_
+0001:0000ee0e+ __ReleaseFHeap_
+0001:0000ee18+ __AccessTDList_
+0001:0000ee1f+ __ReleaseTDList_
+0001:0000ee26+ __AccessFList_
+0001:0000ee2b+ __AccessSemaphore_
+0001:0000ee88+ __ReleaseFList_
+0001:0000ee8d+ __ReleaseSemaphore_
+0001:0000eeb2+ __MultipleThread_
+0001:0000eed2  __InitThreadData_
+0001:0000ef11  __NTThreadInit_
+0001:0000ef5d  __NTAddThread_
+0001:0000efaa  __NTRemoveThread_
+0001:0000f001+ __NTThreadFini_
+0001:0000f021  __InitMultipleThread_
+0002:0000187c  ___AccessSema4
+0002:00001880  ___ReleaseSema4
+0002:00001884  ___CloseSema4
+0002:00002a12* ___AccessSema4Fini
+Module: d:\WATCOM\lib386\nt\clib3r.lib(stdcllmn)
+0001:0000f1a5  _LibMain
+Module: d:\WATCOM\lib386\nt\clib3r.lib(ddgrpwnt)
+0001:0000f1be  __disallow_single_dgroup_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(inirt386)
+0001:0000f28e  __InitRtns
+0001:0000f2d9  __FiniRtns
+Module: d:\WATCOM\lib386\nt\clib3r.lib(rdllmwnt)
+0002:00001888  __pRawDllMain
+Module: d:\WATCOM\lib386\nt\clib3r.lib(cinit)
+0001:0000f328  __CommonInit_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(seg386)
+0000:00001234  __DOSseg__
+Module: d:\WATCOM\lib386\nt\clib3r.lib(grownear)
+0001:0000f438  __ExpandDGROUP_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(nmemneed)
+0001:0000f493  __nmemneed_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(signlwnt)
+0002:0000188c+ _SignalTable
+0001:0000f591+ __sigabort_
+0001:0000f596+ raise_
+0001:0000f5cf+ __sigfpe_handler_
+0001:0000f616* signal_
+0001:0000f6fb  __SigInit_
+0001:0000f728  __SigFini_
+0001:0000f746+ ___ExceptionFilter
+0001:0000faf9  __NewExceptionHandler_
+0001:0000fb37  __DoneExceptionHandler_
+0002:0000b674+ ___ExceptionHandled
+Module: d:\WATCOM\lib386\nt\clib3r.lib(nthdl)
+0001:0000fb86* __NTAtMaxFiles_
+0001:0000fbcb  __NTAddFileHandle_
+0001:0000fc44* __NTAddSpecificFileHandle_
+0001:0000fce0  __NTRemoveFileHandle_
+0001:0000fd0c  __NTInitFileHandles_
+0001:0000fd43* __NTGetFakeHandle_
+0002:0000b67c  ___FileHandleIDs
+Module: d:\WATCOM\lib386\nt\clib3r.lib(crwd386)
+0002:00001910* __psp
+0002:0000193b  __osmajor
+0002:0000193c  __osminor
+0002:0000193d  __osbuild
+0002:00001932* __Extender
+0002:00001933* __ExtenderSubtype
+0002:00001934* __X32VM
+0002:00001914* __x386_stacklow
+0002:00001904  __LpCmdLine
+0002:00001908  __LpPgmName
+0002:0000190c  __LpDllName
+0002:000018fc* __dynend
+0002:00001900  __curbrk
+0002:00001914* __STACKLOW
+0002:00001918* __STACKTOP
+0002:0000191c* __ASTACKSIZ
+0002:00001920* __ASTACKPTR
+0002:00001924* __cbyte
+0002:00001928* __cbyte2
+0002:0000192c* __child
+0002:00001935  __Envptr
+0002:00001939* __Envseg
+0002:00001930  __no87
+0002:0000193f* __FPE_handler
+0002:0000193f* ___FPE_handler
+Module: d:\WATCOM\lib386\nt\clib3r.lib(strdup)
+0001:0000fd56  strdup_
+0001:0000fd56* _strdup_
+Module: d:\WATCOM\lib386\plibmt3r.lib(thrddata)
+0001:0000fd9c  __wcpp_2_multi_thread_init__
+Module: d:\WATCOM\lib386\plibmt3r.lib(stabtrav)
+0001:0000fdac  __wcpp_2_stab_entry__
+0001:0000fdda  __wcpp_2_stab_trav_init__
+0001:0000fdfb  __wcpp_2_stab_trav_comp__
+0001:0000fe00  __wcpp_2_stab_trav_next__
+0001:0000fe85  __wcpp_2_stab_trav_move__
+Module: d:\WATCOM\lib386\plibmt3r.lib(stabthrw)
+0001:0000ff2f  __wcpp_2_corrupted_stack__
+0001:0001026f* __wcpp_2_catch_done__
+0001:000104de+ __wcpp_2_dispatchable__
+0001:00010537+ __wcpp_2_save_exc__
+0001:000105b4+ __wcpp_2_dispatch__
+0001:000106ac* __wcpp_2_rethrow__
+0001:000106bc* __wcpp_2_throw__
+0001:000106c6* __wcpp_2_throw_zero__
+0002:000029fa+ ___wcpp_2_data_init_longjmp_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(regdata)
+0001:000107cb  __RegisterThreadDataSize_
+0002:00001944  ___ThreadDataSize
+Module: d:\WATCOM\lib386\nt\clib3r.lib(itoa)
+0001:00010805+ utoa_
+0001:0001084f  itoa_
+0001:0001084f* _itoa_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(seterrno)
+0001:0001086a* __set_EDOM_
+0001:0001086f  __set_errno_
+0001:0001087d* __set_ERANGE_
+0001:00010884* __set_EINVAL_
+0001:00010894* __set_doserrno_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(noefgfmt)
+0002:00001948  ___EFG_printf
+0002:0000194c* ___EFG_scanf
+Module: d:\WATCOM\lib386\nt\clib3r.lib(ltoa)
+0001:000108d9  ultoa_
+0001:00010923  ltoa_
+0001:00010923* _ltoa_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(toupper)
+0001:0001093e  toupper_
+0001:0001093e* _toupper_
+Module: d:\WATCOM\lib386\plibmt3r.lib(tssize)
+0001:00010970  __wcpp_2_ts_size__
+Module: d:\WATCOM\lib386\plibmt3r.lib(stabreg)
+0001:000109b4  __wcpp_2_base_register__
+0001:000109d1* __wcpp_2_base_deregister__
+Module: d:\WATCOM\lib386\nt\clib3r.lib(trdlist)
+0001:000109e6  __GetThreadData_
+0001:00010a1d  __AddThreadData_
+0001:00010a7e  __RemoveThreadData_
+0001:00010ac8  __FreeThreadDataList_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(calloc)
+0001:00010af1  calloc_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(trdalloc)
+0001:00010b09  __FiniThreadProcessing_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(lmainwnt)
+0001:00010b0e  _LibMain@12
+Module: d:\WATCOM\lib386\nt\clib3r.lib(amblksiz)
+0002:00001950  __amblksiz
+Module: d:\WATCOM\lib386\nt\clib3r.lib(heapen)
+0001:00010b27* _heapenable_
+0002:00001954  ___heap_enabled
+Module: d:\WATCOM\lib386\nt\clib3r.lib(nheapmin)
+0001:00010b48  _nheapshrink_
+0001:00010b48* _nheapmin_
+0001:00010b48* _heapmin_
+0001:00010b48* _heapshrink_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(abort)
+0001:00010c0d* abort_
+0001:00010c13  __terminate_
+0002:00001958  ___abort
+Module: d:\WATCOM\lib386\math387r.lib(cntrl87)
+0001:00010c25  _control87_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(chk8087)
+0001:00010c81+ __init_8087_
+0001:00010cb2  _fpreset_
+0001:00010cbc  __chk8087_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(conutwnt)
+0001:00010d06* __NTRealKey_
+0001:00010d9b* __NTConsoleInput_
+0001:00010da6  __NTConsoleOutput_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(iomode)
+0001:00010db1* __IOMode_
+0001:00010e06* __SetIOMode_
+0002:00001964  ___NFiles
+0002:00001968+ ___init_mode
+0002:000019b8+ __iomode
+Module: d:\WATCOM\lib386\nt\clib3r.lib(nrealloc)
+0001:00010e1b* _nrealloc_
+0001:00010e1b  realloc_
+Module: d:\WATCOM\lib386\plibmt3r.lib(bittest)
+0001:00010e98  __wcpp_2_bit_test__
+Module: d:\WATCOM\lib386\plibmt3r.lib(callterm)
+0001:00010eb8  __wcpp_2_call_terminate__
+Module: d:\WATCOM\lib386\plibmt3r.lib(tsequiv)
+0001:00010ec9  __wcpp_2_ts_equiv__
+Module: d:\WATCOM\lib386\plibmt3r.lib(callunex)
+0001:00010f1c  __wcpp_2_call_unexpected__
+Module: d:\WATCOM\lib386\nt\clib3r.lib(stjmp386)
+0001:00010f22* _setjmp_
+0001:00010f61  longjmp_
+Module: d:\WATCOM\lib386\plibmt3r.lib(allocexc)
+0001:0001100c  __wcpp_2_alloc_exc__
+0001:0001115b  __wcpp_2_free_exc__
+0001:0001119a  __wcpp_2_pop_exc__
+0001:000111a9  __wcpp_2_push_exc__
+Module: d:\WATCOM\lib386\nt\clib3r.lib(ljmphdl)
+0002:000019c4  ___longjmp_handler
+Module: d:\WATCOM\lib386\nt\clib3r.lib(stdcldmn)
+0001:000111b7  _DLLMain
+Module: d:\WATCOM\lib386\nt\clib3r.lib(_8087386)
+0002:000019c8  __8087
+0002:000019c9  __real87
+Module: d:\WATCOM\lib386\nt\clib3r.lib(save8087)
+0002:000019cc  ___Save8087
+0002:000019d0  ___Rest8087
+Module: d:\WATCOM\lib386\nt\clib3r.lib(8087cw)
+0002:000019d4  __8087cw
+Module: d:\WATCOM\lib386\nt\clib3r.lib(ini87386)
+0001:000111d2  __init_80x87
+Module: d:\WATCOM\lib386\nt\clib3r.lib(isattwnt)
+0001:000111f9  isatty_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(nmsize)
+0001:0001123a  _nmsize_
+0001:0001123a* _msize_
+Module: d:\WATCOM\lib386\nt\clib3r.lib(nexpand)
+0001:00011243  _nexpand_
+0001:00011243* _expand_
+0001:0001127d+ __HeapManager_expand_
+Module: d:\WATCOM\lib386\plibmt3r.lib(termnate)
+0001:0001141c  void near terminate()
+Module: d:\WATCOM\lib386\plibmt3r.lib(unexpect)
+0001:00011478  void near unexpected()
+Module: d:\WATCOM\lib386\plibmt3r.lib(areaexc)
+0002:000019d8  ___EXC_AREA
+Module: d:\WATCOM\lib386\nt\clib3r.lib(lmn2wnt)
+0001:000114b4  _DLLMain@12
+
+
+                        +----------------------+
+                        |   Imported Symbols   |
+                        +----------------------+
+
+Symbol                              Module
+======                              ======
+
+_GetOpenFileNameA@4                 comdlg32.dll
+_GetSaveFileNameA@4                 comdlg32.dll
+_ExitProcess                        KERNEL32.DLL
+_GetEnvironmentStrings              KERNEL32.DLL
+_GetModuleFileNameA                 KERNEL32.DLL
+_GetCommandLineA                    KERNEL32.DLL
+_GetVersion                         KERNEL32.DLL
+_GetModuleHandleA                   KERNEL32.DLL
+_CloseHandle                        KERNEL32.DLL
+_SetEvent                           KERNEL32.DLL
+_GetCurrentThread                   KERNEL32.DLL
+_GetCurrentThreadId                 KERNEL32.DLL
+_CreateEventA                       KERNEL32.DLL
+_CreateThread                       KERNEL32.DLL
+_WaitForSingleObject                KERNEL32.DLL
+_ExitThread                         KERNEL32.DLL
+_WriteFile                          KERNEL32.DLL
+_CreateMutexA                       KERNEL32.DLL
+_ReleaseMutex                       KERNEL32.DLL
+_TlsGetValue                        KERNEL32.DLL
+_TlsAlloc                           KERNEL32.DLL
+_TlsSetValue                        KERNEL32.DLL
+_TlsFree                            KERNEL32.DLL
+_MessageBoxA                        USER32.DLL
+_VirtualAlloc                       KERNEL32.DLL
+_SetConsoleCtrlHandler              KERNEL32.DLL
+_wsprintfA                          USER32.DLL
+_GetActiveWindow                    USER32.DLL
+_LoadLibraryA                       KERNEL32.DLL
+_GetProcAddress                     KERNEL32.DLL
+_SetStdHandle                       KERNEL32.DLL
+_GetStdHandle                       KERNEL32.DLL
+_VirtualFree                        KERNEL32.DLL
+_CreateFileA                        KERNEL32.DLL
+_RtlUnwind                          KERNEL32.DLL
+_GetFileType                        KERNEL32.DLL
+_FreeLibrary@4                      KERNEL32.dll
+_GetCurrentThreadId@0               KERNEL32.dll
+_MessageBoxA@16                     USER32.dll
+_GetMessageA@16                     USER32.dll
+_PostThreadMessageA@16              USER32.dll
+_GetModuleFileNameA@12              KERNEL32.dll
+_lstrlenA@4                         KERNEL32.dll
+_SetWindowLongA@12                  USER32.dll
+_DestroyWindow@4                    USER32.dll
+_CallWindowProcA@20                 USER32.dll
+_DefWindowProcA@16                  USER32.dll
+_CreateWindowExA@48                 USER32.dll
+_PostMessageA@16                    USER32.dll
+_SendMessageA@16                    USER32.dll
+_ShowWindow@8                       USER32.dll
+_IsWindowVisible@4                  USER32.dll
+_EnableWindow@8                     USER32.dll
+_IsWindowEnabled@4                  USER32.dll
+_GetParent@4                        USER32.dll
+_SetParent@8                        USER32.dll
+_GetWindow@8                        USER32.dll
+_GetDesktopWindow@0                 USER32.dll
+_SetWindowPos@28                    USER32.dll
+_GetWindowLongA@8                   USER32.dll
+_GetSystemMetrics@4                 USER32.dll
+_RegisterWindowMessageA@4           USER32.dll
+_LoadCursorA@8                      USER32.dll
+_GetStockObject@4                   GDI32.dll
+_RegisterClassA@4                   USER32.dll
+_InitializeCriticalSection@4        KERNEL32.dll
+_DeleteCriticalSection@4            KERNEL32.dll
+_EnterCriticalSection@4             KERNEL32.dll
+_LeaveCriticalSection@4             KERNEL32.dll
+_PostQuitMessage@4                  USER32.dll
+_IsChild@8                          USER32.dll
+_TranslateMessage@4                 USER32.dll
+_DispatchMessageA@4                 USER32.dll
+_BeginDeferWindowPos@4              USER32.dll
+_IsWindow@4                         USER32.dll
+_DeferWindowPos@32                  USER32.dll
+_EndDeferWindowPos@4                USER32.dll
+_GetClientRect@8                    USER32.dll
+_lstrcpyA@8                         KERNEL32.dll
+_GetWindowPlacement@8               USER32.dll
+_RegCreateKeyExA@36                 ADVAPI32.dll
+_RegCloseKey@4                      ADVAPI32.dll
+_RegSetValueExA@24                  ADVAPI32.dll
+_RegOpenKeyExA@20                   ADVAPI32.dll
+_RegQueryValueExA@24                ADVAPI32.dll
+_SetWindowPlacement@8               USER32.dll
+_InvalidateRect@12                  USER32.dll
+_ShowCaret@4                        USER32.dll
+_HideCaret@4                        USER32.dll
+_DestroyCaret@0                     USER32.dll
+_CreateCaret@16                     USER32.dll
+_SetCaretPos@8                      USER32.dll
+_SetTimer@16                        USER32.dll
+_KillTimer@8                        USER32.dll
+_SetWindowTextA@8                   USER32.dll
+_GetWindowTextA@12                  USER32.dll
+_GetWindowTextLengthA@4             USER32.dll
+_GetFocus@0                         USER32.dll
+_SetFocus@4                         USER32.dll
+_GetWindowRect@8                    USER32.dll
+_MapWindowPoints@16                 USER32.dll
+_GetDlgItem@8                       USER32.dll
+_GetDlgCtrlID@4                     USER32.dll
+_CreateDialogParamA@20              USER32.dll
+_EndDialog@8                        USER32.dll
+_IsDialogMessageA@8                 USER32.dll
+_SetDlgItemTextA@12                 USER32.dll
+_IsIconic@4                         USER32.dll
+_SetMenu@8                          USER32.dll
+_TranslateAcceleratorA@12           USER32.dll
+_LoadAcceleratorsA@8                USER32.dll
+_LoadStringA@16                     USER32.dll
+_GetSystemMenu@8                    USER32.dll
+_DrawMenuBar@4                      USER32.dll
+_RedrawWindow@16                    USER32.dll
+_BeginPaint@8                       USER32.dll
+_DrawIcon@16                        USER32.dll
+_EndPaint@8                         USER32.dll
+_GetClassLongA@8                    USER32.dll
+_LoadIconA@8                        USER32.dll
+_GetKeyState@4                      USER32.dll
+_SetCursor@4                        USER32.dll
+_ReleaseCapture@0                   USER32.dll
+_GetCapture@0                       USER32.dll
+_SetCapture@4                       USER32.dll
+_GetMessagePos@0                    USER32.dll
+_GetMessageTime@0                   USER32.dll
+_GetProfileIntA@12                  KERNEL32.dll
+_GetScrollPos@8                     USER32.dll
+_SetScrollPos@16                    USER32.dll
+_GetScrollRange@16                  USER32.dll
+_SetScrollRange@20                  USER32.dll
+_EnableScrollBar@12                 USER32.dll
+_GetMenu@4                          USER32.dll
+_GetVersionExA@4                    KERNEL32.dll
+_GetDialogBaseUnits@0               USER32.dll
+_SetRect@20                         USER32.dll
+_SelectObject@8                     GDI32.dll
+_MoveToEx@16                        GDI32.dll
+_LineTo@12                          GDI32.dll
+_FillRect@12                        USER32.dll
+_SetPixel@16                        GDI32.dll
+_GetTextExtentPoint32A@16           GDI32.dll
+_SetBkMode@8                        GDI32.dll
+_TextOutA@20                        GDI32.dll
+_SaveDC@4                           GDI32.dll
+_CreatePen@12                       GDI32.dll
+_IntersectRect@12                   USER32.dll
+_RestoreDC@8                        GDI32.dll
+_DeleteObject@4                     GDI32.dll
+_GetDC@4                            USER32.dll
+_CreateCompatibleDC@4               GDI32.dll
+_ReleaseDC@8                        USER32.dll
+_CreateCompatibleBitmap@12          GDI32.dll
+_DeleteDC@4                         GDI32.dll
+_BitBlt@36                          GDI32.dll
+_ValidateRect@8                     USER32.dll
+_GlobalAlloc@8                      KERNEL32.dll
+_GlobalLock@4                       KERNEL32.dll
+_GlobalUnlock@4                     KERNEL32.dll
+_GlobalReAlloc@12                   KERNEL32.dll
+_GlobalFree@4                       KERNEL32.dll
+_PtInRect@12                        USER32.dll
+_DestroyIcon@4                      USER32.dll
+_DestroyCursor@4                    USER32.dll
+_LoadMenuA@8                        USER32.dll
+_DestroyMenu@4                      USER32.dll
+_GetMenuItemCount@4                 USER32.dll
+_GetMenuItemID@8                    USER32.dll
+_GetSubMenu@8                       USER32.dll
+_GetCursorPos@4                     USER32.dll
+_TrackPopupMenu@28                  USER32.dll
+_AppendMenuA@16                     USER32.dll
+_DeleteMenu@12                      USER32.dll
+_GetMenuStringA@20                  USER32.dll
+_CheckMenuItem@12                   USER32.dll
+_EnableMenuItem@12                  USER32.dll
+_GetMenuState@12                    USER32.dll
+_CreateEventA@16                    KERNEL32.dll
+_CloseHandle@4                      KERNEL32.dll
+_SetEvent@4                         KERNEL32.dll
+_WaitForSingleObject@8              KERNEL32.dll
+_ResetEvent@4                       KERNEL32.dll
+_CreateMutexA@12                    KERNEL32.dll
+_ReleaseMutex@4                     KERNEL32.dll
+_CreateSemaphoreA@16                KERNEL32.dll
+_ReleaseSemaphore@12                KERNEL32.dll
+_InterlockedExchange@8              KERNEL32.dll
+_InterlockedIncrement@4             KERNEL32.dll
+_InterlockedDecrement@4             KERNEL32.dll
+_Sleep@4                            KERNEL32.dll
+_SetThreadPriority@8                KERNEL32.dll
+_SuspendThread@4                    KERNEL32.dll
+_ResumeThread@4                     KERNEL32.dll
+_ExitThread@4                       KERNEL32.dll
+_CreateThread@24                    KERNEL32.dll
+_TerminateThread@8                  KERNEL32.dll
+_GetCurrentProcess@0                KERNEL32.dll
+_TerminateProcess@8                 KERNEL32.dll
+_CreateFileA@28                     KERNEL32.dll
+_SetFilePointer@16                  KERNEL32.dll
+_WriteFile@20                       KERNEL32.dll
+
+
+                        +--------------------+
+                        |   Libraries Used   |
+                        +--------------------+
+
+d:\WATCOM\lib386\nt\clib3r.lib
+d:\WATCOM\lib386\plibmt3r.lib
+d:\WATCOM\lib386\math387r.lib
+d:\WATCOM\lib386\nt\nt.lib
+d:\WATCOM\lib386\nt\kernel32.lib
+d:\WATCOM\lib386\nt\user32.lib
+d:\WATCOM\lib386\nt\gdi32.lib
+d:\WATCOM\lib386\nt\comdlg32.lib
+d:\WATCOM\lib386\nt\advapi32.lib
+
+
+                        +-----------------------+
+                        |   Linker Statistics   |
+                        +-----------------------+
+
+Stack size:  00010000 (65536.)
+Memory size:  0002d008 (184328.)
+Entry point address: 0001:0000d13a
+Link time: 00:03.28

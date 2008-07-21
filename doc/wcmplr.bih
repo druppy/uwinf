@@ -1,0 +1,39 @@
+[topic bw_compiler_setup same "Compiler setup" "BIF/Window compiler setup" secondary]
+In general you don't have to use special setup for BIF/Window.
+
+If you are using the DLL version of BIF you must define 'BIF_IN_DLL'
+otherwise you program will crash.
+
+[sl]
+[li][ref bw_compiler_setup_win31 "Windows 3.1"]
+[li][ref bw_compiler_setup_os2 "OS/2 PM"]
+[li][ref bw_compiler_setup_wms "WMS"]
+[li][ref bw_compiler_setup_win32 "win32 (win95/NT)"]
+[esl]
+[etopic]
+
+[topic bw_compiler_setup_win31 down "Windows 3.1" "BIF/Window Compiler setup for Windows 3.1" secondary]
+The only thing to setup when using BIF/Window is to ensure that your
+application uses the same STRICTness as BIF/Window. BIF/Window can be
+compiled with or without STRICT defined. We strongly recommend using STRICT.
+[etopic]
+
+[topic bw_compiler_setup_os2 same "OS/2 PM" "BIF/Window Compiler setup for OS/2 PM"]
+No special setup should be necessary.
+[etopic]
+
+[topic bw_compiler_setup_wms same "WMS" "BIF/Window Compiler setup for WMS"]
+Since WMS uses BIF/Thread you must use the compiler setup recommended in
+[ref bifthread_compiler_setup "BIF/Thread Compiler setup"]
+[etopic]
+
+[topic bw_compiler_setup_win32 upafter "Win32" "BIF/Window Compiler setup for win32"]
+No special setup should be necessary except to use the same STRICTness as the
+BIF library. BIF can be compiled with or without STRICT defined. We strongly
+recommend using STRICT.
+
+You may also want to define WIN32_LEAN_AND_MEAN to reduce compilation time. BIF
+can also be compiled with or without WIN32_LEAN_AND_MEAN defined. You do not
+have use WIN32_LEAN_AND_MEAN if BIF was compiled using WIN32_LEAN_AND_MEAN and
+vice versa.
+[etopic]

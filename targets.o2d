@@ -1,0 +1,81 @@
+OS/2 DLL targets (and test and sample programs using these)
+Extra switches unless otherwise is specified:
+  Include directories: e:\source\bif\include
+  -zc Put constants in code segment (not needed but helps find errors and 
+      can improve swap performance)
+  -bm Multithreaded application
+Define BIF_IN_DLL and BUILDING_BIF
+(and for release: NDEBUG DEBUG_TRACE_WHERE=3 DEBUG_NOTE_WHERE=3 and -d1)
+------------------------------------------------------------------------------
+Target:
+  dll\os2\bift.dll
+Sources:
+  ..\..\source\thread\os2\*.cpp
+Switches:
+Description:
+  BIF/Thread DLL
+------------------------------------------------------------------------------
+Target:
+  dll\os2\pm\bifwpm.dll
+Sources:
+  ..\..\..\source\window\pm\*.cpp
+  ..\..\source\dbglog.cpp
+  ..\..\source\log.cpp
+Switches:
+Description:
+  BIF/Window DLL
+------------------------------------------------------------------------------
+Target:
+  dll\os2\pm\bifm.dll
+Sources:
+  ..\..\..\source\mix\os2\pm\*.cpp
+  ..\bift.lib
+  biftpm.lib
+  biftpm.lib
+Switches:
+Description:
+  BIF/Mix DLL
+------------------------------------------------------------------------------
+Target:
+  dll\os2\pm\biftpm.dll
+Sources:
+  ..\..\..\source\thread\pm\*.cpp
+  ..\bift.lib
+Switches:
+Description:
+  BIF/Thread support classes for PM
+------------------------------------------------------------------------------
+Target:
+  dll\os2\pm\ale.exe
+Sources:
+  ..\..\..\sample\window\os2\ale\*.cpp
+  bifwpm.lib
+  ..\..\..\sample\window\os2\ale\ale.rc
+Switches:
+Description:
+  Art Link Editor sample program
+------------------------------------------------------------------------------
+Target:
+  dll\os2\pm\menuedit
+Sources:
+  ..\..\..\sample\window\os2\menuedit\*.cpp
+  bifwpm.lib
+  ..\..\..\sample\window\so2\menuedit\menuedit.rc
+Switches:
+Description:
+  Menu Editor sample program
+------------------------------------------------------------------------------
+Target:
+  dll\os2\pm\pmsort.exe
+Sources:
+  ..\..\..\sample\mix\sort\pmsort.cpp
+  ..\..\..\sample\mix\sort\sortmoni.cpp
+  ..\..\..\sample\mix\sort\sortutil.cpp
+  ..\bift.lib
+  bifm.lib
+  biftpm.lib
+  bifwpm.lib
+Switches:
+Description:
+  Sorting Demonstration sample program
+

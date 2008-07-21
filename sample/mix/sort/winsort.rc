@@ -1,0 +1,47 @@
+#include <windows.h>
+
+#include "winsort.rh"
+
+IDSORT ICON "winsort.ico"
+
+IDSORT MENU
+BEGIN
+ POPUP "&Algorithm"
+ BEGIN
+  MENUITEM "QuickSort",         IDM_QUICKSORT
+  MENUITEM "HeapSort",          IDM_HEAPSORT
+  MENUITEM "ShellSort",         IDM_SHELLSORT
+  MENUITEM "CombSort",          IDM_COMBSORT
+  MENUITEM "BatcherSort",       IDM_BATCHERSORT
+  MENUITEM "Radix Exchange",    IDM_RADIXEXCHANGE
+ END
+
+ POPUP "&Data set"
+ BEGIN
+  MENUITEM "Random",            IDM_RANDOM
+  MENUITEM "Mostly sorted",     IDM_MOSTLYSORTED
+  MENUITEM "Almost sorted",     IDM_ALMOSTSORTED
+  MENUITEM "Sorted",            IDM_SORTED
+  MENUITEM "Reverse sorted",    IDM_REVERSESORTED
+  MENUITEM "Small value range", IDM_SMALLVALUERANGE
+ END
+
+ MENUITEM "&Next", IDM_NEXT
+ MENUITEM "&Sort!", IDM_SORT
+END
+
+IDSORT ACCELERATORS
+BEGIN
+  "N",  IDM_NEXT
+  "S",  IDM_SORT
+END
+
+STRINGTABLE
+BEGIN
+ IDS_QUICKSORT, "QuickSort"
+ IDS_BATCHERSORT, "BatcherSort"
+ IDS_HEAPSORT, "HeapSort"
+ IDS_SHELLSORT, "ShellSort"
+ IDS_COMBSORT, "CombSort"
+ IDS_RADIXEXCHANGE, "Radix Exchange"
+END

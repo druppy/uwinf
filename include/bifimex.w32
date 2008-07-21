@@ -1,0 +1,87 @@
+#ifndef __BIFIMEX_W32_INCLUDED
+#define __BIFIMEX_W32_INCLUDED
+
+//BIFCLASS and BIFFUNCTION #defines for Windows '95 and Windows NT
+
+//Defines BIFCLASS and BIFFUNCTION modifiers taking into account what compiler
+//is used, wether BIF is in a DLL, and if we are building the BIF library
+
+
+//First check that user has defined the library determination macro
+#if (!defined(BIF_IN_SLL)) && (!defined(BIF_IN_DLL))
+// Default is static link library
+#  define BIF_IN_SLL
+#endif
+//... and that he has not defined both
+#if defined(BIF_IN_SLL) && defined(BIF_IN_DLL)
+#  error You cannot define both BIF_IN_SLL and BIF_IN_DLL
+#endif
+
+
+#if defined(__WATCOMC__)
+//Watcom C/C++
+#if defined(BIF_IN_SLL)
+//BIF is in a static library (.LIB) - modifiers are not needed
+#  define BIFCLASS
+#  define BIFFUNCTION
+#else
+//BIF is in a dynlink library (.DLL).
+//Watcom needs modifiers only if we are building the DLL
+#  ifdef BUILDING_BIF
+#    define BIFCLASS __export
+#    define BIFFUNCTION __export
+#  else
+#    define BIFCLASS
+#    define BIFFUNCTION
+#  endif
+#endif
+
+#elif defined(__BORLANDC__)
+//Borland C++ >4.00 assumed
+#if defined(BIF_IN_SLL)
+//BIF is in a static library (.LIB) - modifiers are not needed
+#  define BIFCLASS
+#  define BIFFUNCTION
+#else
+//BIF is in a dynlink library (.DLL).
+//Borland needs modifiers
+#  ifdef BUILDING_BIF
+#    define BIFCLASS __export
+#    define BIFFUNCTION __export
+#  else
+#    define BIFCLASS __import
+#    define BIFFUNCTION __import
+#  endif
+#endif
+
+#elif (_MSC_VER >= 800)
+//MS VC++ 4.2
+#if defined(BIF_IN_SLL)
+//BIF is in a static library (.LIB) - modifiers are not needed
+#  define BIFCLASS
+#  define BIFFUNCTION
+#else
+//BIF is in a dynlink library (.DLL).
+//VC++ needs modifiers
+#  ifdef BUILDING_BIF
+//   "<type> __declspec(dllexport) foo()" works, but
+//   "<type> * __declspec(dllexport) foo()" does not work
+#    error MSVC++ BIFFUNCTION macro does not work. Modify sources, export by hand or phone Microsoft and demand decent support for __declspec
+#    define BIFCLASS __declspec(dllexport)
+#    define BIFFUNCTION __declspec(dllexport)
+#  else
+#    define BIFCLASS __declspec(dllimport)
+#    define BIFFUNCTION __declspec(dllimport)
+#  endif
+#endif
+//Tell MSVC to not warning about 'this' being used in base member initialization
+#pragma warning(disable:4355)
+
+#else
+//add a section for your compiler (Zortech, Metaware, High C, ...)
+#error Unknown compiler. Modify this header to support it.
+#endif
+
+#endif /*__BIFIMEX_W32_INCLUDED*/
+
+

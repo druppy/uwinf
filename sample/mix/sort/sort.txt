@@ -1,0 +1,19 @@
+SORT - sorting algorithm demonstration program
+
+This program demonstrates six different sortingalgorithms
+
+Because the painting is different in Windows and PM two versions of the main
+module is given.
+For Windows your project should include these 3 files:
+  winsort.cpp
+  sortmoni.cpp
+  sortutil.cpp
+For PM your project should include these 3 files:
+  pmsort.cpp
+  sortmoni.cpp
+  sortutil.cpp
+
+The rest of the .CPP should not be included in your project since they contain
+the implementation of the templates. These files are included by
+pmsort.cpp/winsort.cpp.
+

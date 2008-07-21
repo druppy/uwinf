@@ -1,0 +1,21 @@
+WMS!
+  K›rer indtil videre kun under OS/2. DOS (16&32bit) kommer snart.
+
+BIF/Window:
+  FKeyboardHandler
+    Handler til keyboardet
+  FCaretHandler
+    Handler til styring af den blinkende dims p† sk‘rmen
+  FMouseHandler::GetCurrentMousePosition()
+    Er tilf›jet.
+
+BIF/Thread:
+  FThread::GetTID()
+    Denne memberfunc er tilf›jet i DOS/win16 versionen, da WMS har brug for
+    entydig identification af tr†de. (Jeg l‘rte p† den h†rde m†de at man ikke
+    kan sammenligne pointere, n†r man roder med virtuelle base classes)
+
+Directorystrukturen er blever ‘ndret temmelig meget som f›lge af at man kan
+bruge flere forskellige vinduessystemer under det samme OS.
+
+DLL support under win16 er fjernet.

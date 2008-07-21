@@ -1,0 +1,3 @@
+NAME dlgtest
+FIL dlgtest.obj,frametst.obj,mfopen.obj,mousetst.obj,slidert.obj
+LIBR ..\..\..\lib\win16\bw1016.lib

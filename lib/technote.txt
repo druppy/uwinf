@@ -1,0 +1,6 @@
+Remember to make the following setting in the enviroment :
+
+OS2_INCLUDE	: Path to the home of watcom OS/2 headers.
+WINDOWS_INCLUDE : Path to the watcom windows header.
+NT_INCLUDE	: Path to the Watcom NT (95) header.
+TEMP		: Where to place temp OBJ files !

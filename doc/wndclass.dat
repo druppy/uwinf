@@ -1,0 +1,9 @@
+:artlink.
+:link reftype=hd refid=FWnd x=153 y=198 cx=48 cy=17.
+:link reftype=hd refid=FClientWindow x=6 y=136 cx=110 cy=17.
+:link reftype=hd refid=FFrameWindow x=146 y=136 cx=116 cy=17.
+:link reftype=hd refid=FControl x=294 y=135 cx=68 cy=17.
+:link reftype=hd refid=FAppWindow x=75 y=77 cx=104 cy=19.
+:link reftype=hd refid=FDialog x=219 y=73 cx=68 cy=20.
+:link reftype=hd refid=FModalDialog x=201 y=12 cx=110 cy=20.
+:eartlink.

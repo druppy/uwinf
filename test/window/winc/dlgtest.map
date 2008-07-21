@@ -1,0 +1,825 @@
+WATCOM Linker Version 10.6
+Copyright by WATCOM International Corp. 1985, 1996. All rights reserved.
+Created on:       97/12/21 22:04:06
+Warning(1027): file frametst.obj(E:\project\bif\test\window\winc\frametst.cpp): redefinition of FApplication far * far MakeApplicationInstance() ignored
+Warning(1027): file frametst.obj(E:\project\bif\test\window\winc\frametst.cpp): redefinition of WINMAIN ignored
+Warning(1027): file mfopen.obj(E:\project\bif\test\window\winc\mfopen.cpp): redefinition of FApplication far * far MakeApplicationInstance() ignored
+Warning(1027): file mfopen.obj(E:\project\bif\test\window\winc\mfopen.cpp): redefinition of WINMAIN ignored
+Warning(1027): file mousetst.obj(E:\project\bif\test\window\winc\mousetst.cpp): redefinition of FApplication far * far MakeApplicationInstance() ignored
+Warning(1027): file mousetst.obj(E:\project\bif\test\window\winc\mousetst.cpp): redefinition of WINMAIN ignored
+Warning(1027): file slidert.obj(E:\project\bif\test\window\winc\slidert.cpp): redefinition of FApplication far * far MakeApplicationInstance() ignored
+Warning(1027): file slidert.obj(E:\project\bif\test\window\winc\slidert.cpp): redefinition of WINMAIN ignored
+Executable Image: dlgtest.exe
+creating a Windows 16-bit executable
+Warning(1028): GETOPENFILENAME is an undefined reference
+Warning(1028): GETSAVEFILENAME is an undefined reference
+
+
+                        +------------+
+                        |   Groups   |
+                        +------------+
+
+Group                           Address              Size
+=====                           =======              ====
+
+DGROUP                          0004:0000            000028a0
+
+
+
+                        +--------------+
+                        |   Segments   |
+                        +--------------+
+
+Segment                Class          Group          Address         Size
+=======                =====          =====          =======         ====
+
+dlgtest_TEXT           CODE                          0001:0000       00000bea
+frametst_TEXT          CODE                          0001:0bf0       00000356
+mfopen_TEXT            CODE                          0001:0f50       00001100
+mousetst_TEXT          CODE                          0001:2050       00000f1a
+slidert_TEXT           CODE                          0001:2f70       00000aa6
+undefmbr_TEXT          CODE                          0001:3a16       00000019
+wndcore_TEXT           CODE                          0001:3a30       0000117a
+vfun_err_TEXT          CODE                          0001:4baa       00000025
+undefed_TEXT           CODE                          0001:4bd0       00000019
+UNDEFDTA_TEXT          CODE                          0001:4be9       00000000
+dialog_TEXT            CODE                          0001:4bea       000008fd
+opnew_TEXT             CODE                          0001:54e8       0000006d
+applicat_TEXT          CODE                          0001:5556       000003f1
+dtorarst_TEXT          CODE                          0001:5948       00000030
+opdelarr_TEXT          CODE                          0001:5978       0000000c
+opdel_TEXT             CODE                          0001:5984       00000014
+frame_TEXT             CODE                          0001:5998       00000f83
+CSTRTW16_TEXT          CODE                          0001:691b       00000000
+_TEXT                  CODE                          0001:6920       00001b3a
+CMODEL_TEXT            CODE                          0001:845a       00000000
+appwnd_TEXT            CODE                          0001:845a       00001341
+filedlg_TEXT           CODE                          0001:979c       00000636
+msgbox_TEXT            CODE                          0001:9dd2       0000014a
+comhndl_TEXT           CODE                          0001:9f1c       000007fb
+mouse_TEXT             CODE                          0001:a718       00000b7d
+slider_TEXT            CODE                          0001:b296       00000480
+fatalerr_TEXT          CODE                          0001:b716       00000021
+opnewarr_TEXT          CODE                          0001:b738       0000000c
+PRWDATA_TEXT           CODE                          0001:b744       00000000
+cppdata_TEXT           CODE                          0001:b744       00000000
+stabadt_TEXT           CODE                          0001:b744       00000059
+wndmisc_TEXT           CODE                          0001:b79e       00000f22
+INIRT086_TEXT          CODE                          0001:c6c0       00000000
+SEG086_TEXT            CODE                          0001:c6c0       00000000
+pure_err_TEXT          CODE                          0001:c6c0       00000025
+slider31_TEXT          CODE                          0001:c6e6       00002be2
+control_TEXT           CODE                          0001:f2c8       0000028b
+I4M_TEXT               CODE                          0001:f553       00000000
+I4D_TEXT               CODE                          0001:f553       00000000
+MEMALLOC_TEXT          CODE                          0001:f553       00000000
+stabarr_TEXT           CODE                          0001:f554       000000c4
+stabdtor_TEXT          CODE                          0001:f618       000002f5
+stabmod_TEXT           CODE                          0001:f90e       0000010a
+moddtorr_TEXT          CODE                          0001:fa18       00000000
+tssize_TEXT            CODE                          0001:fa18       0000005b
+stabreg_TEXT           CODE                          0001:fa74       0000004c
+stabtrav_TEXT          CODE                          0001:fac0       00000284
+stabthrw_TEXT          CODE                          0002:0000       00000e4b
+bittest_TEXT           CODE                          0002:0e4c       00000020
+callterm_TEXT          CODE                          0002:0e6c       0000000c
+tsequiv_TEXT           CODE                          0002:0e78       00000082
+callunex_TEXT          CODE                          0002:0efa       0000000c
+STJMP086_TEXT          CODE                          0002:0f06       00000000
+allocexc_TEXT          CODE                          0002:0f06       00000315
+termnate_TEXT          CODE                          0002:121c       00000065
+unexpect_TEXT          CODE                          0002:1282       0000003f
+areaexc_TEXT           CODE                          0002:12c1       00000000
+dlgtest_DATA1          FAR_CONST                     0003:0000       000000dc
+frametst_DATA1         FAR_CONST                     0003:00dc       0000002c
+mfopen_DATA1           FAR_CONST                     0003:0108       0000014c
+mfopen_DATA2           FAR_CONST                     0003:0254       00000029
+mousetst_DATA1         FAR_CONST                     0003:027e       0000012c
+mousetst_DATA2         FAR_CONST                     0003:03aa       00000228
+slidert_DATA1          FAR_CONST                     0003:05d2       000000b8
+slidert_DATA2          FAR_CONST                     0003:068a       00000009
+undefmbr_DATA1         FAR_CONST                     0003:0694       0000003c
+wndcore_DATA1          FAR_CONST                     0003:06d0       0000004c
+undefed_DATA1          FAR_CONST                     0003:071c       0000002c
+dialog_DATA1           FAR_CONST                     0003:0748       000000e0
+applicat_DATA1         FAR_CONST                     0003:0828       00000040
+frame_DATA1            FAR_CONST                     0003:0868       00000050
+appwnd_DATA1           FAR_CONST                     0003:08b8       000000dc
+filedlg_DATA1          FAR_CONST                     0003:0994       00000000
+msgbox_DATA1           FAR_CONST                     0003:0994       00000000
+comhndl_DATA1          FAR_CONST                     0003:0994       0000007c
+mouse_DATA1            FAR_CONST                     0003:0a10       00000130
+slider_DATA1           FAR_CONST                     0003:0b40       0000000c
+wndmisc_DATA1          FAR_CONST                     0003:0b4c       000000b2
+control_DATA1          FAR_CONST                     0003:0bfe       00000018
+stabthrw_DATA1         FAR_CONST                     0003:0c16       00000207
+allocexc_DATA1         FAR_CONST                     0003:0e1e       0000002b
+termnate_DATA1         FAR_CONST                     0003:0e4a       00000022
+unexpect_DATA1         FAR_CONST                     0003:0e6c       00000023
+FAR_DATA               FAR_DATA                      0003:0e8f       00000000
+_NULL                  BEGDATA        DGROUP         0004:0000       00000010
+AFX_NULL               BEGDATA        DGROUP         0004:0010       00000000
+CONST                  DATA           DGROUP         0004:0010       00000050
+CONST2                 DATA           DGROUP         0004:0060       00000102
+_DATA                  DATA           DGROUP         0004:0162       0000067c
+STRINGS                DATA           DGROUP         0004:07de       00000000
+DATA                   DATA           DGROUP         0004:07de       00000000
+BCSD                   DATA           DGROUP         0004:07de       00000000
+XIB                    DATA           DGROUP         0004:07de       00000000
+XI                     DATA           DGROUP         0004:07de       00000018
+XIE                    DATA           DGROUP         0004:07f6       00000000
+YIB                    DATA           DGROUP         0004:07f6       00000000
+YI                     DATA           DGROUP         0004:07f6       00000006
+YIE                    DATA           DGROUP         0004:07fc       00000000
+_BSS                   BSS            DGROUP         0004:07fc       000000a0
+STACK                  STACK          DGROUP         0004:08a0       00002000
+
+
+                        +----------------+
+                        |   Memory Map   |
+                        +----------------+
+
+* = unreferenced symbol
++ = symbol only referenced locally
+
+Address        Symbol
+=======        ======
+
+Module: dlgtest.obj(E:\project\bif\test\window\winc\dlgtest.cpp)
+0001:0bc0+     int unsigned far FEvent::GetWParam() const
+0001:0b90+     int far FCommandEvent::GetItem() const
+0001:0b60      Bool far FCommandHandler::SysCommand( FSysCommandEvent far & )
+0001:0b30      Bool far FCloseHandler::CloseUnconditionally( FEvent far & )
+0001:0b00      Bool far FDialog::CreateControls()
+0001:0aa0      Bool far FApplication::StartUp( int, char far * far * )
+0001:0a70      int far FApplication::ShutDown()
+0001:0990+     far MyDlg::MyDlg()
+0001:0670+     int far MyDlg::DoModal( FWnd far * )
+0001:0620+     Bool far MyDlg::Command( FCommandEvent far & )
+0001:05e0+     int far DialogTestApplication::Main( int, char far * far * )
+0001:0550+     far DialogTestApplication::DialogTestApplication()
+0001:04a0+     far DialogTestApplication::~DialogTestApplication()
+0001:0410+     far MyDlg::~MyDlg()
+0001:0360      far FModalDialog::~FModalDialog()
+0001:0280      far FDialog::~FDialog()
+0001:01f0      far FDialogTerminationhandler::~FDialogTerminationhandler()
+0001:0160      far FCloseHandler::~FCloseHandler()
+0001:00d0      far FCommandHandler::~FCommandHandler()
+0001:0000      FApplication far * far MakeApplicationInstance()
+0001:008a      WINMAIN
+Module: frametst.obj(E:\project\bif\test\window\winc\frametst.cpp)
+0001:0e90+     int far FrameTestApplication::ShutDown()
+0001:0e00+     far FrameTestApplication::FrameTestApplication()
+0001:0d50+     far FrameTestApplication::~FrameTestApplication()
+0001:0bf0+     Bool far FrameTestApplication::StartUp( int, char far * far * )
+Module: mfopen.obj(E:\project\bif\test\window\winc\mfopen.cpp)
+0001:2010+     far FEvent::FEvent()
+0001:1f20      far FStdFileDialog::FStdFileDialog()
+0001:1c20      Bool far FStdFileDialog::Command( FCommandEvent far & )
+0001:1b40      far FStdOpenFileDialog::FStdOpenFileDialog()
+0001:1800+     Bool far FStdOpenFileDialog::DoModal( FWnd far *, char far *, int, char far * far *, int, char const far *, char const far *, char const far * )
+0001:1720      far FStdSaveFileDialog::FStdSaveFileDialog()
+0001:13d0+     far TestApp::TestApp()
+0001:1340+     far TestApp::~TestApp()
+0001:12b0      far FStdSaveFileDialog::~FStdSaveFileDialog()
+0001:1220      far FStdOpenFileDialog::~FStdOpenFileDialog()
+0001:1190      far FStdFileDialog::~FStdFileDialog()
+0001:0f50+     int far TestApp::Main( int, char far * far * )
+Module: mousetst.obj(E:\project\bif\test\window\winc\mousetst.cpp)
+0001:2f10+     far FRect::FRect( int, int, int, int )
+0001:2ee0+     HWND__ const near * far FWnd::GetHwnd()
+0001:2eb0      Bool far FWnd::PumpEvent( FEvent far & )
+0001:2e80      Bool far FSizeHandler::SizeChanged( FSizeEvent far & )
+0001:2dc0      far FClientWindow::FClientWindow()
+0001:2d90      Bool far FMouseHandler::Button1Down( FButtonDownEvent far & )
+0001:2d60      Bool far FMouseHandler::Button1Up( FButtonUpEvent far & )
+0001:2d30      Bool far FMouseHandler::Button2Down( FButtonDownEvent far & )
+0001:2d00      Bool far FMouseHandler::Button2Up( FButtonUpEvent far & )
+0001:2cd0      Bool far FMouseHandler::Button2DblClk( FButtonDblClkEvent far & )
+0001:2ca0      Bool far FMouseHandler::Button3Down( FButtonDownEvent far & )
+0001:2c70      Bool far FMouseHandler::Button3Up( FButtonUpEvent far & )
+0001:2c40      Bool far FMouseHandler::Button3DblClk( FButtonDblClkEvent far & )
+0001:2c10      Bool far FMouseHandler::MouseMove( FMouseMoveEvent far & )
+0001:2be0      Bool far FMouseHandler::ControlPointer( FControlPointerEvent far & )
+0001:2bb0      Bool far FMouseHandler::ControlPointerNonWindow( FControlPointerEvent far & )
+0001:2b80      Bool far FExtendedMouseHandler::Button3MotionStart( FMouseEvent far & )
+0001:2b50      Bool far FExtendedMouseHandler::Button3MotionEnd( FMouseEvent far & )
+0001:2b20      Bool far FExtendedMouseHandler::Button3Click( FMouseEvent far & )
+0001:2af0      Bool far FExtendedMouseHandler::ButtonChord( FMouseEvent far & )
+0001:2a30+     far MyClient::MyClient()
+0001:2050+     Bool far MyClient::MouseDragStart( FMouseEvent far & )
+0001:208c+     Bool far MyClient::MouseDragEnd( FMouseEvent far & )
+0001:20c8+     Bool far MyClient::MouseSingleSelect( FMouseEvent far & )
+0001:2104+     Bool far MyClient::MouseOpen( FMouseEvent far & )
+0001:2140+     Bool far MyClient::MouseContextMenu( FMouseEvent far & )
+0001:217c+     Bool far MyClient::MouseTextEdit( FMouseEvent far & )
+0001:21b8+     Bool far MyClient::MouseSelectStart( FMouseEvent far & )
+0001:21f4+     Bool far MyClient::MouseSelectEnd( FMouseEvent far & )
+0001:2950+     int far MouseTestApplication::ShutDown()
+0001:2890+     far MouseTestApplication::MouseTestApplication()
+0001:27c0+     far MouseTestApplication::~MouseTestApplication()
+0001:2710+     far MyClient::~MyClient()
+0001:2680      far FTranslatedMouseHandler::~FTranslatedMouseHandler()
+0001:25f0      far FExtendedMouseHandler::~FExtendedMouseHandler()
+0001:2560      far FMouseHandler::~FMouseHandler()
+0001:24d0      far FSizeHandler::~FSizeHandler()
+0001:2230+     void far MyClient::ShowEvent( char const far * )
+0001:2308+     Bool far MouseTestApplication::StartUp( int, char far * far * )
+Module: slidert.obj(E:\project\bif\test\window\winc\slidert.cpp)
+0001:3990      far FControl::FControl()
+0001:38a0+     far SliderTestFrame::SliderTestFrame()
+0001:3530+     Bool far SliderTestApplication::StartUp( int, char far * far * )
+0001:34f0+     int far SliderTestApplication::ShutDown()
+0001:3460+     far SliderTestApplication::SliderTestApplication()
+0001:33b0+     far SliderTestApplication::~SliderTestApplication()
+0001:3300+     far SliderTestFrame::~SliderTestFrame()
+0001:3270      far FSlider::~FSlider()
+0001:31e0      far FControl::~FControl()
+0001:2f70+     Bool far SliderTestFrame::Create( FWnd far * )
+Module: d:\WATCOM\lib286\win\plibl.lib(undefmbr)
+0001:3a16      __wcpp_2_undefined_member_function__
+Module: ..\..\..\lib\win16\bw1016.lib(E:\PROJECT\BIF\source\window\win16\wndcore.cpp)
+0001:3a30      FDesktop far * far GetDesktop()
+0001:3a6a      FWndMan far * far GetWndMan()
+0001:3a72      far FHandler::FHandler( FWnd far * )
+0001:3ac0      far FHandler::~FHandler()
+0001:3b22      Bool far FHandler::DoDispatch( FEvent far & )
+0001:3b6a      far FWnd::FWnd()
+0001:3b9a      far FWnd::~FWnd()
+0001:3bf8      Bool far FWnd::BeforeDestroy()
+0001:3c40      Bool far FWnd::Destroy()
+0001:3c70      Bool far FWnd::AfterDestroy()
+0001:3ca2      void far FWnd::Default( FEvent far & )
+0001:3d4a      Bool far FWnd::Create( long unsigned, char const far *, char const far *, long unsigned, FRect far *, HWND__ const near *, HMENU__ const near * )
+0001:3e26      void far FWnd::Dispatch( FEvent far & )
+0001:3e58      Bool far FWnd::DispatchNoDefault( FEvent far & )
+0001:3eb2*     Bool far FWnd::CallHandlerChain( FEvent far &, FHandler far *, Bool )
+0001:3f70      void far FWnd::addHandler( FHandler far * )
+0001:3f9c      void far FWnd::removeHandler( FHandler far * )
+0001:400c      Bool far FWnd::PostEvent( FEvent const far & )
+0001:402e      Bool far FWnd::SendEvent( FEvent far & )
+0001:409a      Bool far FWnd::Show()
+0001:40b6*     Bool far FWnd::Hide()
+0001:40d2*     Bool far FWnd::IsVisible()
+0001:40ea      Bool far FWnd::Enable()
+0001:4104      Bool far FWnd::Disable()
+0001:411e*     Bool far FWnd::IsEnabled()
+0001:4136      FWnd far * far FWnd::GetParent()
+0001:416e*     FWnd far * far FWnd::SetParent( FWnd far * )
+0001:41c2+     FWnd far * far FWnd::GetOwner()
+0001:41fc*     FWnd far * far FWnd::SetOwner( FWnd far * )
+0001:4250*     Bool far FWnd::Zorder( FWnd::zorder, FWnd far * )
+0001:42e8*     FWnd far * far FWnd::GetFirstSibling()
+0001:430e*     FWnd far * far FWnd::GetNextSibling()
+0001:4334      long far FWnd::GetStyle()
+0001:434e+     void far FWnd::SetStyle( long )
+0001:4368*     void far FWnd::SetStyle( long, long )
+0001:4392+     far FDesktop::FDesktop()
+0001:43c6+     far FDesktop::~FDesktop()
+0001:441e*     int far FDesktop::GetWidth()
+0001:4430*     int far FDesktop::GetHeight()
+0001:4442      far FWndMan::FWndMan( HINSTANCE__ const near *, HINSTANCE__ const near * )
+0001:4532      far FWndMan::~FWndMan()
+0001:45ea+     void far FWndMan::AddWnd( FWnd far * )
+0001:463e+     Bool far FWndMan::RemoveWnd( FWnd far * )
+0001:471a      FWnd far * far FWndMan::FindWnd( HWND__ const near * )
+0001:47a2      Bool far FWndMan::AddPumpWindow( FWnd far * )
+0001:486e      void far FWndMan::RemovePumpWindow( FWnd far * )
+0001:48e0      Bool far FWndMan::CheckPumpWindows( FEvent far & )
+0001:4956      void far FWndMan::PumpEvent( FEvent far & )
+0001:4986      Bool far FWndMan::SetCreationWindow( FWnd far * )
+0001:499a      FWnd far * far FWndMan::GetCreationWindow()
+0001:49ba      void far FWndMan::SubRegWnd( FWnd far *, HWND__ const near * )
+0001:4a20+     long far BifInitProc( HWND__ const near *, int unsigned, int unsigned, long )
+0001:4ad0+     long far BifSubclassProc( HWND__ const near *, int unsigned, int unsigned, long )
+0001:4b9e      far FRect::FRect( FRect const far & )
+0001:4b68      far tagRECT::tagRECT( tagRECT const far & )
+Module: d:\WATCOM\lib286\win\plibl.lib(vfun_err)
+0001:4baa      __wcpp_2_undef_vfun__
+Module: d:\WATCOM\lib286\win\plibl.lib(undefed)
+0001:4bd0      __wcpp_2_undefed_cdtor__
+Module: d:\WATCOM\lib286\win\plibl.lib(undefdta)
+0000:0000      ____wcpp_2_data_undefined_member_data_
+Module: ..\..\..\lib\win16\bw1016.lib(E:\PROJECT\BIF\source\window\winc\dialog.cpp)
+0001:4bea      Bool far FDialogTerminationhandler::RegTerminateMsg()
+0001:4c16+     far FDialogTerminationhandler::FDialogTerminationhandler( FDialog far * )
+0001:4c96      Bool far FDialogTerminationhandler::Dispatch( FEvent far & )
+0001:4cda      far FDialog::FDialog()
+0001:4d62+     int far BifDlgInitProc( HWND__ const near *, int unsigned, int unsigned, long )
+0001:4e64*     Bool far FDialog::Create( FWnd far *, int, FModule far * )
+0001:4e7e+     Bool far FDialog::Create( FWnd far *, char const far *, FModule far * )
+0001:4f92      Bool far FDialog::Close( FEvent far & )
+0001:4ff0+     Bool far FDialog::Command( FCommandEvent far & )
+0001:5012      Bool far FDialog::PumpEvent( FEvent far & )
+0001:5056      far FModalDialog::FModalDialog()
+0001:50da      int far FModalDialog::DoModal( FWnd far *, int, FModule far * )
+0001:50f4+     int far FModalDialog::DoModal( FWnd far *, char const far *, FModule far * )
+0001:525e      void far FModalDialog::EndDialog( int )
+0001:538c      far FControlTextHandler::~FControlTextHandler()
+0001:5348      far FFrameAccelHandler::~FFrameAccelHandler()
+0001:5304      far FFrameMenuDestroyHandler::~FFrameMenuDestroyHandler()
+0001:52c0      far FFrameIconHandler::~FFrameIconHandler()
+0004:0804      int unsigned far FDialogTerminationhandler::wm_terminatedialog
+Module: d:\WATCOM\lib286\win\plibl.lib(opnew)
+0001:54e8      void far * far operator new( int unsigned )
+Module: ..\..\..\lib\win16\bw1016.lib(E:\PROJECT\BIF\source\window\win16\applicat.cpp)
+0001:58e6+     far FModule::~FModule()
+0001:5556      FModule far * far FModule::GetDefaultResourceModule()
+0001:5572*     void far FModule::SetDefaultResourceModule( FModule far * )
+0001:557a      FApplication far * far GetCurrentApp()
+0001:5582      far FApplication::FApplication()
+0001:55ec      int far FApplication::Main( int, char far * far * )
+0001:563c      far FApplication::~FApplication()
+0001:56ee      int far FApplication::DoMessageBox( HWND__ const near *, char const far *, char const far *, int unsigned )
+0001:570e      Bool far FApplication::GetEvent( FEvent far & )
+0001:5722      void far FApplication::MessageLoop()
+0001:5770      void far FApplication::TerminateApp()
+0001:5862      int far _BIFWindowMain( HINSTANCE__ const near *, HINSTANCE__ const near *, char far *, int, FApplication far * (far *)())
+0004:0806      FModule far * far FModule::defresmodule
+Module: d:\WATCOM\lib286\win\plibl.lib(dtorarst)
+0001:5948      __wcpp_2_dtor_array_store__
+Module: d:\WATCOM\lib286\win\plibl.lib(opdelarr)
+0001:5978      void far operator delete []( void far * )
+Module: d:\WATCOM\lib286\win\plibl.lib(opdel)
+0001:5984      void far operator delete( void far * )
+Module: ..\..\..\lib\win16\bw1016.lib(E:\PROJECT\BIF\source\window\winc\frame.cpp)
+0001:6918+     Bool far FFrameIconHandler::EraseIconBkgnd( FEvent far & )
+0001:6914+     Bool far FFrameIconHandler::PaintIcon( FEvent far & )
+0001:6910+     Bool far FFrameIconHandler::QueryDragIcon( FEvent far & )
+0001:5998+     far FFrameIconHandler::FFrameIconHandler( FFrameWindow far * )
+0001:5a14      Bool far FFrameIconHandler::Dispatch( FEvent far & )
+0001:5af4      far FFrameMenuDestroyHandler::FFrameMenuDestroyHandler( FFrameWindow far * )
+0001:5b64      Bool far FFrameMenuDestroyHandler::Dispatch( FEvent far & )
+0001:5b8e      far FFrameAccelHandler::FFrameAccelHandler( FFrameWindow far * )
+0001:5bfe      Bool far FFrameAccelHandler::Dispatch( FEvent far & )
+0001:5c5c      far FFrameWindow::FFrameWindow()
+0001:5d40      far FFrameWindow::~FFrameWindow()
+0001:5f20      Bool far FFrameWindow::PumpEvent( FEvent far & )
+0001:5f7e      Bool far FFrameWindow::Create( FWnd far *, int, long, long, FRect far *, FModule far * )
+0001:619a      Bool far FFrameWindow::BringToFront()
+0001:61c2*     Bool far FFrameWindow::BringToBack()
+0001:61ea*     Bool far FFrameWindow::Minimize()
+0001:6208*     Bool far FFrameWindow::Maximize()
+0001:6226*     Bool far FFrameWindow::Restore()
+0001:6244*     FMenu far * far FFrameWindow::GetMenu()
+0001:6254+     void far FFrameWindow::SetMenu( FMenu far * )
+0001:62a8*     FMenu far * far FFrameWindow::GetSystemMenu()
+0001:631e*     void far FFrameWindow::RedrawMenu()
+0001:633a      FIcon far * far FFrameWindow::GetIcon()
+0001:634a      void far FFrameWindow::SetIcon( FIcon far * )
+0001:6388      Bool far FFrameWindow::SetCaption( char const far * )
+0001:6440      int far FFrameWindow::GetCaption( char far *, int )
+0001:649c      Bool far FFrameWindow::SetSubtitle( char const far * )
+0001:6554*     int far FFrameWindow::GetSubtitle( char far *, int )
+0001:65b0      void far FFrameWindow::UpdateTitle()
+0001:6662+     void far FFrameWindow::SetAccel( HACCEL__ const near * )
+0001:666e*     HACCEL__ const near * far FFrameWindow::GetAccel()
+0001:667a      Bool far FFrameWindow::EraseIconBkgnd( FEvent far & )
+0001:66c8      Bool far FFrameWindow::PaintIcon( FEvent far & )
+0001:678c      Bool far FFrameWindow::QueryDragIcon( FEvent far & )
+0001:6888      far FEvent::FEvent( FEvent const far & )
+0001:6874      FRect far & far FRect::operator =( FRect const far & )
+0001:680a      far tagMSG::tagMSG( tagMSG const far & )
+0001:67ec      far tagPOINT::tagPOINT( tagPOINT const far & )
+Module: d:\WATCOM\lib286\win\clibl.lib(cstrtw16)
+0000:0006*     pLocalHeap
+0000:0008*     pAtomTable
+0000:000a*     pStackTop
+0000:000c*     pStackMin
+0000:000e*     pStackBot
+0004:0000*     __nullarea
+0004:0164      __curbrk
+0004:0166*     __psp
+0004:0168*     __osmajor
+0004:0169*     __osminor
+0004:016a      __osmode
+0004:000a*     __STACKLOW
+0004:000c*     __STACKTOP
+0004:016c*     __cbyte
+0004:016e*     __child
+0004:0170*     __no87
+0004:016b*     __HShift
+0004:0172*     __get_ovl_stack
+0004:0176*     __restore_ovl_stack
+0004:017a*     __FPE_handler
+0004:017a*     ___FPE_handler
+0004:017e*     __LpCmdLine
+0004:0182*     __LpPgmName
+0001:6920      _wstart_
+0001:6920*     _cstart_
+0001:6a1b      __exit_
+0001:6a2c      __GETDS
+Module: d:\WATCOM\lib286\win\clibl.lib(cmodel)
+0001:6a30      _big_code_
+0001:6a30*     CodeModelMismatch
+Module: ..\..\..\lib\win16\bw1016.lib(E:\PROJECT\BIF\source\window\winc\appwnd.cpp)
+0001:9798      Bool far FFocusHandler::LostFocus( FKillFocusEvent far & )
+0001:9794+     Bool far FFrameFormatHandler::UpdateFrame( FEvent far & )
+0001:9790+     Bool far FFrameFormatHandler::QueryFrameCtlCount( FEvent far & )
+0001:978c+     Bool far FFrameFormatHandler::FormatFrame( FEvent far & )
+0001:845a+     far FClientForwardHandler::FClientForwardHandler( FWnd far * )
+0001:84c0      Bool far FClientForwardHandler::Dispatch( FEvent far & )
+0001:8546+     Bool far FAppWindowResizeHandler::SizeChanged( FSizeEvent far & )
+0001:856c+     far FAppWindowFocusForwarder::FAppWindowFocusForwarder( FAppWindow far * )
+0001:85a4+     far FFrameFormatHandler::FFrameFormatHandler( FWnd far * )
+0001:866c      Bool far FFrameFormatHandler::Dispatch( FEvent far & )
+0001:86d4+     Bool far FAppWindowFocusForwarder::GotFocus( FSetFocusEvent far & )
+0001:872c      far FAppWindow::FAppWindow()
+0001:87f4      far FAppWindow::~FAppWindow()
+0001:88b4      FWnd far * far FAppWindow::SetClient( FWnd far * )
+0001:893a*     FWnd far * far FAppWindow::GetClient()
+0001:894c      Bool far FAppWindow::ForwardToClient( FEvent far & )
+0001:89bc      Bool far FAppWindow::UpdateFrame( FEvent far & )
+0001:8b38      Bool far FAppWindow::QueryFrameCtlCount( FEvent far & )
+0001:8b80      Bool far FAppWindow::FormatFrame( FEvent far & )
+0001:8ce0*     Bool far FAppWindow::SavePosition()
+0001:8fe0*     Bool far FAppWindow::RestorePosition()
+0001:926a      Bool far FClientWindow::Create( FAppWindow far * )
+0001:92f6      far FClientWindow::~FClientWindow()
+0001:9698+     far FAppWindowFocusForwarder::~FAppWindowFocusForwarder()
+0001:9654+     far FFrameFormatHandler::~FFrameFormatHandler()
+0001:9610+     far FAppWindowResizeHandler::~FAppWindowResizeHandler()
+0001:9600+     far FClientForwardHandler::~FClientForwardHandler()
+0001:95bc      far FFocusHandler::~FFocusHandler()
+Module: ..\..\..\lib\win16\bw1016.lib(E:\PROJECT\BIF\source\window\winc\filedlg.cpp)
+0001:979c+     int unsigned far StdFileHack::StdFileInitProc( HWND__ const near *, int unsigned, int unsigned, long )
+0001:98a8*     Bool far FStdFileDialog::DoModal( FWnd far *, FStdFileDialog::sfd_type, char far *, char const far *, char const far *, char const far * )
+0001:9a4c      Bool far FStdFileDialog::DoModal( FWnd far *, FStdFileDialog::sfd_type, char far *, int, char far * far *, int, char const far *, char const far *, char const far * )
+Module: d:\WATCOM\lib286\win\clibl.lib(sprintf)
+0001:6a59      sprintf_
+Module: ..\..\..\lib\win16\bw1016.lib(E:\PROJECT\BIF\source\window\winc\msgbox.cpp)
+0001:9dd2      mbid far MessageBox( FWnd far *, char const far *, char const far *, mb_buttons, mb_icon )
+0001:9e20+     mbid far MessageBox( HWND__ const near *, char const far *, char const far *, mb_buttons, mb_icon )
+0001:9eb0+     mbid far bw_MessageBox( HWND__ const near *, char const far *, char const far *, int unsigned )
+Module: ..\..\..\lib\win16\bw1016.lib(E:\PROJECT\BIF\source\window\winc\comhndl.cpp)
+0001:a714+     Bool far FCreateDestroyHandler::Created( FCreatedEvent far & )
+0001:a710+     Bool far FCreateDestroyHandler::Destroying( FDestroyingEvent far & )
+0001:a70c+     Bool far FCommandHandler::Command( FCommandEvent far & )
+0001:a708+     Bool far FEnableHandler::Enabled( FEnableEvent far & )
+0001:a704+     Bool far FEnableHandler::Disabled( FEnableEvent far & )
+0001:a700+     Bool far FFocusHandler::GotFocus( FSetFocusEvent far & )
+0001:a6fc+     Bool far FMoveHandler::Moved( FMoveEvent far & )
+0001:a6f8+     Bool far FCloseHandler::Close( FEvent far & )
+0001:9f1c*     far FCreateDestroyHandler::FCreateDestroyHandler( FWnd far * )
+0001:9f82+     Bool far FCreateDestroyHandler::Dispatch( FEvent far & )
+0001:9fd6      far FCommandHandler::FCommandHandler( FWnd far * )
+0001:a03c      Bool far FCommandHandler::Dispatch( FEvent far & )
+0001:a0b0*     far FEnableHandler::FEnableHandler( FWnd far * )
+0001:a116+     Bool far FEnableHandler::Dispatch( FEvent far & )
+0001:a154      far FFocusHandler::FFocusHandler( FWnd far * )
+0001:a1ba      Bool far FFocusHandler::Dispatch( FEvent far & )
+0001:a1fa*     Bool far FFocusHandler::HasFocus()
+0001:a220*     Bool far FFocusHandler::SetFocus()
+0001:a240      Bool far FFocusHandler::ForwardFocus( FWnd far * )
+0001:a254      far FSizeHandler::FSizeHandler( FWnd far * )
+0001:a2ba*     Bool far FSizeHandler::SetSize( int, int )
+0001:a2e0      Bool far FSizeHandler::GetSize( int far *, int far * )
+0001:a32c      Bool far FSizeHandler::Dispatch( FEvent far & )
+0001:a352*     far FMoveHandler::FMoveHandler( FWnd far * )
+0001:a3b8*     Bool far FMoveHandler::Move( int, int )
+0001:a3de*     Bool far FMoveHandler::GetPosition( int far *, int far * )
+0001:a446+     Bool far FMoveHandler::Dispatch( FEvent far & )
+0001:a46c      far FCloseHandler::FCloseHandler( FWnd far * )
+0001:a4e8*     void far FCloseHandler::Close()
+0001:a50e*     void far FCloseHandler::CloseUnconditionally()
+0001:a576      Bool far FCloseHandler::Dispatch( FEvent far & )
+0001:a67c+     far FMoveHandler::~FMoveHandler()
+0001:a638+     far FEnableHandler::~FEnableHandler()
+0001:a5f4+     far FCreateDestroyHandler::~FCreateDestroyHandler()
+Module: ..\..\..\lib\win16\bw1016.lib(E:\PROJECT\BIF\source\window\winc\mouse.cpp)
+0001:b292+     Bool far FMouseHandler::Button1DblClk( FButtonDblClkEvent far & )
+0001:b28e+     Bool far FExtendedMouseHandler::Button1MotionStart( FMouseEvent far & )
+0001:b28a+     Bool far FExtendedMouseHandler::Button1MotionEnd( FMouseEvent far & )
+0001:b286+     Bool far FExtendedMouseHandler::Button1Click( FMouseEvent far & )
+0001:b282+     Bool far FExtendedMouseHandler::Button2MotionStart( FMouseEvent far & )
+0001:b27e+     Bool far FExtendedMouseHandler::Button2MotionEnd( FMouseEvent far & )
+0001:b27a+     Bool far FExtendedMouseHandler::Button2Click( FMouseEvent far & )
+0001:b276+     Bool far FTranslatedMouseHandler::MouseDragStart( FMouseEvent far & )
+0001:b272+     Bool far FTranslatedMouseHandler::MouseDragEnd( FMouseEvent far & )
+0001:b26e+     Bool far FTranslatedMouseHandler::MouseSingleSelect( FMouseEvent far & )
+0001:b26a+     Bool far FTranslatedMouseHandler::MouseOpen( FMouseEvent far & )
+0001:b266+     Bool far FTranslatedMouseHandler::MouseContextMenu( FMouseEvent far & )
+0001:b262+     Bool far FTranslatedMouseHandler::MouseTextEdit( FMouseEvent far & )
+0001:b25e+     Bool far FTranslatedMouseHandler::MouseSelectStart( FMouseEvent far & )
+0001:b25a+     Bool far FTranslatedMouseHandler::MouseSelectEnd( FMouseEvent far & )
+0001:a718*     Bool far FMouseEvent::IsButtonDown( int ) const
+0001:a740+     int far FButtonDownEvent::GetButton() const
+0001:a764+     int far FButtonUpEvent::GetButton() const
+0001:a788+     int far FButtonDblClkEvent::GetButton() const
+0001:a7ac*     void far FControlPointerEvent::SetPointer( FPointer far & )
+0001:a7d8+     far FMouseHandler::FMouseHandler( FWnd far * )
+0001:a876      Bool far FMouseHandler::Dispatch( FEvent far & )
+0001:a948      Bool far FMouseHandler::SetCapture()
+0001:a99c      Bool far FMouseHandler::ReleaseCapture()
+0001:a9c4      Bool far FMouseHandler::GetCurrentMousePosition( int far *, int far * )
+0001:aa76      Bool far FMouseHandler::ButtonDown( FButtonDownEvent far & )
+0001:aad2      Bool far FMouseHandler::ButtonUp( FButtonUpEvent far & )
+0001:ab2e      Bool far FMouseHandler::ButtonDblClk( FButtonDblClkEvent far & )
+0001:ab8a      void far FExtendedMouseHandler::button_down( int, FMouseEvent far & )
+0001:ac44      void far FExtendedMouseHandler::button_up( int, FMouseEvent far & )
+0001:ad96+     far FExtendedMouseHandler::FExtendedMouseHandler( FWnd far * )
+0001:ae7a      Bool far FExtendedMouseHandler::Dispatch( FEvent far & )
+0001:b038      far FTranslatedMouseHandler::FTranslatedMouseHandler( FWnd far * )
+0001:b09e      Bool far FTranslatedMouseHandler::Dispatch( FEvent far & )
+0001:b0aa      Bool far FTranslatedMouseHandler::Button1MotionStart( FMouseEvent far & )
+0001:b0d2      Bool far FTranslatedMouseHandler::Button1MotionEnd( FMouseEvent far & )
+0001:b0fa      Bool far FTranslatedMouseHandler::Button1Click( FMouseEvent far & )
+0001:b162      Bool far FTranslatedMouseHandler::Button2MotionStart( FMouseEvent far & )
+0001:b18a      Bool far FTranslatedMouseHandler::Button2MotionEnd( FMouseEvent far & )
+0001:b1b2      Bool far FTranslatedMouseHandler::Button2Click( FMouseEvent far & )
+0001:b1da      Bool far FTranslatedMouseHandler::Button1DblClk( FButtonDblClkEvent far & )
+0001:b236      far FPoint::FPoint( FPoint const far & )
+0001:b21c+     FPoint far & far FPoint::operator =( FPoint const far & )
+Module: ..\..\..\lib\win16\bw1016.lib(E:\PROJECT\BIF\source\window\winc\slider.cpp)
+0001:b296      far FSlider::FSlider()
+0001:b2d0*     Bool far FSlider::Create( FWnd far *, int, int, int, int )
+0001:b318      Bool far FSlider::Create( FWnd far *, int, FRect far *, long, int, int, int )
+0001:b378      int unsigned far FSlider::AddDetent( int )
+0001:b3a0*     Bool far FSlider::RemoveDetent( int unsigned )
+0001:b3c0*     int far FSlider::GetDetentPos( int unsigned )
+0001:b3f0      Bool far FSlider::SetTickText( int, char const far * )
+0001:b424*     Bool far FSlider::GetTickText( int, char far *, int )
+0001:b45e*     int far FSlider::GetTickSize( int )
+0001:b48a      Bool far FSlider::SetTickSize( int, int )
+0001:b4d0*     int far FSlider::GetArmPosition()
+0001:b502*     Bool far FSlider::SetArmPosition( int )
+0001:b52a      Bool far FSlider::ResetTranslation( int, int, int )
+0001:b5c4+     int far FSlider::pel2LV( int )
+0001:b63c+     int far FSlider::LV2pel( int )
+0001:b6ae+     int far FSlider::pos2ticknum( int )
+0001:b6f8*     int far FSlider::ticknum2pos( int )
+Module: d:\WATCOM\lib286\win\plibl.lib(fatalerr)
+0001:b716      __wcpp_2_fatal_runtime_error__
+Module: d:\WATCOM\lib286\win\plibl.lib(opnewarr)
+0001:b738      void far * far operator new []( int unsigned )
+Module: d:\WATCOM\lib286\win\plibl.lib(prwdata)
+0004:0216      __wint_pure_error_flag
+0004:0218      __wint_undef_vfun_flag
+0004:021a      __wint_module_init
+Module: d:\WATCOM\lib286\win\clibl.lib(fmalloc)
+0001:6aa0      malloc_
+0001:6aab+     _fmalloc_
+0004:021e+     ___fheap
+0004:0220      ___fheapRover
+0004:0222      ___LargestSizeB4Rover
+Module: d:\WATCOM\lib286\win\plibl.lib(cppdata)
+0004:081a      __wint_thread_data
+0004:083a*     ___wcpp_2_data_catch_completed_
+0004:083e      ___wcpp_2_data_dtreg_vfptrs_
+0004:0852*     __compiled_under_generic
+Module: d:\WATCOM\lib286\win\plibl.lib(stabadt)
+0001:b744      __wcpp_2_dtor_array__
+Module: d:\WATCOM\lib286\win\clibl.lib(ffree)
+0001:6b9d      free_
+0001:6ba8+     _ffree_
+Module: ..\..\..\lib\win16\bw1016.lib(E:\PROJECT\BIF\source\window\winc\wndmisc.cpp)
+0001:b8ea      far FResourceObject::FResourceObject( Bool )
+0001:b93e      far FResourceObject::FResourceObject( FResourceObject const far & )
+0001:b978      far FResourceObject::~FResourceObject()
+0001:b9d8      void far FResourceObject::operator =( FResourceObject const far & )
+0001:ba20      int far FResourceObject::inc()
+0001:ba38      int far FResourceObject::dec()
+0001:ba50*     far FIcon::FIcon( HICON__ const near *, Bool )
+0001:ba82      far FIcon::FIcon( int, FModule far * )
+0001:bae6*     far FIcon::FIcon( char const far *, FModule far * )
+0001:bb4e+     far FIcon::FIcon( FIcon const far & )
+0001:bb6a+     far FIcon::~FIcon()
+0001:bbf2      HICON__ const near * far FIcon::GetHandle()
+0001:bc02*     FIcon far & far FIcon::operator =( FIcon const far & )
+0001:bc64+     far FPointer::FPointer( HICON__ const near *, Bool )
+0001:bc96+     far FPointer::FPointer( FPointer const far & )
+0001:bcb2*     far FPointer::FPointer( int, FModule far * )
+0001:bd16*     far FPointer::FPointer( char const far *, FModule far * )
+0001:bd7e+     far FPointer::~FPointer()
+0001:be06      HICON__ const near * far FPointer::GetHandle()
+0001:be16*     FPointer far & far FPointer::operator =( FPointer const far & )
+0001:be78*     FPointer far * const far GetSystemArrowPointer()
+0001:be7e*     FPointer far * const far GetSystemTextPointer()
+0001:be84*     FPointer far * const far GetSystemNESWPointer()
+0001:be8a*     FPointer far * const far GetSystemNSPointer()
+0001:be90*     FPointer far * const far GetSystemNWSEPointer()
+0001:be96*     FPointer far * const far GetSystemWEPointer()
+0001:be9c*     FPointer far * const far GetSystemWaitPointer()
+0001:bea2      far FMenu::FMenu( int, FModule far * )
+0001:bf06*     far FMenu::FMenu( char const far *, FModule far * )
+0001:bf6e*     far FMenu::FMenu( FWnd far *, int, FModule far * )
+0001:bfd0*     far FMenu::FMenu( FWnd far *, char const far *, FModule far * )
+0001:c032      far FMenu::FMenu( HMENU__ const near *, Bool )
+0001:c064+     far FMenu::FMenu( FMenu const far & )
+0001:c080+     far FMenu::~FMenu()
+0001:c108*     FMenu far & far FMenu::operator =( FMenu const far & )
+0001:c16a      HMENU__ const near * far FMenu::GetHandle()
+0001:c17a*     Bool far FMenu::Popup( FWnd far *, FWnd far *, FPoint const far * )
+0001:c25e*     Bool far FMenu::AppendItem( char const far *, int, Bool, Bool )
+0001:c2a2*     Bool far FMenu::AppendItem( char const far *, FMenu far *, Bool )
+0001:c2dc*     void far FMenu::AppendSeparator()
+0001:c302*     Bool far FMenu::DeleteItem( int )
+0001:c322*     Bool far FMenu::GetItem( int, char far *, int )
+0001:c352*     FMenu far FMenu::GetSubmenuFromPos( int )
+0001:c392*     void far FMenu::CheckItem( int, Bool )
+0001:c3ba*     void far FMenu::EnableItem( int, Bool )
+0001:c3e2*     Bool far FMenu::IsItemEnabled( int )
+0001:c412*     Bool far FMenu::IsItemChecked( int )
+0001:c442*     far FResourceString::FResourceString( int, FModule far * )
+0001:c4e2+     far FResourceString::~FResourceString()
+0001:c536+     far FResourceString::FResourceString( FResourceString const far & )
+0001:c5bc*     FResourceString far & far FResourceString::operator =( FResourceString const far & )
+0001:c67c+     far FSystemPointer::~FSystemPointer()
+Module: d:\WATCOM\lib286\win\clibl.lib(exit)
+0001:6beb+     __null_int23_exit_
+0001:6bec      exit_
+0001:6c05      _exit_
+0004:022e+     ___atexit
+0004:0232+     ___int23_exit
+0004:0236+     ___FPE_handler_exit
+Module: d:\WATCOM\lib286\win\clibl.lib(inirt086)
+0001:6c86*     __InitRtns
+0001:6ca4*     __FiniRtns
+0001:6cbd      __FInitRtns
+0001:6cc3      __FFiniRtns
+Module: d:\WATCOM\lib286\win\clibl.lib(seg086)
+0001:6cca      __DOSseg__
+Module: d:\WATCOM\lib286\win\plibl.lib(pure_err)
+0001:c6c0      __wcpp_2_pure_error__
+Module: d:\WATCOM\lib286\win\clibl.lib(prtf)
+0001:6ccb      __prtf_
+Module: ..\..\..\lib\win16\bw1016.lib(E:\PROJECT\BIF\source\window\winc\slider31.cpp)
+0001:e6aa+     Slider far * far GetSLP( HWND__ const near * )
+0001:ee62+     long far SliderWndProc( HWND__ const near *, int unsigned, int unsigned, long )
+0004:088c+     __70lmp7formatMetrics far formatMetrics
+0001:f24e      int far RegisterSlider( HINSTANCE__ const near * )
+Module: ..\..\..\lib\win16\bw1016.lib(E:\PROJECT\BIF\source\window\winc\control.cpp)
+0001:f550+     Bool far FOwnerNotifyHandler::Notify( FOwnerNotifyEvent far & )
+0001:f2c8*     far FOwnerNotifyHandler::FOwnerNotifyHandler( FWnd far * )
+0001:f32e+     Bool far FOwnerNotifyHandler::Dispatch( FEvent far & )
+0001:f390      Bool far FControl::Create( FWnd far *, int )
+0001:f3c8      Bool far FControl::Create( FWnd far *, int, char const far *, char const far *, long unsigned, FRect far * )
+0001:f45c*     int far FControl::GetID()
+0001:f474*     int far FControlTextHandler::GetTextLen()
+0001:f49a*     Bool far FControlTextHandler::GetText( char far *, int )
+0001:f4d0*     Bool far FControlTextHandler::SetText( char const far * )
+0001:f504+     far FOwnerNotifyHandler::~FOwnerNotifyHandler()
+Module: d:\WATCOM\lib286\win\clibl.lib(i4m)
+0001:7910      __I4M
+0001:7910      __U4M
+Module: d:\WATCOM\lib286\win\clibl.lib(i4d)
+0001:7930      __I4D
+0001:7985*     __U4D
+Module: d:\WATCOM\lib286\win\clibl.lib(enterdb)
+0001:7a13      __EnterWVIDEO_
+0004:035a+     ___WD_Present
+Module: d:\WATCOM\lib286\win\clibl.lib(xmsgwin)
+0001:7a3e      __exit_with_msg_
+0001:7aa6      __fatal_runtime_error_
+Module: d:\WATCOM\lib286\win\clibl.lib(allocseg)
+0001:7ac3      __AllocSeg_
+Module: d:\WATCOM\lib286\win\clibl.lib(memalloc)
+0001:7ba0      __MemAllocator
+0001:7c44      __MemFree
+Module: d:\WATCOM\lib286\win\clibl.lib(growseg)
+0001:7d4d      __GrowSeg_
+Module: d:\WATCOM\lib286\win\clibl.lib(fmemneed)
+0001:7e89      __fmemneed_
+Module: d:\WATCOM\lib286\win\clibl.lib(nmalloc)
+0001:7e8c      _nmalloc_
+0004:035c      ___nheapbeg
+0004:035e      ___MiniHeapRover
+0004:0360      ___LargestSizeB4MiniHeapRover
+Module: d:\WATCOM\lib286\win\clibl.lib(heapmod)
+0004:0898      ___nheap_clean
+0004:0899      ___fheap_clean
+Module: d:\WATCOM\lib286\win\plibl.lib(stabarr)
+0001:f5a6      __wcpp_2_arr_register__
+0004:07e4*     rt_init __based("XI") __wcpp_2_data_stab_init_arr_
+Module: d:\WATCOM\lib286\win\plibl.lib(stabdtor)
+0001:f8b7      __wcpp_2_destruct_internal__
+0001:f8c5      __wcpp_2_destruct_all__
+0001:f8d2*     __wcpp_2_destruct_after_all__
+0001:f8df+     __wcpp_2_destruct__
+0001:f8f9+     __wcpp_2_destruct_after__
+Module: d:\WATCOM\lib286\win\clibl.lib(nfree)
+0001:7f42      _nfree_
+0004:089a      ___MiniHeapFreeRover
+Module: d:\WATCOM\lib286\win\plibl.lib(stabmod)
+0001:f90e      __wcpp_2_module_dtor__
+0001:f9fb      __wcpp_2_mod_register__
+0004:07ea*     rt_init __based("XI") __wcpp_2_data_stab_init_mod_
+Module: d:\WATCOM\lib286\win\plibl.lib(moddtorr)
+0004:07f6      ___wcpp_2_data_module_dtor_ref_
+Module: d:\WATCOM\lib286\win\clibl.lib(winrtns)
+0004:037a*     __WindowsIsWindowedHandle
+0004:037e*     __WindowsRemoveWindowedHandle
+0004:0382*     __WindowsNewWindow
+0004:0386*     __WindowsCloseWindow
+0004:038a*     __WindowsSetAbout
+0004:038e*     __WindowsSetAppTitle
+0004:0392*     __WindowsSetConTitle
+0004:0396*     __WindowsDestroyOnClose
+0004:039a*     __WindowsYieldControl
+0004:039e*     __WindowsShutDown
+0004:03a2*     __WindowsStdin
+0004:03a6*     __WindowsStdout
+0004:03aa*     __WindowsKbhit
+0004:03ae*     __WindowsGetch
+0004:03b2*     __WindowsGetche
+0004:03b6*     __WindowsPutch
+0004:03ba      __WindowExitRtn
+Module: d:\WATCOM\lib286\win\clibl.lib(itoa)
+0001:7fc5+     utoa_
+0001:802b*     _itoa_
+0001:8036      itoa_
+Module: d:\WATCOM\lib286\win\clibl.lib(noefgfmt)
+0004:03be      ___EFG_printf
+0004:03c2*     ___EFG_scanf
+Module: d:\WATCOM\lib286\win\clibl.lib(ltoa)
+0001:80bc      ultoa_
+0001:8132      ltoa_
+0001:8160*     _ltoa_
+Module: d:\WATCOM\lib286\win\clibl.lib(toupper)
+0001:816d*     _toupper_
+0001:8178      toupper_
+Module: d:\WATCOM\lib286\win\clibl.lib(atoi)
+0001:8186      atoi_
+Module: d:\WATCOM\lib286\win\clibl.lib(heapen)
+0001:81ec*     _heapenable_
+0004:03c6      ___heap_enabled
+Module: d:\WATCOM\lib286\win\clibl.lib(amblksiz)
+0004:03c8      __amblksiz
+Module: d:\WATCOM\lib286\win\clibl.lib(wallflgs)
+0004:03ca      ___win_alloc_flags
+0004:03ce      ___win_realloc_flags
+Module: d:\WATCOM\lib286\win\clibl.lib(grownear)
+0001:82dc      __ExpandDGROUP_
+Module: d:\WATCOM\lib286\win\clibl.lib(nmemneed)
+0001:832b      __nmemneed_
+Module: d:\WATCOM\lib286\win\plibl.lib(tssize)
+0001:fa2a      __wcpp_2_ts_size__
+Module: d:\WATCOM\lib286\win\plibl.lib(stabreg)
+0001:fa74      __wcpp_2_base_register__
+0001:faab*     __wcpp_2_base_deregister__
+Module: d:\WATCOM\lib286\win\plibl.lib(stabtrav)
+0001:fac0      __wcpp_2_stab_entry__
+0001:fb0c      __wcpp_2_stab_trav_init__
+0001:fb5f      __wcpp_2_stab_trav_comp__
+0001:fb6b      __wcpp_2_stab_trav_next__
+0001:fc70      __wcpp_2_stab_trav_move__
+Module: d:\WATCOM\lib286\win\plibl.lib(stabthrw)
+0002:002c      __wcpp_2_corrupted_stack__
+0002:05d9*     __wcpp_2_catch_done__
+0002:0992+     __wcpp_2_dispatchable__
+0002:0a15+     __wcpp_2_save_exc__
+0002:0b12+     __wcpp_2_dispatch__
+0002:0c7a*     __wcpp_2_rethrow__
+0002:0c90*     __wcpp_2_throw__
+0002:0c9f*     __wcpp_2_throw_zero__
+0004:07f0+     ___wcpp_2_data_init_longjmp_
+Module: d:\WATCOM\lib286\win\clibl.lib(istable)
+0004:0060      __IsTable
+Module: d:\WATCOM\lib286\win\clibl.lib(nheapmin)
+0001:832e*     _nheapmin_
+0001:83ac      _nheapshrink_
+Module: d:\WATCOM\lib286\win\plibl.lib(bittest)
+0002:0e4c      __wcpp_2_bit_test__
+Module: d:\WATCOM\lib286\win\plibl.lib(callterm)
+0002:0e6c      __wcpp_2_call_terminate__
+Module: d:\WATCOM\lib286\win\plibl.lib(tsequiv)
+0002:0e8f      __wcpp_2_ts_equiv__
+Module: d:\WATCOM\lib286\win\plibl.lib(callunex)
+0002:0efa      __wcpp_2_call_unexpected__
+Module: d:\WATCOM\lib286\win\clibl.lib(stjmp086)
+0001:83e0*     _setjmp_
+0001:8416      longjmp_
+Module: d:\WATCOM\lib286\win\plibl.lib(allocexc)
+0002:0f18      __wcpp_2_alloc_exc__
+0002:115a      __wcpp_2_free_exc__
+0002:11c6      __wcpp_2_pop_exc__
+0002:11f1      __wcpp_2_push_exc__
+Module: d:\WATCOM\lib286\win\clibl.lib(ljmphdl)
+0004:03da      ___longjmp_handler
+Module: d:\WATCOM\lib286\win\plibl.lib(termnate)
+0002:121c      void far terminate()
+Module: d:\WATCOM\lib286\win\plibl.lib(unexpect)
+0002:1282      void far unexpected()
+Module: d:\WATCOM\lib286\win\plibl.lib(areaexc)
+0004:03de      ___EXC_AREA
+
+
+                        +---------------------------+
+                        |   Unresolved References   |
+                        +---------------------------+
+
+Undefined Symbol                Referenced by
+================                =============
+
+GETOPENFILENAME                 ..\..\..\lib\win16\bw1016.lib(E:\PROJECT\BIF\source\window\winc\filedlg.cpp)
+GETSAVEFILENAME                 ..\..\..\lib\win16\bw1016.lib(E:\PROJECT\BIF\source\window\winc\filedlg.cpp)
+
+
+                        +--------------------+
+                        |   Libraries Used   |
+                        +--------------------+
+
+d:\WATCOM\lib286\win\windows.lib
+..\..\..\lib\win16\bw1016.lib
+d:\WATCOM\lib286\win\clibl.lib
+d:\WATCOM\lib286\win\plibl.lib

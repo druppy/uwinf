@@ -1,0 +1,63 @@
+#ifndef OS2_INCLUDED
+   #include <os2.h>
+#endif
+#include "MENUEDIT.H"
+
+DLGTEMPLATE DIALOG_MENUEDIT PRELOAD MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "BIF Menu Editor", DIALOG_MENUEDIT, 33, 29, 387, 150, NOT
+            FS_DLGBORDER | FS_BORDER | NOT WS_SAVEBITS, 
+            FCF_SYSMENU | FCF_TITLEBAR | FCF_MINBUTTON | FCF_NOBYTEALIGN
+    BEGIN
+        LTEXT           "~Text", -1, 3, 117, 26, 8, DT_MNEMONIC
+        ENTRYFIELD      "", ID_MENUITEMTEXT, 31, 118, 66, 8, ES_MARGIN
+        LTEXT           "~Id", -1, 3, 103, 20, 8, DT_MNEMONIC
+        ENTRYFIELD      "", ID_MENUITEMID, 31, 104, 66, 8, ES_MARGIN
+        LTEXT           "Value", -1, 3, 89, 23, 8, NOT WS_VISIBLE
+        ENTRYFIELD      "", ID_MENUITEMVALUE, 31, 90, 66, 8, ES_MARGIN | 
+                        ES_READONLY | NOT WS_TABSTOP | NOT WS_VISIBLE
+        GROUPBOX        "~Style", -1, 3, 3, 172, 81, DT_MNEMONIC
+        AUTORADIOBUTTON "Text", ID_TEXT, 9, 64, 66, 10, WS_TABSTOP
+        AUTORADIOBUTTON "Bitmap", ID_BITMAP, 9, 54, 66, 10, WS_TABSTOP
+        AUTORADIOBUTTON "Separator", ID_SEPARATOR, 9, 44, 66, 10, 
+                        WS_TABSTOP
+        AUTORADIOBUTTON "Ownerdraw", ID_OWNERDRAW, 9, 34, 66, 10, 
+                        WS_TABSTOP
+        AUTOCHECKBOX    "Static", ID_STATIC, 9, 18, 77, 10, WS_GROUP
+        AUTOCHECKBOX    "Help", ID_HELP, 9, 8, 77, 10, NOT WS_TABSTOP
+        AUTOCHECKBOX    "SYSCOMMAND", ID_SYSCOMMAND, 86, 18, 77, 10, NOT 
+                        WS_TABSTOP
+        AUTORADIOBUTTON "None", ID_NOBREAK, 86, 64, 83, 10, WS_GROUP | 
+                        WS_TABSTOP
+        AUTORADIOBUTTON "Break", ID_BREAK, 86, 54, 83, 10, WS_TABSTOP
+        AUTORADIOBUTTON "Break separator", ID_BREAKSEPARATOR, 86, 44, 83, 
+                        10, WS_TABSTOP
+        AUTORADIOBUTTON "Button separator", ID_BUTTONSEPARATOR, 86, 34, 83, 
+                        10, WS_TABSTOP
+        GROUPBOX        "~Attribute", -1, 108, 84, 67, 52, DT_MNEMONIC
+        AUTOCHECKBOX    "Checked", ID_CHECKED, 113, 117, 59, 10
+        AUTOCHECKBOX    "Disabled", ID_DISABLED, 113, 107, 59, 10, NOT 
+                        WS_TABSTOP
+        AUTOCHECKBOX    "Framed", ID_FRAMED, 113, 97, 59, 10, NOT 
+                        WS_TABSTOP
+        AUTOCHECKBOX    "No dismiss", ID_NODISMISS, 113, 87, 59, 10, NOT 
+                        WS_TABSTOP
+        LISTBOX         ID_MENUITEMS, 181, 3, 142, 130, LS_NOADJUSTPOS | 
+                        LS_HORZSCROLL | WS_GROUP
+                        PRESPARAMS PP_FONTNAMESIZE, "10.System VIO"
+        PUSHBUTTON      "#125", ID_MOVEUP, 327, 113, 27, 20, BS_ICON | BS_NOPOINTERFOCUS | WS_GROUP
+        PUSHBUTTON      "#126", ID_MOVEDOWN, 356, 113, 27, 20, BS_ICON | BS_NOPOINTERFOCUS
+        PUSHBUTTON      "Item", ID_INSERTITEM, 330, 85, 54, 12, 
+                        BS_NOPOINTERFOCUS
+        PUSHBUTTON      "Submenu", ID_INSERTSUBMENU, 330, 70, 54, 12, 
+                        BS_NOPOINTERFOCUS
+        PUSHBUTTON      "Delete", ID_DELETEITEM, 330, 42, 54, 12, 
+                        BS_NOPOINTERFOCUS
+        PUSHBUTTON      "Test", ID_TESTMENU, 329, 15, 54, 12, 
+                        BS_NOPOINTERFOCUS
+        PUSHBUTTON      "Popup", ID_TESTPOPUP, 329, 1, 54, 12, 
+                        BS_NOPOINTERFOCUS
+        PUSHBUTTON      "Separator", ID_INSERTSEPARATOR, 330, 56, 54, 12
+    END
+END
+

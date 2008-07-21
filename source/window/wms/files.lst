@@ -1,0 +1,43 @@
+Contents: BIF/Window for WMS
+applicat.cpp FApplication
+appwnd.cpp   FAppWindow
+bwclpbrd.cpp Implementation for a clipboard
+bwclpbrd.h   
+bwwdt.cpp    Desktop implementation
+bwwdt.h
+checkbox.cpp FCheckBox
+clhndl.cpp   Client handlers
+combobox.cpp FXxxxxComboBox
+comhndl.cpp  Common handlers
+control.cpp  FControl
+csi.cpp      FCSIXxxxx handlers
+dialog.cpp   FDialog and FModalDialog
+dynmsg.cpp   Registration of dynamic ("named") messages
+fmenu.cpp    Implementation of FMenu class
+frame.cpp    FFrameWindow
+groupbox.cpp FGroupBox
+keyboard.cpp FKeyboardHandler
+listbox.cpp  FxxxxListBox
+lowlbut.cpp  Undocumented superclass for push/radiobuttons and checkbox
+menuwin.cpp  Implementation of menu window
+menuwin.h
+module.cpp   FModule
+mouse.cpp    Mouse handlers
+msgbox.cpp   MessageBox() function
+ownerdrw.cpp Ownerdraw handlers
+presparm.cpp Presentation parameters API
+presparm.h
+pushbut.cpp  FPushButton
+radiobut.cpp FRadioButton
+restempl.cpp Resource template support classes
+scroll.cpp   Scrollbar client handler
+scrollba.cpp FScrollBar
+sizerest.cpp Size restrinction handlers
+sle.cpp      FSLE
+stext.cpp    FStaticText
+switchls.cpp Switch list/task list/window list
+switchls.h
+trackrct.cpp Rectangle tracking
+wndcore.cpp  BIF/Window core
+wndmisc.cpp  BIF/Window core misc.
+wndprop.cpp  Implementation of window properties

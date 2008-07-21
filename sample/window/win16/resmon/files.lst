@@ -1,0 +1,8 @@
+This tiny application shows how much free System, GDI and User resources there
+are. The display is updated every second. This sample shows how to use a dialog
+as the main window (no big deal) and how to write a custom handler (a timer
+handler)
+
+RESMON.H   Resource IDs
+RESMON.CPP Source
+RESMON.RC  Resources

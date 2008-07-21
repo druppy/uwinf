@@ -1,0 +1,7 @@
+4 FOwnerNotifyHandler FOwnerNotifyHandler
+5 FOwnerNotifyHandler_Notify Notify()
+4 FOwnerNotifyEvent FOwnerNotifyEvent
+5 FOwnerNotifyEvent_GetItem GetItem()
+5 FOwnerNotifyEvent_GetNotifyCode GetNotifyCode()
+5 FOwnerNotifyEvent_GetNotifySpec GetNotifySpec()
+5 FOwnerNotifyEvent_GetItemHwnd GetItemHwnd()

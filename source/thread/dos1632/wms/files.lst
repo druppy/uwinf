@@ -1,0 +1,3 @@
+Contents: BIF/Thread support files for WMS
+MWTHREAD.CPP Implementation for FMainWindowThread
+WTHREAD.CPP  -"-                FWindowThread

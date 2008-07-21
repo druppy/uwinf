@@ -1,0 +1,14 @@
+#include <windows.h>
+#include "notebook.dlg"
+#include "page1.dlg"
+#include "page2.dlg"
+#include "page3.dlg"
+#include "page4.dlg"
+#include "page5.dlg"
+#include "page6.dlg"
+#include "page7.dlg"
+#include "page8.dlg"
+#include "page9.dlg"
+#include "page10.dlg"
+#include "page11.dlg"
+

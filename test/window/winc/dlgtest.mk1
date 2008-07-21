@@ -1,0 +1,71 @@
+!define BLANK ""
+e:\project\bif\test\window\winc\dlgtest.obj : e:\project\bif\test\window\win&
+c\dlgtest.cpp .AUTODEPEND
+ @e:
+ cd e:\project\bif\test\window\winc
+ *wpp dlgtest.cpp -i=d:\WATCOM\h;d:\WATCOM\h\win;e:\project\bif\include -w4 &
+-e25 -dSTRICT -zq -otexan -d2 -bt=windows -ml
+
+e:\project\bif\test\window\winc\frametst.obj : e:\project\bif\test\window\wi&
+nc\frametst.cpp .AUTODEPEND
+ @e:
+ cd e:\project\bif\test\window\winc
+ *wpp frametst.cpp -i=d:\WATCOM\h;d:\WATCOM\h\win;e:\project\bif\include -w4&
+ -e25 -dSTRICT -zq -otexan -d2 -bt=windows -ml
+
+e:\project\bif\test\window\winc\mfopen.obj : e:\project\bif\test\window\winc&
+\mfopen.cpp .AUTODEPEND
+ @e:
+ cd e:\project\bif\test\window\winc
+ *wpp mfopen.cpp -i=d:\WATCOM\h;d:\WATCOM\h\win;e:\project\bif\include -w4 -&
+e25 -dSTRICT -zq -otexan -d2 -bt=windows -ml
+
+e:\project\bif\test\window\winc\mousetst.obj : e:\project\bif\test\window\wi&
+nc\mousetst.cpp .AUTODEPEND
+ @e:
+ cd e:\project\bif\test\window\winc
+ *wpp mousetst.cpp -i=d:\WATCOM\h;d:\WATCOM\h\win;e:\project\bif\include -w4&
+ -e25 -dSTRICT -zq -otexan -d2 -bt=windows -ml
+
+e:\project\bif\test\window\winc\slidert.obj : e:\project\bif\test\window\win&
+c\slidert.cpp .AUTODEPEND
+ @e:
+ cd e:\project\bif\test\window\winc
+ *wpp slidert.cpp -i=d:\WATCOM\h;d:\WATCOM\h\win;e:\project\bif\include -w4 &
+-e25 -dSTRICT -zq -otexan -d2 -bt=windows -ml
+
+e:\project\bif\test\window\winc\dlgtest.res : e:\project\bif\test\window\win&
+c\dlgtest.rc .AUTODEPEND
+ @e:
+ cd e:\project\bif\test\window\winc
+ *wrc dlgtest.rc -bt=windows -i=$[:;d:\WATCOM\h;d:\WATCOM\h\win -q -ad -r -f&
+o=dlgtest.res
+
+e:\project\bif\test\window\winc\frametst.res : e:\project\bif\test\window\wi&
+nc\frametst.rc .AUTODEPEND
+ @e:
+ cd e:\project\bif\test\window\winc
+ *wrc frametst.rc -bt=windows -i=$[:;d:\WATCOM\h;d:\WATCOM\h\win -q -ad -r -&
+fo=frametst.res
+
+e:\project\bif\test\window\winc\dlgtest.exe : e:\project\bif\test\window\win&
+c\dlgtest.obj e:\project\bif\test\window\winc\frametst.obj e:\project\bif\te&
+st\window\winc\mfopen.obj e:\project\bif\test\window\winc\mousetst.obj e:\pr&
+oject\bif\test\window\winc\slidert.obj e:\project\bif\lib\win16\bw1016.lib e&
+:\project\bif\test\window\winc\dlgtest.res e:\project\bif\test\window\winc\f&
+rametst.res .AUTODEPEND
+ @e:
+ cd e:\project\bif\test\window\winc
+ @%write dlgtest.lk1 NAME dlgtest
+ @%append dlgtest.lk1 FIL dlgtest.obj,frametst.obj,mfopen.obj,mousetst.obj,s&
+lidert.obj
+ @%append dlgtest.lk1 LIBR ..\..\..\lib\win16\bw1016.lib
+!ifneq BLANK ""
+ *wlib -q -n -b dlgtest.imp 
+ @%append dlgtest.lk1 LIBR dlgtest.imp
+!endif
+ *wlink d all SYS windows op m op maxe=25 op q op symf @dlgtest.lk1
+!ifneq BLANK "dlgtest.res frametst.res"
+ wrc -q -ad -s0 dlgtest.res frametst.res dlgtest.exe
+!endif
+

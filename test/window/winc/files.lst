@@ -1,0 +1,11 @@
+Contents: Test stubs for win16 and win32
+dlgtest.cpp Test of FDialog
+dlgtest.idh
+dlgtest.rc
+frametst.cpp Test of frame (note: background of client does intentionally not paint)
+frametst.ico
+frametst.idh
+frametst.rc
+mfopen.cpp   Test of standard file dialogs
+mousetst.cpp Test of Mouse handlers
+slidert.cpp  Test of slider control

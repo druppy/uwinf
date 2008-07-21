@@ -1,0 +1,84 @@
+[topic FOwnerNotifyHandler same "FOwnerNotifyHandler"]
+Declaration:
+[code]
+class FOwnerNotifyHandler : public FHandler {
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW
+
+The FOwnerNotifyHandler is used for catching notification from owned windows.
+
+Member functions:
+[sl]
+[li][ref FOwnerNotifyHandler_Notify "Notify()"]
+[esl]
+[etopic]
+
+[topic FOwnerNotifyHandler_Notify downonce "Notify()" "FOwnerNotifyHandler::FOwnerNotifyHandler()"]
+Declaration:
+[code]
+virtual Bool Notify([ref FOwnerNotifyEvent "FOwnerNotifyEvent"]&);
+[ecode]
+This function is called when a owned window want to the its owner window 
+something. Exactly what it tries to tell its owner is very GUI system dependent.
+
+[note](Windows) Notify is called when the handler detects a WM_COMMAND message 
+that is not a command but a notification. (Windows has really messed up its 
+notification/command concept)
+[enote]
+[etopic]
+
+[topic FOwnerNotifyEvent same "FOwnerNotifyEvent"]
+Declaration:
+[code]
+class FOwnerNotifyEvent : public FEvent {
+[ecode]
+
+Member functions:
+[sl]
+[li][ref FOwnerNotifyEvent_GetItem "GetItem()"]
+[li][ref FOwnerNotifyEvent_GetNotifyCode "GetNotifyCode()"]
+[esl]
+
+Non-portable member functions:
+[sl]
+[li][ref FOwnerNotifyEvent_GetNotifySpec "GetNotifySpec()"] - OS/2 PM and WMS
+[li][ref FOwnerNotifyEvent_GetItemHwnd "GetItemHwnd()"] - Windows
+[esl]
+[etopic]
+
+[topic FOwnerNotifyEvent_GetItem down "GetItem()" "FOwnerNotifyEvent::GetItem()"]
+Declaration:
+[code]
+int GetItem() const;
+[ecode]
+GetItem() returns the ID of the control that sent this event.
+[etopic]
+
+[topic FOwnerNotifyEvent_GetNotifyCode same "GetNotifyCode()" "FOwnerNotifyEvent::GetNotifyCode()"]
+Declaration:
+[code]
+int GetNotifyCode() const;
+[ecode]
+This function returns the type of the notification. The notification types are 
+very dependent on the GUI system. There are similarities between
+Windows, OS/2 PM and WMS but not enough to build a common interface.
+[etopic]
+
+[topic FOwnerNotifyEvent_GetNotifySpec same "GetNotifySpec()" "FOwnerNotifyEvent::GetNotifySpec()"]
+Declaration: [hp 2](OS/2 PM and WMS only)[ehp]
+[code]
+ULONG GetNotifySpec() const;
+[ecode]
+Returns MParam2. See "PM guide and reference", "WM_CONTROL" for details.
+[etopic]
+
+[topic FOwnerNotifyEvent_GetItemHwnd upafter "GetItemHwnd()" "FOwnerNotifyEvent::GetItemHwnd()"]
+Declaration: [hp 2](Windows only)[ehp]
+[code]
+HWND GetItemHwnd() const;
+[ecode]
+Returns the HWND of the control that sent the event. See "Windows API", "WM_COMMAND" for details.
+[etopic]
+
+

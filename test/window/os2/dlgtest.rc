@@ -1,0 +1,3 @@
+#include "dlgtest.h"
+RCINCLUDE "../../../test/window/os2/dlgtest.dlg"
+

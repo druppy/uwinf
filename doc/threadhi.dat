@@ -1,0 +1,9 @@
+:artlink.
+:link reftype=hd refid=FThread x=86 y=120 cx=67 cy=19.
+:link reftype=hd refid=FMainThread x=6 y=66 cx=100 cy=19.
+:link reftype=hd refid=FWindowThread x=126 y=67 cx=123 cy=18.
+:link reftype=hd refid=FMainWindowThread x=48 y=7 cx=157 cy=19.
+:link reftype=hd refid=FSemaphore x=317 y=110 cx=98 cy=20.
+:link reftype=hd refid=FEventSemaphore x=297 y=74 cx=136 cy=20.
+:link reftype=hd refid=FMutexSemaphore x=290 y=34 cx=140 cy=21.
+:eartlink.

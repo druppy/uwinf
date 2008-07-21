@@ -1,0 +1,845 @@
+[topic bifwindow_miscellaneous same "Miscellaneous classes"]
+BIF/Window defines a few "wrapper"-classes that encapsulates some of the
+GUIs native classes/structures/resources. These classes are always
+defined when you use BIF/Window.
+
+The following classes are provided:
+[sl]
+[li][ref FPoint "FPoint"]
+[li][ref FRect "FRect"]
+[li][ref FIcon "FIcon"]
+[li][ref FPointer "FPointer"]
+[li][ref FMenu "FMenu"]
+[li][ref FResourceString "FResourceString"]
+[esl]
+
+In addition these classes exist to wrap the DLLs and the application:
+[sl]
+[li][ref FApplication "FApplication"]
+[li][ref FModule "FModule"]
+[esl]
+[etopic]
+
+[topic FPoint down "FPoint"]
+Declaration:
+[code]
+Windows:
+  class FPoint : public POINT {
+OS/2 PM:
+  class FPoint : public POINTL {
+WMS:
+  class FPoint {
+[ecode]
+
+The FPoint class is reasonable straight-forward. The FPoint class does
+not add data members and does not contain virtual functions so you can
+use the FPoint class when you call functions in the native GUI system.
+
+Member functions:
+[sl]
+[li]FPoint()
+[li]FPoint(int x, int y)
+[li]FPoint(POINTL/POINT p)
+[li]void Set(int x, int y)
+[li]void Set(POINTL/POINT p)
+[li]int GetX()
+[li]int GetY()
+[li]operator ==
+[li]operator !=
+[esl]
+[etopic]
+
+
+[topic FRect same "FRect"]
+Declaration:
+[code]
+Windows:
+  class FRect : public RECT {
+OS/2 PM:
+  class FRect : public RECTL {
+WMS:
+  class FRect {
+[ecode]
+
+The FRect class is a wrapper-class over the native rectangle class. It
+tries to protect you from the native coordinate system by providing
+coordinate-system independent functions (GetTop/GetBottom etc.). The class does 
+not add data members or virtual functions so it is compatible with the native 
+rectangle type.
+
+Member functions:
+[sl]
+[li]FRect()
+[li]FRect( ... )
+[li][ref FRect_ctor3 "FRect(RECT/RECTL)"]
+[li]int GetTop()
+[li]int SetTop()
+[li]int GetLeft()
+[li]int SetLeft()
+[li]int GetRight()
+[li]int SetRight()
+[li]int GetBottom()
+[li]int SetBottom()
+[li]int GetWidth()
+[li]int GetHeight()
+[li][ref FRect_Shrink "Shrink()"]
+[li][ref FRect_Expand "Expand()"]
+[li][ref FRect_Contains1 "Contains(FPoint)"]
+[li][ref FRect_Contains2 "Contains(FRect)"]
+[li][ref FRect_Intersects "Intersects()"]
+[li][ref FRect_IsEmpty "IsEmpty()"]
+[esl]
+
+Related global functions:
+[sl]
+[li][ref Intersection "Intersection()"]
+[li][ref Union "Union()"]
+[esl]
+[etopic]
+
+[topic FRect_ctor3 down "FRect()" "FRect::FRect()"]
+Declaration:
+[code]
+Windows:
+  FRect( int l, int t, int r, int b )
+OS/2 PM:
+  FRect( int l, int b, int r, int t )
+WMS:
+  FRect( int l, int t, int r, int b )
+[ecode]
+[etopic]
+
+[topic FRect_Shrink same "Shrink()" "Frect::Shrink()" only]
+Declaration:
+[code]
+void Shrink(int dx, int dy);
+[ecode]
+Shrink() shrinks the rectangle by moving
+the left edge [hp 1]dx[ehp] units to the right,
+the right edge [hp 1]dx[ehp] units to the left,
+the top edge [hp 1]dy[ehp] units down and
+the bottom edge [hp 1]dy[ehp] units up.
+
+[note]Shrink() does not check if the width or height becomes negative
+[enote]
+
+See also: [ref FRect_Expand "Expand()"]
+[etopic]
+
+[topic FRect_Expand same "Expand()" "Frect::Expand()"]
+Declaration:
+[code]
+void Expand(int dx, int dy);
+[ecode]
+Expand() expands the rectangle by moving
+the left edge [hp 1]dx[ehp] units to the left,
+the right edge [hp 1]dx[ehp] units to the right,
+the top edge [hp 1]dy[ehp] units up and
+the bottom edge [hp 1]dy[ehp] units down.
+
+See also: [ref FRect_Shrink "Shrink()"]
+[etopic]
+
+[topic FRect_Contains1 same "Contains(FPoint)" "FRect::Contains(FPoint)"]
+Declaration:
+[code]
+Bool Contains(const FPoint &p) const;
+[ecode]
+This function returns wether the point is inside the rectangle or not.
+[etopic]
+
+[topic FRect_Contains2 same "Contains(FRect)" "FRect::Contains(FRect)"]
+Declaration:
+[code]
+Bool Contains(const FRect &r) const;
+[ecode]
+This function returns wether the rectangle [hp 1]r[ehp] is inside the
+rectangle or not.
+
+[note]The return value is undefined when the rectangle [hp 1]r[ehp] is
+empty (zero width and height)
+[enote]
+[etopic]
+
+[topic FRect_Intersects same "Intersects()" "FRect::Intersects()"]
+Declaration:
+[code]
+Bool Intersects(const FRect &r) const;
+[ecode]
+This function returns wether the rectangle [hp 1]r[ehp] intersects the
+rectangle or not.
+
+[note]The return value is undefined when the rectangle [hp 1]r[ehp] is
+empty (zero width and height)
+[enote]
+
+See also: [ref Intersection "Intersection()"]
+[etopic]
+
+[topic FRect_IsEmpty same "IsEmpty()" "FRect::IsEmpty()"]
+Declaration:
+[code]
+Bool IsEmpty() const;
+[ecode]
+This function returns wether the rectangle is empty or not. When an
+rectangle is empty (=has zero width or height) the behavior of some
+functions are undefined.
+[etopic]
+
+[topic Intersection same "Intersection()"]
+Declaration:
+[code]
+FRect Intersection(const FRect &r1, const FRect &r2);
+[ecode]
+This function returns the intersection (the area covered by both
+rectangles). If the rectangles does not intersect the return value is
+an empty rectangle.
+
+[graphic bitmap "" "winbmp:intersec.bmp" "os2bmp:intersec.bmp"]
+
+[note]This function is global and not a member function.[enote]
+
+See also: [ref FRect_Intersects "FRect::Intersects()"]
+[etopic]
+
+[topic Union upafter "Union()" "FRect::Union()"]
+Declaration:
+[code]
+FRect Union(const FRect &r1, const FRect &r2);
+[ecode]
+This function returns the union of the rectangles.
+
+[graphic bitmap "" "winbmp:union.bmp" "os2bmp:union.bmp"]
+
+[note]This function is global and not a member function.[enote]
+
+See also: [ref Intersection "Intersection()"]
+[etopic]
+
+
+
+[topic FIcon same "FIcon"]
+The FIcon class encapsulates the native icons. Icons are normally
+loaded from the resources. The FIcon class uses reference counting to
+eliminate duplication of the native icon and to track when to delete
+the native icon resource.
+
+Member functions:
+[sl]
+[li][ref FIcon_ctor1 "FIcon(HPOINTER/HICON)"]
+[li]FIcon(FIcon)
+[li][ref FIcon_ctor3 "FIcon(resID)"]
+[li][ref FIcon_GetHandle "GetHandle()"]
+[li]operator =
+[esl]
+[etopic]
+
+[topic FIcon_ctor1 down "FIcon(HPOINTER/HICON)" "FIcon::FIcon(HPOINTER/HICON)"]
+Declaration:
+[code]
+Windows:
+  FIcon(HICON hicon, Bool d=False);
+OS/2 PM:
+  FIcon(HPOINTER hicon, Bool d=False);
+WMS:
+  non-existing
+[ecode]
+This constructor constructs a FIcon from a handle to a native icon.
+the [hp 1]d[ehp] specifies wether the native icon should be deleted
+when the FIcon reference count decrements to zero. If the icon is
+used by non-BIF functions throughout the lifetime of the FIcon
+instance you should specify False (default).
+[etopic]
+
+[topic FIcon_ctor3 same "FIcon(resId)" "FIcon::FIcon(resId)"]
+Declaration:
+[code]
+FIcon(int resId, [ref FModule "FModule"] *module=0);
+[ecode]
+This constructor automatically loads the icon with the id 
+[hp 1]resId[ehp] from the module [hp 1]module[ehp].
+[etopic]
+
+[topic FIcon_GetHandle upafter "GetHandle()" "FIcon::GetHandle()"]
+Declaration:
+[code]
+Windows:
+  HICON GetHandle();
+OS/2 PM:
+  HPOINTER GetHandle();
+WMS:
+  non-existing
+[ecode]
+This function returns the handle to the native icon.
+[etopic]
+
+
+
+[topic FPointer same "FPointer"]
+The FPointer class encapsulates the native pointers. A pointer is the
+shape of the thingy that moves on the screen when you move the mouse.
+Pointers are normally loaded from the resources or retrieved by the
+GetSystemXxxxPointer() functions. The FPointer class uses reference
+counting to eliminate duplication of the native pointer and to track
+when to delete the native pointer resource.
+
+Member functions:
+[sl]
+[li][ref FPointer_ctor1 "FPointer(HPOINTER/HICON)"]
+[li]FPointer(FPointer)
+[li][ref FPointer_ctor3 "FPointer(resID)"]
+[li][ref FPointer_GetHandle "GetHandle()"]
+[li]operator =
+[esl]
+
+See also:
+[ref GetSystemArrowPointer "GetSystemArrowPointer()"],
+[ref GetSystemTextPointer "GetSystemTextPointer()"],
+[ref GetSystemNESWPointer "GetSystemNESWPointer()"],
+[ref GetSystemNSPointer "GetSystemNSPointer()"],
+[ref GetSystemNWSEPointer "GetSystemNWSEPointer()"],
+[ref GetSystemWEPointer "GetSystemWEPointer()"],
+[ref GetSystemWaitPointer "GetSystemWaitPointer()"]
+[ref FMouseHandler_ControlPointer "FMouseHandler::ControlPointer()"]
+[etopic]
+
+[topic FPointer_ctor1 down "FPointer(HPOINTER/HICON)" "FPointer::FPointer(HPOINTER/HICON)"]
+Declaration:
+[code]
+Windows:
+  FPointer(HCURSOR hicon, Bool d=False);
+OS/2 PM:
+  FPointer(HPOINTER hicon, Bool d=False);
+WMS:
+  non-existing
+[ecode]
+This constructor constructs a FPointer from a handle to a native
+pointer.
+the [hp 1]d[ehp] specifies wether the native pointer should be deleted
+when the FPointer reference count decrements to zero. If the pointer is
+used by non-BIF functions throughout the lifetime of the FPointer
+instance you should specify False (default).
+[etopic]
+
+[topic FPointer_ctor3 same "FPointer(resId)" "FPointer::FPointer(resId)"]
+Declaration:
+[code]
+FPointer(int resId, [ref FModule "FModule"] *module=0);
+[ecode]
+This constructor automatically loads the pointer with the id
+[hp 1]resId[ehp] from the module [hp 1]module[ehp].
+[etopic]
+
+[topic FPointer_GetHandle upafter "GetHandle()" "FPointer::GetHandle()" secondary]
+Declaration:
+[code]
+Windows:
+  HICON GetHandle();
+OS/2 PM:
+  HPOINTER GetHandle();
+WMS:
+  non-existing
+[ecode]
+This function returns the handle to the native pointer.
+[etopic]
+
+
+[topic FMenu same "FMenu"]
+The FMenu class encapsulates the native menus. The FMenu uses
+reference counting to track the use of the menu.
+
+Member functions:
+[sl]
+[li][ref FMenu_ctor1 "FMenu()"]
+[li]FMenu(FMenu)
+[li][ref FMenu_Popup "Popup()"]
+[li][ref FMenu_AppendItem1 "AppendItem(item)"]
+[li][ref FMenu_AppendItem2 "AppendItem(submenu)"]
+[li][ref FMenu_AppendSeparator "AppendSeparator()"]
+[li][ref FMenu_DeleteItem "DeleteItem()"]
+[li][ref FMenu_GetItem "GetItem()"]
+[li][ref FMenu_GetSubmenuFromPos "GetSubMenuFromPos()"]
+[li][ref FMenu_CheckItem "CheckItem()"]
+[li][ref FMenu_EnableItem "EnableItem()"]
+[li][ref FMenu_IsItemEnabled "IsItemEnabled()"]
+[li][ref FMenu_IsItemChecked "IsItemChecked()"]
+[li]operator =
+[esl]
+
+See also: [ref FFrameWindow_RedrawMenu "FFrameWindow::RedrawMenu()"],
+[etopic]
+
+[topic FMenu_ctor1 down "FMenu()" "FMenu::FMenu()"]
+Declaration:
+[code]
+FMenu(FWnd *pwndOwner, int resId, FModule *module=0);
+[ecode]
+This constructor loads the menu from the resources.
+
+[parml]
+[pt]pwndOwner[pd]The window that is to recieve menu events from the
+menu. This is normally the frame window that the menu is going to be
+attached or the powner parameter to [ref FMenu_Popup "Popup()"]
+[pt]resId[pd]Resource ID of the menu
+[pt]module[pd]Module where the menu is loaded from. If NULL the menu
+is loaded from the application
+[eparml]
+
+[etopic]
+
+[topic FMenu_Popup same "Popup()" "FMenu::Popup()"]
+Declaration:
+[code]
+Bool Popup(FWnd *parent, FWnd *owner, const FPoint *position=0);
+[ecode]
+Popup() is used for displaying a submenu and letting the user select
+an item from it. This can be used for context-sensitive menus.
+
+[parml]
+[pt]parent[pd]parent window. This specifies which window the
+[hp 1]position[ehp] is relative to. Even if [hp 1]position[ehp] is null,
+parent is required.
+[pt]owner[pd]owner window. This is the window that will recieve menu
+events. This should be the same as the pwndOwner parameter specified
+in [ref FMenu_ctor1 "Fmenu()"]
+[pt]position[pd]origin of the menu. If [hp 1]position[ehp] is NULL the menu
+will pop up a suitable place, eg. where the mouse currently is.
+[eparml]
+
+[note]Popup() may return before the user has selected an item from the
+menu, so you cannot let the FMenu instance go out of scope after the
+the call to Popup().
+[enote]
+
+Example:
+[code]
+class MyWindow : public ..., public FTranslatedMouseHandler
+  FMenu *popupmenu;
+  MyWindow()
+    : FTranslatedMouseHandler(this)
+    { popupmenu=0; }
+  ~MyWindow() { delete popupmenu; }
+  MouseContextMenu(FMouseEvent &);
+  ...
+};
+
+Bool MyWindow::MouseContextMenu(FMouseEvent &) {
+  if(!popupmenu)
+    popupmenu = new FMenu(this,this,IDM_MYCONTEXTMENU);
+  popupmenu->Popup(this,this,0);
+  return True;
+}
+[ecode]
+
+See also: [ref FCommandHandler "FCommandHandler"],
+[ref FTranslatedMouseHandler "FTranslatedMouseHandler"]
+[etopic]
+
+
+[topic FMenu_AppendItem1 same "AppendItem(item)" "FMenu::AppendItem()"]
+Declaration:
+[code]
+Bool AppendItem(const char *string, int nId,
+                Bool enabled = True, Bool checked = False);
+[ecode]
+This function appends a normal menu item to the menu.
+
+[parml]
+[pt]string[pd]Menu string. Under OS/2 PM shortcuts is specified with
+an tilde (~), under Windows with an ampersand (&) and under WMS with
+an at-sign (@)
+[pt]nId[pd]Menu item id. This is the id that will be returned in the
+[ref FCommandHandler_Command "FCommandEvent"]
+[pt]enabled[pd]Specifies wether the item should initially be enabled.
+[pt]checked[pd]Specifies wether the item should initially have a check
+mark
+[eparml]
+
+Example: This code fragment show how to have the "File" submenu
+contain the names of the past 4 files the user has had opened:
+[code]
+void SetOldFilename(const char *fn) {
+  strcpy(oldfilename\[3\],oldfilename\[2\]);
+  strcpy(oldfilename\[2\],oldfilename\[1\]);
+  strcpy(oldfilename\[1\],oldfilename\[0\]);
+  strcpy(oldfilename\[0\],fn);
+
+  FMenu *pmenu = GetAppWindow()->GetMenu();
+  FMenu *pmenuFile = pmenu->GetSubMenuFromPos(0);
+
+  pmenuFile->DeleteItem(MID_FILE0);
+  pmenuFile->DeleteItem(MID_FILE1);
+  pmenuFile->DeleteItem(MID_FILE2);
+  pmenuFile->DeleteItem(MID_FILE3);
+
+  pmenuFile->AppendItem(oldfilename\[0\],MID_FILE0);
+  pmenuFile->AppendItem(oldfilename\[1\],MID_FILE1);
+  pmenuFile->AppendItem(oldfilename\[2\],MID_FILE2);
+  pmenuFile->AppendItem(oldfilename\[3\],MID_FILE3);
+
+  GetAppWindow()->RedrawMenu();
+}
+[ecode]
+[etopic]
+
+[topic FMenu_AppendItem2 same "AppendItem(submenu)" "FMenu::AppendMenu()"]
+Declaration:
+[code]
+Bool AppendItem(const char *pszItem, FMenu *submenu, Bool enabled);
+[ecode]
+This function appends a submenu to the menu.
+
+[note]When the menu is destroyed the native menu used by
+[hp 1]submenu[ehp] is destroyed too and BIF has no way of detecting this.
+[enote]
+
+[note]Under OS/2 PM the submenu is given a serial ID[enote]
+[etopic]
+
+[topic FMenu_AppendSeparator same "AppendSeparator()" "FMenu::AppendSeparator()"]
+Declaration:
+[code]
+void AppendSeparator();
+[ecode]
+This function appends a separator to a menu.
+
+[note]There is no portable way to remove the separator again
+[enote]
+[etopic]
+
+[topic FMenu_DeleteItem same "DeleteItem()" "FMenu::DeleteItem()"]
+Declaration:
+[code]
+Bool DeleteItem(int Id);
+[ecode]
+DeleteItem() deletes the item in the menu with the id [hp 1]Id[ehp].
+[etopic]
+
+[topic FMenu_GetItem same "GetItem()" "FMenu::GetItem()" secondary]
+Declaration:
+[code]
+Bool GetItem(int Id, char *buf, int buflen);
+[ecode]
+This function retrieves the text of an item.
+[etopic]
+
+[topic FMenu_GetSubMenuFromPos same "GetSubmenuFromPos()" "Fmenu::GetSubmenuFromPos()"]
+Declaration:
+[code]
+FMenu GetSubmenuFromPos(int nPos);
+[ecode]
+GetSubmenuFromPos() retrieves the submenu at [hp 1]nPos[ehp] (0-based).
+[etopic]
+
+[topic FMenu_CheckItem same "CheckItem()" "FMenu::CheckItem()"]
+Declaration:
+[code]
+void CheckItem(int Id, Bool check);
+[ecode]
+CheckItem() places or removes a checkmark at an item.
+
+Example: This code fragment toggles a "status bar" on and off.
+[code]
+Bool MyWindow::Command(FCommandEvent &ev) {
+  if(ev.GetItem()==MID_STATUSBAR) {
+    if(statuswindow->IsVisible()) {
+      //turn off the status bar
+      GetAppWindow()->GetMenu()->CheckItem(MID_STATUSBAR,False);
+      statuswindow->Hide();
+    } else {
+      //turn the status bar on
+      GetAppWindow()->GetMenu()->CheckItem(MID_STATUSBAR,True);
+      statuswindow->Show();
+    }
+    FormatSubWindows();
+  } else
+    ...
+}
+[ecode]
+
+See also: [ref FMenu_IsItemEnabled "IsItemChecked()"]
+[etopic]
+
+[topic FMenu_EnableItem same "EnableItem()" "FMenu::EnableItem()"]
+Declaration:
+[code]
+void EnableItem(int Id, Bool enable);
+[ecode]
+EnableItem() enables or disables an item. When an item is disabled it is
+displayed as grayed text and the GUI ignores selections of the item.
+
+[note]It is possible to disable all items in a submenu by disabling the
+submenu itself, but there is no portable way to do this. Windows requires
+the 0-based position and OS/2 PM requires the submenu ID.
+[enote]
+[etopic]
+
+[topic FMenu_IsItemChecked same "IsItemChecked()" "FMenu::IsItemChecked()"]
+Declaration:
+[code]
+Bool IsItemChecked(int Id);
+[ecode]
+Returns true if the item with the id [hp 1]Id[ehp] is checked.
+[etopic]
+
+[topic FMenu_IsItemEnabled upafter "IsItemEnabled()" "FMenu::IsItemEnabled()"]
+Declaration:
+[code]
+Bool IsItemEnabled(int Id);
+[ecode]
+Returns true if the item with the id [hp 1]Id[ehp] is enabled.
+[etopic]
+
+
+[topic FResourceString same "FResourceString"]
+This humble class is very useful. It is the most convienient ways of loading
+strings from the stringtable in the resources.
+
+Member functions:
+[sl]
+[li]FResourceString(int resId, FModule *module=0);
+[li]operator const char *() const;
+[esl]
+
+Example:
+[code]
+MessageBox(this, FResourceString(IDS_COULDNOTSAVE), 0, mb_ok);
+[ecode]
+
+The above line displays a message to the user. The "FResourceString(IDS_COULDNOTSAVE)"
+part will do several tasks for your: load the string, perform error checking and pass
+the MessageBox() function a pointer to the string.
+
+If the string cannot be located in the resources the char* operator will return NULL.
+
+[note]The FResourceString has an iternal limit of 256 characters for the
+string. This limit may be lifted or completly removed in future versions of BIF.
+[enote]
+[etopic]
+
+
+
+
+
+
+
+[topic FModule same "FModule"]
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_MODULE (or BIFINCL_APPLICATION)
+
+This classes the the interface to executables and DLLs. It is usually
+only interesting when you want to load resources from another module
+than your application.
+
+
+It has only two portable member functions:
+[sl]
+[li][ref FModule_ctor "FModule()"]
+[li][ref FModule_Fail "Fail()"]
+[esl]
+
+In addition is has two static functions:
+[sl]
+[li][ref FModule_GetDefaultResourceModule "GetDefaultResourceModule"]
+[li][ref FModule_SetDefaultResourceModule "SetDefaultResourceModule"]
+[esl]
+
+In addition it has a lot of non-portable member functions that you may be 
+interested in if portability is not an issue to your application.
+[etopic]
+
+[topic FModule_ctor down "Fmodule()" "Fmodule::Fmodule()"]
+Declaration:
+[code]
+FModule(const char *name);
+[ecode]
+
+This constructor loads the DLL specified by [hp 1]name[ehp]. If the DLL could
+not be found (or an other error occurred) [ref FModule_Fail "Fail()"] will return true.
+[etopic]
+
+
+[topic FModule_Fail same "Fail()" "FModule::Fail()" secondary]
+Declaration:
+[code]
+Bool Fail() const;
+[ecode]
+This function return True if the constructor could not load the DLL.
+[etopic]
+
+
+[topic FModule_GetDefaultResourceModule same "GetDefaultResourceModule()" "FModule::GetDefaultResourceModule()"]
+Declaration:
+[code]
+static FModule *GetDefaultResourceModule();
+[ecode]
+This function returns the default module for loading resources. This can be the
+application or the module previously set with [ref FModule_SetDefaultResourceModule "SetDefaultResourceModule"]
+[etopic]
+
+[topic FModule_SetDefaultResourceModule upafter "SetDefaultResourceModule()" "FModule::SetDefaultResourceModule()"]
+Declaration:
+[code]
+static void SetDefaultResourceModule(FModule *mod);
+[ecode]
+This function sets the default module for loading resources. If not set
+[ref FModule_GetDefaultResourceModule "GetDefaultResourceModule"] will return
+a point the the application ([ref FApplication "FApplication"]).
+It can be very useful to change the default resource module. For instance if
+your application is multi-lingual the applicaiton could at startup determine
+the language and load the module containing the language-dependent resources.
+
+Example:
+[code]
+FModule *languageModule;
+MyApplication::StartUp(...) {
+  //detect language
+  ...
+  <determine which .DLL contains that language>
+  char *modulename;
+  switch(language) {
+    case LANG_UKEN: //UK english
+    case LANG_USEN: //US english
+      modulename = "l_en.dll";
+      break;
+    case LANG_DADK: //danish
+      modulename = "l_dadk.dll";
+      break;
+    case LANG_FRBE: //belgian french
+    case LANG_FRFR: //french
+      modulename = "l_fr.dll";
+      break;
+    default:
+      modulename = "l_en.dll"
+  }
+  languageModule = new FModule(modulename);
+  FModule::SetDefaultResourceModule(languageModule);
+}
+[ecode]
+[etopic]
+
+
+[topic FApplication same "FApplication"]
+Declaration:
+[code]
+class FApplication : public FModule {
+[ecode]
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_APPLICATION
+
+The FApplication class is the basis for your application. Windows do not just
+come to life automatically, something has to create them.
+
+FApplication takes care of a few things:
+[ul]
+[li]Initialization and termination of the program
+[li]Startup and shutdown of the windows
+[li]Message loop
+[li]and a few other things you don't want to know about
+[eul]
+
+There exists only one instance of FApplication. That instance is created for
+you in the DEFBIFWINDOWMAIN macro.
+
+FApplication has the following portable member functions:
+[sl]
+[li][ref FApplication_MessageLoop "MessageLoop()"]
+[li][ref FApplication_TerminateApp "TerminateApp()"]
+[li][ref FApplication_StartUp "StartUp()"]
+[li][ref FApplication_ShutDown "ShutDown()"]
+[li][ref FApplication_Main "Main()"]
+[esl]
+[etopic]
+
+[topic FApplication_MessageLoop down "MessageLoop()" "FApplication::MessageLoop()"]
+Declaration:
+[code]
+virtual void MessageLoop();
+[ecode]
+MessageLoop() performs the main message-loop of the application. You will
+normally only have to call it when you override [ref FApplication_Main "Main()"]
+
+MessageLoop() returns when [ref FApplication_TerminateApp "TerminateApp()"] has
+been called or when there are no windows known to BIF/Window.
+
+[note](For Windows programmers) You don't have to worry about modeless dialogs
+and accelarator tables, BIF/Window takes care of that.
+[enote]
+[etopic]
+
+
+[topic FApplication_TerminateApp same "TerminateApp()" "FApplication::TerminateApp()" only]
+Declaration:
+[code]
+void TerminateApp( void );
+[ecode]
+This function tells [ref FApplication_MessageLoop "MessageLoop()"] to terminate.
+You should call this function when you main window is being closed.
+[etopic]
+
+
+[topic FApplication_StartUp same "StartUp()" "FApplication::StartUp()"]
+Declaration:
+[code]
+virtual Bool StartUp(int argc, char **argv);
+[ecode]
+This function is called by the default implementation of [ref FApplication_Main "Main()"].
+In you derived class you should create the main window(s) and show them.
+
+[hp 1]argc[ehp] and [hp 1]argv[ehp] contains the argument count and arguments
+(including the program name) as you know them from DOS/OS/2/Unix/...
+
+If StartUp() returns False the application is aborted immidiatly. This is useful if
+StartUp() was unable to create the main window.
+
+See also: [ref FApplication_ShutDown "ShutDown()"]
+[etopic]
+
+
+[topic FApplication_ShutDown same "ShutDown()" "FApplication::ShutDown()"]
+Declaration:
+[code]
+virtual int ShutDown();
+[ecode]
+This function is called by default implementation of [ref FApplication_Main "Main()"] just
+before it returns. In your derived class you should destroy the main window(s)
+of your application.
+
+The return value from ShutDown() is passed back to the operating system as the
+program exit code.
+
+See also: [ref FApplication_StartUp "StartUp()"]
+[etopic]
+
+
+[topic FApplication_Main upafter "Main()" "FApplication::Main()" secondary]
+Declaration:
+[code]
+virtual int Main( int argc, char **argv );
+[ecode]
+Main is the main entry point of a BIF/Window application. [hp 1]argc[ehp] and
+[hp 1]argv[ehp] contains the argument count and arguments.
+
+The default implementation of Main is:
+[code]
+if(StartUp(argc,argv)) {
+  MessageLoop();
+  return ShutDown();
+} else
+  return -1;      //could not initialize
+[ecode]
+
+[etopic]
+
+
+[topic FWndMan same "FWndMan"]
+FWndMan implements several GUI system dependent things:
+[ul]
+[li]Native window <-> BIF window mapping
+[li]Event dispatching
+[li]Special message handling
+[eul]
+
+FWndMan does not have any portable operations so it is not documented any further.
+[etopic]
+
+

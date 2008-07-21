@@ -1,0 +1,749 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote FCreateDestroyHandler}
+${\footnote FCreateDestroyHandler}
++{\footnote defbrowse}
+K{\footnote FCreateDestroyHandler}
+{\fs26\cf1\b FCreateDestroyHandler}\par
+K{\footnote WM_CREATE}
+K{\footnote wm_created}
+K{\footnote WM_DESTROY}
+The FCreateDestroyHandler is used when you have to initialize or clean up when 
+the native window is created or destroyed.\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMMONHANDLERS\par
+
+Notifications: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Created()}{\v FCreateDestroyHandler_Created} 
+\par
+\tab
+{\uldb Destroying()}{\v FCreateDestroyHandler_Destroying} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FCreateDestroyHandler_Created}
+${\footnote FCreateDestroyHandler::Created()}
++{\footnote defbrowse}
+K{\footnote Created()}
+K{\footnote FCreateDestroyHandler::Created()}
+{\fs26\cf1\b Created()}\par
+Declaration: 
+\line{\f1
+virtual Bool Created(FCreatedEvent &);\line
+}
+\par
+
+This function is called when BIF associates the native window with the BIF 
+window object. It is called very early, but BIF does not guarantee that it 
+will be called before any events are handled by the native window.\par
+
+{\b{Note:}} The FCreatedEvent is NOT equal to Windows' or PMs' WM_CREATE message.\par
+
+In dialogs created from resources Created() may be called before Windows/PM 
+has created the controls. For control creation use 
+{\uldb FDialog::CreateControls()}{\v FDialog_CreateControls} 
+\par
+
+See also: {\uldb Destroying()}{\v FCreateDestroyHandler_Destroying}, {\uldb FCreateDestroyHandler}{\v FCreateDestroyHandler} 
+\page
+
+#{\footnote FCreateDestroyHandler_Destroying}
+${\footnote FCreateDestroyHandler::Destroying()}
++{\footnote defbrowse}
+K{\footnote Destroying()}
+K{\footnote FCreateDestroyHandler::Destroying()}
+{\fs26\cf1\b Destroying()}\par
+Declaration: 
+\line{\f1
+Bool Destroying(FDestroyingEvent &);\line
+}
+\par
+
+This function is called before the native window is destroyed.\par
+
+{\b{Note:}} The FDestroyingEvent is NOT equal to Windows' or PMs WM_DESTROY message. 
+\par
+
+See also: {\uldb Created()}{\v FCreateDestroyHandler_Created}, {\uldb FCreateDestroyHandler}{\v FCreateDestroyHandler} 
+\page
+
+#{\footnote FCommandHandler}
+${\footnote FCommandHandler}
++{\footnote defbrowse}
+K{\footnote FCommandHandler}
+{\fs26\cf1\b FCommandHandler}\par
+K{\footnote WM_COMMAND}
+K{\footnote WM_SYSCOMMAND}
+The FCommandhandler is used to react on commands and system commands from 
+push buttons, accelerators, menus and other sources.\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMMONHANDLERS\par
+
+Notifications: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Command()}{\v FCommandHandler_Command} 
+\par
+\tab
+{\uldb SysCommand()}{\v FCommandHandler_SysCommand} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FCommandHandler_Command}
+${\footnote FCommandHandler::Command}
++{\footnote defbrowse}
+K{\footnote FCommandHandler::Command}
+{\fs26\cf1\b FCommandHandler::Command}\par
+Declaration: 
+\line{\f1
+Bool Command(FCommandEvent&);\line
+}
+\par
+
+This function is called when something (a push button, menu or other) wants 
+the window to do something. Normally, the window decides what to do based on 
+the return value from {\uldb FCommandEvent::GetItem()}{\v FCommandEvent}.\par
+
+Example: 
+\line{\f1
+Bool MyWindow::Command(FCommandEvent &ev) \{\line
+    switch(ev.GetItem()) \{\line
+        case ID_SAVE:\line
+            <save file>\line
+        case ID_SAVEAS:\line
+            <save file with new name>\line
+        case ID_CUT:\line
+            <move selected text to clipboard>\line
+        ...\line
+        case ID_PRODUCTINFORMATION:\line
+            <show "about" box>\line
+        default:\line
+            //unrecognized command\line
+            return False;\line
+    \}\line
+    return True;        //handled\line
+\}\line
+}
+\par
+
+See also: {\uldb FCommandHandler}{\v FCommandHandler}, {\uldb SysCommand()}{\v FCommandHandler_SysCommand}\par
+
+{\b{Note:}} (Windows) The FCommandHandler will only call Command() if the WM_COMMAND 
+message really is a command and not a notification. The 
+{\uldb FOwnerNotifyHandler}{\v FOwnerNotifyHandler} is used for reacting on 
+notifications. 
+ 
+\page
+
+#{\footnote FCommandHandler_SysCommand}
+${\footnote FCommandHandler::SysCommand()}
++{\footnote defbrowse}
+K{\footnote FCommandHandler::SysCommand()}
+{\fs26\cf1\b FCommandHandler::SysCommand()}\par
+Declaration: 
+\line{\f1
+Bool SysCommand(FSysCommandEvent&);\line
+}
+\par
+
+This handler allows the window to react on system commands, usually sent from 
+the system menu. In general, windows should let the default action take place.\par
+
+See also: {\uldb FCommandHandler}{\v FCommandHandler}, {\uldb Command()}{\v FCommandHandler_Command} 
+\page
+
+#{\footnote FCommandEvent}
+${\footnote FCommandEvent}
++{\footnote defbrowse}
+K{\footnote FCommandEvent}
+{\fs26\cf1\b FCommandEvent}\par
+The FCommandEvent is used by {\uldb Command()}{\v FCommandHandler_Command} when a 
+command arrives to the window.\par
+
+The only portable operation is: 
+\line{\f1
+int GetItem() const;\line
+}
+\par
+
+which returns the ID of the item which caused the event to occur. 
+\page
+
+#{\footnote FEnableHandler}
+${\footnote FEnableHandler}
++{\footnote defbrowse}
+K{\footnote FEnableHandler}
+{\fs26\cf1\b FEnableHandler}\par
+K{\footnote WM_ENABLE}
+The FEnableHandler notifices when the window is enabled or disabled.\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMMONHANDLERS\par
+
+Notifications: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Enabled()}{\v FEnableHandler_Enabled} 
+\par
+\tab
+{\uldb Disabled()}{\v FEnableHandler_Disabled} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FEnableHandler_Enabled}
+${\footnote FEnableHandler::Enabled()}
++{\footnote defbrowse}
+K{\footnote Enabled()}
+K{\footnote FEnableHandler::Enabled()}
+{\fs26\cf1\b Enabled()}\par
+Declaration: 
+\line{\f1
+Bool Enabled(FEnableEvent&);\line
+}
+\par
+
+This function is called when the window is being enabled.\par
+
+See also: {\uldb FEnableHandler}{\v FEnableHandler} 
+\page
+
+#{\footnote FEnableHandler_Disabled}
+${\footnote FEnableHandler::Disabled()}
++{\footnote defbrowse}
+K{\footnote Disabled()}
+K{\footnote FEnableHandler::Disabled()}
+{\fs26\cf1\b Disabled()}\par
+Declaration: 
+\line{\f1
+Bool Disabled(FEnableEvent&);\line
+}
+\par
+
+This function is called when the window is being disabled.\par
+
+See also: {\uldb FEnableHandler}{\v FEnableHandler} 
+\page
+
+#{\footnote FFocusHandler}
+${\footnote FFocusHandler}
++{\footnote defbrowse}
+K{\footnote FFocusHandler}
+{\fs26\cf1\b FFocusHandler}\par
+K{\footnote WM_SETFOCUS}
+K{\footnote WM_KILLFOCUS}
+This handler is used for manipulating the focus. The focus window is the 
+window which receives keyboard events.\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMMONHANDLERS\par
+
+Notifications: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb LostFocus()}{\v FFocusHandler_LostFocus} 
+\par
+\tab
+{\uldb GotFocus()}{\v FFocusHandler_GotFocus} 
+\par\pard\sb100
+\par
+
+Operations: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb SetFocus()}{\v FFocusHandler_SetFocus} 
+\par
+\tab
+{\uldb ForwardFocus()}{\v FFocusHandler_ForwardFocus} 
+\par
+\tab
+{\uldb HasFocus()}{\v FFocusHandler_HasFocus} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FFocusHandler_LostFocus}
+${\footnote FFocusHandler::LostFocus()}
++{\footnote defbrowse}
+K{\footnote LostFocus()}
+K{\footnote FFocusHandler::LostFocus()}
+{\fs26\cf1\b LostFocus()}\par
+Declaration: 
+\line{\f1
+Bool LostFocus(FKillFocusEvent&);\line
+}
+\par
+
+This function is called when the window is losing the focus. Normally a 
+window should destroy carets and remove focus emphasis.\par
+
+See also: {\uldb FFocusHandler}{\v FFocusHandler}, {\uldb GotFocus}{\v FFocusHandler_GotFocus} 
+\page
+
+#{\footnote FFocusHandler_GotFocus}
+${\footnote FFocusHandler::GotFocus()}
++{\footnote defbrowse}
+K{\footnote GotFocus()}
+K{\footnote FFocusHandler::GotFocus()}
+{\fs26\cf1\b GotFocus()}\par
+Declaration: 
+\line{\f1
+Bool GotFocus(FSetFocusEvent&);\line
+}
+\par
+
+This function is called when the window is gaining focus. The window should 
+create carets and add focus emphasis.\par
+
+See also: {\uldb FFocusHandler}{\v FFocusHandler}, {\uldb LostFocus}{\v FFocusHandler_LostFocus} 
+\page
+
+#{\footnote FFocusHandler_SetFocus}
+${\footnote FFocusHandler::SetFocus()}
++{\footnote defbrowse}
+K{\footnote SetFocus()}
+K{\footnote FFocusHandler::SetFocus()}
+{\fs26\cf1\b SetFocus()}\par
+Declaration: 
+\line{\f1
+Bool SetFocus();\line
+}
+\par
+
+This function sets the focus to the window.\par
+
+Return: True if the function successfully changed the focus the the window, 
+False otherwise.\par
+
+See also: {\uldb FFocusHandler}{\v FFocusHandler} 
+\page
+
+#{\footnote FFocusHandler_ForwardFocus}
+${\footnote FFocusHandler::ForwardFocus()}
++{\footnote defbrowse}
+K{\footnote ForwardFocus()}
+K{\footnote FFocusHandler::ForwardFocus()}
+{\fs26\cf1\b ForwardFocus()}\par
+Declaration: 
+\line{\f1
+Bool ForwardFocus(FWnd *pwnd);\line
+}
+\par
+
+This function forwards the focus to the specified window. This is only 
+possible if the window has the focus.\par
+
+This function is usually used in a overridden {\uldb GotFocus()}{\v FFocusHandler_GotFocus} 
+function when the window wants to forward the focus to one of its child 
+windows.\par
+
+Example: 
+\line{\f1
+Bool MyWindow::GotFocus(FSetFocusEvent &ev) \{\line
+  //we dont want the focus - the command line entry field should have it\line
+  ForwardFocus(&cmdline_window)\line
+  return True;\line
+\}\line
+}
+\par
+
+See also: {\uldb FFocusHandler}{\v FFocusHandler} 
+\page
+
+#{\footnote FFocusHandler_HasFocus}
+${\footnote FFocusHandler::HasFocus()}
++{\footnote defbrowse}
+K{\footnote HasFocus()}
+K{\footnote FFocusHandler::HasFocus()}
+{\fs26\cf1\b HasFocus()}\par
+Declaration: 
+\line{\f1
+Bool HasFocus();\line
+}
+\par
+
+This function returns wether or not the associated window currently has the focus. 
+\page
+
+#{\footnote FSizeHandler}
+${\footnote FSizeHandler}
++{\footnote defbrowse}
+K{\footnote FSizeHandler}
+{\fs26\cf1\b FSizeHandler}\par
+K{\footnote WM_SIZE}
+This handler handles the sizing of a window.\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMMONHANDLERS\par
+
+Notifications: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb SizeChanged()}{\v FSizehandler_SizeChanged} 
+\par\pard\sb100
+\par
+
+Operations: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb SetSize()}{\v FSizehandler_SetSize} 
+\par
+\tab
+{\uldb GetSize()}{\v FSizehandler_GetSize} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FSizehandler_SizeChanged}
+${\footnote FSizehandler::SizeChanged()}
++{\footnote defbrowse}
+K{\footnote SizeChanged()}
+K{\footnote FSizehandler::SizeChanged()}
+{\fs26\cf1\b SizeChanged()}\par
+Declaration: 
+\line{\f1
+Bool SizeChanged({\uldb FSizeEvent}{\v FSizeEvent}&);\line
+}
+\par
+
+This function is called whenever the size of the window has changed.\par
+
+Example: 
+\line{\f1
+Bool MyClient::SizeChanged(FSizeEvent &ev) \{\line
+    //adjust scrollbars\line
+    ...\line
+    <calculate amount of visible data>\line
+    ...\line
+    SetHScrollBar(currentHpos,0,Htotal-Hvisible);\line
+    SetHScrollThumbSize(Hvisible,Htotal);\line
+    SetVScrollBar(currentVpos,0,Vtotal-Vvisible);\line
+    SetVScrollThumbSize(Vvisible,Vtotal);\line
+    return False;        //we don't mind other handlers reacting on the event\line
+\}\line
+}
+\par
+
+See also: {\uldb FSizeHandler}{\v FSizeHandler} 
+\page
+
+#{\footnote FSizeHandler_SetSize}
+${\footnote FSizeHandler::SetSize()}
++{\footnote defbrowse}
+K{\footnote SetSize()}
+K{\footnote FSizeHandler::SetSize()}
+{\fs26\cf1\b SetSize()}\par
+Declaration: 
+\line{\f1
+Bool SetSize(int w, int h);\line
+}
+\par
+
+This function sets the size of the window.\par
+
+Return: True if the function was succesful, False otherwise\par
+
+See also: {\uldb FSizeHandler}{\v FSizeHandler}, {\uldb GetSize()}{\v FSizehandler_GetSize} 
+\page
+
+#{\footnote FSizeHandler_GetSize}
+${\footnote FSizeHandler::GetSize()}
++{\footnote defbrowse}
+K{\footnote GetSize()}
+K{\footnote FSizeHandler::GetSize()}
+{\fs26\cf1\b GetSize()}\par
+Declaration: 
+\line{\f1
+Bool GetSize(int *w, int *h);\line
+}
+\par
+
+This function retrieves the current size of the window. If the function is 
+succesful {\i{w}} and {\i{h}} is set the the current width and height 
+of the window.\par
+
+Return: True if the function was succesful, False otherwise\par
+
+See also: {\uldb FSizeHandler}{\v FSizeHandler}, {\uldb SetSize()}{\v FSizehandler_SetSize} 
+\page
+
+#{\footnote FSizeEvent}
+${\footnote FSizeEvent}
++{\footnote defbrowse}
+K{\footnote FSizeEvent}
+{\fs26\cf1\b FSizeEvent}\par
+This event is handled by an {\uldb FSizeHandler}{\v FSizeHandler}.\par
+
+This event has to member functions: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+int GetWidth() 
+\par
+\tab
+int GetHeight() 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FMoveHandler}
+${\footnote FMoveHandler}
++{\footnote defbrowse}
+K{\footnote FMoveHandler}
+{\fs26\cf1\b FMoveHandler}\par
+K{\footnote WM_MOVE}
+This handler handles the position of the window.\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMMONHANDLERS\par
+
+Notifications: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Moved()}{\v FMoveHandler_Moved} 
+\par\pard\sb100
+\par
+
+Operations: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Move()}{\v FMoveHandler_Move} 
+\par
+\tab
+{\uldb GetPosition()}{\v FMoveHandler_GetPosition} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FMoveHandler_Moved}
+${\footnote FMoveHandler::Moved()}
++{\footnote defbrowse}
+K{\footnote Moved()}
+K{\footnote FMoveHandler::Moved()}
+{\fs26\cf1\b Moved()}\par
+Declaration: 
+\line{\f1
+Bool Moved(FMoveEvent&);\line
+}
+\par
+
+This function is called when the position of the window has changed.\par
+
+See also: {\uldb FMoveHandler}{\v FMoveHandler} 
+\page
+
+#{\footnote FMoveHandler_Move}
+${\footnote FMoveHandler::Move()}
++{\footnote defbrowse}
+K{\footnote Move()}
+K{\footnote FMoveHandler::Move()}
+{\fs26\cf1\b Move()}\par
+Declaration: 
+\line{\f1
+Bool Move(int x, int y);\line
+}
+\par
+
+This function moves the window so its origin will be (x,y).\par
+
+{\b{Note:}} The coordinates must be in the native coordinate system. 
+\par
+
+See also: {\uldb FMoveHandler}{\v FMoveHandler} 
+\page
+
+#{\footnote FMoveHandler_GetPosition}
+${\footnote FMoveHandler::GetPosition()}
++{\footnote defbrowse}
+K{\footnote GetPosition()}
+K{\footnote FMoveHandler::GetPosition()}
+{\fs26\cf1\b GetPosition()}\par
+Declaration: 
+\line{\f1
+Bool GetPosition(int *x, int *y);\line
+}
+\par
+
+This function retrieves the current origin of the window.\par
+
+{\b{Note:}} The coordinates are retrieved in the native coordinate system. 
+\par
+
+See also: {\uldb FMoveHandler}{\v FMoveHandler} 
+\page
+
+#{\footnote FCloseHandler}
+${\footnote FCloseHandler}
++{\footnote defbrowse}
+K{\footnote FCloseHandler}
+{\fs26\cf1\b FCloseHandler}\par
+K{\footnote WM_CLOSE}
+K{\footnote WM_ENDSESSION}
+K{\footnote WM_SAVEAPPLICATION}
+The FCloseHandler handles close requests and other related events.\par
+
+WYDIWYG: BIFINCL_WINDOW and BIFINCL_COMMONHANDLERS\par
+
+Notifications: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Close()}{\v FCloseHandler_Close1} 
+\par
+\tab
+{\uldb CloseUnconditionally()}{\v FCloseHandler_CloseUnconditionally1} 
+\par\pard\sb100
+\par
+
+Operations: 
+\par\pard\sb100\tx550\li550\fi-549
+\tab
+{\uldb Close()}{\v FCloseHandler_Close2} 
+\par
+\tab
+{\uldb CloseUnconditionally()}{\v FCloseHandler_CloseUnconditionally2} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote FCloseHandler_Close1}
+${\footnote FCloseHandler::Close(FEvent&)}
++{\footnote defbrowse}
+K{\footnote Close()}
+K{\footnote FCloseHandler::Close(FEvent&)}
+{\fs26\cf1\b Close()}\par
+Declaration: 
+\line{\f1
+Bool Close(FEvent &);\line
+}
+\par
+
+This function is called when something (or someone) request the window to 
+close. If the window lets the default action take place the application 
+is terminated.\par
+
+The window can ask the user if he wants to save the changes (if any) or 
+eventually not close the window.\par
+
+Compare this to {\uldb CloseUnconditionally()}{\v FCloseHandler_CloseUnconditionally1}\par
+
+Example: 
+\line{\f1
+Bool MyWindow::Close(FEvent&) \{\line
+  if(changed) \{\line
+    switch(MessageBox(this, "Do you want to save the changes?", "foo-app", mb_yesnocancel))\line
+    \{\line
+      case mbid_yes:\line
+        //user wants to save\line
+        <save>\line
+        if(<save succesful>) \{\line
+          changed=False;\line
+          GetCurrentApp()->TerminateApp();\line
+          return False;        //let other handlers know about the close\line
+        \} else \{\line
+          //error ocurred while saving\line
+          return True;         //eat the event\line
+        \}\line
+      case mbid_no:\line
+        //user do not want to save\line
+        changed=False;\line
+        GetCurrentApp()->TerminateApp();\line
+        return False;\line
+      case mbid_cancel:\line
+        //the user didn't want to close the window after all\line
+        return True;           //eat the event\line
+    \}\line
+  \} else \{\line
+    return False;              //let the default processing take place\line
+  \}\line
+\}\line
+}
+\par
+
+See also: 
+{\uldb FCloseHandler}{\v FCloseHandler}, 
+{\uldb CloseUnconditionally()}{\v FCloseHandler_CloseUnconditionally1} 
+\page
+
+#{\footnote FCloseHandler_CloseUnconditionally1}
+${\footnote FCloseHandler::CloseUnconditionally(FEvent&)}
++{\footnote defbrowse}
+K{\footnote CloseUnconditionally()}
+K{\footnote FCloseHandler::CloseUnconditionally(FEvent&)}
+{\fs26\cf1\b CloseUnconditionally()}\par
+Declaration: 
+\line{\f1
+Bool CloseUnconditionally(FEvent &);\line
+}
+\par
+
+This function is called when the window is being closed. The window cannot 
+reject the close and it cannot ask the user any questions. The event may be 
+the very last event sent to the window.\par
+
+This function may get called several times. This function may get called when 
+the window is being destructed, when the system is shutting down or whenever 
+the operation system wants to.\par
+
+The window should save changed data to a special file, which is automatically 
+loaded the next time the application is started.\par
+
+Example: 
+\line{\f1
+Bool MyWindow::CloseUnconditionally(FEvent &) \{\line
+  if(changed) \{\line
+    <save>\line
+    if(<save succesful>)\line
+      changed=False;\line
+    //if an error ocurred there is nothing we can do about it\line
+    //we cannot even report it to the user\line
+  \}\line
+  return False;        //let other handlers know about this\line
+\}\line
+}
+\par
+
+See also: {\uldb FCloseHandler}{\v FCloseHandler}, {\uldb Close()}{\v FCloseHandler_Close1} 
+\page
+
+#{\footnote FCloseHandler_Close2}
+${\footnote FCloseHandler::Close()}
++{\footnote defbrowse}
+K{\footnote Close()}
+K{\footnote FCloseHandler::Close()}
+{\fs26\cf1\b Close()}\par
+Declaration: 
+\line{\f1
+void Close();\line
+}
+\par
+
+This function requests the window to close. The window may reject.\par
+
+See also: {\uldb FCloseHandler}{\v FCloseHandler} 
+\page
+
+#{\footnote FCloseHandler_CloseUnconditionally2}
+${\footnote FCloseHandler::CloseUnconditionally()}
++{\footnote defbrowse}
+K{\footnote CloseUnconditionally()}
+K{\footnote FCloseHandler::CloseUnconditionally()}
+{\fs26\cf1\b CloseUnconditionally()}\par
+Declaration: 
+\line{\f1
+void CloseUnconditionally();\line
+}
+\par
+
+This function forces the window to close. The window will be notified of 
+this.\par
+
+See also: {\uldb FCloseHandler}{\v FCloseHandler} 
+\page
+
+}

@@ -1,0 +1,15 @@
+[topic bifmix same "BIF/Mix" "BIF/Mix subsystem" secondary]
+BIF/Mix is the "glue" between the BIF/Thread and BIF/Window subsystems.
+It implements subclasses of FWindowThread, FMainThread and FApplication
+so BIF/Thread can be used together with BIF/Window.
+
+Select a topic:
+[sl]
+[li][ref bifmix_howto "How to mix BIF/Thread and BIF/Window"]
+[li][ref bifmix_include_hierachy "Include hierachy"]
+[li][ref bifmix_classes "Classes"]
+[li][ref DEFBIFMIXMAIN "The DEFBIFMIXMAIN macro"]
+[li][ref bifmix_compiler_setup "Compiler setup"]
+[esl]
+[etopic]
+

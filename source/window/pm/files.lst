@@ -1,0 +1,30 @@
+Contents: BIF/Window for Presentation Manager
+applicat.cpp FApplication
+appwnd.cpp   FAppWindow
+checkbox.cpp FCheckBox
+clhndl.cpp   Client handlers
+combobox.cpp FXxxxxxComboBox
+comhndl.cpp  Common handlers
+control.cpp  FControl
+csi.cpp      Coordinate-system independent handlers
+dialog.cpp   FDialog, FModalDialog
+filedlg.cpp  Standard file dialogs
+frame.cpp    FFrameWindow
+groupbox.cpp FGroupBox
+keyboard.cpp FKeyboardHandler
+listbox.cpp  FXxxxxxListBox
+mle.cpp      FMLE
+module.cpp   FModule
+mouse.cpp    Mouse handlers
+msgbox.cpp   MessageBox
+ownerdrw.cpp Ownerdraw handlers
+pushbut.cpp  FPushButton
+radiobut.cpp FRadioButton
+scroll.cpp   Scrollbar handlers
+sizerest.cpp Window size restriction handlers
+sle.cpp      FSLE
+slider.cpp   FSlider
+stext.cpp    FStaticText
+wndcore.cpp  BIF/Window core
+wndmisc.cpp  BIF/Window core misc.
+

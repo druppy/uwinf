@@ -1,0 +1,14 @@
+[topic bifwindow same "BIF/Window" "BIF/Window" secondary]
+Select a topic:
+[sl]
+[li][ref bifwindow_overview "Overview"]
+[li][ref bifwindow_buildingblocks "The building blocks"]
+[li][ref bifwindow_include_hierachy "Include hierachy"]
+[li][ref bifwindow_classes "Classes"]
+[li][ref bifwindow_class_hierachy "Class hierachy"]
+[li][ref bifwindow_functions "Functions"]
+[li][ref bifwindow_helloworld "Hello world"]
+[li][ref bw_compiler_setup "Compiler setup"]
+[esl]
+[etopic]
+

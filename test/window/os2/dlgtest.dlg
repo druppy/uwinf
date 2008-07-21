@@ -1,0 +1,24 @@
+#ifndef OS2_INCLUDED
+   #include <os2.h>
+#endif
+
+DLGTEMPLATE ID_TESTBW PRELOAD MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "BIF/Window dialog test program", ID_TESTBW, 12, 6, 284, 92, 
+            WS_VISIBLE, FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        ENTRYFIELD      "", 101, 5, 72, 32, 8, ES_MARGIN
+        GROUPBOX        "Group", 102, 3, 18, 116, 47
+        AUTORADIOBUTTON "Radio 1", 103, 11, 44, 101, 10, WS_GROUP | 
+                        WS_TABSTOP
+        AUTORADIOBUTTON "Radio 2", 104, 11, 34, 101, 10, WS_TABSTOP
+        AUTORADIOBUTTON "Radio 3", 105, 11, 24, 101, 10, WS_TABSTOP
+        AUTOCHECKBOX    "Checkbox", 106, 3, 2, 61, 10, WS_GROUP
+        LISTBOX         107, 130, 6, 85, 76
+        DEFPUSHBUTTON   "Ok", ID_TESTBW, 232, 70, 40, 14, WS_GROUP
+        PUSHBUTTON      "Cancel", DID_CANCEL, 232, 49, 40, 14, NOT 
+                        WS_TABSTOP
+        PUSHBUTTON      "Help", 108, 232, 28, 40, 14, BS_HELP | 
+                        BS_NOPOINTERFOCUS | NOT WS_TABSTOP
+    END
+END

@@ -1,0 +1,120 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote bifthread_buildingblocks}
+${\footnote BIF/Thread building blocks}
++{\footnote defbrowse}
+K{\footnote Building blocks}
+K{\footnote BIF/Thread building blocks}
+{\fs26\cf1\b Building blocks}\par
+BIF/Thread has two building blocks: threads and semaphores.\par
+
+What is a thread?\par
+
+A thread is a unit of execution. The operating system decides when to give  
+a thread time and how much. Every process has at least one thread: the main 
+thread.\par
+
+A thread has its own stack, instruction pointer and register set, just like  
+a process in non-thread environments. A thread shares all other resources  
+(current directory, file handles, memory, etc) with the other threads in the 
+process. In BIF/Thread a thread is an instance of {\uldb FThread}{\v FThread} or 
+one of its subclasses. The states of a thread can be illustrated as this: 
+\{bml thrstate.bmp\}\par{\fs16{Thread states}}\par
+\par
+
+What is a semaphore?\par
+
+Semaphores are used for synchronization and communication between threads. 
+Semaphores comes in three flavors in BIF/Thread: 
+\par\pard\sb100\tx2000\li2000\fi-1999
+Event semaphores.  
+\tab
+Event semaphores are used to signal that an event has occured. In  
+BIF/Thread an event semaphore is an instance of {\uldb FEventSemaphore}{\v FEventSemaphore} 
+\par
+Mutex semaphores (MUTual EXclusion semaphores). 
+\tab
+Mutex semaphores are used for serializing access to shared resources. In  
+BIF/Thread instances of {\uldb FMutexSemaphore}{\v FMutexSemaphore} are mutex seamphores. 
+\par
+General semaphores. 
+\tab
+General semaphores are logically integers that can only be incremented or  
+decremented. If a thread tries to decrement the integer below zero it will  
+cause the thread to block until another thread has incremented the integer. 
+General semaphores are implemented in BIF/Thread as {\uldb FSemaphore}{\v FSemaphore} 
+\par\pard\sb100
+ 
+\page
+
+#{\footnote tbasis_threadlifetime}
+${\footnote Keep-around versus Create-do-die}
++{\footnote defbrowse}
+K{\footnote  Keep-around versus Create-do-die}
+{\fs26\cf1\b Keep-around versus Create-do-die}\par
+There exist two aproaches to the lifetime of threads: 
+\par\pard\sb100\tx2000\li2000\fi-1999
+Create-do-die 
+\tab
+Thread is created, does its job and then terminates. This approach is 
+normally used when the job is a one-time task or when two jobs can be carried 
+out simultaneously. 
+\par
+Keep-around 
+\tab
+The thread is created and awaits work to arrive. When work arrives it performs 
+it and then waits again. It first terminates when it is told to. This approach  
+is normally used when there normally is work to do and the 
+jobs cannot be done simultaneously (usually due to a shared resource). 
+\par\pard\sb100
+\par
+
+{\b{Note:}} The two approaches does not refer to static/dynamic allocation of the 
+Fhreads but rather to the logical lifetime of the threads from the perspective 
+of the thread creator. 
+\par
+
+Examples of jobs where create-do-die is likely to be suitable: 
+\par\pard\sb100\tx2000\li2000\fi-1999
+Printing 
+\tab
+Documents are normally printed once. There should be no need to have a 
+thread lying around. 
+\par
+File loading/saving 
+\tab
+File loading and saving should be done in background threads since it may 
+take a long time to do (just imagine your marvelous editor loading 10MB file 
+from a CD...). Your program could potentionally load or save several files at a time 
+\par
+Remote connection/disconnection 
+\tab
+A communication program can connect to seveal sources at the same time so 
+several "connection"-threads should be created. 
+\par\pard\sb100
+\par
+
+Examples of jobs where keep-around is likely to be suitable: 
+\par\pard\sb100\tx2000\li2000\fi-1999
+Background window painting 
+\tab
+The thread should be keept around for the lifetime 
+of the window and notified when the window recieves a paint request. 
+\par
+Background (re-)computation. 
+\tab
+A window that uses a thread to 
+recompute/reformat something will normally want to keep the thread around and 
+not create a new thread every time the (re-)computation has to be done. 
+\par\pard\sb100
+ 
+\page
+
+}

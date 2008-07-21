@@ -1,0 +1,3 @@
+Contents: win16 specific BIF/Window for MS Windows GUI system
+applicat.cpp FApplication and FModule
+wndcore.cpp  BIF/Window core

@@ -1,0 +1,69 @@
+#ifndef __BIFIMEX_OS2_INCLUDED
+#define __BIFIMEX_OS2_INCLUDED
+
+//BIFCLASS and BIFFUNCTION #defines for OS/2 32bit
+
+//Defines BIFCLASS and BIFFUNCTION modifiers taking into account what compiler
+//is used, wether BIF is in a DLL, and if we are building the BIF library
+
+
+//First check that user has defined the library determination macro
+#if (!defined(BIF_IN_SLL)) && (!defined(BIF_IN_DLL))
+// default is static link library
+#  define BIF_IN_SLL
+#endif
+//... and that he has not defined both
+#if defined(BIF_IN_SLL) && defined(BIF_IN_DLL)
+#  error You cannot define both BIF_IN_SLL and BIF_IN_DLL
+#endif
+
+
+#if defined(__WATCOMC__)
+//Watcom C/C++
+#if defined(BIF_IN_SLL)
+//BIF is in a static library (.LIB) - modifiers are not needed
+#  define BIFCLASS
+#  define BIFFUNCTION
+#else
+//BIF is in a dynlink library (.DLL) 
+//Watcom needs modifiers only if we are building the DLL
+#  ifdef BUILDING_BIF
+#    define BIFCLASS __export
+#    define BIFFUNCTION __export
+#  else
+#    define BIFCLASS
+#    define BIFFUNCTION
+#  endif
+#endif
+
+#elif defined(__IBMCPP__)
+//IBM Cset++
+#if defined(BIF_IN_SLL)
+//BIF is in a static library (.LIB) - modifiers are not needed
+#  define BIFCLASS
+#  define BIFFUNCTION
+#else
+//BIF is in a dynlink library (.DLL) 
+//VAC++ needs modifiers only if we are building the DLL
+#  ifdef BUILDING_BIF
+#    define BIFCLASS _Export
+#    define BIFFUNCTION _Export
+#  else
+#    define BIFCLASS
+#    define BIFFUNCTION
+#  endif
+#endif
+
+#elif defined(__BORLANDC__)
+//Borland C++
+#error Borland C++ is not supported yet
+
+#else
+//add a section for your compiler (Metaware High C++, EMX, GCC/2, Visipro, ...)
+#error unknown compiler
+
+#endif
+
+#endif /*__BIFIMEX_OS2_INCLUDED*/
+
+

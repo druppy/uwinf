@@ -1,0 +1,6 @@
+Contents: 5 directories
+OS2     BIF/Thread for OS/2
+WIN16   BIF/Thread for win16
+WIN32   BIF/Thread for win32
+DOSC    BIF/Thread common files for dos16, dos32 and win16
+DOS1632 BIF/Thread common files for dos16 and dos32

@@ -1,0 +1,10 @@
+#include "exit.h"
+
+
+ID_EXIT ICON "exit.ico"
+
+STRINGTABLE
+BEGIN
+  ID_EXIT	"Windows Exit"
+  IDS_EXIT	"E&xit Windows"
+END

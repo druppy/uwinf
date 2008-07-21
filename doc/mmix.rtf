@@ -1,0 +1,73 @@
+{\rtf1\ansi
+{\fonttbl
+ \f0\fswiss Arial;
+ \f1\fmodern Courier;
+ \f2\ftech Symbol;}
+\deff0
+{\colortbl;\red0\green0\blue196;}
+\fs20
+\sb100
+#{\footnote bifmix_howto}
+${\footnote How to mix BIF/Window and BIF/Thread}
++{\footnote defbrowse}
+K{\footnote How to mix BIF/Window and BIF/Thread}
+{\fs26\cf1\b How to mix BIF/Window and BIF/Thread}\par
+BIF/Mix contains a few classes that enable you to use both BIF/Thread 
+and BIF/Window in the same program.\par
+
+In general you will only have to do three things: 
+\par\pard\sb100\tx550\li550\fi-300
+{\f2\'B7}\tab
+Use the {\uldb FMTApplication}{\v FMTApplication} as base class for you application class instad of FApplication. 
+\par
+{\f2\'B7}\tab
+The threads that use BIF/Window should be a subclass of {\uldb FWWindowThread}{\v FWWindowThread} instead of FWindowThread. 
+\par
+{\f2\'B7}\tab
+Use the {\uldb DEFBIFMIXMAIN}{\v DEFBIFMIXMAIN} macro instead of DEFBIFTHREADMAIN or DEFBIFWINDOWMAIN 
+\par\pard\sb100
+\par
+
+Example: (taken from \\sample\\mix\\sort) 
+\line{\f1
+class SortThread : public FWWindowThread \{\line
+  //A thread that sorts the array in the background. It is a\line
+  //subclass of FWWindowThread instead of FWindowThread\line
+  ...\line
+\};\line
+\line
+class FSortApplication : public FMTApplication \{\line
+  //The application class is a subclass of FMTApplication instead of FApplication\line
+  SortFrame frame;\line
+public:\line
+  Bool StartUp(int,char**);\line
+  int ShutDown();\line
+\};\line
+\line
+\line
+Bool FSortApplication::StartUp(int , char **) \{\line
+  //the startup and shutdown is just as in normal BIF/Window programs\line
+  if(frame.Create(GetDesktop())) \{\line
+    frame.Show();\line
+    frame.BringToFront();\line
+    return True;\line
+  \} else\line
+    return False;\line
+\}\line
+\line
+int FSortApplication::ShutDown() \{\line
+        frame.Destroy();\line
+        return 0;\line
+\}\line
+\line
+\line
+//Use the DEFBIFMIXMAIN macro to specify the main thread and the application class\line
+//The application class is normally your subclass of FMTApplication. The main\line
+//thread class is FWMainWindowThread. It is rarely anything else.\line
+DEFBIFMIXMAIN(FSortApplication,FWMainWindowThread);\line
+}
+\par
+
+\page
+
+}
